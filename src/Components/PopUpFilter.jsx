@@ -67,7 +67,7 @@ export default function PopUpFilter(props) {
 
   const { departmentList } = props;
   const dispatch = useDispatch();
-    const [active, setActive] = React.useState('All branches');
+    const [active, setActive] = React.useState('All Departments');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -75,7 +75,7 @@ export default function PopUpFilter(props) {
   };
 
   const handleMenuItemClick = (item) => {
-    if (item == "All Branches") {
+    if (item == "All Departments") {
       dispatch(loadInstitutionStats());
     } else {
       let params = {
@@ -122,12 +122,12 @@ export default function PopUpFilter(props) {
       >
         <MenuItem
           onClick={() => {
-            handleMenuItemClick("All Branches");
+            handleMenuItemClick("All Departments");
           }}
           disableRipple
         >
           {/* <EditIcon /> */}
-          All Branches
+          All Departments
         </MenuItem>
         {departmentList?.map((branch) => (
           <MenuItem

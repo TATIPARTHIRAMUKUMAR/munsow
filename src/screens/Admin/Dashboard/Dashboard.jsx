@@ -95,15 +95,15 @@ const AdminDashboard = () => {
       institutionStats?.graphs?.map((o)=>{
         switch(o?.name)
         {
-          case "Department wise Participation": {
+          case "Departments wise participation": {
             setbarPlot(()=>o?.data)
             break
           }
-          case "DEPARTMENT WISE IMPROVEMENT RATE" : {
+          case "Departments wise improvement rate" : {
             setplot(()=>o?.data)
             break
           }
-          case "CRITICAL IMPROVEMENT AREAS" : {
+          case "Critical Improvement Areas" : {
             setPie(()=>o?.data)
             break
           }
@@ -114,6 +114,9 @@ const AdminDashboard = () => {
       })
 
     }
+
+    // console.log("graph",barPlot,plot,pie)
+
   },[institutionStats])
 
 
