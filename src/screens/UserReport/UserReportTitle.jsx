@@ -8,7 +8,7 @@ const UserReportTitle = () => {
             <div className="p-4">
               <div className="mt-5">
                 <div className="text-2xl font-semibold report1-header">
-                  START X REPORT
+                  MUNSOW REPORT
                 </div>
               </div>
             </div>

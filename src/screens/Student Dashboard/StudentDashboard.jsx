@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import image from "../../assets/testPng.png"
+import image2 from "../../assets/dashboard_std.png"
 import SecondRow from "./SecondRow";
 import BarChartLines from "./BarChart";
 import Carousel from "./Carousel";
@@ -36,7 +37,7 @@ export default function StudentDashboard() {
                         </div>
                     </div>
                     <div>
-                        <img className="h-40 w-40 bg-transparent" src={image} />
+                        <img className="h-40 w-40 bg-transparent" src={image2} />
                     </div>
 
                 </div>

@@ -6,7 +6,7 @@ const UserReportPartSeven = () => {
           <div className="md:col-span-12">
             <div className="mt-5 md:mt-0 md:ms-4 md:mb-5">
               <span className="md:ms-4 text-4xl font-semibold text-purple-800">
-                START X
+              MUNSOW
               </span>
             </div>
           </div>
