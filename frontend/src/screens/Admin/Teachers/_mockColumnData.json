@@ -1,0 +1,33 @@
+[
+  {
+    "field": "serialNumber",
+    "headerName": "SL NO",
+    "resizable": true,
+    "sortable": true,
+    "flex": 1
+  },
+  {
+    "field": "name",
+    "headerName": "Name",
+    "resizable": true,
+    "sortable": true,
+    "editable": true,
+    "flex": 1
+  },
+  {
+    "field": "department",
+    "headerName": "Department",
+    "resizable": true,
+    "sortable": true,
+    "editable": true,
+    "flex": 1
+  },
+  {
+    "field": "branch",
+    "headerName": "Branch",
+    "resizable": true,
+    "sortable": true,
+    "editable": true,
+    "flex": 1
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "serialNumber": 1,
+    "name": "Teacher A",
+    "department": "HR",
+    "branch": "kolkata"
+  },
+  {
+    "serialNumber": 2,
+    "name": "Teacher B",
+    "department": "Admin",
+    "branch": "Bengaluru"
+  },
+  {
+    "serialNumber": 3,
+    "name": "Teacher C",
+    "department": "HR",
+    "branch": "Bengaluru"
+  },
+  {
+    "serialNumber": 4,
+    "name": "Teacher D",
+    "department": "HR",
+    "branch": "Bengaluru"
+  },
+  {
+    "serialNumber": 5,
+    "name": "Teacher E",
+    "department": "Admin",
+    "branch": "kolkata"
+  }
+]

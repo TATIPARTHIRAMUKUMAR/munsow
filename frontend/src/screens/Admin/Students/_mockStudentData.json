@@ -1,0 +1,137 @@
+[
+  {
+    "id": 1,
+    "serialNumber": 1,
+    "name": "Student A",
+    "department": "HR",
+    "branch": "Kolkata",
+    "numberOfInterviews": 10,
+    "averageScore": 80
+  },
+  {
+    "id": 2,
+    "serialNumber": 2,
+    "name": "Student B",
+    "department": "Admin",
+    "branch": "Pune",
+    "numberOfInterviews": 2,
+    "averageScore": 60
+  },
+  {
+    "id": 3,
+    "serialNumber": 3,
+    "name": "Student C",
+    "department": "HR",
+    "branch": "Bengaluru",
+    "numberOfInterviews": 9,
+    "averageScore": 75
+  },
+  {
+    "id": 4,
+    "serialNumber": 4,
+    "name": "Student D",
+    "department": "HR",
+    "branch": "Bengaluru",
+    "numberOfInterviews": 6,
+    "averageScore": 80
+  },
+  {
+    "id": 5,
+    "serialNumber": 5,
+    "name": "Student E",
+    "department": "HR",
+    "branch": "Kolkata",
+    "numberOfInterviews": 5,
+    "averageScore": 95
+  },
+  {
+    "id": 1,
+    "serialNumber": 1,
+    "name": "Student A",
+    "department": "HR",
+    "branch": "Kolkata",
+    "numberOfInterviews": 10,
+    "averageScore": 80
+  },
+  {
+    "id": 2,
+    "serialNumber": 2,
+    "name": "Student B",
+    "department": "Admin",
+    "branch": "Pune",
+    "numberOfInterviews": 2,
+    "averageScore": 60
+  },
+  {
+    "id": 3,
+    "serialNumber": 3,
+    "name": "Student C",
+    "department": "HR",
+    "branch": "Bengaluru",
+    "numberOfInterviews": 9,
+    "averageScore": 75
+  },
+  {
+    "id": 4,
+    "serialNumber": 4,
+    "name": "Student D",
+    "department": "HR",
+    "branch": "Bengaluru",
+    "numberOfInterviews": 6,
+    "averageScore": 80
+  },
+  {
+    "id": 5,
+    "serialNumber": 5,
+    "name": "Student E",
+    "department": "HR",
+    "branch": "Kolkata",
+    "numberOfInterviews": 5,
+    "averageScore": 95
+  },
+  {
+    "id": 1,
+    "serialNumber": 1,
+    "name": "Student A",
+    "department": "HR",
+    "branch": "Kolkata",
+    "numberOfInterviews": 10,
+    "averageScore": 80
+  },
+  {
+    "id": 2,
+    "serialNumber": 2,
+    "name": "Student B",
+    "department": "Admin",
+    "branch": "Pune",
+    "numberOfInterviews": 2,
+    "averageScore": 60
+  },
+  {
+    "id": 3,
+    "serialNumber": 3,
+    "name": "Student C",
+    "department": "HR",
+    "branch": "Bengaluru",
+    "numberOfInterviews": 9,
+    "averageScore": 75
+  },
+  {
+    "id": 4,
+    "serialNumber": 4,
+    "name": "Student D",
+    "department": "HR",
+    "branch": "Bengaluru",
+    "numberOfInterviews": 6,
+    "averageScore": 80
+  },
+  {
+    "id": 5,
+    "serialNumber": 5,
+    "name": "Student E",
+    "department": "HR",
+    "branch": "Kolkata",
+    "numberOfInterviews": 5,
+    "averageScore": 95
+  }
+]

@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* width */
+*::-webkit-scrollbar {
+    width: 4px !important; 
+  }
+  
+  /* Track */
+  *::-webkit-scrollbar-track {
+    background: linear-gradient(180.43deg, #A191C2 19.43%, #886CC0 87.63%)  !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180.43deg, #A191C2 19.43%, #886CC0 87.63%) !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555 !important;
+  }
+  
+  #lessonViewRender::-webkit-scrollbar {
+    height: 8px !important;
+    width: 10px !important;
+  }
+  #lessonViewRender::-webkit-scrollbar-thumb {
+    background: linear-gradient(180.43deg, #A191C2 19.43%, #886CC0 87.63%) !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+  }
+
+  *{
+    margin: 0;
+    padding: 0;
+    /* font-family: "poppins"; */
+  }
+
+  input[type='text']:focus { box-shadow: none; }
+input[type='number']:focus { box-shadow: none; }

@@ -1,0 +1,15 @@
+/* CSS for sliding animations */
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    transition: width 0.5s ease-in-out;
+  }
+  
+  .slide-left .carousel-item {
+    transform: translateX(-100%);
+  }
+  
+  .slide-right .carousel-item {
+    transform: translateX(100%);
+  }
+  
