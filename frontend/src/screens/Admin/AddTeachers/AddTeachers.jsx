@@ -8,6 +8,7 @@ import { Autocomplete, Box, Button, Tab, TextField } from "@mui/material";
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import GLOBAL_CONSTANTS from "../../../../GlobalConstants";
 const AddTeachers = () => {
 
   const dispatch = useDispatch()
@@ -145,7 +146,19 @@ const AddTeachers = () => {
                 Import Teachers
 
               </div>
-              <div className="flex justify-between items-center gap-2 text-lg font-semibold text-blue-500 cursor-pointer"><CloudDownloadOutlinedIcon /> Download Sample User File</div>
+              <div className="flex justify-between items-center gap-2 text-lg font-semibold text-blue-500 cursor-pointer"><a href={`${GLOBAL_CONSTANTS?.backend_url}user/download`} >
+                    <Button
+                      endIcon={<CloudDownloadOutlinedIcon />}
+                      style={{ color: "gray", borderColor: "gray" }}
+                      variant="outlined"
+                      size="small"
+                      onClick={() => {    
+                      }}
+                    >
+                      {" "}
+                      Download Sample File{" "}
+                    </Button>
+                    </a></div>
             </div>
 
 

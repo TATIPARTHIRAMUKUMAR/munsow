@@ -98,14 +98,15 @@ export const institution_login = (data, callback) => {
           headers,
         })
         .then((resp) => {
-          if(resp?.data?.error)
+          console.log("resp",resp)
+          if(resp?.data?.status==false)
           {
-            toast.error(resp?.data?.error);  
+            toast.error(resp?.data?.message);  
           }
           else
           {
             
-            toast.success("User Created Sucessfully");  
+            toast.success(resp?.data?.message);  
             callback(resp?.data);
           }
         })

@@ -149,17 +149,17 @@ export default function HeaderFooterLayout({ Component }) {
             {
               label: "Behavioral Analysis",
               icon: <FaBrain size={20} className="" />,
-              route: "/emotionSensing",
+              route: "/behaviourAnalysis",
             },
             {
               label: "KS Analysis",
               icon: <FaChartLine size={20} className="" />,
-              route: "/emotionSensing",
+              route: "/ksanalysis",
             },
             {
               label: "Practical thinking A",
               icon: <FaLightbulb size={20} className="" />,
-              route: "/emotionSensing",
+              route: "/practicalThinking",
             },
             {
               label: "Emotion Sensing",
@@ -169,7 +169,7 @@ export default function HeaderFooterLayout({ Component }) {
             {
               label: "Hard Skill vs Soft skills",
               icon: <FaBalanceScale size={20} className="" />,
-              route: "/emotionSensing",
+              route: "/skills",
             },
           ],
         },
@@ -194,6 +194,18 @@ export default function HeaderFooterLayout({ Component }) {
               route: "/teachersList",
             },
           ],
+        },
+        {
+          label: "Help & Support",
+          icon: <FaThLarge size={20} className="" />,
+          route: "/adminHelp",
+          subItems: [],
+        },
+        {
+          label: "Settings",
+          icon: <FaThLarge size={20} className="" />,
+          route: "/adminSettings",
+          subItems: [],
         },
       ]);
     } else {
@@ -322,7 +334,7 @@ export default function HeaderFooterLayout({ Component }) {
 
                 <ListItemButton
                   sx={{
-                    minHeight: 48,
+                    minHeight: 50,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
                     backgroundColor: selectedItem === mainIndex ? "#f3f0f9" : "transparent",

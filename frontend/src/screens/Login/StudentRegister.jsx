@@ -117,7 +117,8 @@ const StudentRegister = () => {
     dispatch(
       user_signup(payload, { mode: "teacher" }, () => {
         setMainData({});
-    navigate("/studentDashboard")
+        console.log("test")
+    navigate("/studentLogin")
       })
     );
   };

@@ -25,6 +25,13 @@ import StepperComponent from "./screens/PracticeNow/Practice";
 import NotificationsPage from "./screens/Notifications/Notifications";
 import SettingsPage from "./screens/StudentSettings/Settings";
 import HelpAndSupportPage from "./screens/Help/Help";
+import Interview from "./screens/InterviewSection/Interview";
+import KSAnalysis from "./screens/Admin/Analysis/KSAnalysis";
+import Skills from "./screens/Admin/Analysis/Skills";
+import BehaviourAnalysis from "./screens/Admin/Analysis/BehaviourAnalysis";
+import PracticalThinking from "./screens/Admin/Analysis/PracticalThinking";
+import HelpSupportAdmin from "./screens/Help/AdminHelp";
+import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 
 
 function Url_Routes() {
@@ -50,6 +57,12 @@ function Url_Routes() {
                 <Route excat path="/addTeacher" element={<HeaderFooterLayout Component={<AddTeachers />} />} />
                 <Route excat path="/summary" element={<HeaderFooterLayout Component={<Summary />} />} />
                 <Route excat path="/emotionSensing" element={<HeaderFooterLayout Component={<EmotionSensing />} />} />
+                <Route excat path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} />
+                <Route excat path="/skills" element={<HeaderFooterLayout Component={<Skills />} />} />
+                <Route excat path="/behaviourAnalysis" element={<HeaderFooterLayout Component={<BehaviourAnalysis />} />} />
+                <Route excat path="/practicalThinking" element={<HeaderFooterLayout Component={<PracticalThinking />} />} />
+                <Route excat path="/adminHelp" element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />} />
+                <Route excat path="/adminSettings" element={<HeaderFooterLayout Component={<SettingsPageAdmin />} />} />
               </> : <>
                 <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} />} />
                 <Route excat path="/lessons" element={<HeaderFooterLayout Component={<LessonIndex />} />} />
@@ -59,6 +72,7 @@ function Url_Routes() {
                 <Route excat path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
                 <Route excat path="/notifications" element={<HeaderFooterLayout Component={<NotificationsPage />} />} />
                 <Route excat path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
+                <Route excat path="/interview" element={<HeaderFooterLayout Component={<Interview />} />} />
                 <Route excat path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
                 <Route excat path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
               </>

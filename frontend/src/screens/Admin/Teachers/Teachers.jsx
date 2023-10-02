@@ -46,14 +46,14 @@ const Teachers = () => {
       "flex": 1
     },
     {
-      "field": "department",
+      "field": "department_name",
       "headerName": "Department",
       "resizable": true,
       // "sortable": true,
       "flex": 1
     },
     {
-      "field": "branch",
+      "field": "branch_name",
       "headerName": "Branch",
       "resizable": true,
       // "sortable": true,
@@ -120,7 +120,7 @@ const Teachers = () => {
           />
         </div>
         <AgGridReact
-          rowData={teachersList?.data?.map(o => ({ ...o, name: `${o?.first_name} ${o?.last_name}` }))}
+          rowData={teachersList?.data?.map(o => ({ ...o }))}
           columnDefs={headCells}
           domLayout='autoHeight'
           pagination={false}

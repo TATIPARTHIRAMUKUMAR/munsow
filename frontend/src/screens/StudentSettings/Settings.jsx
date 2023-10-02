@@ -4,6 +4,10 @@ const SettingsPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [marksAlertsEnabled, setMarksAlertsEnabled] = useState(true);
+  const [interviewAlertsEnabled, setInterviewAlertsEnabled] = useState(true);
+  const [classScheduleAlertsEnabled, setClassScheduleAlertsEnabled] = useState(true);
+  const [libraryDueAlertsEnabled, setLibraryDueAlertsEnabled] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,6 +51,54 @@ const SettingsPage = () => {
             type="checkbox"
             checked={notificationsEnabled}
             onChange={(e) => setNotificationsEnabled(e.target.checked)}
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <label htmlFor="marksAlerts" className="block text-sm font-medium text-gray-600">
+            Enable Marks Alerts
+          </label>
+          <input
+            id="marksAlerts"
+            type="checkbox"
+            checked={marksAlertsEnabled}
+            onChange={(e) => setMarksAlertsEnabled(e.target.checked)}
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <label htmlFor="interviewAlerts" className="block text-sm font-medium text-gray-600">
+            Enable Interview Alerts
+          </label>
+          <input
+            id="interviewAlerts"
+            type="checkbox"
+            checked={interviewAlertsEnabled}
+            onChange={(e) => setInterviewAlertsEnabled(e.target.checked)}
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <label htmlFor="classScheduleAlerts" className="block text-sm font-medium text-gray-600">
+            Enable Class Schedule Alerts
+          </label>
+          <input
+            id="classScheduleAlerts"
+            type="checkbox"
+            checked={classScheduleAlertsEnabled}
+            onChange={(e) => setClassScheduleAlertsEnabled(e.target.checked)}
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <label htmlFor="libraryDueAlerts" className="block text-sm font-medium text-gray-600">
+            Enable Library Due Alerts
+          </label>
+          <input
+            id="libraryDueAlerts"
+            type="checkbox"
+            checked={libraryDueAlertsEnabled}
+            onChange={(e) => setLibraryDueAlertsEnabled(e.target.checked)}
             className="mt-1"
           />
         </div>
