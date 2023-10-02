@@ -107,7 +107,7 @@ const Teachers = () => {
             id="combo-box-demo"
             options={departmentList?.map(o => ({ label: o?.name ?? "", value: o?.id })) ?? []}
             renderInput={(params) => <TextField {...params} label="Filter by Department" />}
-            onChange={(e, value) => { setParams((prev) => ({ ...prev, department_id: value?.value })) }}
+            onChange={(e, value) => { setParams((prev) => ({ ...prev, department_name: value?.label })) }}
           />
           <Autocomplete
             size="small"

@@ -10,6 +10,8 @@ import './Practice.css'; // Make sure to import your stylesheet
 
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
+import Audio_Video from "../../Components/Audio_Video";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -36,6 +38,7 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
 
 const StepperComponent = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [steps] = useState([
         { title: "Skill Specific" },
         { title: "Role Specific" },
@@ -277,7 +280,8 @@ const StepperComponent = () => {
                         </div>
                     )}
                     {currentStep == 3 && (
-                        <div>
+                        <div className="grid grid-cols-2 gap-6 items-center justify-center " >
+                        <div className="grid justify-center ">
                             <div className="text-center font-semibold text-gray-500 mb-4">
                                 <ComputerRoundedIcon sx={{fontSize: "5rem"}}/>
                             </div>
@@ -295,6 +299,14 @@ const StepperComponent = () => {
                                 <span className="ml-3 text-sm">I&apos;m completing this check on this device and Wi-Fi network where I will participate</span>
                             </label>
                         </div>
+
+                        <div className="bg-gray-200 rounded w-full" > 
+                        <Audio_Video />
+                        </div>
+
+                       
+                        </div>
+
                     )}
                 </div>
                 <div className="mt-4 p-6 flex justify-end">
@@ -315,7 +327,9 @@ const StepperComponent = () => {
                         </button>
                     )}
                     {currentStep === steps.length - 1 && (
-                        <button className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                        <button onClick={()=>{
+                            navigate("/interview")
+                        }}  className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md">
                             Submit
                         </button>
                     )}

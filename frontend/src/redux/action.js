@@ -760,7 +760,7 @@ export const getcountries = () => {
         "Content-type": "application/json",
         "Authorization" : `Bearer ${GLOBAL_CONSTANTS?.token}`
         };
-        axios.delete(`${GLOBAL_CONSTANTS?.backend_url}user/${id}/${endpoint}`, {headers : headers})
+        axios.get(`${GLOBAL_CONSTANTS?.backend_url}user/${id}/${endpoint}`, {headers : headers})
         .then(() => {
           dispatch(loadStudentList({}));
           dispatch(loadTeachersList({}));

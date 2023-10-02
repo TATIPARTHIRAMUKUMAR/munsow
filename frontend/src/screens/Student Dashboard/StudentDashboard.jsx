@@ -23,7 +23,7 @@ export default function StudentDashboard() {
             <div className="col-span-1 ">
                 <div style={{background:"linear-gradient(180.43deg, #886CC0 19.43%, #c3b5df 87.63%)" }} className=" p-10 flex justify-between rounded-lg">
                     <div className="text-white">
-                        <div className="text-3xl font-bold color-">Hello {GLOBAL_CONSTANTS?.user_cred?.first_name} {GLOBAL_CONSTANTS?.user_cred?.last_name}!!!</div>
+                        <div className="text-3xl font-bold color-">Hello {GLOBAL_CONSTANTS?.user_cred?.first_name} {GLOBAL_CONSTANTS?.user_cred?.last_name} !!!</div>
                         {/* <p className="text-3xl font-bold pt-1">Apritha!!!</p> */}
                         <p className="text-lg py-3">Are you ready for your next interview?</p>
                         <div className="flex space-x-4 pt-5">
