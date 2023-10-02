@@ -25,7 +25,7 @@ import StepperComponent from "./screens/PracticeNow/Practice";
 import NotificationsPage from "./screens/Notifications/Notifications";
 import SettingsPage from "./screens/StudentSettings/Settings";
 import HelpAndSupportPage from "./screens/Help/Help";
-import Interview from "./screens/InterviewSection/Interview";
+// import Interview from "./screens/InterviewSection/Interview";
 import KSAnalysis from "./screens/Admin/Analysis/KSAnalysis";
 import Skills from "./screens/Admin/Analysis/Skills";
 import BehaviourAnalysis from "./screens/Admin/Analysis/BehaviourAnalysis";
@@ -72,7 +72,7 @@ function Url_Routes() {
                 <Route excat path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
                 <Route excat path="/notifications" element={<HeaderFooterLayout Component={<NotificationsPage />} />} />
                 <Route excat path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
-                <Route excat path="/interview" element={<HeaderFooterLayout Component={<Interview />} />} />
+                {/* <Route excat path="/interview" element={<HeaderFooterLayout Component={<Interview />} />} /> */}
                 <Route excat path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
                 <Route excat path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
               </>
