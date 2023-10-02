@@ -127,7 +127,7 @@ export default function PopUpFilter(props) {
           disableRipple
         >
           {/* <EditIcon /> */}
-          All Branches
+          All Departments
         </MenuItem>
         {departmentList?.map((branch) => (
           <MenuItem
