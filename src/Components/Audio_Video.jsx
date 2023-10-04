@@ -68,12 +68,12 @@ export default function Audio_Video() {
             let sliceWidth = WIDTH * 1.0 / analyser.current.fftSize;
             let x = 0;
             let isSpeaking = false;
-
+            // Adjust the sensitivity here. Lower values will make it more sensitive.
             for(let i = 0; i < analyser.current.fftSize; i++) {
                 let v = dataArray.current[i] / 128.0;
                 let y = v * HEIGHT / 2;
 
-                if(v > 1.5 || v < 0.5) {
+                if(v > 1.3 || v < 0.8) {
                     isSpeaking = true;
                 }
 
