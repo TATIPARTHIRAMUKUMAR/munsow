@@ -59,7 +59,6 @@ const headers = {
 
 axios.get(url, { headers })
   .then(response => {
-    console.log(response.data);
     setVideoUrl(response.data.result_url);
   })
   .catch(error => {
@@ -73,18 +72,19 @@ axios.get(url, { headers })
 
   useEffect(() => {
     dispatch(loadUserStats());
-    createVideo();
+    // createVideo();
+    getVideo()
   }, []);
 
-  useEffect(() => {
-      getVideo()
-  },[videoId])
+//   useEffect(() => {
+//       getVideo()
+//   },[videoId])
+
+  console.log(videoUrl)
 
   return (
     <div>
-        <video controls width="640" height="360" autoPlay>
-        <source src="https://d-id-talks-prod.s3.us-west-2.amazonaws.com/auth0%7C651dc0b50d85a79a4cc3c1d5/tlk_9TrJ-j1j8O_xT7ng6CSO5/1696531097815.mp4" type="video/mp4"/>
-        Your browser does not support the video tag.
+        <video controls src={videoUrl} width="640" height="360" autoPlay>
     </video>
       <div
         className="grid grid-cols-2 gap-7 px-6 py-6"
