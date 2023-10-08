@@ -3,6 +3,8 @@ import { Avatar, Divider, Typography } from '@mui/material'; // Import Material-
 import InsightsIcon from '@mui/icons-material/Insights';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import hardSkill from '../../assets/tools.png'
+import sofSkills from '../../assets/expertise.png'
 const SecondRow = () => {
     return (
         <div className="col-span-1 bg-white rounded-lg">
@@ -13,9 +15,10 @@ const SecondRow = () => {
                     <div className='flex flex-row justify-start items-center space-x-4'>
                         <div className="flex-shrink-0">
                             <Avatar
-                                src="your_image_url.jpg"
+                                style={{border: 0, borderRadius: '0%'}}
+                                src={hardSkill}
                                 alt="Image Description"
-                                sx={{ width: 50, height: 50 }}
+                                sx={{ width: 35, height: 35 }}
                             />
                         </div>
                         <div>
@@ -32,9 +35,10 @@ const SecondRow = () => {
                     <div className='flex flex-row justify-start items-center space-x-4'>
                         <div className="flex-shrink-0">
                             <Avatar
-                                src="your_image_url.jpg"
+                                style={{border: 0, borderRadius: '0%'}}
+                                src={sofSkills}
                                 alt="Image Description"
-                                sx={{ width: 50, height: 50 }}
+                                sx={{ width: 35, height: 35 }}
                             />
                         </div>
                         <div>
