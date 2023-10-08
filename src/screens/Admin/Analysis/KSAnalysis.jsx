@@ -1,143 +1,283 @@
 import React from "react";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
-    Label
-} from "recharts";
+import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _mockChartData from "./EmotionSensing/_mockChartData.json";
 
 const KSAnalysis = () => {
-    const legendFormatter = (value, entry) => {
-        return (
-            <div className={"flex items-center"}>
-                <div className={"h-4 w-4 mr-2"} style={{ backgroundColor: entry.color }} />
-                <div>{value}</div>
-            </div>
-        );
-    };
+    const hardSkillData = [
+        {
+          "id": "Hard skill 1",
+          "data": [
+            { "x": "Department 1", "y": 50 },
+            { "x": "Department 2", "y": 48 },
+            { "x": "Department 3", "y": 31 },
+            { "x": "Department 4", "y": 20 },
+            { "x": "Department 5", "y": 0 },
+            { "x": "Department 6", "y": 39 },
+            { "x": "Department 7", "y": 86 }
+          ]
+        },
+        {
+          "id": "Hard skill 2",
+          "data": [
+            { "x": "Department 1", "y": 64 },
+            { "x": "Department 2", "y": 10 },
+            { "x": "Department 3", "y": 2 },
+            { "x": "Department 4", "y": 11 },
+            { "x": "Department 5", "y": 69 },
+            { "x": "Department 6", "y": 85 },
+            { "x": "Department 7", "y": 78 }
+          ]
+        },
+        {
+          "id": "Hard skill 3",
+          "data": [
+            { "x": "Department 1", "y": 56 },
+            { "x": "Department 2", "y": 97 },
+            { "x": "Department 3", "y": 36 },
+            { "x": "Department 4", "y": 30 },
+            { "x": "Department 5", "y": 54 },
+            { "x": "Department 6", "y": 50 },
+            { "x": "Department 7", "y": 25 }
+          ]
+        },
+        {
+          "id": "Hard skill 4",
+          "data": [
+            { "x": "Department 1", "y": 71 },
+            { "x": "Department 2", "y": 90 },
+            { "x": "Department 3", "y": 14 },
+            { "x": "Department 4", "y": 13 },
+            { "x": "Department 5", "y": 53 },
+            { "x": "Department 6", "y": 5 },
+            { "x": "Department 7", "y": 85 }
+          ]
+        },
+        {
+          "id": "Hard skill 5",
+          "data": [
+            { "x": "Department 1", "y": 24 },
+            { "x": "Department 2", "y": 58 },
+            { "x": "Department 3", "y": 74 },
+            { "x": "Department 4", "y": 66 },
+            { "x": "Department 5", "y": 54 },
+            { "x": "Department 6", "y": 79 },
+            { "x": "Department 7", "y": 83 }
+          ]
+        },
+        {
+          "id": "Hard skill 6",
+          "data": [
+            { "x": "Department 1", "y": 59 },
+            { "x": "Department 2", "y": 16 },
+            { "x": "Department 3", "y": 77 },
+            { "x": "Department 4", "y": 41 },
+            { "x": "Department 5", "y": 35 },
+            { "x": "Department 6", "y": 54 },
+            { "x": "Department 7", "y": 45 }
+          ]
+        }
+      ]
+      
 
-    return (
-        <div className="flex-grow p-5">
-            <div className="container mx-auto">
-                <div className="flex flex-wrap">
-                    <div className="w-full">
-                        <div className="bg-white mb-3 p-5 rounded-xl">
-                            <div className="bg-white mb-10">
-                                <span className="text-2xl font-normal text-gray-900">
-                                    KS Analysis
-                                </span>
-                                <span className="text-xs uppercase text-gray-600"></span>
-                            </div>
-                            <div className="mt-5 pt-3">
-                                <ResponsiveContainer width="100%" height={480}>
-                                    <LineChart
-                                        data={_mockChartData}
-                                        margin={{
-                                            top: 20,
-                                            right: 50,
-                                            left: 5,
-                                            bottom: 5,
-                                        }}
-                                    >
-                                        <CartesianGrid vertical={false} strokeDasharray="0 0" />
-                                        <XAxis
-                                            dataKey="name"
-                                            axisLine={false}
-                                            tickLine={false}
-                                            interval={0}
-                                            dy={10}
-                                            dx={20}
-                                        >
-                                            <Label
-                                                value="TIME"
-                                                position="bottom"
-                                                dy={20}
-                                            />
-                                        </XAxis>
-                                        <YAxis
-                                            axisLine={false}
-                                            tickLine={false}
-                                            dx={-5}
-                                        >
-                                            <Label
-                                                value="EMOTIONS"
-                                                position="middle"
-                                                angle={-90}
-                                                dx={-30}
-                                            />
-                                        </YAxis>
-                                        <Tooltip />
-                                        <Legend
-                                            formatter={(value, entry) =>
-                                                legendFormatter(value, entry)
-                                            }
-                                            layout="horizontal"
-                                            iconSize={0}
-                                            wrapperStyle={{
-                                                width: "95%",
-                                                left: '50px',
-                                                marginBottom: '20px',
-                                                top: '-50px'
-                                            }}
-                                        />
-                                        <Line
-                                            type="basic"
-                                            dataKey="surprise"
-                                            stroke="#AFDFEF"
-                                            strokeWidth={4}
-                                        />
-                                        <Line
-                                            type="basic"
-                                            dataKey="disgust"
-                                            stroke="#E1885E"
-                                            strokeWidth={4}
-                                        />
-                                        <Line
-                                            type="basic"
-                                            dataKey="contempt"
-                                            stroke="#6B2F6B"
-                                            strokeWidth={4}
-                                        />
-                                        <Line
-                                            type="basic"
-                                            dataKey="happiness"
-                                            stroke="#9F9A8F"
-                                            strokeWidth={4}
-                                        />
-                                        <Line
-                                            type="basic"
-                                            dataKey="sadnesss"
-                                            stroke="#669548"
-                                            strokeWidth={4}
-                                        />
-                                        <Line
-                                            type="basic"
-                                            dataKey="anger"
-                                            stroke="#596EF2"
-                                            strokeWidth={4}
-                                        />
-                                        <Line
-                                            type="basic"
-                                            dataKey="fear"
-                                            stroke="#000000"
-                                            strokeWidth={4}
-                                        />
-                                        {/* ...rest of the lines for the LineChart */}
-                                    </LineChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    const softSkillData =[
+        {
+          "id": "Soft skill 1",
+          "data": [
+            { "x": "Department 1", "y": 50 },
+            { "x": "Department 2", "y": 48 },
+            { "x": "Department 3", "y": 31 },
+            { "x": "Department 4", "y": 20 },
+            { "x": "Department 5", "y": 10 },
+            { "x": "Department 6", "y": 39 },
+            { "x": "Department 7", "y": 86 }
+          ]
+        },
+        {
+          "id": "Soft skill 2",
+          "data": [
+            { "x": "Department 1", "y": 49 },
+            { "x": "Department 2", "y": 84 },
+            { "x": "Department 3", "y": 73 },
+            { "x": "Department 4", "y": 93 },
+            { "x": "Department 5", "y": 75 },
+            { "x": "Department 6", "y": 10 },
+            { "x": "Department 7", "y": 79 }
+          ]
+        },
+        {
+          "id": "Soft skill 3",
+          "data": [
+            { "x": "Department 1", "y": 56 },
+            { "x": "Department 2", "y": 37 },
+            { "x": "Department 3", "y": 36 },
+            { "x": "Department 4", "y": 30 },
+            { "x": "Department 5", "y": 54 },
+            { "x": "Department 6", "y": 50 },
+            { "x": "Department 7", "y": 25 }
+          ]
+        },
+        {
+          "id": "Soft skill 4",
+          "data": [
+            { "x": "Department 1", "y": 73 },
+            { "x": "Department 2", "y": 90 },
+            { "x": "Department 3", "y": 12 },
+            { "x": "Department 4", "y": 13 },
+            { "x": "Department 5", "y": 53 },
+            { "x": "Department 6", "y": 5 },
+            { "x": "Department 7", "y": 85 }
+          ]
+        },
+        {
+          "id": "Soft skill 5",
+          "data": [
+            { "x": "Department 1", "y": 24 },
+            { "x": "Department 2", "y": 58 },
+            { "x": "Department 3", "y": 74 },
+            { "x": "Department 4", "y": 6 },
+            { "x": "Department 5", "y": 54 },
+            { "x": "Department 6", "y": 79 },
+            { "x": "Department 7", "y": 83 }
+          ]
+        },
+        {
+          "id": "Soft skill 6",
+          "data": [
+            { "x": "Department 1", "y": 59 },
+            { "x": "Department 2", "y": 16 },
+            { "x": "Department 3", "y": 77 },
+            { "x": "Department 4", "y": 41 },
+            { "x": "Department 5", "y": 35 },
+            { "x": "Department 6", "y": 54 },
+            { "x": "Department 7", "y": 45 }
+          ]
+        }
+      ]
+      
+  return (
+    <div className="flex-grow p-5">
+      <div className="container mx-auto">
+        <div className="flex flex-wrap">
+          <div className="w-full">
+            <div className="bg-white mb-3 p-5 rounded-xl">
+              <div className="bg-white mb-10">
+                <span className="text-2xl font-normal text-gray-900">
+                  KS Analysis
+                </span>
+              </div>
+              <div className="mt-5 pt-3" style={{ height: 500 }}>
+              <span className="text-2xl font-normal text-gray-900">
+                 Hard skills
+                </span>
+                <ResponsiveHeatMap
+                  data={hardSkillData}
+                  margin={{ top: 70, right: 90, bottom: 60, left: 90 }}
+                  valueFormat=">-.2s"
+                  axisTop={{
+                    tickSize: 5,
+                    tickPadding: 5,
+                    tickRotation: -90,
+                    legend: "",
+                    legendOffset: 46,
+                  }}
+                  axisLeft={{
+                    tickSize: 5,
+                    tickPadding: 5,
+                    tickRotation: 0,
+                    legend: "Hard Skills",
+                    legendPosition: "middle",
+                    legendOffset: -80,
+                  }}
+                  colors={{
+                    type: "sequential",
+                    scheme: "greens",
+                    minValue: 0,
+                    maxValue: 100,
+                  }}
+                  emptyColor="#555555"
+                  legends={[
+                    {
+                      anchor: "bottom",
+                      translateX: 0,
+                      translateY: 30,
+                      length: 400,
+                      thickness: 8,
+                      direction: "row",
+                      tickPosition: "after",
+                      tickSize: 3,
+                      tickSpacing: 4,
+                      tickOverlap: false,
+                      tickFormat: ">-.2s",
+                      title: "Department",
+                      titleAlign: "start",
+                      titleOffset: 4,
+                    },
+                  ]}
+                />
+              </div>
+              <div className="mt-5 pt-3" style={{ height: 500 }}>
+              <span className="text-2xl font-normal text-gray-900">
+                 Soft skills
+                </span>
+                <ResponsiveHeatMap
+                  data={softSkillData}
+                  margin={{ top: 80, right: 90, bottom: 60, left: 90 }}
+                  valueFormat=">-.2s"
+                  axisTop={{
+                    tickSize: 5,
+                    tickPadding: 5,
+                    tickRotation: -90,
+                    legend: "",
+                    legendOffset: 46,
+                  }}
+                  axisLeft={{
+                    tickSize: 5,
+                    tickPadding: 5,
+                    tickRotation: 0,
+                    legend: "Soft Skills",
+                    legendPosition: "middle",
+                    legendOffset: -85,
+                  }}
+                  colors={{
+                    type: 'diverging',
+                    scheme: "purples",
+                    divergeAt: 0.5,
+                    minValue: 0,
+                    maxValue: 100,
+                  }}
+                  emptyColor="#555555"
+                  legends={[
+                    {
+                      anchor: "bottom",
+                      translateX: 0,
+                      translateY: 30,
+                      length: 400,
+                      thickness: 8,
+                      direction: "row",
+                      tickPosition: "after",
+                      tickSize: 3,
+                      tickSpacing: 4,
+                      tickOverlap: false,
+                      tickFormat: ">-.2s",
+                      title: "Department",
+                      titleAlign: "start",
+                      titleOffset: 4,
+                      colors: {
+                        scheme: "red_yellow_blue",
+                        divergeAt: 0.5,
+                        minValue: 0,
+                        maxValue: 100,
+                      }
+                    },
+                  ]}
+                />
+              </div>
             </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default KSAnalysis;
