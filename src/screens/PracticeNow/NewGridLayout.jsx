@@ -31,17 +31,32 @@ export default function NewGridLayout() {
     {
       id: 1,
       question: "Can you tell me about your strengths ?",
-      duration: 1000,
+      duration: 60,
     },
     {
       id: 2,
       question: "Please tell me why you would be a good fit for this role ?",
-      duration: 1000,
+      duration: 60,
     },
     {
       id: 3,
       question: "What are your career goals for the next five years ?",
-      duration: 1000,
+      duration: 60,
+    },
+    {
+      id: 4,
+      question: "Please tell me why you would be a good fit for this role ?",
+      duration: 60,
+    },
+    {
+      id: 5,
+      question: "What are your career goals for the next five years ?",
+      duration: 60,
+    },
+    {
+      id: 6,
+      question: "What are your career goals for the next five years ?",
+      duration: 60,
     },
   ];
   const TOTAL_TIME = questions.reduce((acc, q) => acc + q.duration, 0);
@@ -164,7 +179,7 @@ export default function NewGridLayout() {
             status: "Inprogress",
             video: base64data
           }
-          // dispatch(submit_interview(payload));
+          dispatch(submit_interview(payload));
 
           // If it's the last question, turn off the camera
           if (status === "completed") {
