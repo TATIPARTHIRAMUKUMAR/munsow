@@ -888,3 +888,34 @@ export const getcountries = () => {
         .catch((error) => console.log(error));
     };
   };
+
+
+  export const submit_interview = (data) => {
+    return function (dispatch) {
+      var headers = {
+        "Content-type": "application/json",
+        "Authorization" : `Bearer ${GLOBAL_CONSTANTS?.token}`
+      };
+      axios
+        .post(`${GLOBAL_CONSTANTS.backend_url}user/submit_answer`, JSON.stringify(data), {
+          headers,
+        })
+        .then((resp) => {
+         
+          if(! resp?.data?.status)
+          {
+            toast.error(resp?.data?.message);  
+          }
+  
+        })
+        .catch((error) => {
+  
+          toast.error(
+            error ?? "Something went wrong",
+            {
+              autoClose: 2000,
+            }
+          );
+        });
+    };
+  };
