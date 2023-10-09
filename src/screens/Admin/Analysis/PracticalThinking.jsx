@@ -1,7 +1,7 @@
 import React from "react";
 import {
-    LineChart,
-    Line,
+    BarChart,
+    Bar,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -36,7 +36,7 @@ const PracticalThinking = () => {
                             </div>
                             <div className="mt-5 pt-3">
                                 <ResponsiveContainer width="100%" height={480}>
-                                    <LineChart
+                                    <BarChart
                                         data={_mockChartData}
                                         margin={{
                                             top: 20,
@@ -69,7 +69,7 @@ const PracticalThinking = () => {
                                                 value="EMOTIONS"
                                                 position="middle"
                                                 angle={-90}
-                                                dx={-30}
+                                                dx={-25}
                                             />
                                         </YAxis>
                                         <Tooltip />
@@ -86,50 +86,35 @@ const PracticalThinking = () => {
                                                 top: '-50px'
                                             }}
                                         />
-                                        <Line
-                                            type="basic"
+                                        <Bar
                                             dataKey="surprise"
-                                            stroke="#AFDFEF"
-                                            strokeWidth={4}
+                                            fill="#AFDFEF"
                                         />
-                                        <Line
-                                            type="basic"
+                                        <Bar
                                             dataKey="disgust"
-                                            stroke="#E1885E"
-                                            strokeWidth={4}
+                                            fill="#E1885E"
                                         />
-                                        <Line
-                                            type="basic"
+                                        <Bar
                                             dataKey="contempt"
-                                            stroke="#6B2F6B"
-                                            strokeWidth={4}
+                                            fill="#6B2F6B"
                                         />
-                                        <Line
-                                            type="basic"
+                                        <Bar
                                             dataKey="happiness"
-                                            stroke="#9F9A8F"
-                                            strokeWidth={4}
+                                            fill="#9F9A8F"
                                         />
-                                        <Line
-                                            type="basic"
+                                        <Bar
                                             dataKey="sadnesss"
-                                            stroke="#669548"
-                                            strokeWidth={4}
+                                            fill="#669548"
                                         />
-                                        <Line
-                                            type="basic"
+                                        <Bar
                                             dataKey="anger"
-                                            stroke="#596EF2"
-                                            strokeWidth={4}
+                                            fill="#596EF2"
                                         />
-                                        <Line
-                                            type="basic"
+                                        <Bar
                                             dataKey="fear"
-                                            stroke="#000000"
-                                            strokeWidth={4}
+                                            fill="#000000"
                                         />
-                                        {/* ...rest of the lines for the LineChart */}
-                                    </LineChart>
+                                    </BarChart>
                                 </ResponsiveContainer>
                             </div>
                         </div>
