@@ -1,4 +1,4 @@
-const UserReportPartFive = () => {
+const UserReportPartFive = ({userData}) => {
   return (
     <div className="mt-5 bg-white pt-10 pb-10" style={{ height: '1000px' }} id="page6">
       <div className="md:flex">
@@ -27,17 +27,17 @@ const UserReportPartFive = () => {
               <div className="flex justify-between ml-6">
                 <div className="mt-5 ms-4 me-4 w-52">
                   <div>
-                    <span className="font-bold text-7xl">75%</span>
+                    <span className="font-bold text-7xl">{userData?.percentage}</span>
                   </div>
                   <div className="py-8">
                     <span className="text-lg font-semibold text-center">
-                      You would stand in the top 75% applicants
+                      You would stand in the top {userData?.percentage} applicants
                     </span>
                   </div>
                 </div>
                 <div className="mt-5 ms-4 me-4 w-52">
                   <div>
-                    <span className="font-bold text-7xl">50</span>
+                    <span className="font-bold text-7xl">{userData?.content}</span>
                   </div>
                   <div className="py-8">
                     <span className="text-lg font-semibold text-center">Content</span>
@@ -45,7 +45,7 @@ const UserReportPartFive = () => {
                 </div>
                 <div className="mt-5 ms-4 me-4 w-52">
                   <div>
-                    <span className="font-bold text-7xl">3</span>
+                    <span className="font-bold text-7xl">{userData?.content_highlight}</span>
                   </div>
                   <div className="py-8">
                     <span className="text-lg font-semibold text-center">

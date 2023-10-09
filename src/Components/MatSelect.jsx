@@ -13,19 +13,19 @@ export default function CheckboxesTags(props) {
   return (
     <Autocomplete
     size="small"
-      multiple
+      // multiple
       id="checkboxes-tags-demo"
       options={options}
       disableCloseOnSelect
       getOptionLabel={(option) => option.label}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
-          <Checkbox
+          {/* <Checkbox
             icon={icon}
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
             checked={selected}
-          />
+          /> */}
           {option.label}
         </li>
       )}

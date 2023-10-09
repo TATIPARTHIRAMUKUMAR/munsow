@@ -283,7 +283,6 @@ export default function HeaderFooterLayout({ Component }) {
   return (
     <Box sx={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden" }}>
       <CssBaseline />
-
       <CustomDrawer variant="permanent" open={open} role1={GLOBAL_CONSTANTS?.user_cred?.role_id ? GLOBAL_CONSTANTS?.user_cred?.role_id : 1}>
         <DrawerHeader style={{ background: "#f1e8f5" }}>
           <div className="font-bold  text-[#4e3f6b] text-2xl pr-10">MUNSOW</div>

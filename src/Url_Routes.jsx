@@ -43,11 +43,11 @@ function Url_Routes() {
     <BrowserRouter>
       <Routes>
         {
-          GLOBAL_CONSTANTS?.loggedIn &&
+          (GLOBAL_CONSTANTS?.loggedIn || true ) &&
           <>
             {
               GLOBAL_CONSTANTS?.user_cred?.role_id == 1 ? <>
-                <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} />} />
+                {/* <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} />} /> */}
                 <Route excat path="/quiz" element={<HeaderFooterLayout Component={<QuizListing />} />} />
                 <Route excat path="/users" element={<HeaderFooterLayout Component={<Users />} />} />
                 <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
@@ -65,7 +65,7 @@ function Url_Routes() {
                 <Route excat path="/adminHelp" element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />} />
                 <Route excat path="/adminSettings" element={<HeaderFooterLayout Component={<SettingsPageAdmin />} />} />
               </> : <>
-                <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} />} />
+                {/* <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} />} /> */}
                 <Route excat path="/lessons" element={<HeaderFooterLayout Component={<LessonIndex />} />} />
                 <Route excat path="/lesson/:id" element={<HeaderFooterLayout Component={<LessonView />} />} />
                 <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />

@@ -1,4 +1,4 @@
-const UserReportPartSeven = () => {
+const UserReportPartSeven = ({userData}) => {
   return (
     <div className="mt-5 bg-white" id="page8" style={{ height: '1000px' }}>
       <div className="md:flex justify-center items-center">

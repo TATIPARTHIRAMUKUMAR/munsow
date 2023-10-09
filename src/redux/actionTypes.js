@@ -26,6 +26,9 @@ export const SOFT_SKILLS_LIST = "SOFT_SKILLS_LIST";
 export const INTERVIEW_ROLES_LIST = "INTERVIEW_ROLES_LIST";
 export const COMPANIES_LIST = "COMPANIES_LIST";
 
+export const USER_REPORT = "USER_REPORT";
+
+
  
  
  

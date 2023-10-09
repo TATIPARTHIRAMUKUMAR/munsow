@@ -1,5 +1,5 @@
 import GLOBAL_CONSTANTS from "../../../GlobalConstants"
-const UserReportTitle = () => {
+const UserReportTitle = ({ userData }) => {
   return (
     <div className="bg-white" id="page1">
       <div className="report1-main-container">
@@ -21,7 +21,7 @@ const UserReportTitle = () => {
                     </span>
                   </div>
                   <div className="mt-2">
-                    <span className="text-2xl font-semibold">{GLOBAL_CONSTANTS?.user_cred?.first_name} {GLOBAL_CONSTANTS?.user_cred?.last_name}</span>
+                    <span className="text-2xl font-semibold">{userData?.user_name}</span>
                   </div>
                 </div>
                 <div className="md:w-6/12">
@@ -31,10 +31,10 @@ const UserReportTitle = () => {
                     </span>
                   </div>
                   <div className="mt-2">
-                    <span className="text-2xl font-semibold">MANU R</span>
+                    <span className="text-2xl font-semibold">{userData?.teacher_name}</span>
                   </div>
                   <div className="mt-2">
-                    <span className="text-2xl font-semibold">+91 8328057448</span>
+                    <span className="text-2xl font-semibold">{userData?.teacher_number}</span>
                   </div>
                 </div>
               </div>
@@ -48,7 +48,7 @@ const UserReportTitle = () => {
             <div className="p-4 mt-3">
               <div className="mb-4 report1-footer">
                 <span className="report1-footer-txt text-xl">
-                  Position: HR Transformation Consultant | Deloitte
+                  Position: {userData?.interview_position} | {userData?.interview_company}
                 </span>
               </div>
             </div>

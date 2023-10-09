@@ -869,3 +869,22 @@ export const getcountries = () => {
     };
   };
   
+  const getUserReport = (data) => ({
+    type: types.USER_REPORT,
+    payload: data,
+  });
+  
+  export const loadUserReport = () => {
+    return function (dispatch) {
+      var headers = {
+        "Content-type": "application/json",
+        "Authorization" : `Bearer ${GLOBAL_CONSTANTS?.token}`
+        };
+        axios.get(`${GLOBAL_CONSTANTS?.backend_url}/user/report`, {headers})
+        .then((resp) => {
+          console.log("rep",resp?.data)
+          dispatch(getUserReport(resp?.data));
+        })
+        .catch((error) => console.log(error));
+    };
+  };

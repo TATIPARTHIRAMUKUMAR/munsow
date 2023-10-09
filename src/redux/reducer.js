@@ -27,6 +27,7 @@ const initialState = {
   interviewRolesList: [],
   companiesList: [],
   emotionStats: {},
+  userReport:[],
   loading: false
 };
 
@@ -149,6 +150,11 @@ const DataReducers = (state = initialState, action) => {
     case types.EMOTION_STATS: return{
       ...state,
       emotionStats:action.payload.data,
+      loading:false
+    }
+    case types.USER_REPORT: return{
+      ...state,
+      userReport:action.payload?.data,
       loading:false
     }
     case types.INSTITUTION_LIST: return{

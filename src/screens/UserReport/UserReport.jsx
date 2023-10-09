@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -13,10 +13,24 @@ import UserReportPartFive from "./UserReportPartFive";
 import UserReportPartSix from "./UserReportPartSix";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Divider } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { loadUserReport } from "../../redux/action";
 
 const UserReport = () => {
   const reportTemplateRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [reportData, setReportData] = useState({});
+  const {  userReport } = useSelector(state => state?.data)
+
+  const dispatch=useDispatch();
+
+  useEffect(()=>{
+    dispatch(loadUserReport());
+  },[])
+
+  useEffect(()=>{
+    setReportData(userReport);
+  },[userReport])
 
   const handleGeneratePdf = async () => {
     setLoading(true);
@@ -48,38 +62,38 @@ const UserReport = () => {
       <div className="container mx-auto">
         <div ref={reportTemplateRef} className="bg-white">
           <div>
-            <UserReportTitle />
+            <UserReportTitle userData={reportData}/>
           </div>
           <div>
-            <UserReportPartOne />
-          </div>
-          <div>
-            <Divider className="pt-5"/>
-            <UserReportPartTwo />
-            <Divider className="pt-5"/>
+            <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming}/>
           </div>
           <div>
             <Divider className="pt-5"/>
-            <UserReportPartThree />
+            <UserReportPartTwo userData={reportData?.interview_score_by_category}/>
             <Divider className="pt-5"/>
           </div>
           <div>
             <Divider className="pt-5"/>
-            <UserReportPartFour />
+            <UserReportPartThree userData={reportData?.interview_score_by_category}/>
             <Divider className="pt-5"/>
           </div>
           <div>
             <Divider className="pt-5"/>
-            <UserReportPartFive />
+            <UserReportPartFour userData={reportData?.interview_score_by_category}/>
             <Divider className="pt-5"/>
           </div>
           <div>
             <Divider className="pt-5"/>
-            <UserReportPartSix />
+            <UserReportPartFive userData={reportData?.where_you_stand}/>
             <Divider className="pt-5"/>
           </div>
           <div>
-            <UserReportPartSeven />
+            <Divider className="pt-5"/>
+            <UserReportPartSix userData={reportData}/>
+            <Divider className="pt-5"/>
+          </div>
+          <div>
+            <UserReportPartSeven userData={reportData}/>
           </div>
         </div>
         <div className="mt-5">

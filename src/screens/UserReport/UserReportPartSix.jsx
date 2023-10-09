@@ -1,4 +1,4 @@
-const UserReportPartSix = () => {
+const UserReportPartSix = ({ userData }) => {
   return (
     <div className="mt-5" id="page7">
       <div className="bg-white p-5">
@@ -23,12 +23,17 @@ const UserReportPartSix = () => {
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
               <ul className="list-disc list-inside text-lg font-medium text-purple-800">
-                <li className="mb-2">
-                  Deloitte is a global leader in consulting and has a robust framework for HR transformation, which includes cloud technologies, process improvement, and change management. Familiarize yourself with their approach.
-                </li>
-                <li>
-                  Deloitte often works with diverse, global teams. If you have any experiences working in diverse or cross-cultural settings, be sure to mention these.
-                </li>
+                {userData?.about_company?.map((o, index) => {
+                  return (
+                    <>
+                      <li>
+                        {o}
+                      </li>
+                    </>
+                  )
+                }
+                )
+                }
               </ul>
             </div>
           </div>
@@ -44,9 +49,17 @@ const UserReportPartSix = () => {
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
               <ul className="list-disc list-inside text-lg font-medium text-purple-800">
-                <li>
-                  In recent news, Deloitte has announced plans to increase their investment in AI and digital transformation services. Mentioning awareness of this can show that you stay updated with company news.
-                </li>
+              {userData?.lastest_company_news?.map((o, index) => {
+                  return (
+                    <>
+                      <li>
+                        {o}
+                      </li>
+                    </>
+                  )
+                }
+                )
+                }
               </ul>
             </div>
           </div>
@@ -62,12 +75,17 @@ const UserReportPartSix = () => {
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
               <ul className="list-disc list-inside text-lg font-medium text-purple-800">
-                <li>
-                  Showcasing your experience with digital HR platforms is crucial for a HR Transformation Consultant role at Deloitte.
-                </li>
-                <li>
-                  Deloitte's HR Transformation services also involve process redesign and change management. Share examples of your experience in these areas.
-                </li>
+              {userData?.role_specific_skills?.map((o, index) => {
+                  return (
+                    <>
+                      <li>
+                        {o}
+                      </li>
+                    </>
+                  )
+                }
+                )
+                }
               </ul>
             </div>
           </div>
@@ -83,12 +101,17 @@ const UserReportPartSix = () => {
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
               <ul className="list-disc list-inside text-lg font-medium text-purple-800">
-                <li>
-                  The HR industry is increasingly leveraging AI and machine learning for various HR functions. Highlighting your awareness and any experience you have with these technologies could be beneficial.
-                </li>
-                <li>
-                  According to a recent study, HR departments are playing a key role in environmental, social and governance (ESG) initiatives. This is also an area that Deloitte is focusing on, as per recent news. Be prepared to discuss your views or experience in this area.
-                </li>
+              {userData?.industry_trends?.map((o, index) => {
+                  return (
+                    <>
+                      <li>
+                        {o}
+                      </li>
+                    </>
+                  )
+                }
+                )
+                }
               </ul>
             </div>
           </div>
