@@ -850,6 +850,25 @@ export const getcountries = () => {
     };
   };
 
+  const getReportsList = (data) => ({
+    type: types.USER_REPORT_LIST,
+    payload: data,
+  });
+  
+  export const loadReportsList = (params={}) => {
+    return function (dispatch) {
+      var headers = {
+        "Content-type": "application/json",
+        "Authorization" : `Bearer ${GLOBAL_CONSTANTS?.token}`
+        };
+        axios.get(`${GLOBAL_CONSTANTS?.backend_url}user/list_interviews`, {params,headers})
+        .then((resp) => {
+          dispatch(getReportsList(resp?.data));
+        })
+        .catch((error) => console.log(error));
+    };
+  };
+
   const getEmotionStats = (data) => ({
     type: types.EMOTION_STATS,
     payload: data,
@@ -888,6 +907,78 @@ export const getcountries = () => {
         .catch((error) => console.log(error));
     };
   };
+
+  const getInterviewQuestions = (data) => ({
+    type: types.INTERVIEW_QUESTIONS,
+    payload: data,
+  });
+
+  export const loadQuestions = (data) => {
+    return function (dispatch) {
+      var headers = {
+        "Content-type": "application/json",
+        "Authorization" : `Bearer ${GLOBAL_CONSTANTS?.token}`
+      };
+      // let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
+      axios
+        .post(`${GLOBAL_CONSTANTS.backend_url}user/register_interview`, JSON.stringify(data), {headers,
+        })
+        .then((resp) => {
+          if(resp?.data?.error)
+          {
+            // toast.update( toastId ,{render: resp?.data?.error,type:"error", autoClose: true})
+
+          }
+          else
+          {
+            dispatch(getInterviewQuestions(resp?.data));
+            // toast.update( toastId ,{render:"Wait .. redirecting to Interview Section",type:"success", autoClose: true })
+          }
+        })
+        .catch((error) => {
+          // toast.error(
+          //   error ?? "Something went wrong",
+          //   {
+          //     autoClose: 2000,
+          //   }
+          // );
+        });
+    };
+  };
+
+  export const prepare_interview = (data,callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+        "Authorization" : `Bearer ${GLOBAL_CONSTANTS?.token}`
+      };
+      let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
+      axios
+        .post(`${GLOBAL_CONSTANTS.backend_url}user/register_interview`, JSON.stringify(data), {headers,
+        })
+        .then((resp) => {
+          if(resp?.data?.error)
+          {
+            toast.update( toastId ,{render: resp?.data?.error,type:"error", autoClose: true})
+
+          }
+          else
+          {
+            toast.update( toastId ,{render:"Wait .. redirecting to Interview Section",type:"success", autoClose: true })
+            callback
+          }
+        })
+        .catch((error) => {
+          toast.error(
+            error ?? "Something went wrong",
+            {
+              autoClose: 2000,
+            }
+          );
+        });
+    };
+  };
+
 
 
   export const submit_interview = (data) => {

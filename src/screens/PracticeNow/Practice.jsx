@@ -5,13 +5,15 @@ import ComputerRoundedIcon from '@mui/icons-material/ComputerRounded';
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 import CheckboxesTags from "../../Components/MatSelect";
-import { loadCompaniesList, loadHardSkillsList, loadInterviewRolesList, loadSoftSkillsList } from "../../redux/action";
+import { loadCompaniesList, loadHardSkillsList, loadInterviewRolesList, loadQuestions, loadSoftSkillsList, prepare_interview } from "../../redux/action";
 import './Practice.css'; // Make sure to import your stylesheet
 
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import Audio_Video from "../../Components/Audio_Video";
+import { toast } from "react-toastify";
+
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -51,10 +53,45 @@ const StepperComponent = () => {
     const [chosenRole, setChosenRole] = useState(false);
     const [chosenCompany, setChosenCompany] = useState(false);
     const [level, setLevel] = useState(0);
-    const [experienceLevel, setExperienceLevel] = useState("Beginner");
+    const [experienceLevel, setExperienceLevel] = useState("low");
     const [selectedCategory, setSelectedCategory] = useState('skills');
 
+    const [selectedSoftskill, setSelectedSoftskill] = useState(null);
+    const [selectedHardskill, setSelectedHardskill] = useState(null);
+    const [selectedRole, setSelectedRole] = useState(null);
+    const [selectedCompany, setSelectedCompany] = useState(null);
+    const payload = {
+        level: "",
+        specifications: {
+            role: "",
+            company: "",
+            hard_skill: "",
+            soft_skill: ""
+        }
+    }
+
+    const { hardSkillsList, softSkillsList, interviewRolesList, companiesList, questionsList } = useSelector(state => state?.data)
+
+
     const handleNext = () => {
+        payload.level = experienceLevel ? experienceLevel : "";
+        payload.specifications.role = selectedRole ? selectedRole?.label : "";
+        payload.specifications.company = selectedCompany ? selectedCompany?.label : "";
+        payload.specifications.hard_skill = selectedHardskill ? selectedHardskill?.label : "";
+        payload.specifications.soft_skill = selectedSoftskill ? selectedSoftskill?.label : "";
+        console.log("currentStep", payload)
+        if (currentStep == 1) {
+            dispatch(loadQuestions(payload))
+        }
+        if (currentStep == 2) {
+            let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
+            toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
+            if (questionsList?.questions?.length > 0) {
+                setTimeout(() => {
+                    navigate("/interview")
+                }, 3000);
+            }
+        }
         setCurrentStep(currentStep + 1);
     };
 
@@ -62,7 +99,6 @@ const StepperComponent = () => {
         setCurrentStep(currentStep - 1);
     };
 
-    const { hardSkillsList, softSkillsList, interviewRolesList, companiesList } = useSelector(state => state?.data)
 
     useEffect(() => {
         dispatch(loadHardSkillsList());
@@ -127,13 +163,13 @@ const StepperComponent = () => {
                                 </div>
                                 <div className={selectedCategory !== 'skills' ? 'opacity-50 pointer-events-none' : ''}>
                                     <label className="flex items-center space-x-2 my-3">
-                                        <input
+                                        {/* <input
                                             type="checkbox"
                                             name="hardSkills"
                                             checked={hardSkills}
                                             className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                                             onChange={() => setHardSkills(!hardSkills)}
-                                        />
+                                        /> */}
                                         <span className="font-bold pr-2">Hard Skills</span>
                                     </label>
                                     <CheckboxesTags
@@ -143,17 +179,20 @@ const StepperComponent = () => {
                                                 id: o.id,
                                             }
                                         })}
-                                        label="Hard Skills" />
+                                        label="Hard Skills"
+                                        selectedItems={selectedHardskill}
+                                        onSelectionChange={setSelectedHardskill}
+                                    />
                                 </div>
                                 <div>
                                     <label className="flex items-center space-x-2 my-3">
-                                        <input
+                                        {/* <input
                                             type="checkbox"
                                             name="softSkills"
                                             checked={softSkills}
                                             className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                                             onChange={() => setSoftSkills(!softSkills)}
-                                        />
+                                        /> */}
                                         <span className="font-bold pr-2">Soft Skills</span>
                                     </label>
                                     <CheckboxesTags
@@ -163,7 +202,10 @@ const StepperComponent = () => {
                                                 id: o.id,
                                             }
                                         })}
-                                        label="Soft Skills" />
+                                        selectedItems={selectedSoftskill}
+                                        onSelectionChange={setSelectedSoftskill}
+                                        label="Soft Skills"
+                                    />
                                 </div>
                             </div>
                             <div className="p-10"></div>
@@ -186,13 +228,13 @@ const StepperComponent = () => {
 
                                 <div className={selectedCategory !== 'role' ? 'opacity-50 pointer-events-none' : ''}>
                                     <label className="flex items-center space-x-2 my-3">
-                                        <input
+                                        {/* <input
                                             type="checkbox"
                                             name="chosenRole"
                                             checked={chosenRole}
                                             className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                                             onChange={() => setChosenRole(!chosenRole)}
-                                        />
+                                        /> */}
 
                                         <span className="font-bold pr-2">Choose Role</span>
                                     </label>
@@ -203,17 +245,19 @@ const StepperComponent = () => {
                                                 id: o.id,
                                             }
                                         })}
+                                        selectedItems={selectedRole}
+                                        onSelectionChange={setSelectedRole}
                                         label="Interview Roles" />
                                 </div>
                                 <div>
                                     <label className="flex items-center space-x-2 my-3">
-                                        <input
+                                        {/* <input
                                             type="checkbox"
                                             name="chosenCompany"
                                             checked={chosenCompany}
                                             className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                                             onChange={() => setChosenCompany(!chosenCompany)}
-                                        />
+                                        /> */}
 
                                         <span className="font-bold pr-2">Choose Company</span>
                                     </label>
@@ -224,6 +268,8 @@ const StepperComponent = () => {
                                                 id: o.id,
                                             }
                                         })}
+                                        selectedItems={selectedCompany}
+                                        onSelectionChange={setSelectedCompany}
                                         label="Companies" />
                                 </div>
                             </div>
@@ -248,19 +294,19 @@ const StepperComponent = () => {
 
                                 <div className="flex justify-evenly text-md">
                                     <button
-                                        onClick={() => setLevel(0)}
+                                        onClick={() => { setLevel(0); setExperienceLevel("low") }}
                                         className="bg-green-500 hover:bg-green-700 text-white  py-1 px-3 rounded-md"
                                     >
                                         Begginer
                                     </button>
                                     <button
-                                        onClick={() => setLevel(50)}
+                                        onClick={() => { setLevel(50); setExperienceLevel("medium") }}
                                         className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 rounded-md"
                                     >
                                         Intermediate
                                     </button>
                                     <button
-                                        onClick={() => setLevel(100)}
+                                        onClick={() => { setLevel(100); setExperienceLevel("high") }}
                                         className="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded-md"
                                     >
                                         Advaned
@@ -270,7 +316,7 @@ const StepperComponent = () => {
                             {/* <div className="text-center font-semibold">Or</div>
                             <h2 className="text-center text-sm font-semibold mb-2 text-purple-600">Choose your Experience level</h2>
                             <div className="flex justify-between items-center"> */}
-                                {/* <div>
+                            {/* <div>
                                     <select
                                         className="border rounded p-1"
                                         value={experienceLevel}
@@ -282,7 +328,7 @@ const StepperComponent = () => {
                                     </select>
                                 </div> */}
 
-                                {/* <Autocomplete
+                            {/* <Autocomplete
                                     size="small"
                                     fullWidth
                                     disablePortal
@@ -353,15 +399,24 @@ const StepperComponent = () => {
                     {currentStep < steps.length - 1 && (
                         <button
                             onClick={handleNext}
-                            className="bg-blue-500 mx-2 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+                            disabled={selectedRole==null} // Use the isRoleSelected state variable here
+                            className={`bg-blue-500 mx-2 hover:bg-blue-700 text-white py-2 px-4 rounded-md ${selectedRole==null ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             Next
                         </button>
                     )}
+
+
+                    {/* {currentStep < steps.length - 1 && (
+                        <button
+                            onClick={handleNext}
+                            className="bg-blue-500 mx-2 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+                        >
+                            Next
+                        </button>
+                    )} */}
                     {currentStep === steps.length - 1 && (
-                        <button onClick={() => {
-                            navigate("/interview")
-                        }} className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                        <button onClick={handleNext} className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md">
                             Submit
                         </button>
                     )}

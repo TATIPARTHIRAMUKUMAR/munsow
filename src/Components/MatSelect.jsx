@@ -9,7 +9,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function CheckboxesTags(props) {
-  const { options, label } = props;
+  const { options, label, selectedItems, onSelectionChange } = props;
   return (
     <Autocomplete
     size="small"
@@ -17,7 +17,10 @@ export default function CheckboxesTags(props) {
       id="checkboxes-tags-demo"
       options={options}
       disableCloseOnSelect
+      value={selectedItems}
+      onChange={(event, newValue) => onSelectionChange(newValue)}
       getOptionLabel={(option) => option.label}
+      disableCloseOnSelect={false}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           {/* <Checkbox

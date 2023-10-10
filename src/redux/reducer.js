@@ -28,6 +28,8 @@ const initialState = {
   companiesList: [],
   emotionStats: {},
   userReport:[],
+  userReportList:[],
+  questionsList:[],
   loading: false
 };
 
@@ -157,6 +159,11 @@ const DataReducers = (state = initialState, action) => {
       userReport:action.payload?.data,
       loading:false
     }
+    case types.USER_REPORT_LIST: return{
+      ...state,
+      userReportList:action.payload?.data,
+      loading:false
+    }
     case types.INSTITUTION_LIST: return{
       ...state,
       institutionList:action.payload,
@@ -165,6 +172,11 @@ const DataReducers = (state = initialState, action) => {
     case types.COUNTRY_LIST: return{
       ...state,
       countryList:action.payload,
+      loading:false
+    }
+    case types.INTERVIEW_QUESTIONS: return{
+      ...state,
+      questionsList:action.payload,
       loading:false
     }
     default:
