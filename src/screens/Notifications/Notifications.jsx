@@ -31,7 +31,7 @@ const Notification = ({ type, message, date }) => {
 const NotificationsPage = () => {
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-center text-3xl font-bold my-4">Notifications</h1>
+      <h1 className="text-center text-3xl text-[#886cc0] font-bold my-4">Notifications</h1>
       {notifications.map((notification, index) => (
         <Notification key={index} {...notification} />
       ))}

@@ -54,7 +54,7 @@ export default function ReportIndex() {
         return (
             <div className="max-h-[320px]">
                 {/* {access ? ( */}
-                <div className="shadow-lg flex flex-col h-full bg-gray-200 min-h-[150px] rounded-lg overflow-hidden outline outline-purple-300">
+                <div className="shadow-lg flex flex-col h-full bg-[#886cc010] min-h-[150px] rounded-lg overflow-hidden outline outline-[#886cc060]">
                     <div className="grid gap-4" >
                         {/* <Image src={Lesson} alt="Title" className="w-full h-[120px]" /> */}
                         <div className="p-2 flex flex-col gap-y-2 ">
@@ -68,7 +68,7 @@ export default function ReportIndex() {
 
                         <Divider className="py-5" />
                         <div className="py-2 item-self-end w-full">
-                            <Button className="font-bold w-full  py-2" endIcon={<ArrowForwardIcon />} onClick={() => { navigate(`/reportView`) }} style={{ color: "#9f7aea" }} > View Report </Button>
+                            <Button className="font-bold w-full  py-2" endIcon={<ArrowForwardIcon />} onClick={() => { navigate(`/reportView`) }} style={{ color: "#886cc0" }} > View Report </Button>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ export default function ReportIndex() {
     }
     return (
         <div className="w-full h-full overflow-y-auto px-4 ">
-            <div className="text-3xl font-bold text-purple-800 pt-10">
+            <div className="text-3xl font-bold text-[#886cc0] pt-10">
                 My Reports
             </div>
             <Divider style={{ margin: "10px 0px", padding: "10px" }} />

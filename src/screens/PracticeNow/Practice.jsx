@@ -156,9 +156,9 @@ const StepperComponent = () => {
                                         value="skills"
                                         checked={selectedCategory === 'skills'}
                                         onChange={() => setSelectedCategory('skills')}
-                                        className="p-1 m-2"
+                                        className="p-1 m-2 text-[#886cc0]"
                                     />
-                                    <h2 className="text-xl font-semibold mb-2 text-purple-500">Skill Specific</h2>
+                                    <h2 className="text-xl font-semibold mb-2 text-[#886cc0]">Skill Specific</h2>
 
                                 </div>
                                 <div className={selectedCategory !== 'skills' ? 'opacity-50 pointer-events-none' : ''}>
@@ -220,9 +220,9 @@ const StepperComponent = () => {
                                         value="role"
                                         checked={selectedCategory === 'role'}
                                         onChange={() => setSelectedCategory('role')}
-                                        className="p-1 m-2"
+                                        className="p-1 m-2 text-[#886cc0]"
                                     />
-                                    <h2 className="text-xl font-semibold mb-2 text-purple-500">Role Specific</h2>
+                                    <h2 className="text-xl font-semibold mb-2 text-[#886cc0]">Role Specific</h2>
 
                                 </div>
 
@@ -236,7 +236,7 @@ const StepperComponent = () => {
                                             onChange={() => setChosenRole(!chosenRole)}
                                         /> */}
 
-                                        <span className="font-bold pr-2">Choose Role</span>
+                                        <span className="font-bold pr-2 ">Choose Role</span>
                                     </label>
                                     <CheckboxesTags
                                         options={interviewRolesList?.map((o) => {
@@ -391,7 +391,7 @@ const StepperComponent = () => {
                     {currentStep > 0 && (
                         <button
                             onClick={handlePrev}
-                            className="bg-blue-500 mx-2 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+                            className="bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md"
                         >
                             Previous
                         </button>
@@ -400,7 +400,7 @@ const StepperComponent = () => {
                         <button
                             onClick={handleNext}
                             disabled={selectedRole==null} // Use the isRoleSelected state variable here
-                            className={`bg-blue-500 mx-2 hover:bg-blue-700 text-white py-2 px-4 rounded-md ${selectedRole==null ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md ${selectedRole==null ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             Next
                         </button>
@@ -410,7 +410,7 @@ const StepperComponent = () => {
                     {/* {currentStep < steps.length - 1 && (
                         <button
                             onClick={handleNext}
-                            className="bg-blue-500 mx-2 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+                            className="bg-blue-500 mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md"
                         >
                             Next
                         </button>

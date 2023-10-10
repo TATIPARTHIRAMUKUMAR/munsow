@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Button } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import { useNavigate } from "react-router-dom";
@@ -7,11 +6,10 @@ import { submit_interview } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import image from "../../assets/AI_Interview_img1.avif"
+import image from "../../assets/h.jpeg"
 
 let mediaRecorder;
 let recordedChunks = [];
-
 
 function formatTime(seconds) {
   const hrs = Math.floor(seconds / 3600);
@@ -27,71 +25,34 @@ export default function NewGridLayout({ questions }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const [questions, setQuestions] = useState([]);
+  const [voices, setVoices] = useState([]);
 
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          setVoices(window.speechSynthesis.getVoices());
+        };
+      }
+    }
+  }, []);
+  
   const { questionsList } = useSelector(state => state?.data)
-  // let questions = [];
-
-  // let questions = [
-  // {
-  //   id: 1,
-  //   question: "Can you tell me about your strengths ?",
-  //   duration: 60,
-  // },
-  // {
-  //   id: 2,
-  //   question: "Please tell me why you would be a good fit for this role ?",
-  //   duration: 60,
-  // },
-  // {
-  //   id: 3,
-  //   question: "What are your career goals for the next five years ?",
-  //   duration: 60,
-  // },
-  // {
-  //   id: 4,
-  //   question: "Please tell me why you would be a good fit for this role ?",
-  //   duration: 60,
-  // },
-  // {
-  //   id: 5,
-  //   question: "What are your career goals for the next five years ?",
-  //   duration: 60,
-  // },
-  // {
-  //   id: 6,
-  //   question: "What are your career goals for the next five years ?",
-  //   duration: 60,
-  // },
-  // ];
-
-  // useEffect(() => {
-  //   setQuestions(questionsList?.questions ? questionsList?.questions : [])
-  //   console.log("questions", questions, questionsList)
-  //   // questions = questionsList?.questions ? questionsList?.questions : []
-  // }, [questionsList])
-
   const TOTAL_TIME = questions?.reduce((acc, q) => acc + q.duration, 0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questionTimeLeft, setQuestionTimeLeft] = useState(questions?.[0]?.duration);
   const [totalTimeLeft, setTotalTimeLeft] = useState(TOTAL_TIME);
-
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [interviewCompleted, setInterviewCompleted] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [spokenQuestions, setSpokenQuestions] = useState([]);
 
-
-
-
   const handleFinishInterview = () => {
     setShowConfirmationPopup(true);
   }
 
-
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
-      // stopRecording();
       stopRecording();
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
@@ -108,7 +69,6 @@ export default function NewGridLayout({ questions }) {
     navigate("/studentDashboard");
   }
 
-
   function startStreamAndRecording() {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -121,11 +81,9 @@ export default function NewGridLayout({ questions }) {
             recordedChunks.push(event.data);
           }
         };
-
         mediaRecorder.onstop = function () {
           const blob = new Blob(recordedChunks, { type: "video/mp4" });
           const url = URL.createObjectURL(blob);
-
           // Create a download link for the recorded video
           const a = document.createElement("a");
           a.href = url;
@@ -134,11 +92,9 @@ export default function NewGridLayout({ questions }) {
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-
           // Clear the recordedChunks array
           recordedChunks = [];
         };
-
         mediaRecorder.start();
       })
       .catch(function (error) {
@@ -152,21 +108,17 @@ export default function NewGridLayout({ questions }) {
       mediaRecorder.onstop = function () {
         const blob = new Blob(recordedChunks, { type: "video/mp4" });
         const reader = new FileReader();
-
         reader.onloadend = function () {
           let base64data = reader.result;
           const status = (questionIndex === questions.length - 1) ? "Completed" : "Inprogress";
-
           const mimeRegex = /^data:.+;base64,/;
           if (mimeRegex.test(base64data)) {
             base64data = base64data.replace(mimeRegex, '');
           }
-
           // Ensure the base64 data length is a multiple of 4
           while (base64data.length % 4 !== 0) {
             base64data += '=';
           }
-
           const payload = {
             question: questions[questionIndex]?.question,
             interview_id: questionsList?.interview_id,
@@ -174,20 +126,17 @@ export default function NewGridLayout({ questions }) {
             video: base64data
           }
           dispatch(submit_interview(payload));
-
           // If it's the last question, turn off the camera
           if (status === "completed") {
             const videoElement = document.getElementById("vid");
             const stream = videoElement.srcObject;
             const tracks = stream.getTracks();
-
             tracks.forEach(track => {
               track.stop();
             });
             videoElement.srcObject = null;
           }
         }
-
         reader.readAsDataURL(blob);
       };
     } else {
@@ -197,13 +146,33 @@ export default function NewGridLayout({ questions }) {
 
   const speakOut = (text) => {
     if ('speechSynthesis' in window && isSpeakerOn && !spokenQuestions.includes(text)) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      window.speechSynthesis.speak(utterance);
-      // Update the spokenQuestions array
-      setSpokenQuestions(prev => [...prev, text]);
+      // Fetch voices
+      let allVoices = window.speechSynthesis.getVoices();
+      if (!allVoices.length) {
+        window.speechSynthesis.onvoiceschanged = function() {
+          allVoices = window.speechSynthesis.getVoices();
+          const femaleVoice = allVoices.find(voice => /female/i.test(voice.name));
+          speak(text, femaleVoice);
+        };
+        window.speechSynthesis.getVoices();  
+      } else {
+        const femaleVoice = allVoices.find(voice => /female/i.test(voice.name));
+        speak(text, femaleVoice);
+      }
     }
   }
-
+  
+  // Helper function to actually perform the speaking
+  const speak = (text, voice) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    if (voice) {
+      utterance.voice = voice;
+    }
+    window.speechSynthesis.speak(utterance);
+    // Update the spokenQuestions array
+    setSpokenQuestions(prev => [...prev, text]);
+  }
+  
   useEffect(() => {
     const speakInitialQuestion = () => {
       speakOut(questions[0]?.question);
@@ -226,8 +195,6 @@ export default function NewGridLayout({ questions }) {
       } else {
         stopRecording();
         setInterviewCompleted(true);
-
-
         // Turn off the camera
         const videoElement = document.getElementById("vid");
         const stream = videoElement.srcObject;
@@ -240,12 +207,8 @@ export default function NewGridLayout({ questions }) {
         }
       }
     }, 1000);
-
     speakOut(questions[questionIndex]?.question);
-
     return () => clearInterval(interval);
-
-
   }, [questionTimeLeft, questionIndex, totalTimeLeft]);
 
   useEffect(() => {
