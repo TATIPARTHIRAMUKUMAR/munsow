@@ -861,7 +861,7 @@ export const getcountries = () => {
         "Content-type": "application/json",
         "Authorization" : `Bearer ${GLOBAL_CONSTANTS?.token}`
         };
-        axios.get(`${GLOBAL_CONSTANTS?.backend_url}user/list_interviews`, {params,headers})
+        axios.get(`${GLOBAL_CONSTANTS?.backend_url}user/list_interviews?status=Report_Generated`, {params,headers})
         .then((resp) => {
           dispatch(getReportsList(resp?.data));
         })
