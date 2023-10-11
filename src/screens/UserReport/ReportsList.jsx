@@ -85,7 +85,7 @@ export default function ReportIndex() {
     return (
         <div className="w-full h-full overflow-y-auto px-4 ">
             <div className="text-3xl font-bold text-[#886cc0] pt-10">
-                My Reports
+                My Interviews
             </div>
             <Divider style={{ margin: "10px 0px", padding: "10px" }} />
             <div

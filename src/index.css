@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 /* width */
-*::-webkit-scrollbar {
+/* *::-webkit-scrollbar {
     width: 4px !important; 
-  }
+  } */
   
   /* Track */
   *::-webkit-scrollbar-track {

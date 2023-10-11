@@ -114,13 +114,12 @@ const StudentRegister = () => {
       password: mainData?.password,
       course: mainData?.course?.label,
     };
-    dispatch(
-      user_signup(payload, { mode: "teacher" }, () => {
-        setMainData({});
-        console.log("test")
-    navigate("/studentLogin")
-      })
-    );
+    dispatch(user_signup(payload, (test) => {
+      setMainData({});
+      console.log("test",test);
+      navigate("/studentLogin");
+    }));
+    
   };
 
   return (
