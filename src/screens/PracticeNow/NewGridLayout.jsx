@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import image from "../../assets/h.jpeg"
+import InterviewOver from "./InterviewOver";
 
 let mediaRecorder;
 let recordedChunks = [];
@@ -36,7 +37,7 @@ export default function NewGridLayout({ questions }) {
       }
     }
   }, []);
-  
+
   const { questionsList } = useSelector(state => state?.data)
   const TOTAL_TIME = questions?.reduce((acc, q) => acc + q.duration, 0);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -149,19 +150,19 @@ export default function NewGridLayout({ questions }) {
       // Fetch voices
       let allVoices = window.speechSynthesis.getVoices();
       if (!allVoices.length) {
-        window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.onvoiceschanged = function () {
           allVoices = window.speechSynthesis.getVoices();
           const femaleVoice = allVoices.find(voice => /female/i.test(voice.name));
           speak(text, femaleVoice);
         };
-        window.speechSynthesis.getVoices();  
+        window.speechSynthesis.getVoices();
       } else {
         const femaleVoice = allVoices.find(voice => /female/i.test(voice.name));
         speak(text, femaleVoice);
       }
     }
   }
-  
+
   // Helper function to actually perform the speaking
   const speak = (text, voice) => {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -172,7 +173,7 @@ export default function NewGridLayout({ questions }) {
     // Update the spokenQuestions array
     setSpokenQuestions(prev => [...prev, text]);
   }
-  
+
   useEffect(() => {
     const speakInitialQuestion = () => {
       speakOut(questions[0]?.question);
@@ -230,35 +231,7 @@ export default function NewGridLayout({ questions }) {
         <>
           {interviewCompleted ? <>
 
-            <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-blue-300 via-purple-400 to-pink-500">
-
-              {/* Main Card */}
-              <div className="bg-white p-10 rounded-lg shadow-2xl text-center max-w-md transform transition-transform duration-300 hover:scale-105">
-
-                {/* Completion Icon or Illustration */}
-                <svg className="w-16 h-16 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-
-                <h2 className="text-4xl font-semibold mb-4">Interview Over</h2>
-
-                {/* Thank you message */}
-                <p className="text-xl mb-6 font-light">Thank you for completing the interview! We truly value your time and effort.</p>
-
-                {/* Guidance or description */}
-                <p className="mb-6 font-light">Your responses are now under review. We'll reach out soon. Until then, explore your dashboard for more insights.</p>
-
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center transform transition-transform duration-150 hover:scale-105"
-                  onClick={goToDashboard}
-                >
-                  <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                  </svg>
-                  Go to Dashboard
-                </button>
-              </div>
-            </div>
+            <InterviewOver />
 
 
           </> : <>
@@ -306,19 +279,24 @@ export default function NewGridLayout({ questions }) {
                     </Button> */}
                         <div></div>
                         <div className="flex items-center gap-4">
-                          <ArrowForwardIcon
+                          <button
                             onClick={nextQuestion}
-                            color="secondary"
                             style={{
                               cursor: "pointer",
-                              fontSize: "50px",
-                              border: "1px solid lightblue",
-                              borderRadius: "5px",
+                              fontSize: "18px",  // Adjusted the font size suitable for text
+                              // border: "1px solid lightblue",
+                              borderRadius: "8px",
                               padding: "10px",
+                              background:"#886cc0",
+                              color:"white",
                               visibility:
                                 questionIndex < questions?.length - 1 ? "" : "hidden",
                             }}
-                          />
+                            className="text-secondary"  // Assuming you have a utility class for secondary text color
+                          >
+                            Next Question
+                          </button>
+
                         </div>
                       </div>
                     </div>
@@ -372,7 +350,7 @@ export default function NewGridLayout({ questions }) {
                           <div className="sm:flex sm:items-start">
                             <div className="mt-3 text-center sm:mt-0 sm:text-left">
                               <h3 className="text-2xl leading-6 font-medium text-gray-900">
-                                Confirm Action
+                                Finish Interview
                               </h3>
                               <div className="mt-6">
                                 <p className="text-xl text-gray-500">

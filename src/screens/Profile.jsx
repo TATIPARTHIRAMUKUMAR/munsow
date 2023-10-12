@@ -60,11 +60,11 @@ export default function Profile() {
       className="text-lg flex items-center justify-center gap-10 h-full w-full " >
       <div
         className="rounded-xl overflow-hidden py-6 px-5 shadow-xl grid items-center justify-center"
-        style={{ background: "rgba(255,255,255,0.5)", transform: "rotateZ(5deg)", backdropfilter: "blur(90px)", border: "2px solid #886cc0" }}
+        style={{ background: "rgba(255,255,255,0.5)", transform: "rotateZ(5deg)", backdropfilter: "blur(90px)", border: "2px solid #886cc040" }}
       >
         <div
           className="flex flex-col items-center justify-center gap-10 m-2 p-4 rounded-lg"
-          style={{ background: "rgba(255,255,255,0.3)", backdropFilter: "blur(80px)", transform: "rotateZ(-5deg)", border: "2px solid #886cc0" }}
+          style={{ background: "rgba(255,255,255,0.3)", backdropFilter: "blur(80px)", transform: "rotateZ(-5deg)", border: "2px solid #886cc040" }}
         >
           <div className="text-5xl font-semibold "  >Account Details</div>
           <div className="grid gap-4 w-[40vw]">
@@ -130,9 +130,16 @@ export default function Profile() {
               type={showPassword ? "text" : "password"}
             />
 
-            <div className='flex justify-end gap-x-4' >
-              <Button size="small" variant='contained' color='secondary'  onClick={() => { onUpdate() }}> Update </Button>
+            <div className='flex justify-end gap-x-4'>
+              <Button
+                size="small"
+                style={{ backgroundColor: '#886cc0', cursor: "pointer", padding: "5px 10px", color: "white" }}
+                onClick={() => { onUpdate() }}
+              >
+                Update
+              </Button>
             </div>
+
           </div>
         </div>
       </div>
