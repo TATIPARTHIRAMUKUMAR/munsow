@@ -851,7 +851,7 @@ export const loadReportsList = (params = {}) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    axios.get(`${GLOBAL_CONSTANTS?.backend_url}user/list_interviews?status=Report_Generated`, { params, headers })
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}user/list_interviews?user_id=${GLOBAL_CONSTANTS?.user_cred?.id}`, { params, headers })
       .then((resp) => {
         dispatch(getReportsList(resp?.data));
       })

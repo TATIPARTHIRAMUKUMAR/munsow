@@ -223,7 +223,7 @@ export default function HeaderFooterLayout({ Component }) {
           subItems: [],
         },
         {
-          label: "My Reports",
+          label: "My Interviews",
           icon: <FaChartLine size={20} className="" />,
           route: "/report",
           subItems: [],
