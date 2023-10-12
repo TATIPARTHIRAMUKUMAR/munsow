@@ -15,20 +15,23 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUserReport } from "../../redux/action";
+import { useNavigate } from 'react-router-dom';
+
 
 const UserReport = () => {
   const reportTemplateRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState({});
-  const {  userReport } = useSelector(state => state?.data)
+  const { userReport } = useSelector(state => state?.data)
 
-  const dispatch=useDispatch();
+  const navigate = useNavigate();
 
 
 
-  useEffect(()=>{
+
+  useEffect(() => {
     setReportData(userReport);
-  },[userReport])
+  }, [userReport])
 
   const handleGeneratePdf = async () => {
     setLoading(true);
@@ -58,40 +61,47 @@ const UserReport = () => {
   return (
     <div className="body flex-grow-1 overflow-y-scroll">
       <div className="container mx-auto">
+        {/* Back button */}
+        <button
+        className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
+        onClick={() => navigate(-1)}
+      >
+          ← View All Reports
+        </button>
         <div ref={reportTemplateRef} className="bg-white">
           <div>
-            <UserReportTitle userData={reportData}/>
+            <UserReportTitle userData={reportData} />
           </div>
           <div>
-            <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming}/>
+            <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming} />
           </div>
           <div>
-            <Divider className="pt-5"/>
-            <UserReportPartTwo userData={reportData?.interview_score_by_category} user={reportData}/>
-            <Divider className="pt-5"/>
+            <Divider className="pt-5" />
+            <UserReportPartTwo userData={reportData?.interview_score_by_category} user={reportData} />
+            <Divider className="pt-5" />
           </div>
           <div>
-            <Divider className="pt-5"/>
-            <UserReportPartThree userData={reportData?.interview_score_by_category} user={reportData}/>
-            <Divider className="pt-5"/>
+            <Divider className="pt-5" />
+            <UserReportPartThree userData={reportData?.interview_score_by_category} user={reportData} />
+            <Divider className="pt-5" />
           </div>
           <div>
-            <Divider className="pt-5"/>
-            <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData}/>
-            <Divider className="pt-5"/>
+            <Divider className="pt-5" />
+            <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData} />
+            <Divider className="pt-5" />
           </div>
           <div>
-            <Divider className="pt-5"/>
-            <UserReportPartFive userData={reportData?.where_you_stand}/>
-            <Divider className="pt-5"/>
+            <Divider className="pt-5" />
+            <UserReportPartFive userData={reportData?.where_you_stand} />
+            <Divider className="pt-5" />
           </div>
           <div>
-            <Divider className="pt-5"/>
-            <UserReportPartSix userData={reportData}/>
-            <Divider className="pt-5"/>
+            <Divider className="pt-5" />
+            <UserReportPartSix userData={reportData} />
+            <Divider className="pt-5" />
           </div>
           <div>
-            <UserReportPartSeven userData={reportData}/>
+            <UserReportPartSeven userData={reportData} />
           </div>
         </div>
         <div className="mt-5">

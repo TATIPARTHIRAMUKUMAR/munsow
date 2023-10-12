@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Divider } from "@mui/material";
+import { Button, CircularProgress, Divider } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ export default function ReportIndex() {
     const dispatch = useDispatch();
     const { userReportList } = useSelector((state) => state.data);
     const [lessonsList, setLessonsList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
 
     useEffect(() => {
@@ -19,7 +20,8 @@ export default function ReportIndex() {
 
     useEffect(() => {
         setLessonsList(userReportList);
-    }, [userReportList])
+        setIsLoading(false);  // Set isLoading to false once data is set
+    }, [userReportList]);
 
     const navigate = useNavigate();
 
@@ -69,18 +71,25 @@ export default function ReportIndex() {
     }
     return (
         <div className="w-full h-full overflow-y-auto px-4 ">
-            <div
-                className=" p-5 gap-8 pt-5"
-                style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                        "repeat(auto-fill, minmax(min(240px, 100%), 1fr))",
-                }}
-            >
-                {lessonsList?.map((o, index) => (
-                    <ReportCards id={o?.id} role={o?.specifications?.role} report_data={o?.report_json==null?{}:o?.report_json} report_ready={o?.report_json==null?"false":"true"} level={o?.level} key={index} />
-                ))}
-            </div>
+            {isLoading ? (
+                <div className="flex justify-center items-center h-screen">
+                    <CircularProgress style={{ color: "#886cc0" }} />
+                </div>
+            ) : (
+                <div
+                    className=" p-5 gap-8 pt-5"
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns:
+                            "repeat(auto-fill, minmax(min(240px, 100%), 1fr))",
+                    }}
+                >
+                    {lessonsList?.map((o, index) => (
+                        <ReportCards id={o?.id} role={o?.specifications?.role} report_data={o?.report_json==null?{}:o?.report_json} report_ready={o?.report_json==null?"false":"true"} level={o?.level} key={index} />
+                    ))}
+                </div>
+            )}
         </div>
     );
+    
 }
