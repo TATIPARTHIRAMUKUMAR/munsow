@@ -24,9 +24,7 @@ const UserReport = () => {
 
   const dispatch=useDispatch();
 
-  useEffect(()=>{
-    dispatch(loadUserReport());
-  },[])
+
 
   useEffect(()=>{
     setReportData(userReport);
@@ -69,17 +67,17 @@ const UserReport = () => {
           </div>
           <div>
             <Divider className="pt-5"/>
-            <UserReportPartTwo userData={reportData?.interview_score_by_category}/>
+            <UserReportPartTwo userData={reportData?.interview_score_by_category} user={reportData}/>
             <Divider className="pt-5"/>
           </div>
           <div>
             <Divider className="pt-5"/>
-            <UserReportPartThree userData={reportData?.interview_score_by_category}/>
+            <UserReportPartThree userData={reportData?.interview_score_by_category} user={reportData}/>
             <Divider className="pt-5"/>
           </div>
           <div>
             <Divider className="pt-5"/>
-            <UserReportPartFour userData={reportData?.interview_score_by_category}/>
+            <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData}/>
             <Divider className="pt-5"/>
           </div>
           <div>
@@ -97,7 +95,7 @@ const UserReport = () => {
           </div>
         </div>
         <div className="mt-5">
-          <div className="flex justify-center items-center mt-4">
+          <div className="flex justify-center items-center mt-4 mb-5">
             <button
               type="button"
               className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full flex justify-center items-center"

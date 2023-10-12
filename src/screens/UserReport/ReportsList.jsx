@@ -5,7 +5,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { loadReportsList } from "../../redux/action";
+import { loadReportsList, loadUserReport } from "../../redux/action";
 
 export default function ReportIndex() {
     const dispatch = useDispatch();
@@ -24,40 +24,48 @@ export default function ReportIndex() {
     const navigate = useNavigate();
 
 
-    const ReportCards = ({ id, role,level,report_ready }) => {
-        return (
-            <div className="max-h-[320px]">
-                <div className="flex flex-col h-full bg-[#886cc010] min-h-[150px] rounded-lg overflow-hidden outline outline-[#886cc050]">
-                    <div className="grid gap-4" >
-                        <div className="p-2 flex flex-col gap-y-2 ">
-                            <div className=" text-xl">Role : {role}</div>
-                            <div className="font-semibold ">
-                                Level : {level}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
+    const ReportCards = ({ id, role, level, report_ready,report_data }) => {
 
-                        <Divider className="py-5" />
-                        <div className="py-2 item-self-end w-full">
-                            {report_ready=="true"?<>
-                                <Button className="font-bold w-full  py-2" endIcon={<ArrowForwardIcon />} onClick={() => { navigate(`/reportView`) }} style={{ color: "#886cc0" }} > View Report </Button>
-                            </>:<>
-                            <p className=" flex items-center justify-center">Your report is being generated</p>
-                            </>}
-                        </div>
+        const viewReport = (data) => {
+           console.log("d",data)
+        //    useEffect(()=>{
+            dispatch(loadUserReport(data));
+            navigate("/reportView")
+        //   },[])
+          };
+
+        return (
+            <div className="max-h-[320px] transition-transform duration-300 hover:scale-105">
+                <div className="flex flex-col h-full  p-4 border border-[#886cc050] rounded-lg shadow-lg">
+                    <div className="flex-grow p-2 flex flex-col gap-y-2">
+                        <div className="text-xl font-semibold">Role: {role}</div>
+                        <div className="font-medium">Level: {level}</div>
+                    </div>
+                    <Divider className="my-5" />
+                    <div className="py-2 w-full">
+                        {report_ready === "true" ? (
+                            <>
+                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] hover:text-white"  endIcon={<ArrowForwardIcon />} onClick={() => { viewReport(report_data) }} style={{ color: "#886cc0" }} > View Report</Button>
+                            </>
+                        ) : (
+                            <div className="flex items-center justify-center text-orange-300">
+                                <HttpsOutlinedIcon className="mr-2 animate-spin" />
+                                Your report is being generated
+                            </div>
+                        )}
                     </div>
                 </div>
-
             </div>
         );
     };
+    
 
     ReportCards.propTypes = {
         id: PropTypes.number.isRequired,
         role: PropTypes.string.isRequired,
         level: PropTypes.bool.isRequired,
-        report_ready:PropTypes.bool.isRequired
+        report_ready:PropTypes.bool.isRequired,
+        report_data:PropTypes.bool.isRequired
     }
     return (
         <div className="w-full h-full overflow-y-auto px-4 ">
@@ -70,7 +78,7 @@ export default function ReportIndex() {
                 }}
             >
                 {lessonsList?.map((o, index) => (
-                    <ReportCards id={o?.id} role={o?.specifications?.role} report_ready={o?.report_json==null?"false":"true"} level={o?.level} key={index} />
+                    <ReportCards id={o?.id} role={o?.specifications?.role} report_data={o?.report_json==null?{}:o?.report_json} report_ready={o?.report_json==null?"false":"true"} level={o?.level} key={index} />
                 ))}
             </div>
         </div>

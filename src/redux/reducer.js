@@ -156,7 +156,7 @@ const DataReducers = (state = initialState, action) => {
     }
     case types.USER_REPORT: return{
       ...state,
-      userReport:action.payload?.data,
+      userReport:action.payload,
       loading:false
     }
     case types.USER_REPORT_LIST: return{

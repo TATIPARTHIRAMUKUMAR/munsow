@@ -1,4 +1,3 @@
-import GLOBAL_CONSTANTS from "../../../GlobalConstants"
 const UserReportTitle = ({ userData }) => {
   return (
     <div className="bg-white" id="page1">

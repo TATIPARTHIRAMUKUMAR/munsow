@@ -6,7 +6,7 @@ const UserReportPartSeven = ({userData}) => {
           <div className="md:col-span-12">
             <div className="mt-5 md:mt-0 md:ms-4 md:mb-5">
               <span className="md:ms-4 text-4xl font-semibold text-purple-800">
-              MUNSOW
+              {userData?.source_company}
               </span>
             </div>
           </div>
@@ -17,17 +17,17 @@ const UserReportPartSeven = ({userData}) => {
           <div className="md:col-span-12">
             <div className="mt-4 md:mb-4">
               <span className="text-lg font-normal text-purple-800">
-                +91 8328057448
+              {userData?.source_company_number}
               </span>
             </div>
             <div className="mt-4 md:mb-4">
               <span className="text-lg font-normal text-purple-800">
-                hello@startx.com
+              {userData?.source_company_email}
               </span>
             </div>
             <div className="mt-4 md:mb-5">
               <span className="text-lg font-normal text-purple-800">
-                www.startx.com
+              {userData?.source_company_websites}
               </span>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const UserReportPartThree = ({ userData }) => {
+const UserReportPartThree = ({ userData,user }) => {
 
   const [data, setData] = useState({});
 
@@ -111,7 +111,7 @@ const UserReportPartThree = ({ userData }) => {
                   <div className="md:w-6/12 p-4">
                     <div>
                       <span className="md:text-2xl md:font-semibold text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                        Arpitha's Answer:
+                      {user?.user_name}'s Answer:
                       </span>
                       <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
                         {o.answer}                       </p>
