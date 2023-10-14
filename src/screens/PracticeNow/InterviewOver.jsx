@@ -40,7 +40,7 @@ const InterviewOver = () => {
                 <p className="text-xl mb-8 font-medium">Thank you for your time. Your effort is much appreciated!</p>
 
                 {/* Guidance or description */}
-                <p className="mb-8 font-medium text-gray-600">Your report is underway. You'll be notified once it's ready. Meanwhile, monitor its progress under "Reports".</p>
+                <p className="mb-8 font-medium text-gray-600">Your report is underway. You'll be notified once it's ready. Meanwhile, monitor its progress under "My Interviews".</p>
                 <div className='flex justify-center gap-6'>
                     <button
                         className="bg-[#886cc0]  text-white font-bold py-2 px-6 rounded-full flex items-center justify-center shadow-md transform transition-transform duration-200 hover:scale-110 hover-mouse cursor-pointer"
@@ -58,7 +58,7 @@ const InterviewOver = () => {
                         <svg className="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
                         </svg>
-                        Reports
+                        My Interviews
                     </button>
                 </div>
             </div>

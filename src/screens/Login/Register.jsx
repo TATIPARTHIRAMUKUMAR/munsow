@@ -34,6 +34,7 @@ const Register = () => {
       preference_days: days?.filter(o=>o?.checked)?.map(o=>o?.value)?.join(", ") ,
       preference_time: "10 AM to 6 PM",
       password: mainData.password,
+      registration_number:mainData.registration_number
     };
 
     dispatch(registerInstitute(payload));
@@ -108,6 +109,12 @@ const Register = () => {
       value:mainData?.country ?? null ,
       type:"select",
       options: countryList?.map((o)=>({label:o?.name ?? "--",value:o?.id})) ?? [],
+    },
+    {
+      label:"Registration Number",
+      key:"registration_number",
+      value:mainData?.registration_number ?? "" ,
+      type:"text"
     },
 
   ]

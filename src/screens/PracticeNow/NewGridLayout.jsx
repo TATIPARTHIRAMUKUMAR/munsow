@@ -10,7 +10,7 @@ import image from "../../assets/h.jpeg"
 import InterviewOver from "./InterviewOver";
 
 let mediaRecorder;
-let recordedChunks = [];
+// let recordedChunks = [];
 
 function formatTime(seconds) {
   const hrs = Math.floor(seconds / 3600);
@@ -27,6 +27,8 @@ export default function NewGridLayout({ questions }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [voices, setVoices] = useState([]);
+  const [recordedChunks, setRecordedChunks] = useState([]);
+
 
   useEffect(() => {
     if ('speechSynthesis' in window) {
@@ -79,22 +81,23 @@ export default function NewGridLayout({ questions }) {
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = function (event) {
           if (event.data.size > 0) {
-            recordedChunks.push(event.data);
+            setRecordedChunks(prevChunks => [...prevChunks, event.data]);
           }
         };
         mediaRecorder.onstop = function () {
           const blob = new Blob(recordedChunks, { type: "video/mp4" });
-          const url = URL.createObjectURL(blob);
+          // const url = URL.createObjectURL(blob);
           // Create a download link for the recorded video
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "recorded-video.mp4";
-          a.style.display = "none";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+          // const a = document.createElement("a");
+          // a.href = url;
+          // a.download = "recorded-video.mp4";
+          // a.style.display = "none";
+          // document.body.appendChild(a);
+          // a.click();
+          // document.body.removeChild(a);
+
           // Clear the recordedChunks array
-          recordedChunks = [];
+          setRecordedChunks([]);
         };
         mediaRecorder.start();
       })
@@ -125,7 +128,7 @@ export default function NewGridLayout({ questions }) {
             interview_id: questionsList?.interview_id,
             status: status,
             video: base64data,
-            question_id:questions[questionIndex]?.id
+            question_id: questions[questionIndex]?.id
           }
           dispatch(submit_interview(payload));
           // If it's the last question, turn off the camera
@@ -288,8 +291,8 @@ export default function NewGridLayout({ questions }) {
                               // border: "1px solid lightblue",
                               borderRadius: "8px",
                               padding: "10px",
-                              background:"#886cc0",
-                              color:"white",
+                              background: "#886cc0",
+                              color: "white",
                               visibility:
                                 questionIndex < questions?.length - 1 ? "" : "hidden",
                             }}
