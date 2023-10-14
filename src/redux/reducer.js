@@ -30,6 +30,8 @@ const initialState = {
   userReport:[],
   userReportList:[],
   questionsList:[],
+  behaviourAnalysis:[],
+  ksAnalysis: [],
   loading: false
 };
 
@@ -177,6 +179,16 @@ const DataReducers = (state = initialState, action) => {
     case types.INTERVIEW_QUESTIONS: return{
       ...state,
       questionsList:action.payload,
+      loading:false
+    }
+    case types.BEHAVIOUR_ANALYSIS: return{
+      ...state,
+      behaviourAnalysis:action.payload.data.data,
+      loading:false
+    }
+    case types.KS_ANALYSIS: return{
+      ...state,
+      ksAnalysis: action.payload.data.data,
       loading:false
     }
     default:

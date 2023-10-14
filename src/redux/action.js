@@ -988,3 +988,41 @@ export const submit_interview = (data) => {
       });
   };
 };
+
+const getBehaviourAnalysis = (data) => ({
+  type: types.BEHAVIOUR_ANALYSIS,
+  payload: data,
+});
+
+export const loadBehaviourAnalysis = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/behavioral_analysis`, { params, headers })
+      .then((resp) => {
+        dispatch(getBehaviourAnalysis(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+const getKSAnalysis = (data) => ({
+  type: types.KS_ANALYSIS,
+  payload: data,
+});
+
+export const loadKSAnalysis = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/ks_analysis`, { params, headers })
+      .then((resp) => {
+        dispatch(getKSAnalysis(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
