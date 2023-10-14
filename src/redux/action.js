@@ -1026,3 +1026,8 @@ export const loadKSAnalysis = (params) => {
       .catch((error) => console.log(error));
   };
 };
+
+export const setReduxState = (data) => ({
+  type: types.SET_REDUX_STATE,
+  payload: data,
+});

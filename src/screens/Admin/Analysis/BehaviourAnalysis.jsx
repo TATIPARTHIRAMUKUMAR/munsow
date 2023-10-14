@@ -16,20 +16,22 @@ import {
   loadDepartmentList,
   loadInstitutionStats,
   loadBehaviourAnalysis,
+  setReduxState
 } from "../../../redux/action";
 import FilterCommon from "../../../Components/FilterCommon";
+import { branchesList } from "./mockbranchesdata";
 
 const BehaviourAnalysis = () => {
-  const { institutionStats, departmentList, behaviourAnalysis } = useSelector(
+  const { behaviourAnalysis } = useSelector(
     (state) => state?.data
   );
   const dispatch = useDispatch();
-  const [active, setActive] = React.useState("All Departments");
+  const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [branchesData, setBranchesData] = useState(branchesList);
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    dispatch(loadDepartmentList());
     dispatch(loadBehaviourAnalysis());
   }, [dispatch]);
 
@@ -49,10 +51,21 @@ const BehaviourAnalysis = () => {
   };
 
   const handleMenuItemClick = (item) => {
-    if (item == "All Departments") {
+    if (item == "All Branches") {
       dispatch(loadBehaviourAnalysis());
     } else {
       //  write filter code
+      const emotions = ["Anger", "Contempt", "Disgust", "Fear", "Happiness", "Sadness", "Surprise"];
+      const filteredBehaviourAnalysis = behaviourAnalysis.map((data) => {
+        for (const emotion of emotions) {
+          const randomValue = Math.floor(Math.random() * 100) + 1;
+          data[emotion] = randomValue;
+        }
+        return data;
+      });
+
+      //here name is the name of the state which you want to set in reducer and value is the value which you want to set
+      dispatch(setReduxState({name: 'behaviourAnalysis', value: filteredBehaviourAnalysis}))
     }
     setActive(item);
     handleClose();
@@ -84,15 +97,15 @@ const BehaviourAnalysis = () => {
                 </span>
                 <span className="text-xs uppercase text-gray-600"></span>
                 <span>
-                  <FilterCommon
+                <FilterCommon
                     handleClose={handleClose}
                     handleMenuItemClick={handleMenuItemClick}
                     handleClick={handleClick}
                     active={active}
                     anchorEl={anchorEl}
                     open={open}
-                    defaultValue={"All Departments"}
-                    data={departmentList}
+                    defaultValue={"All Branches"}
+                    data={branchesData}
                   />
                 </span>
               </div>
@@ -142,7 +155,6 @@ const BehaviourAnalysis = () => {
                     />
 
                     {behaviourAnalysis?.map((analysis, index) => {
-                      console.log(analysis, "analysis");
                       const keys = Object.keys(analysis);
                       return (
                         <>

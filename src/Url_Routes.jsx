@@ -61,7 +61,6 @@ function Url_Routes() {
                 <Route excat path="/summary" element={<HeaderFooterLayout Component={<Summary />} />} />
                 <Route excat path="/emotionSensing" element={<HeaderFooterLayout Component={<EmotionSensing />} />} />
                 <Route excat path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} />
-                <Route excat path="/skills" element={<HeaderFooterLayout Component={<Skills />} />} />
                 <Route excat path="/behaviourAnalysis" element={<HeaderFooterLayout Component={<BehaviourAnalysis />} />} />
                 <Route excat path="/practicalThinking" element={<HeaderFooterLayout Component={<PracticalThinking />} />} />
                 <Route excat path="/adminHelp" element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />} />

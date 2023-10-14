@@ -1,41 +1,162 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
-    Label
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Label,
 } from "recharts";
 import _mockChartData from "./EmotionSensing/_mockChartData.json";
+import FilterCommon from "../../../Components/FilterCommon";
+import { branchesList } from "./mockbranchesdata";
 
 const PracticalThinking = () => {
-    const legendFormatter = (value, entry) => {
-        return (
-            <div className={"flex items-center"}>
-                <div className={"h-4 w-4 mr-2"} style={{ backgroundColor: entry.color }} />
-                <div>{value}</div>
-            </div>
-        );
-    };
-
+  const barPlotData = [
+    {
+      "Not Solved": 24,
+      Solved: 40,
+      name: "Finance",
+    },
+    {
+      "Not Solved": 30,
+      Solved: 30,
+      name: "Marketing",
+    },
+    {
+      "Not Solved": 10,
+      Solved: 20,
+      name: "Operations",
+    },
+    {
+      "Not Solved": 20,
+      Solved: 10,
+      name: "Hr",
+    },
+  ];
+  const [barPlot, setBarPlot] = useState(barPlotData);
+  const [branchesData, setBranchesData] = useState(branchesList);
+  const [active, setActive] = React.useState("All Branches");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const legendFormatter = (value, entry) => {
     return (
-        <div className="flex-grow p-5">
-            <div className="container mx-auto">
-                <div className="flex flex-wrap">
-                    <div className="w-full">
-                        <div className="bg-white mb-3 p-5 rounded-xl">
-                            <div className="bg-white mb-10">
-                                <span className="text-2xl font-normal text-gray-900">
-                                   Practical Thinking
-                                </span>
-                                <span className="text-xs uppercase text-gray-600"></span>
-                            </div>
-                            <div className="mt-5 pt-3">
-                                <ResponsiveContainer width="100%" height={480}>
+      <div className={"flex items-center"}>
+        <div
+          className={"h-4 w-4 mr-2"}
+          style={{ backgroundColor: entry.color }}
+        />
+        <div>{value}</div>
+      </div>
+    );
+  };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (value) => {
+    if (value == "All Branches") {
+      setBarPlot(barPlotData);
+    } else {
+      // use api to filter the data using id
+      const problemSolvingRate = ["Solved", "Not Solved"];
+      const filteredBarplot = barPlot.map((data) => {
+        for (const problem of problemSolvingRate) {
+          const randomValue = Math.floor(Math.random() * 100) + 1;
+          data[problem] = randomValue;
+        }
+        return data;
+      });
+      setBarPlot(filteredBarplot);
+    }
+    setActive(value);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <div className="flex-grow p-5">
+      <div className="container mx-auto">
+        <div className="flex flex-wrap">
+          <div className="w-full">
+            <div className="bg-white mb-3 p-5 rounded-xl">
+              <div
+                className="bg-white mb-10"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <span className="text-2xl font-normal text-gray-900">
+                  Practical Thinking
+                </span>
+                <div>
+                  <FilterCommon
+                    handleClose={handleClose}
+                    handleMenuItemClick={handleMenuItemClick}
+                    handleClick={handleClick}
+                    active={active}
+                    anchorEl={anchorEl}
+                    open={open}
+                    defaultValue={"All Branches"}
+                    data={branchesData}
+                  />
+                </div>
+              </div>
+              <div className="mt-5 pt-3">
+                <ResponsiveContainer width="100%" height={480}>
+                  <BarChart data={barPlot} width={"1000px"}>
+                    <CartesianGrid vertical={false} strokeDasharray="0 0" />
+                    <XAxis
+                      dataKey="name"
+                      axisLine={false}
+                      tickLine={false}
+                      interval={0}
+                      dy={10}
+                      dx={0}
+                    >
+                      <Label value="Department" position="bottom" dy={20} />
+                    </XAxis>
+                    <YAxis axisLine={false} tickLine={false} dx={-5}>
+                      <Label
+                        value="Problem Solving %"
+                        position="middle"
+                        angle={-90}
+                        dx={-25}
+                      />
+                    </YAxis>
+                    <Tooltip />
+                    <Legend
+                      formatter={(value, entry) =>
+                        legendFormatter(value, entry)
+                      }
+                      layout="horizontal"
+                      iconSize={0}
+                      wrapperStyle={{
+                        width: "95%",
+                        left: "50px",
+                        marginBottom: "20px",
+                        top: "-50px",
+                      }}
+                    />
+                    <Bar
+                      dataKey="Solved"
+                      stackId={"a"}
+                      fill="#3D3B8E"
+                      barSize={60}
+                    />
+                    <Bar
+                      dataKey="Not Solved"
+                      stackId={"a"}
+                      fill="#6883BA"
+                      barSize={60}
+                      radius={[15, 15, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+                {/* <ResponsiveContainer width="100%" height={480}>
                                     <BarChart
                                         data={_mockChartData}
                                         margin={{
@@ -115,14 +236,14 @@ const PracticalThinking = () => {
                                             fill="#000000"
                                         />
                                     </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                </ResponsiveContainer> */}
+              </div>
             </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default PracticalThinking;

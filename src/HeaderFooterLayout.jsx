@@ -165,12 +165,7 @@ export default function HeaderFooterLayout({ Component }) {
               label: "Emotion Sensing",
               icon: <FaHeartPulse size={20} className="" />,
               route: "/emotionSensing",
-            },
-            {
-              label: "Hard Skill vs Soft skills",
-              icon: <FaBalanceScale size={20} className="" />,
-              route: "/skills",
-            },
+            }
           ],
         },
         {

@@ -3,10 +3,9 @@ import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _mockChartData from "./EmotionSensing/_mockChartData.json";
 import FilterCommon from "../../../Components/FilterCommon";
 import { useDispatch, useSelector } from "react-redux";
-import { capitalizeWords } from "../../../utils/stringUtils";
+import { branchesList } from "./mockbranchesdata";
+
 import {
-  loadDepartmentList,
-  loadInstitutionStats,
   loadKSAnalysis,
 } from "../../../redux/action";
 
@@ -90,16 +89,15 @@ const KSAnalysis = () => {
   ];
   const [hardSkillData, setHardSkillsData] = useState(hardSkills);
   const [softSkillData, setSoftSkillsData] = useState(softSkills);
-  const [active, setActive] = React.useState("All Departments");
+  const [branchesData, setBranchesData] = useState(branchesList);
+  const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
 
-  const {departmentList, ksAnalysis } =
-    useSelector((state) => state?.data);
+  const { departmentList, ksAnalysis } = useSelector((state) => state?.data);
   const open = Boolean(anchorEl);
-
   useEffect(() => {
-    dispatch(loadDepartmentList());
+    //dispatch get branches Api
     dispatch(loadKSAnalysis());
   }, [dispatch]);
   const handleClick = (event) => {
@@ -107,33 +105,37 @@ const KSAnalysis = () => {
   };
 
   const handleMenuItemClick = (value) => {
-    if (value == "All Departments") {
+    if (value == "All Branches") {
       dispatch(loadKSAnalysis());
       setHardSkillsData(hardSkills);
       setSoftSkillsData(softSkills);
     } else {
-      //write filter
+      // use api to filter the data using id
       const filteredHardSkillData = hardSkills.map((data) => {
         return {
           ...data,
-          data: data.data.filter(
-            (item) => item.x.toLowerCase() === value.toLowerCase()
-          ),
+          data: data.data.map((item) => {
+            return {
+              ...item,
+              y: Math.floor(Math.random() * 100),
+            };
+          }),
         };
       });
-
       const filteredSoftSkillData = softSkills.map((data) => {
         return {
           ...data,
-          data: data.data.filter(
-            (item) => item.x.toLowerCase() === value.toLowerCase()
-          ),
+          data: data.data.map((item) => {
+            return {
+              ...item,
+              y: Math.floor(Math.random() * 100),
+            };
+          }),
         };
       });
 
       setHardSkillsData(filteredHardSkillData);
       setSoftSkillsData(filteredSoftSkillData);
-      console.log(filteredHardSkillData, "filteredHardSkillData");
     }
     setActive(value);
     handleClose();
@@ -143,42 +145,21 @@ const KSAnalysis = () => {
     setAnchorEl(null);
   };
 
-  const options = {
-    chart: {
-      height: 350,
-      type: 'heatmap',
-    },
-    dataLabels: {
-      enabled: false
-    },
-    colors: ["#008FFB"],
-    title: {
-      text: 'Hard Skills'
-    },
-  }
-
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
         <div className="flex flex-wrap">
           <div className="w-full">
             <div className="bg-white mb-3 p-5 rounded-xl">
-              <div className="bg-white mb-10" style={{display: 'flex', justifyContent: 'space-between'}}>
+              <div
+                className="bg-white mb-10"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
                 <span className="text-2xl font-normal text-gray-900">
-                  KS Analysis
+                  Knowledge and Skill Analysis
                 </span>
                 <div>
-                <FilterCommon
-                  handleClose={handleClose}
-                  handleMenuItemClick={handleMenuItemClick}
-                  handleClick={handleClick}
-                  active={active}
-                  anchorEl={anchorEl}
-                  open={open}
-                  defaultValue={"All Departments"}
-                  data={departmentList}
-                />
-                {/* <FilterCommon
+                  <FilterCommon
                     handleClose={handleClose}
                     handleMenuItemClick={handleMenuItemClick}
                     handleClick={handleClick}
@@ -186,8 +167,8 @@ const KSAnalysis = () => {
                     anchorEl={anchorEl}
                     open={open}
                     defaultValue={"All Branches"}
-                    data={departmentList}
-                  /> */}
+                    data={branchesData}
+                  />
                 </div>
               </div>
               <div className="mt-5 pt-3" style={{ height: 500 }}>

@@ -191,6 +191,11 @@ const DataReducers = (state = initialState, action) => {
       ksAnalysis: action.payload.data.data,
       loading:false
     }
+    case types.SET_REDUX_STATE : { 
+      return {
+      ...state,
+      [action.payload.name]: action.payload.value
+    }}
     default:
       return state;
   }
