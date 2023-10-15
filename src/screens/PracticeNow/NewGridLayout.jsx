@@ -57,6 +57,7 @@ export default function NewGridLayout({ questions }) {
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
       stopRecording();
+      setRecordedChunks([]);  // Reset the recordedChunks array here
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       startStreamAndRecording();
@@ -69,6 +70,7 @@ export default function NewGridLayout({ questions }) {
   }
 
   function startStreamAndRecording() {
+    setRecordedChunks([]);  // Reset the recordedChunks array here
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then(function (stream) {
@@ -80,6 +82,7 @@ export default function NewGridLayout({ questions }) {
             setRecordedChunks(prevChunks => [...prevChunks, event.data]);
           }
         };
+        // console.log("recorded",recordedChunks)
         mediaRecorder.onstop = function () {
           const blob = new Blob(recordedChunks, { type: "video/mp4" });
           const url = URL.createObjectURL(blob);
