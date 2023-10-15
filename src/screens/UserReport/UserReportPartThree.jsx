@@ -5,7 +5,7 @@ const UserReportPartThree = ({ userData,user }) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    const filteredData = userData?.data.filter(o => o.main_title === "HR Pro");
+    const filteredData = userData?.data.filter(o => o.main_title === "Domain Knowledge Evaluation Scores");
     if (filteredData?.length > 0) {
       setData(filteredData[0]);
     }

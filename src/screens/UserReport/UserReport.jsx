@@ -85,15 +85,15 @@ const UserReport = () => {
             <UserReportPartThree userData={reportData?.interview_score_by_category} user={reportData} />
             <Divider className="pt-5" />
           </div>
-          {
-            reportData?.interview_score_by_category?.data.find(o => o.main_title === "Equipped Mastery")?.length > 0 && (
+          {/* {
+            reportData?.interview_score_by_category?.data.find(o => o.main_title === "Equipped Mastery")?.length > 0 && ( */}
               <div>
                 <Divider className="pt-5" />
                 <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData} />
                 <Divider className="pt-5" />
               </div>
-            )
-          }
+          {/* //   )
+          // } */}
           <div>
             <Divider className="pt-5" />
             <UserReportPartFive userData={reportData?.where_you_stand} />
