@@ -961,6 +961,7 @@ export const prepare_interview = (data, callback) => {
 
 
 export const submit_interview = (data) => {
+  // console.log("submit_interview",data);
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",

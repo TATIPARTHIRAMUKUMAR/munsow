@@ -68,10 +68,6 @@ export default function NewGridLayout({ questions }) {
     setShowConfirmationPopup(false);
   }
 
-  const goToDashboard = () => {
-    navigate("/studentDashboard");
-  }
-
   function startStreamAndRecording() {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -86,15 +82,15 @@ export default function NewGridLayout({ questions }) {
         };
         mediaRecorder.onstop = function () {
           const blob = new Blob(recordedChunks, { type: "video/mp4" });
-          // const url = URL.createObjectURL(blob);
+          const url = URL.createObjectURL(blob);
           // Create a download link for the recorded video
-          // const a = document.createElement("a");
-          // a.href = url;
-          // a.download = "recorded-video.mp4";
-          // a.style.display = "none";
-          // document.body.appendChild(a);
-          // a.click();
-          // document.body.removeChild(a);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "recorded-video.mp4";
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
 
           // Clear the recordedChunks array
           setRecordedChunks([]);
@@ -114,6 +110,7 @@ export default function NewGridLayout({ questions }) {
         const reader = new FileReader();
         reader.onloadend = function () {
           let base64data = reader.result;
+          // console.log("base64data",base64data);
           const status = (questionIndex === questions.length - 1) ? "Completed" : "Inprogress";
           const mimeRegex = /^data:.+;base64,/;
           if (mimeRegex.test(base64data)) {
@@ -123,6 +120,7 @@ export default function NewGridLayout({ questions }) {
           while (base64data.length % 4 !== 0) {
             base64data += '=';
           }
+          // console.log("base64data1",base64data);
           const payload = {
             question: questions[questionIndex]?.question,
             interview_id: questionsList?.interview_id,
@@ -131,6 +129,7 @@ export default function NewGridLayout({ questions }) {
             question_id: questions[questionIndex]?.id,
             tag: questions[questionIndex]?.tag?questions[questionIndex]?.tag:""
           }
+          console.log("payload",payload);
           dispatch(submit_interview(payload));
           // If it's the last question, turn off the camera
           if (status === "completed") {
@@ -179,16 +178,6 @@ export default function NewGridLayout({ questions }) {
     setSpokenQuestions(prev => [...prev, text]);
   }
 
-  // useEffect(() => {
-  //   const speakInitialQuestion = () => {
-  //     speakOut(questions[0]?.question);
-  //   }
-  //   const timer = setTimeout(speakInitialQuestion, 500);  // Delay of 500ms for 1st quetion speak out
-  //   return () => clearTimeout(timer);
-  // }, []);
-
-
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (questionTimeLeft > 0) {
@@ -221,7 +210,6 @@ export default function NewGridLayout({ questions }) {
     setIsLoading(true);
   }, []);
 
-
   useEffect(() => {
     if (isLoading) {
       // camOn();
@@ -235,10 +223,7 @@ export default function NewGridLayout({ questions }) {
       {questions?.length > 0 && (
         <>
           {interviewCompleted ? <>
-
             <InterviewOver />
-
-
           </> : <>
 
             <div className="p-5">
@@ -250,12 +235,8 @@ export default function NewGridLayout({ questions }) {
                   Finish Interview
                 </button>
               </div>
-
               <div>
-
-
                 <div className="grid grid-cols-3  gap-4 ">
-
                   {/* Left Top Cell */}
                   <div className="col-span-2 flex flex-col">
                     <div className="flex-grow">
@@ -332,14 +313,6 @@ export default function NewGridLayout({ questions }) {
 
 
                 </div>
-
-
-
-
-
-
-
-
 
                 {showConfirmationPopup && (
                   <div className="fixed z-99999999999999999 inset-0 overflow-y-auto">
