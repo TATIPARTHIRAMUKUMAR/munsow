@@ -12,7 +12,7 @@ import {
 const KSAnalysis = () => {
   const hardSkills = [
     {
-      id: "Hard skill 1",
+      id: "Programming Language (Python)",
       data: [
         { x: "Finance", y: 50 },
         { x: "Marketing", y: 48 },
@@ -21,7 +21,7 @@ const KSAnalysis = () => {
       ],
     },
     {
-      id: "Hard skill 2",
+      id: "Data Analysis",
       data: [
         { x: "Finance", y: 64 },
         { x: "Marketing", y: 10 },
@@ -30,7 +30,7 @@ const KSAnalysis = () => {
       ],
     },
     {
-      id: "Hard skill 3",
+      id: "Data Science ",
       data: [
         { x: "Finance", y: 56 },
         { x: "Marketing", y: 97 },
@@ -39,7 +39,7 @@ const KSAnalysis = () => {
       ],
     },
     {
-      id: "Hard skill 4",
+      id: "DevOps (Docker)",
       data: [
         { x: "Finance", y: 71 },
         { x: "Marketing", y: 90 },
@@ -51,7 +51,7 @@ const KSAnalysis = () => {
 
   const softSkills = [
     {
-      id: "Soft skill 1",
+      id: "Communication",
       data: [
         { x: "Finance", y: 50 },
         { x: "Marketing", y: 48 },
@@ -60,7 +60,7 @@ const KSAnalysis = () => {
       ],
     },
     {
-      id: "Soft skill 2",
+      id: "Adaptability",
       data: [
         { x: "Finance", y: 49 },
         { x: "Marketing", y: 84 },
@@ -69,7 +69,7 @@ const KSAnalysis = () => {
       ],
     },
     {
-      id: "Soft skill 3",
+      id: "Creativity",
       data: [
         { x: "Finance", y: 56 },
         { x: "Marketing", y: 37 },
@@ -78,7 +78,7 @@ const KSAnalysis = () => {
       ],
     },
     {
-      id: "Soft skill 4",
+      id: "Empathy",
       data: [
         { x: "Finance", y: 73 },
         { x: "Marketing", y: 90 },
@@ -201,6 +201,24 @@ const KSAnalysis = () => {
                     maxValue: 100,
                   }}
                   emptyColor="#555555"
+                  legends={[
+                    {
+                      anchor: "bottom",
+                      translateX: 0,
+                      translateY: 30,
+                      length: 400,
+                      thickness: 8,
+                      direction: "row",
+                      tickPosition: "after",
+                      tickSize: 3,
+                      tickSpacing: 4,
+                      tickOverlap: false,
+                      tickFormat: ">-.2s",
+                      title: "Value →",
+                      titleAlign: "start",
+                      titleOffset: 4,
+                    },
+                  ]}
                 />
               </div>
               <div className="mt-5 pt-3" style={{ height: 500 }}>
@@ -233,6 +251,24 @@ const KSAnalysis = () => {
                     maxValue: 100,
                   }}
                   emptyColor="#555555"
+                  legends={[
+                    {
+                      anchor: "bottom",
+                      translateX: 0,
+                      translateY: 30,
+                      length: 400,
+                      thickness: 8,
+                      direction: "row",
+                      tickPosition: "after",
+                      tickSize: 3,
+                      tickSpacing: 4,
+                      tickOverlap: false,
+                      tickFormat: ">-.2s",
+                      title: "Value →",
+                      titleAlign: "start",
+                      titleOffset: 4,
+                    },
+                  ]}
                 />
               </div>
             </div>
