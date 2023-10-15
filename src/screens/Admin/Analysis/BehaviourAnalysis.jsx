@@ -93,7 +93,7 @@ const BehaviourAnalysis = () => {
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <span className="text-2xl font-normal text-gray-900">
-                  Bevaiour Analysis
+                  Behavioural Analysis
                 </span>
                 <span className="text-xs uppercase text-gray-600"></span>
                 <span>
