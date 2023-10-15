@@ -63,9 +63,9 @@ const UserReport = () => {
       <div className="container mx-auto">
         {/* Back button */}
         <button
-        className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
-        onClick={() => navigate(-1)}
-      >
+          className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
+          onClick={() => navigate(-1)}
+        >
           ← View All Reports
         </button>
         <div ref={reportTemplateRef} className="bg-white">
@@ -85,11 +85,15 @@ const UserReport = () => {
             <UserReportPartThree userData={reportData?.interview_score_by_category} user={reportData} />
             <Divider className="pt-5" />
           </div>
-          <div>
-            <Divider className="pt-5" />
-            <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData} />
-            <Divider className="pt-5" />
-          </div>
+          {
+            reportData?.interview_score_by_category?.data.find(o => o.main_title === "Equipped Mastery")?.length > 0 && (
+              <div>
+                <Divider className="pt-5" />
+                <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData} />
+                <Divider className="pt-5" />
+              </div>
+            )
+          }
           <div>
             <Divider className="pt-5" />
             <UserReportPartFive userData={reportData?.where_you_stand} />

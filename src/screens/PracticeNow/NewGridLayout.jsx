@@ -128,7 +128,8 @@ export default function NewGridLayout({ questions }) {
             interview_id: questionsList?.interview_id,
             status: status,
             video: base64data,
-            question_id: questions[questionIndex]?.id
+            question_id: questions[questionIndex]?.id,
+            tag: questions[questionIndex]?.tag?questions[questionIndex]?.tag:""
           }
           dispatch(submit_interview(payload));
           // If it's the last question, turn off the camera
