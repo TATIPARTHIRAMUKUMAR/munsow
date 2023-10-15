@@ -18,7 +18,7 @@ const SettingsPage = () => {
     <div className="max-w-lg mx-auto mt-10 p-4">
       <h1 className="text-3xl text-[#886cc0] font-semibold mb-6">Settings</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        {/* <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-600">
             Email
           </label>
@@ -41,7 +41,7 @@ const SettingsPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 p-2 w-full border rounded-md"
           />
-        </div>
+        </div> */}
         <div>
           <label htmlFor="notifications" className="block text-sm font-medium text-gray-600">
             Enable Notifications
@@ -102,9 +102,11 @@ const SettingsPage = () => {
             className="mt-1 text-[#886cc0]"
           />
         </div>
-        <button type="submit" className="bg-[#886cc0] text-white py-2 px-4 rounded">
-          Save
-        </button>
+        <div className='pt-5'>
+          <button type="submit" className="bg-[#886cc0] text-white py-2  px-4 rounded">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );

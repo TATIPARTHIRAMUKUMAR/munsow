@@ -319,7 +319,7 @@ const StepperComponent = () => {
                                     min="0"
                                     max="100"
                                     value={level}
-                                    onChange={(e) => setLevel(e.target.value)}
+                                    // onChange={(e) => setLevel(e.target.value)}
                                     className="w-full mb-4 appearance-none h-2 rounded-lg"
                                     style={{ background: "#f3f0f9" }}
                                 />
