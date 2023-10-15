@@ -13,6 +13,7 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import Audio_Video from "../../Components/Audio_Video";
 import { toast } from "react-toastify";
+import Tooltip from '@mui/material/Tooltip';
 
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -67,6 +68,28 @@ const StepperComponent = () => {
             company: "",
             hard_skill: "",
             soft_skill: ""
+        }
+    }
+
+    const handleSelection = () => {
+        if (selectedCategory == 'skills') {
+
+            if (selectedSoftskill != null || selectedHardskill != null) {
+                return false
+            }
+            else {
+                return true
+            }
+        }
+        if (selectedCategory == 'role') {
+
+            if (selectedRole != null && selectedCompany != null) {
+                return false
+            }
+            else {
+                return true
+            }
+
         }
     }
 
@@ -146,7 +169,10 @@ const StepperComponent = () => {
                     {currentStep === 0 && (
                         <>
                             {/* <div > */}
-                            <div className={`bg-${selectedCategory === 'skills' ? 'gray-100' : ''} p-7 rounded-xl`} onClick={() => setSelectedCategory('skills')}>
+                            <div className={`bg-${selectedCategory === 'skills' ? 'gray-100' : ''} p-7 rounded-xl`} onClick={() => {
+                                setSelectedCategory('skills'); setSelectedRole(null)
+                                setSelectedCompany(null)
+                            }}>
                                 <div className="flex ">
                                     {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
 
@@ -183,34 +209,38 @@ const StepperComponent = () => {
                                         selectedItems={selectedHardskill}
                                         onSelectionChange={setSelectedHardskill}
                                     />
-                                </div>
-                                <div>
-                                    <label className="flex items-center space-x-2 my-3">
-                                        {/* <input
+                                    <div>
+                                        <label className="flex items-center space-x-2 my-3">
+                                            {/* <input
                                             type="checkbox"
                                             name="softSkills"
                                             checked={softSkills}
                                             className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                                             onChange={() => setSoftSkills(!softSkills)}
                                         /> */}
-                                        <span className="font-bold pr-2">Soft Skills</span>
-                                    </label>
-                                    <CheckboxesTags
-                                        options={softSkillsList?.map((o) => {
-                                            return {
-                                                label: o.name,
-                                                id: o.id,
-                                            }
-                                        })}
-                                        selectedItems={selectedSoftskill}
-                                        onSelectionChange={setSelectedSoftskill}
-                                        label="Soft Skills"
-                                    />
+                                            <span className="font-bold pr-2">Soft Skills</span>
+                                        </label>
+                                        <CheckboxesTags
+                                            options={softSkillsList?.map((o) => {
+                                                return {
+                                                    label: o.name,
+                                                    id: o.id,
+                                                }
+                                            })}
+                                            selectedItems={selectedSoftskill}
+                                            onSelectionChange={setSelectedSoftskill}
+                                            label="Soft Skills"
+                                        />
+                                    </div>
                                 </div>
+
                             </div>
                             <div className="p-10"></div>
 
-                            <div className={`bg-${selectedCategory === 'role' ? 'gray-100' : ''} p-7 rounded-xl`} onClick={() => setSelectedCategory('role')}>
+                            <div className={`bg-${selectedCategory === 'role' ? 'gray-100' : ''} p-7 rounded-xl`} onClick={() => {
+                                setSelectedCategory('role'); setSelectedSoftskill(null)
+                                setSelectedHardskill(null)
+                            }}>
                                 <div className="flex ">
                                     {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
 
@@ -230,36 +260,13 @@ const StepperComponent = () => {
                                     <label className="flex items-center space-x-2 my-3">
                                         {/* <input
                                             type="checkbox"
-                                            name="chosenRole"
-                                            checked={chosenRole}
-                                            className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
-                                            onChange={() => setChosenRole(!chosenRole)}
-                                        /> */}
-
-                                        <span className="font-bold pr-2 ">Choose Role</span>
-                                    </label>
-                                    <CheckboxesTags
-                                        options={interviewRolesList?.map((o) => {
-                                            return {
-                                                label: o.name,
-                                                id: o.id,
-                                            }
-                                        })}
-                                        selectedItems={selectedRole}
-                                        onSelectionChange={setSelectedRole}
-                                        label="Interview Roles" />
-                                </div>
-                                <div>
-                                    <label className="flex items-center space-x-2 my-3">
-                                        {/* <input
-                                            type="checkbox"
                                             name="chosenCompany"
                                             checked={chosenCompany}
                                             className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                                             onChange={() => setChosenCompany(!chosenCompany)}
                                         /> */}
 
-                                        <span className="font-bold pr-2">Choose Company</span>
+                                        <span className="font-bold pr-2">Choose Company <span className="font-bold text-red-500 text-2xl">*</span></span>
                                     </label>
                                     <CheckboxesTags
                                         options={companiesList?.map((o) => {
@@ -272,6 +279,31 @@ const StepperComponent = () => {
                                         onSelectionChange={setSelectedCompany}
                                         label="Companies" />
                                 </div>
+
+                                <div className={selectedCategory !== 'role' ? 'opacity-50 pointer-events-none' : ''}>
+                                    <label className="flex items-center space-x-2 my-3">
+                                        {/* <input
+                                            type="checkbox"
+                                            name="chosenRole"
+                                            checked={chosenRole}
+                                            className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
+                                            onChange={() => setChosenRole(!chosenRole)}
+                                        /> */}
+
+                                        <span className="font-bold pr-2 ">Choose Role <span className="font-bold text-red-500 text-2xl">*</span></span>
+                                    </label>
+                                    <CheckboxesTags
+                                        options={interviewRolesList?.map((o) => {
+                                            return {
+                                                label: o.name,
+                                                id: o.id,
+                                            }
+                                        })}
+                                        selectedItems={selectedRole}
+                                        onSelectionChange={setSelectedRole}
+                                        label="Interview Roles" />
+                                </div>
+
                             </div>
 
                             {/* </div> */}
@@ -399,8 +431,8 @@ const StepperComponent = () => {
                     {currentStep < steps.length - 1 && (
                         <button
                             onClick={handleNext}
-                            disabled={selectedRole==null} // Use the isRoleSelected state variable here
-                            className={`bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md ${selectedRole==null ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={handleSelection()} // Use the isRoleSelected state variable here
+                            className={`bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md ${handleSelection() ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             Next
                         </button>
@@ -416,9 +448,26 @@ const StepperComponent = () => {
                         </button>
                     )} */}
                     {currentStep === steps.length - 1 && (
-                        <button onClick={handleNext} className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md">
-                            Submit
-                        </button>
+                        <span>
+                            {chosenCompany ? (
+                                <button
+                                    onClick={handleNext}
+                                    className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+                                >
+                                    Submit
+                                </button>
+                            ) : (
+                                <Tooltip title="Please finish system checks before submitting">
+                                    <button
+                                        onClick={handleNext}
+                                        disabled={!chosenCompany}
+                                        className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md opacity-50 cursor-not-allowed"
+                                    >
+                                        Submit
+                                    </button>
+                                </Tooltip>
+                            )}
+                        </span>
                     )}
                 </div>
             </div>

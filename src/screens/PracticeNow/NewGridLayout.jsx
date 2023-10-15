@@ -178,13 +178,13 @@ export default function NewGridLayout({ questions }) {
     setSpokenQuestions(prev => [...prev, text]);
   }
 
-  useEffect(() => {
-    const speakInitialQuestion = () => {
-      speakOut(questions[0]?.question);
-    }
-    const timer = setTimeout(speakInitialQuestion, 500);  // Delay of 500ms for 1st quetion speak out
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const speakInitialQuestion = () => {
+  //     speakOut(questions[0]?.question);
+  //   }
+  //   const timer = setTimeout(speakInitialQuestion, 500);  // Delay of 500ms for 1st quetion speak out
+  //   return () => clearTimeout(timer);
+  // }, []);
 
 
 
