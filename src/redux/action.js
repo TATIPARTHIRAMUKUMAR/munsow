@@ -744,16 +744,21 @@ export const user_delete = (params, callback) => {
 };
 
 
-export const userStatUpdate = (id, endpoint) => {
-  return function (dispatch) {
+export const userStatUpdate = (id, endpoint, callback) => {
+  return function () {
     var headers = {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
     axios.get(`${GLOBAL_CONSTANTS?.backend_url}user/${id}/${endpoint}`, { headers: headers })
-      .then(() => {
-        dispatch(loadStudentList({}));
-        dispatch(loadTeachersList({}));
+      .then((resp) => {
+        console.log("resp", resp)
+        if (resp?.data?.status) {
+          callback
+        }
+        // dispatch(loadStudentList({}));
+        // dispatch(loadTeachersList({}));
+
       })
       .catch((error) => console.log(error));
   };
@@ -1032,3 +1037,25 @@ export const setReduxState = (data) => ({
   type: types.SET_REDUX_STATE,
   payload: data,
 });
+
+
+
+
+const getSummmaryData = (data) => ({
+  type: types.SUMMARY_DATA,
+  payload: data,
+});
+
+export const loadSummaryData = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}institution/management`, { params, headers })
+      .then((resp) => {
+        dispatch(getSummmaryData(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};

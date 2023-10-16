@@ -32,6 +32,7 @@ const initialState = {
   questionsList:[],
   behaviourAnalysis:[],
   ksAnalysis: [],
+  summaryData:{},
   loading: false
 };
 
@@ -179,6 +180,11 @@ const DataReducers = (state = initialState, action) => {
     case types.INTERVIEW_QUESTIONS: return{
       ...state,
       questionsList:action.payload,
+      loading:false
+    }
+    case types.SUMMARY_DATA: return{
+      ...state,
+      summaryData:action.payload,
       loading:false
     }
     case types.BEHAVIOUR_ANALYSIS: return{

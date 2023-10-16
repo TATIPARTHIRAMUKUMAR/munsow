@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { userStatUpdate } from "../../../redux/action";
+import { loadTeachersList, userStatUpdate } from "../../../redux/action";
 import { Switch } from "@mui/material";
 const ActionButtonCellRenderer = (props) => {
 
@@ -11,10 +11,22 @@ const ActionButtonCellRenderer = (props) => {
 
   const [checked, setChecked] = React.useState(row?.is_active);
 
+  const [params, setParams] = useState({
+    //   order_by:"",
+    //   ASC:"",
+    //   page_number:"",
+    //   created_date:"",
+    limit:10,
+    mode: "Teacher"
+  })
+
   const handleChange = (event) => {
     console.info(event,"--")
     setChecked(event);
-    dispatch(userStatUpdate( row?.id , event ? "activate" : "deactivate"))
+    dispatch(userStatUpdate( row?.id , event ? "activate" : "deactivate"  ,() => {
+      // console.log("test",test);
+      dispatch(loadTeachersList(params));
+    } ))
   };
 
   return (

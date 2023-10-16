@@ -18,7 +18,7 @@ const Students = () => {
     //   ASC:"",
     //   page_number:"",
     //   created_date:"",
-    // limit:10,
+    limit:10,
     mode: "Student"
   })
 

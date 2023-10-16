@@ -21,7 +21,7 @@ const Teachers = () => {
     //   ASC:"",
     //   page_number:"",
     //   created_date:"",
-    // limit:10,
+    limit:10,
     mode: "Teacher"
   })
 
@@ -96,6 +96,7 @@ const Teachers = () => {
   useEffect(() => {
     dispatch(loadTeachersList(params));
   }, [dispatch, params])
+  
   return (
     <div className="flex-grow-1 p-5 h-[100vh] " >
       <div className="ag-theme-alpine grid gap-4">
