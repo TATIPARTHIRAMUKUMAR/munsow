@@ -163,7 +163,7 @@ const Register = () => {
 
   return (
     <div
-      className="bg-gray-100 p-10 min-h-[100vh]"
+      className="bg-gray-100 p-5 min-h-[100vh]"
       style={{
         display: "flex",
         justifyContent: "center",
@@ -174,15 +174,15 @@ const Register = () => {
         className="rounded-xl overflow-hidden bg-white "
         style={{ width: "60%", boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', borderRadius: '20px'}}
       >
-        <div className="px-4 py-8 border-b-2">
-          <h2 className="text-xl font-medium">Join Us Form</h2>
-          <p className="registration-sub-header">
+        <div className="px-4 py-2 border-b-2">
+          <h2 className="text-2xl font-medium">Join Us Form</h2>
+          <p className="registration-sub-header py-2">
             Kick start your journey to get access to our expert insights about
             your students across departments, branches, and cities today!
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-8 p-8">
+        <div className="grid grid-cols-2 gap-6 p-6">
           {userFeilds?.map((o) => (
             <>
               {o?.type === "select" ? (
@@ -222,9 +222,9 @@ const Register = () => {
           ))}
         </div>
 
-        <div className="p-8 grid gap-8 ">
+        <div className="p-4 grid gap-4 ">
           <div className="font-medium"> Prefered Days For Contact </div>
-          <div className="flex gap-8 flex-wrap">
+          <div className="flex gap-4 flex-wrap">
             {days?.map((o, i) => (
               <div
                 key={o?.value}
@@ -244,7 +244,7 @@ const Register = () => {
           </div>
         </div>
 
-        <div className="p-8 grid gap-8 w-full ">
+        <div className="p-4 grid gap-4 w-full ">
           <div className="font-medium"> Prefered Time For Contact </div>
           <div className="grid grid-cols-2">
             <TimePicker.RangePicker
@@ -273,7 +273,7 @@ const Register = () => {
           </Button>
 
           <Button
-            variant="outlined"
+            variant="contained"
             type="primary"
             onClick={() => {
               handleSubmit();

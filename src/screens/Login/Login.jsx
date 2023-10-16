@@ -9,6 +9,7 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { useDispatch } from "react-redux";
 import { institution_login } from "../../redux/action";
+import ForgotPassword from "./ForgotPassword";
 
 const style = {
   position: "absolute",
@@ -48,11 +49,11 @@ const LoginPage = () => {
 
   const handleSubmit = async () => {
     const payload = {
-      email:universityId,
-      password:password
+      email: universityId,
+      password: password
     }
-    dispatch(institution_login(payload,()=>{
-      window.location.href="./adminDashboard";
+    dispatch(institution_login(payload, () => {
+      window.location.href = "./adminDashboard";
     }))
   };
 
@@ -110,7 +111,8 @@ const LoginPage = () => {
               </span>
             </div>
             <div>
-              <Modal
+              {open ? <ForgotPassword open={open} setOpen={setOpen} /> : <></>}
+              {/* <Modal
                 open={open}
                 onClose={handleClickOpen}
                 aria-labelledby="modal-modal-title"
@@ -138,7 +140,7 @@ const LoginPage = () => {
                     <Button onClick={handleClose}>Submit</Button>
                   </div>
                 </Box>
-              </Modal>
+              </Modal> */}
             </div>
             <div className="mt-12 text-center">
               <span className="text-gray-600">

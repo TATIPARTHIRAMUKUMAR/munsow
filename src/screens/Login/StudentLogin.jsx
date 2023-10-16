@@ -9,6 +9,7 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { user_login } from "../../redux/action";
 import { useDispatch } from "react-redux";
+import ForgotPassword from "./ForgotPassword";
 
 const style = {
   position: "absolute",
@@ -113,7 +114,8 @@ const StudentLogin = () => {
               </span>
             </div> */}
             <div>
-              <Modal
+              {open ? <ForgotPassword open={open} setOpen={setOpen}/>:<></>}
+              {/* <Modal
                 open={open}
                 onClose={handleClickOpen}
                 aria-labelledby="modal-modal-title"
@@ -141,7 +143,7 @@ const StudentLogin = () => {
                     <Button onClick={handleClose}>Submit</Button>
                   </div>
                 </Box>
-              </Modal>
+              </Modal> */}
             </div>
             <div className="mt-4 text-center">
               <span className="text-gray-600">
