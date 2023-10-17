@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import interview from "../../assets/interview.jpeg";
+import interview from "../../assets/admin_ui.png";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
