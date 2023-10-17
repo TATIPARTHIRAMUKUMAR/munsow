@@ -49,14 +49,14 @@ const StudentLogin = () => {
     setOpen(false);
   };
 
-  
+
   const handleSubmit = async () => {
     const payload = {
-      email:universityId,
-      password:password
+      email: universityId,
+      password: password
     }
-    dispatch(user_login(payload,()=>{
-      window.location.href="./studentDashboard";
+    dispatch(user_login(payload, () => {
+      window.location.href = "./studentDashboard";
     }))
   };
 
@@ -67,7 +67,7 @@ const StudentLogin = () => {
           <div className="bg-white   rounded-lg p-6">
             <h2 className="text-4xl font-semibold mb-4">Interviewee Login</h2>
             <p className="text-base text-gray-600 mb-4">
-            Get personalized insights on your interview skills, strengths, and areas for improvement.
+              Get personalized insights on your interview skills, strengths, and areas for improvement.
             </p>
             <div className="space-y-4">
               <div className="mb-2">
@@ -114,7 +114,7 @@ const StudentLogin = () => {
               </span>
             </div> */}
             <div>
-              {open ? <ForgotPassword open={open} setOpen={setOpen}/>:<></>}
+              {open ? <ForgotPassword open={open} setOpen={setOpen} /> : <></>}
               {/* <Modal
                 open={open}
                 onClose={handleClickOpen}
@@ -147,7 +147,7 @@ const StudentLogin = () => {
             </div>
             <div className="mt-4 text-center">
               <span className="text-gray-600">
-              New to Munsow? {" "}
+                New to Munsow? {" "}
               </span>
               <span className="text-blue-600 hover:underline">
                 <Link to={"/studentRegister"}>Sign Up!</Link>
@@ -155,7 +155,7 @@ const StudentLogin = () => {
             </div>
             <div className="mt-5 text-center">
               <span className="text-gray-600">
-                 Institution login here!
+                Institution login here!
               </span>
               <span className="text-blue-600 font-semibold cursor-pointer">
                 {" "}
@@ -175,9 +175,13 @@ const StudentLogin = () => {
               <span>
                 By continuing, you agree to our
               </span>
-              <span className="font-semibold"> Terms of Service </span>
+              <a href=" https://www.munsow.com/terms-and-conditions" target="_blank"><span className="font-semibold text-blue-500">  Terms of Service  </span></a>
+
+              {/* <span className="font-semibold"> Terms of Service </span> */}
               <span>and</span>
-              <span className="font-semibold"> Privacy Policy</span>
+              <a href=" https://www.munsow.com/privacy-policy" target="_blank"><span className="font-semibold text-blue-500">  Privacy Policy  </span></a>
+
+              {/* <span className="font-semibold"> Privacy Policy</span> */}
             </div>
           </div>
         </div>

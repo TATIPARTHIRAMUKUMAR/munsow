@@ -163,9 +163,13 @@ const LoginPage = () => {
               <span>
                 By continuing, you agree to our
               </span>
-              <span className="font-semibold"> Terms of Service </span>
+              <a href=" https://www.munsow.com/terms-and-conditions" target="_blank"><span className="font-semibold text-blue-500">  Terms of Service  </span></a>
+
+              {/* <span className="font-semibold"> Terms of Service </span> */}
               <span>and</span>
-              <span className="font-semibold"> Privacy Policy</span>
+              <a href=" https://www.munsow.com/privacy-policy" target="_blank"><span className="font-semibold text-blue-500">  Privacy Policy  </span></a>
+
+              {/* <span className="font-semibold"> Privacy Policy</span> */}
             </div>
           </div>
         </div>
