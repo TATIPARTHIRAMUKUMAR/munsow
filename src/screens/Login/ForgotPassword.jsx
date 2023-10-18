@@ -53,7 +53,7 @@ function ForgotPassword({ open, setOpen }) {
 
             const payload = {
                 email: email,
-                password: password1,
+                new_password: password1,
                 // user_id:
             };
 
