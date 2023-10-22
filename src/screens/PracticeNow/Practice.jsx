@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Audio_Video from "../../Components/Audio_Video";
 import { toast } from "react-toastify";
 import Tooltip from '@mui/material/Tooltip';
+import MutiSelect from "../../Components/Multiselect";
 
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -100,8 +101,8 @@ const StepperComponent = () => {
         payload.level = experienceLevel ? experienceLevel : "";
         payload.specifications.role = selectedRole ? selectedRole?.label : "";
         payload.specifications.company = selectedCompany ? selectedCompany?.label : "";
-        payload.specifications.hard_skill = selectedHardskill ? selectedHardskill?.label : "";
-        payload.specifications.soft_skill = selectedSoftskill ? selectedSoftskill?.label : "";
+        payload.specifications.hard_skill = selectedHardskill ? selectedHardskill.map(skill => skill.label) : [];
+        payload.specifications.soft_skill = selectedSoftskill ? selectedSoftskill.map(skill => skill.label) : [];
         console.log("currentStep", payload)
         if (currentStep == 1) {
             dispatch(loadQuestions(payload))
@@ -121,6 +122,10 @@ const StepperComponent = () => {
     const handlePrev = () => {
         setCurrentStep(currentStep - 1);
     };
+
+  useEffect(()=>{
+console.log("selectedSoftskill",selectedSoftskill)
+  },[selectedSoftskill])
 
 
     useEffect(() => {
@@ -198,7 +203,7 @@ const StepperComponent = () => {
                                         /> */}
                                         <span className="font-bold pr-2">Hard Skills</span>
                                     </label>
-                                    <CheckboxesTags
+                                    <MutiSelect
                                         options={hardSkillsList?.map((o) => {
                                             return {
                                                 label: o.name,
@@ -220,17 +225,17 @@ const StepperComponent = () => {
                                         /> */}
                                             <span className="font-bold pr-2">Soft Skills</span>
                                         </label>
-                                        <CheckboxesTags
-                                            options={softSkillsList?.map((o) => {
-                                                return {
-                                                    label: o.name,
-                                                    id: o.id,
-                                                }
-                                            })}
+                                        <MutiSelect
+                                            options={(softSkillsList || []).map((o) => ({
+                                                label: o.name,
+                                                id: o.id,
+                                            }))}
+                                            // onSelectionChange={(e) => testselection(e)}
                                             selectedItems={selectedSoftskill}
                                             onSelectionChange={setSelectedSoftskill}
                                             label="Soft Skills"
                                         />
+
                                     </div>
                                 </div>
 

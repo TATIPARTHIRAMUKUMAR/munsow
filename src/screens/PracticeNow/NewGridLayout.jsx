@@ -130,6 +130,8 @@ export default function NewGridLayout({ questions }) {
             status: status,
             video: base64data,
             question_id: questions[questionIndex]?.id,
+            category:questions[questionIndex]?.category,
+            sub_category:questions[questionIndex]?.sub_category,
             tag: questions[questionIndex]?.tag?questions[questionIndex]?.tag:""
           }
           console.log("payload",payload);
