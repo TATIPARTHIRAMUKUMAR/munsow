@@ -46,51 +46,47 @@ const UserReportTitle = ({ userData }) => {
             </div>
 
 
-      
-      {/* {userData?.report_type === "role based report" ? (
-        <div className="p-4 mt-3">
-          <div className="mb-4 report1-footer">
-            <span className="report1-footer-txt text-xl">
-              Position: {userData?.interview_position} | {userData?.interview_company}
-            </span>
-          </div>
-        </div>
-      ) : userData?.report_type === "skill based report" ? (
-        <div className="p-4 mt-3">
-          <div className="mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Hard Skills</h2>
-            <ul className="list-disc list-inside">
-              {Object.keys(userData?.hard_and_soft_skill_dic?.hard_skill || {}).map((skill, index) => (
-                <li key={index} className="mb-2">
-                  {skill}: {userData?.hard_and_soft_skill_dic?.hard_skill[skill]}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Soft Skills</h2>
-            <ul className="list-disc list-inside">
-              {Object.keys(userData?.hard_and_soft_skill_dic?.soft_skill || {}).map((skill, index) => (
-                <li key={index} className="mb-2">
-                  {skill}: {userData?.hard_and_soft_skill_dic?.soft_skill[skill]}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      ) : null} */}
-  
 
-
-
-            {userData?.report_type == "role based report" && (
+            {userData?.report_type === "role based report" ? (
               <div className="p-4 mt-3">
                 <div className="mb-4 report1-footer">
                   <span className="report1-footer-txt text-xl">
                     Position: {userData?.interview_position} | {userData?.interview_company}
                   </span>
                 </div>
-              </div>)}
+              </div>
+            ) : userData?.report_type === "skill based report" ? (
+              <div className="p-4 mt-3">
+                <div className="mb-4">
+                <div className="mb-4 report1-footer">
+                  <span className="report1-footer-txt text-xl">
+                  Skills : {Object.keys(userData?.hard_and_soft_skill_dic?.hard_skill || {}).map((skill, index) => (
+                      <>
+                        {skill} <span className="px-2">|</span> 
+                      </>
+                    ))}
+                    {Object.keys(userData?.hard_and_soft_skill_dic?.soft_skill || {}).map((skill, index) => (
+                      <>
+                          {skill}
+                      </>
+                    ))}
+                  </span>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+
+
+
+            {/* {userData?.report_type == "role based report" && (
+              <div className="p-4 mt-3">
+                <div className="mb-4 report1-footer">
+                  <span className="report1-footer-txt text-xl">
+                    Position: {userData?.interview_position} | {userData?.interview_company}
+                  </span>
+                </div>
+              </div>)} */}
           </div>
           <div className="mt-20 -ml-8">
             <div className="w-16 h-16 bg-pink-600 rounded-full mt-8"></div>
