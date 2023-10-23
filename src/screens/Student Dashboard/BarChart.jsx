@@ -66,9 +66,7 @@ const LineChartComponent = () => {
   }, [userStats])
 
 
-  useEffect(() => {
-    loadUserStats();
-  }, [])
+
 
 
   console.log("data", data, userStats)

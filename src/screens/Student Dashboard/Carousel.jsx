@@ -33,7 +33,7 @@ const Carousel = () => {
 
   return (
     <div>
-      <p className="text-[#886cc0] text-lg font-bold p-2">Emotinal Insight</p>
+      <p className="text-[#886cc0] text-lg font-bold p-2">Emotional Insight</p>
       <Divider style={{opacity:"0.4"}}/>
       <div className="flex items-center justify-center carousel-container py-2 rounded-lg relative">
 

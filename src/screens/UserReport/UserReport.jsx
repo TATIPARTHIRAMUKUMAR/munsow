@@ -16,6 +16,8 @@ import { Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUserReport } from "../../redux/action";
 import { useNavigate } from 'react-router-dom';
+import SkillSuggestions from "./SkillSuggestions";
+import SkillsDisplay from "./SkillsDisplay";
 
 
 const UserReport = () => {
@@ -75,35 +77,58 @@ const UserReport = () => {
           <div>
             <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming} />
           </div>
-          <div>
-            <Divider className="pt-5" />
-            <UserReportPartTwo userData={reportData?.interview_score_by_category} user={reportData} />
-            <Divider className="pt-5" />
-          </div>
-          <div>
+
+          {reportData?.interview_score_by_category?.data?.map((o, index) => {
+            return (
+              <>
+                <div>
+                  <Divider className="pt-5" />
+                  <UserReportPartTwo userData={o} user={reportData} />
+                  <Divider className="pt-5" />
+                </div>
+              </>)
+          })}
+
+          {/* <div>
             <Divider className="pt-5" />
             <UserReportPartThree userData={reportData?.interview_score_by_category} user={reportData} />
             <Divider className="pt-5" />
-          </div>
+          </div> */}
           {/* {
             reportData?.interview_score_by_category?.data.find(o => o.main_title === "Equipped Mastery")?.length > 0 && ( */}
-              <div>
-                <Divider className="pt-5" />
-                <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData} />
-                <Divider className="pt-5" />
-              </div>
-          {/* //   )
-          // } */}
-          <div>
+          {/* <div>
+            <Divider className="pt-5" />
+            <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData} />
+            <Divider className="pt-5" />
+          </div> */}
+
+          {/* <div>
             <Divider className="pt-5" />
             <UserReportPartFive userData={reportData?.where_you_stand} />
             <Divider className="pt-5" />
-          </div>
-          <div>
-            <Divider className="pt-5" />
-            <UserReportPartSix userData={reportData} />
-            <Divider className="pt-5" />
-          </div>
+          </div> */}
+          {reportData?.report_type == "role based report" && (
+            <div>
+              <Divider className="pt-5" />
+              <UserReportPartSix userData={reportData} />
+              <Divider className="pt-5" />
+            </div>
+          )}
+          {reportData?.report_type == "skill based report" && (
+            <div>
+              <Divider className="pt-5" />
+              <SkillSuggestions data={reportData?.skill_based_suggestions ? reportData?.skill_based_suggestions : {}} />
+              <Divider className="pt-5" />
+            </div>
+          )}
+          {reportData?.report_type == "skill based report" && (
+            <div>
+              <Divider className="pt-5" />
+              <SkillsDisplay skills={reportData?.hard_and_soft_skill_dic ? reportData?.hard_and_soft_skill_dic : {}} />
+              <Divider className="pt-5" />
+            </div>
+          )}
+
           <div>
             <UserReportPartSeven userData={reportData} />
           </div>

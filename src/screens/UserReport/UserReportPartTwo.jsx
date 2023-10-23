@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 
-const UserReportPartTwo = ({ userData,user }) => {
+const UserReportPartTwo = ({ userData, user }) => {
 
   const [data, setData] = useState({});
 
   useEffect(() => {
-    const filteredData = userData?.data.filter(o => o.main_title === "Growth Mindset");
-    if (filteredData?.length > 0) {
-      setData(filteredData[0]);
-    }
-    console.log("data", data, filteredData)
+    // const filteredData = userData?.data.filter(o => o.main_title === "Growth Mindset");
+    // if (filteredData?.length > 0) {
+    //   setData(filteredData[0]);
+    // }
+    // console.log("data", data, filteredData)
+    setData(userData);
   }, [userData])
 
   function getScoreClass(secured, total) {
@@ -97,42 +98,42 @@ const UserReportPartTwo = ({ userData,user }) => {
           {data?.interview_questions?.map((o, index) => {
             return (
               <>
-              < div className="bg-gray-100 m-5">
-                <div >
+                < div className="bg-gray-100 m-5">
                   <div >
-                    <div className="p-2 bg-[#7a5fa7] m-5">
-                      <span className="text-white md:text-2xl md:font-bold  w-full">
-                        {o.question}                      </span>
+                    <div >
+                      <div className="p-2 bg-[#7a5fa7] m-5">
+                        <span className="text-white md:text-2xl md:font-bold  w-full">
+                          {o.question}                      </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="md:flex">
-                  <div className="md:w-6/12 p-4">
-                    <div>
+                  <div className="md:flex">
+                    <div className="md:w-6/12 p-4">
+                      <div>
+                        <span className="md:text-2xl md:font-semibold text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
+                          {user?.user_name}'s Answer:
+                        </span>
+                        <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
+                          {o.answer}                       </p>
+                      </div>
+                      <div className="mt-4">
+                        <span className="md:text-2xl md:font-semibold text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
+                          Insights
+                        </span>
+                        <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
+                          {o.Insights}                       </p>
+                      </div>
+                    </div>
+                    <div className="md:w-6/12 p-4">
                       <span className="md:text-2xl md:font-semibold text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                      {user?.user_name}'s Answer:
+                        Curated Answer
                       </span>
                       <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                        {o.answer}                       </p>
+                        {o.suggested_answer}                     </p>
                     </div>
-                    <div className="mt-4">
-                      <span className="md:text-2xl md:font-semibold text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                        Insights
-                      </span>
-                      <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                        {o.Insights}                       </p>
-                    </div>
-                  </div>
-                  <div className="md:w-6/12 p-4">
-                    <span className="md:text-2xl md:font-semibold text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                      Curated Answer
-                    </span>
-                    <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                      {o.suggested_answer}                     </p>
                   </div>
                 </div>
-              </div>
               </>
             )
           }

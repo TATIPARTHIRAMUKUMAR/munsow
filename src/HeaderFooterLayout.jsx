@@ -228,12 +228,12 @@ export default function HeaderFooterLayout({ Component }) {
           route: "/report",
           subItems: [],
         },
-        {
-          label: "Notifications",
-          icon: <FaBell size={20} className="" />,
-          route: "/notifications",
-          subItems: [],
-        },
+        // {
+        //   label: "Notifications",
+        //   icon: <FaBell size={20} className="" />,
+        //   route: "/notifications",
+        //   subItems: [],
+        // },
         {
           label: "My Profile",
           icon: <FaUser size={20} className="" />,
