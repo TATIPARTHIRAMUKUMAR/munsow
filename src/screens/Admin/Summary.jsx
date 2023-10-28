@@ -2,7 +2,7 @@ import { Divider } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { loadSummaryData } from "../../redux/action";
+import { loadSummaryData, getCourseList, getDepartmentList, } from "../../redux/action";
 
 const Summary = () => {
 
@@ -10,7 +10,14 @@ const Summary = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { summaryData } = useSelector(state => state.data)
-
+    const routeChange = (route)=>{
+        if(route=="/addTeacher" || route=="/addStudent"){
+            console.log("pathChanged")
+            dispatch(getDepartmentList());
+            dispatch(getCourseList());
+          }
+        navigate(route)
+    }
 
     useEffect(() => {
         dispatch(loadSummaryData());
@@ -64,7 +71,7 @@ const Summary = () => {
                                 <button
                                     type="button"
                                     className={buttonStyle}
-                                    onClick={() => navigate("/addStudent")}
+                                    onClick={() => routeChange("/addStudent")}
                                 >
                                     Add Students
                                 </button>
@@ -114,7 +121,7 @@ const Summary = () => {
                                 <button
                                     type="button"
                                     className={buttonStyle}
-                                    onClick={() => navigate("/addTeacher")}
+                                    onClick={() => routeChange("/addTeacher")}
                                 >
                                     Add Teachers
                                 </button>

@@ -11,8 +11,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import { useDispatch } from "react-redux";
-import { loadInstitutionStats } from "../redux/action";
+import { loadDepartmentList, loadInstitutionStats, loadCourseList, loadBehaviourAnalysis, loadKSAnalysis, loadEmotionStats } from "../redux/action";
 import { capitalizeString, capitalizeWords } from "../utils/stringUtils";
+import { capitalize } from "@mui/material";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -65,25 +66,33 @@ export default function PopUpFilter(props) {
   //     { name: "HR", value: "" },
   //   ]);
 
-  const { departmentList } = props;
+  const {route, list, dependencyList } = props;
   const dispatch = useDispatch();
-    const [active, setActive] = React.useState('All Departments');
+    // const [branchActive, setBranchActive] = React.useState(`All Branches`);
+    // const [courseActive, setCourseActive] = React.useState(`All Courses`);
+    // const [departmentActive, setDepartmentActive] = React.useState(`All Departments`);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuItemClick = (item) => {
-    if (item == "All Departments") {
-      dispatch(loadInstitutionStats());
-    } else {
-      let params = {
-        department: capitalizeWords(item),
-      };
-      dispatch(loadInstitutionStats(params));
-    }
-    setActive(item);
+  const handleMenuItemClick = (item, id) => {
+    list=="Branches"?localStorage.setItem("branch",item):(list=="Courses"?localStorage.setItem("course",item):localStorage.setItem("department",item));
+    // if (item == `All ${list}`) {
+    //   dispatch(loadInstitutionStats());
+    // } else {
+      list=="Branches"?dispatch(loadCourseList(`branch_id=${id}`)):(list=="Courses"?dispatch(loadDepartmentList(`course_id=${id}`)):"");
+        let params = {
+          branch: capitalizeWords(localStorage.getItem("branch")),
+          course: capitalizeWords(localStorage.getItem("course")),
+          department: capitalizeWords(localStorage.getItem("department")),
+        };
+        list=="Branches"?params.branch=capitalizeWords(item):(list=="Courses"?params.course=capitalizeWords(item):params.department=capitalizeWords(item));
+        route=="AdminDashboard"?dispatch(loadInstitutionStats(params)):(route=="BehaviourAnanlysis"?dispatch(loadBehaviourAnalysis(params)):
+        (route=="KSAnalysis"?dispatch(loadKSAnalysis(params)):
+        (route=="PracticalThinking"?"":(route=="EmotionSensing"?dispatch(loadEmotionStats(params)):""))));
+    // }
     handleClose();
   };
 
@@ -109,7 +118,8 @@ export default function PopUpFilter(props) {
           fontWeight: 600,
         }}
       >
-        {active}
+        
+        {list=="Branches"?localStorage.getItem("branch"):(list=="Courses"?localStorage.getItem("course"):localStorage.getItem("department"))}
       </Button>
       <StyledMenu
         id="demo-customized-menu"
@@ -122,22 +132,22 @@ export default function PopUpFilter(props) {
       >
         <MenuItem
           onClick={() => {
-            handleMenuItemClick("All Departments");
+            handleMenuItemClick(`All ${list}`);
           }}
           disableRipple
         >
           {/* <EditIcon /> */}
-          All Departments
+          All {list}
         </MenuItem>
-        {departmentList?.map((branch) => (
+        {dependencyList?.map((item) => (
           <MenuItem
-            key={branch?.name}
+            key={item?.name}
             onClick={() => {
-              handleMenuItemClick(branch?.name);
+              handleMenuItemClick(item?.name, item?.id);
             }}
             disableRipple
           >
-            {branch?.name}
+            {item?.name}
           </MenuItem>
         ))}
       </StyledMenu>

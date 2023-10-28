@@ -9,6 +9,7 @@ import {
   user_signup,
 } from "../../redux/action";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const StudentRegister = () => {
   const dispatch = useDispatch();
@@ -66,6 +67,13 @@ const StudentRegister = () => {
         })) ?? [],
     },
     {
+      label: "Branch",
+      key: "branch",
+      value: mainData?.branch ?? null,
+      options: branchList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
+      type: "select",
+    },
+    {
       label: "Course",
       key: "course",
       value: mainData?.course ?? null,
@@ -80,24 +88,49 @@ const StudentRegister = () => {
         departmentList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
       type: "select",
     },
-    {
-      label: "Branch",
-      key: "branch",
-      value: mainData?.branch ?? null,
-      options: branchList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
-      type: "select",
-    },
   ];
 
   const handleInputChange = (key, value) => {
     let temp = { ...mainData };
     temp[key] = value;
+    if(key=="institution"){
+      dispatch(loadBrachList(`institution_id=${value?.value}`));
+    } else if(key=="branch"){
+      dispatch(loadCourseList(`branch_id=${value?.value}`));
+    } else if(key=="course"){
+      dispatch(loadDepartmentList(`course_id=${value?.value}`));
+    }
     setMainData(() => ({ ...temp }));
   };
+
+  const handleSelectionError = (key, value) => {
+    if(key == "branch" && !mainData.institution){
+      toast.error(
+        "Institution not selected",
+        {
+          autoClose: 2000,
+        }
+      );
+    } else if(key == "course" && !mainData.branch){
+      toast.error(
+        "Branch not selected",
+        {
+          autoClose: 2000,
+        }
+      );
+    } else if(key == "department" && !mainData.course){
+      toast.error(
+        "Course not selected",
+        {
+          autoClose: 2000,
+        }
+      );
+    }
+  }
   useEffect(() => {
-    dispatch(loadBrachList());
-    dispatch(loadCourseList());
-    dispatch(loadDepartmentList());
+    // dispatch(loadBrachList());
+    // dispatch(loadCourseList());
+    // dispatch(loadDepartmentList());
     dispatch(loadInstitutionList());
   }, [dispatch]);
 
@@ -159,6 +192,9 @@ const StudentRegister = () => {
                     )}
                     onChange={(e, value) => {
                       handleInputChange(o?.key, value);
+                    }}
+                    onClickCapture={(e, value)=>{
+                      handleSelectionError(o?.key, value);
                     }}
                   />
                 </>

@@ -618,7 +618,7 @@ export const uploadUser = (data) => {
 };
 
 
-const getCourseList = (data) => ({
+export const getCourseList = (data) => ({
   type: types.COURSE_LIST,
   payload: data,
 });
@@ -629,7 +629,7 @@ export const loadCourseList = (params) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/course_list`, { params, headers })
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/course_list?${params}`, {headers })
       .then((resp) => {
         dispatch(getCourseList(resp?.data));
       })
@@ -648,7 +648,7 @@ export const loadBrachList = (params = {}) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/branch_list`, { params, headers })
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/branch_list?${params}`, {headers })
       .then((resp) => {
         dispatch(getBrachList(resp?.data));
       })
@@ -656,7 +656,7 @@ export const loadBrachList = (params = {}) => {
   };
 };
 
-const getDepartmentList = (data) => ({
+export const getDepartmentList = (data) => ({
   type: types.DEPARTMENT_LIST,
   payload: data,
 });
@@ -667,7 +667,7 @@ export const loadDepartmentList = (params) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/department_list`, { params, headers })
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/department_list?${params}`, {headers })
       .then((resp) => {
         dispatch(getDepartmentList(resp?.data));
       })

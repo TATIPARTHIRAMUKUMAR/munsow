@@ -26,13 +26,20 @@ import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from '@mui/icons-material/Groups';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import { useDispatch, useSelector } from "react-redux";
-import { loadDepartmentList, loadInstitutionStats } from "../../../redux/action";
+import { loadDepartmentList, loadInstitutionStats,loadBrachList,loadCourseList, getCourseList, getDepartmentList } from "../../../redux/action";
 import { classNames, legendFormatter } from "../../../utils/generalUtils";
 import PopUpFilter from "../../../Components/PopUpFilter";
+import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 
 
 
 const AdminDashboard = () => {
+  window.onbeforeunload = ()=>{
+    localStorage.setItem("branch", "All Branches");
+    localStorage.setItem("course", "All Courses");
+    localStorage.setItem("department", "All Departments");
+  }
+  
 
   const [cardLists,setCardsList] = useState([
     {
@@ -67,15 +74,17 @@ const AdminDashboard = () => {
   const [pie,setPie] = useState([]);
 
   const dispatch = useDispatch();
-  const {institutionStats, departmentList} = useSelector((state)=>state?.data)
+  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
 
 
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   useEffect(()=>{
+    dispatch(getDepartmentList());
+    dispatch(getCourseList());
     dispatch(loadInstitutionStats());
-    dispatch(loadDepartmentList());
+    dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
   },[dispatch])
 
   useEffect(()=>{
@@ -126,14 +135,22 @@ const AdminDashboard = () => {
       <div className="container ">
           {/* Card section */}
           <div className="">
-            <div className="flex justify-end mr-10 mb-3 ">
-              <PopUpFilter departmentList={departmentList}/>
+            <div className="flex justify-end mr-10 mb-3">
+              <div className="">
+                <PopUpFilter route="AdminDashboard" list="Branches" dependencyList={branchList}/>
+              </div>
+              <div className="">
+                <PopUpFilter route="AdminDashboard" list="Courses" dependencyList={courseList}/>
+              </div>
+              <div className="">
+                <PopUpFilter route="AdminDashboard" list="Departments" dependencyList={departmentList}/>
+              </div>
             </div>
-        <div className=" grid grid-cols-3 gap-2 ">
-            {cardLists.length ? (
-              <CardContainer cardLists={cardLists} />
-            ) : null}
-          </div>
+            <div className=" grid grid-cols-3 gap-2 ">
+                {cardLists.length ? (
+                <CardContainer cardLists={cardLists} />
+                ) : null}
+            </div>
         </div>
         <div className="flex flex-wrap pt-5">
           {/* Chart section */}

@@ -275,6 +275,11 @@ export default function HeaderFooterLayout({ Component }) {
   };
 
   const handleListItemClick = (index, route) => {
+    if(route=="/adminDashboard" || route=="/behaviourAnalysis" || route=="/ksanalysis" || route=="/practicalThinking" || route=="/emotionSensing"){
+      localStorage.setItem("branch", "All Branches");
+      localStorage.setItem("course", "All Courses");
+      localStorage.setItem("department", "All Departments");
+    }
     setSelectedItem(index);
     navigate(route);
     handleDrawerOpen();

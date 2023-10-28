@@ -9,6 +9,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants";
+import { toast } from "react-toastify";
 const AddStudents = () => {
 
   const dispatch = useDispatch()
@@ -72,6 +73,13 @@ const AddStudents = () => {
         type: "text"
       },
       {
+        label: "Branch",
+        key: "branch",
+        value: mainData?.branch ?? null,
+        options: branchList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
+        type: "select"
+      },
+      {
         label: "Course",
         key: "course",
         value: mainData?.course ?? null,
@@ -85,24 +93,41 @@ const AddStudents = () => {
         options: departmentList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
         type: "select"
       },
-      {
-        label: "Branch",
-        key: "branch",
-        value: mainData?.branch ?? null,
-        options: branchList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
-        type: "select"
-      },
     ]
 
   const handleInputChange = (key, value) => {
     let temp = { ...mainData }
     temp[key] = value;
+    if(key=="branch"){
+      dispatch(loadCourseList(`branch_id=${value?.value}`));
+    } else if(key=="course"){
+      dispatch(loadDepartmentList(`course_id=${value?.value}`));
+    }
     setMainData(() => ({ ...temp }))
   }
+  const handleSelectionError = (key, value) => {
+    if(key == "course" && !mainData.branch){
+      toast.error(
+        "Branch not selected",
+        {
+          autoClose: 2000,
+        }
+      );
+    } else if(key == "department" && !mainData.course){
+      toast.error(
+        "Course not selected",
+        {
+          autoClose: 2000,
+        }
+      );
+    }
+  }
+
   useEffect(() => {
-    dispatch(loadBrachList());
-    dispatch(loadCourseList());
-    dispatch(loadDepartmentList())
+    dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
+    // dispatch(loadBrachList());
+    // dispatch(loadCourseList());
+    // dispatch(loadDepartmentList())
 
   }, [])
 
@@ -257,6 +282,9 @@ const AddStudents = () => {
                             />
                           )}
                           onChange={(e, value) => { handleInputChange(o?.key, value) }}
+                          onClickCapture={(e, value)=>{
+                            handleSelectionError(o?.key, value);
+                          }}
                         />
 
                       </>

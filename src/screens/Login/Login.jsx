@@ -53,6 +53,9 @@ const LoginPage = () => {
       password: password
     }
     dispatch(institution_login(payload, () => {
+      localStorage.setItem("branch", "All Branches");
+      localStorage.setItem("course", "All Courses");
+      localStorage.setItem("department", "All Departments");
       window.location.href = "./adminDashboard";
     }))
   };

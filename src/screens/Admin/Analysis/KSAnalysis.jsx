@@ -4,12 +4,22 @@ import _mockChartData from "./EmotionSensing/_mockChartData.json";
 import FilterCommon from "../../../Components/FilterCommon";
 import { useDispatch, useSelector } from "react-redux";
 import { branchesList } from "./mockbranchesdata";
+import PopUpFilter from "../../../Components/PopUpFilter";
+import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 
 import {
   loadKSAnalysis,
+  loadBrachList,
+  getCourseList,
+  getDepartmentList
 } from "../../../redux/action";
 
 const KSAnalysis = () => {
+  window.onbeforeunload = ()=>{
+    localStorage.setItem("branch", "All Branches");
+    localStorage.setItem("course", "All Courses");
+    localStorage.setItem("department", "All Departments");
+  }
   const hardSkills = [
     {
       id: "Programming Language (Python)",
@@ -94,11 +104,14 @@ const KSAnalysis = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
 
-  const { departmentList, ksAnalysis } = useSelector((state) => state?.data);
+  const { departmentList, ksAnalysis, courseList, branchList } = useSelector((state) => state?.data);
   const open = Boolean(anchorEl);
   useEffect(() => {
+    dispatch(getDepartmentList());
+    dispatch(getCourseList());
     //dispatch get branches Api
     dispatch(loadKSAnalysis());
+    dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
   }, [dispatch]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -159,16 +172,17 @@ const KSAnalysis = () => {
                   Knowledge and Skill Analysis
                 </span>
                 <div>
-                  <FilterCommon
-                    handleClose={handleClose}
-                    handleMenuItemClick={handleMenuItemClick}
-                    handleClick={handleClick}
-                    active={active}
-                    anchorEl={anchorEl}
-                    open={open}
-                    defaultValue={"All Branches"}
-                    data={branchesData}
-                  />
+                <div className="flex justify-end mr-10 mb-3">
+                  <div className="">
+                    <PopUpFilter route="KSAnalysis" list="Branches" dependencyList={branchList}/>
+                  </div>
+                  <div className="">
+                    <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList}/>
+                  </div>
+                  <div className="">
+                    <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList}/>
+                  </div>
+                </div>
                 </div>
               </div>
               <div className="mt-5 pt-3" style={{ height: 500 }}>

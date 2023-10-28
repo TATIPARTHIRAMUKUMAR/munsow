@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -13,8 +13,21 @@ import {
 import _mockChartData from "./EmotionSensing/_mockChartData.json";
 import FilterCommon from "../../../Components/FilterCommon";
 import { branchesList } from "./mockbranchesdata";
+import {
+  loadBrachList,
+  getCourseList,
+  getDepartmentList
+} from "../../../redux/action";
+import { useDispatch, useSelector } from "react-redux";
+import PopUpFilter from "../../../Components/PopUpFilter";
+import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 
 const PracticalThinking = () => {
+  window.onbeforeunload = ()=>{
+    localStorage.setItem("branch", "All Branches");
+    localStorage.setItem("course", "All Courses");
+    localStorage.setItem("department", "All Departments");
+  }
   const barPlotData = [
     {
       "Not Solved": 24,
@@ -37,11 +50,20 @@ const PracticalThinking = () => {
       name: "Hr",
     },
   ];
+  const dispatch = useDispatch();
   const [barPlot, setBarPlot] = useState(barPlotData);
   const [branchesData, setBranchesData] = useState(branchesList);
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  useEffect(() => {
+    dispatch(getDepartmentList());
+    dispatch(getCourseList());
+    // dispatch(loadPracticalThinking());
+    dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
+  }, [dispatch]);
+
   const legendFormatter = (value, entry) => {
     return (
       <div className={"flex items-center"}>
@@ -93,16 +115,17 @@ const PracticalThinking = () => {
                   Practical Thinking
                 </span>
                 <div>
-                  <FilterCommon
-                    handleClose={handleClose}
-                    handleMenuItemClick={handleMenuItemClick}
-                    handleClick={handleClick}
-                    active={active}
-                    anchorEl={anchorEl}
-                    open={open}
-                    defaultValue={"All Branches"}
-                    data={branchesData}
-                  />
+                <div className="flex justify-end mr-10 mb-3">
+                  <div className="">
+                    <PopUpFilter route="PracticalThinking" list="Branches" dependencyList={branchList}/>
+                  </div>
+                  <div className="">
+                    <PopUpFilter route="PracticalThinking" list="Courses" dependencyList={courseList}/>
+                  </div>
+                  <div className="">
+                    <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList}/>
+                  </div>
+                </div>
                 </div>
               </div>
               <div className="mt-5 pt-3">

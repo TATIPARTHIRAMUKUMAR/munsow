@@ -3,21 +3,31 @@ import NeutralEmotionsChart from "./NeutralEmotionsChart";
 import NegativeEmotionsChart from "./NegativeEmotionsChart";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { loadEmotionStats, setReduxState } from "../../../../redux/action";
+import { loadEmotionStats, setReduxState,loadBrachList, getDepartmentList, getCourseList } from "../../../../redux/action";
 import FilterCommon from "../../../../Components/FilterCommon";
 import { branchesList } from "../mockbranchesdata";
+import PopUpFilter from "../../../../Components/PopUpFilter";
+import GLOBAL_CONSTANTS from "../../../../../GlobalConstants.js";
 
 const EmotionSensing = () => {
+  window.onbeforeunload = ()=>{
+    localStorage.setItem("branch", "All Branches");
+    localStorage.setItem("course", "All Courses");
+    localStorage.setItem("department", "All Departments");
+  }
   const [branchesData, setBranchesData] = useState(branchesList);
   const [active, setActive] = useState("All Branches");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
 
-  const { emotionStats } = useSelector((state) => state.data);
+  const { emotionStats, branchList, courseList, departmentList } = useSelector((state) => state.data);
 
   useEffect(() => {
+    dispatch(getDepartmentList());
+    dispatch(getCourseList());
     dispatch(loadEmotionStats());
+    dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
   }, []);
 
   const handleClick = (event) => {
@@ -78,16 +88,17 @@ const EmotionSensing = () => {
             <span className="text-lg">Time wise emotions</span>
           </div>
           <div>
-            <FilterCommon
-              handleClose={handleClose}
-              handleMenuItemClick={handleMenuItemClick}
-              handleClick={handleClick}
-              active={active}
-              anchorEl={anchorEl}
-              open={open}
-              defaultValue={"All Branches"}
-              data={branchesData}
-            />
+          <div className="flex justify-end mr-10 mb-3">
+            <div className="">
+              <PopUpFilter route="EmotionSensing" list="Branches" dependencyList={branchList}/>
+            </div>
+            <div className="">
+              <PopUpFilter route="EmotionSensing" list="Courses" dependencyList={courseList}/>
+            </div>
+            <div className="">
+              <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList}/>
+            </div>
+          </div>
           </div>
         </div>
         <div className="flex">
