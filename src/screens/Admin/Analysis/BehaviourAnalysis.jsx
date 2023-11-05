@@ -32,6 +32,8 @@ const BehaviourAnalysis = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
+    localStorage.setItem("user", "All Users");
+
   }
   const { behaviourAnalysis } = useSelector(
     (state) => state?.data

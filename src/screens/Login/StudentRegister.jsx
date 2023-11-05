@@ -2,6 +2,8 @@ import { Autocomplete, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getCourseList,
+  getDepartmentList,
   loadBrachList,
   loadCourseList,
   loadDepartmentList,
@@ -92,33 +94,63 @@ const StudentRegister = () => {
 
   const handleInputChange = (key, value) => {
     let temp = { ...mainData };
-    temp[key] = value;
-    if(key=="institution"){
+  
+    // When an institution is selected
+    if (key === "institution") {
+      // Update the institution, reset branch, course, and department
+      temp = {
+        ...temp,
+        institution: value,
+        branch: null,
+        course: null,
+        department: null,
+      };
       dispatch(loadBrachList(`institution_id=${value?.value}`));
-    } else if(key=="branch"){
+      // Also dispatch for empty course and department lists
+    } else if (key === "branch") {
+      // Update the branch, reset course and department
+      temp = {
+        ...temp,
+        branch: value,
+        course: null,
+        department: null,
+      };
       dispatch(loadCourseList(`branch_id=${value?.value}`));
-    } else if(key=="course"){
+    } else if (key === "course") {
+      // Update the course, reset department
+      temp = {
+        ...temp,
+        course: value,
+        department: null,
+      };
       dispatch(loadDepartmentList(`course_id=${value?.value}`));
+    } else {
+      // For all other fields, just update the value
+      temp[key] = value;
     }
-    setMainData(() => ({ ...temp }));
+  
+    setMainData(temp);
   };
+  
+  
+  
 
   const handleSelectionError = (key, value) => {
-    if(key == "branch" && !mainData.institution){
+    if (key == "branch" && !mainData.institution) {
       toast.error(
         "Institution not selected",
         {
           autoClose: 2000,
         }
       );
-    } else if(key == "course" && !mainData.branch){
+    } else if (key == "course" && !mainData.branch) {
       toast.error(
         "Branch not selected",
         {
           autoClose: 2000,
         }
       );
-    } else if(key == "department" && !mainData.course){
+    } else if (key == "department" && !mainData.course) {
       toast.error(
         "Course not selected",
         {
@@ -149,10 +181,10 @@ const StudentRegister = () => {
     };
     dispatch(user_signup(payload, (test) => {
       setMainData({});
-      console.log("test",test);
-      navigate("../studentLogin", {replace: true});
+      console.log("test", test);
+      navigate("../studentLogin", { replace: true });
     }));
-    
+
   };
 
   return (
@@ -174,26 +206,27 @@ const StudentRegister = () => {
                     size="small"
                     fullWidth
                     disablePortal
-                    value={o?.value}
+                    value={o?.value || null}  
+                    // value={o?.value}
                     defaultValue={o?.value}
                     id="combo-box-demo"
                     options={o?.options ?? []}
                     renderInput={(params) => (
-                      <TextField 
-                      {...params} 
-                      label={o?.label} 
-                      InputProps={{
-                        ...params.InputProps,
-                        style: {
-                          borderRadius: "0.4rem",
-                        },
-                      }}
+                      <TextField
+                        {...params}
+                        label={o?.label}
+                        InputProps={{
+                          ...params.InputProps,
+                          style: {
+                            borderRadius: "0.4rem",
+                          },
+                        }}
                       />
                     )}
                     onChange={(e, value) => {
                       handleInputChange(o?.key, value);
                     }}
-                    onClickCapture={(e, value)=>{
+                    onClickCapture={(e, value) => {
                       handleSelectionError(o?.key, value);
                     }}
                   />

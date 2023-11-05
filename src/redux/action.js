@@ -605,12 +605,18 @@ export const loadTeachersList = (params) => {
 export const uploadUser = (data) => {
   return function (dispatch) {
     var headers = {
-      "Content-type": "multipart/form-data",
+      "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
+    // let toastId = toast("file upload", { autoClose: false });
+
     axios.post(`${GLOBAL_CONSTANTS?.backend_url}/user/upload`, data, { headers })
       .then((resp) => {
         console.log(resp)
+        toast.success(resp?.data?.message);
+
+        // toast.update(toastId, { render: resp?.data?.message, type: "error", autoClose: true })
+
         // dispatch(getTeachersList(resp?.data));
       })
       .catch((error) => console.log(error));
@@ -670,6 +676,25 @@ export const loadDepartmentList = (params) => {
     axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/department_list?${params}`, {headers })
       .then((resp) => {
         dispatch(getDepartmentList(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+export const getUsersList = (data) => ({
+  type: types.USERS_LIST_BY_DEPARTMENT,
+  payload: data,
+});
+
+export const loadUsersList = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/user/user_by_department_list?${params}`, {headers })
+      .then((resp) => {
+        dispatch(getUsersList(resp?.data));
       })
       .catch((error) => console.log(error));
   };

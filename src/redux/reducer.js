@@ -32,6 +32,7 @@ const initialState = {
   questionsList:[],
   behaviourAnalysis:[],
   ksAnalysis: [],
+  userListByDepartment:[],
   summaryData:{},
   loading: false
 };
@@ -194,7 +195,12 @@ const DataReducers = (state = initialState, action) => {
     }
     case types.KS_ANALYSIS: return{
       ...state,
-      ksAnalysis: action.payload.data.data,
+      ksAnalysis: action.payload.data,
+      loading:false
+    }
+    case types.USERS_LIST_BY_DEPARTMENT: return{
+      ...state,
+      userListByDepartment: action.payload.data,
       loading:false
     }
     case types.SET_REDUX_STATE : { 

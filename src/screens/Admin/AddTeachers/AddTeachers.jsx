@@ -14,6 +14,7 @@ const AddTeachers = () => {
 
   const dispatch = useDispatch()
   const { institutionList, departmentList, branchList, courseList } = useSelector(state => state.data)
+  const [fileData, setFileData] = useState(null);
 
   const formData = new FormData();
   formData.append("mode", "Teacher")
@@ -21,10 +22,41 @@ const AddTeachers = () => {
   const input = useRef(null);
 
   // utils
+  // const handleSelectFiles = (e) => {
+  //   formData.append('file', e.currentTarget.files[0]);
+  //   dispatch(uploadUser(formData))
+  // };
+
   const handleSelectFiles = (e) => {
-    formData.append('file', e.currentTarget.files[0]);
-    dispatch(uploadUser(formData))
+    const file = e.currentTarget.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      let base64Data = event.target.result.split(",")[1]; // Get the base64 data part
+
+      const mimeRegex = /^data:.+;base64,/;
+      if (mimeRegex.test(base64Data)) {
+        base64Data = base64Data.replace(mimeRegex, '');
+      }
+      // Ensure the base64 data length is a multiple of 4
+      while (base64Data.length % 4 !== 0) {
+        base64Data += '=';
+      }
+
+      // console.log("base64Data", base64Data)
+      const payload = {
+        mode: "teacher",
+        base64: base64Data
+      }
+      dispatch(uploadUser(payload))
+      // setFileData(base64Data); // Store the base64 data in state
+    };
+
+    reader.readAsDataURL(file);
+
+    // console.log("base64", fileData, file)
   };
+
 
   const [value, setValue] = React.useState("1");
 
@@ -99,23 +131,23 @@ const AddTeachers = () => {
   const handleInputChange = (key, value) => {
     let temp = { ...mainData }
     temp[key] = value;
-    if(key=="branch"){
+    if (key == "branch") {
       dispatch(loadCourseList(`branch_id=${value?.value}`));
-    } else if(key=="course"){
+    } else if (key == "course") {
       dispatch(loadDepartmentList(`course_id=${value?.value}`));
     }
     setMainData(() => ({ ...temp }))
   }
 
   const handleSelectionError = (key, value) => {
-    if(key == "course" && !mainData.branch){
+    if (key == "course" && !mainData.branch) {
       toast.error(
         "Branch not selected",
         {
           autoClose: 2000,
         }
       );
-    } else if(key == "department" && !mainData.course){
+    } else if (key == "department" && !mainData.course) {
       toast.error(
         "Course not selected",
         {
@@ -174,18 +206,18 @@ const AddTeachers = () => {
 
               </div>
               <div className="flex justify-between items-center gap-2 text-lg font-semibold text-blue-500 cursor-pointer"><a href={`${GLOBAL_CONSTANTS?.backend_url}user/download`} >
-                    <Button
-                      endIcon={<CloudDownloadOutlinedIcon />}
-                      style={{ color: "gray", borderColor: "gray" }}
-                      variant="outlined"
-                      size="small"
-                      onClick={() => {    
-                      }}
-                    >
-                      {" "}
-                      Download Sample File{" "}
-                    </Button>
-                    </a></div>
+                <Button
+                  endIcon={<CloudDownloadOutlinedIcon />}
+                  style={{ color: "gray", borderColor: "gray" }}
+                  variant="outlined"
+                  size="small"
+                  onClick={() => {
+                  }}
+                >
+                  {" "}
+                  Download Sample File{" "}
+                </Button>
+              </a></div>
             </div>
 
 
@@ -261,7 +293,7 @@ const AddTeachers = () => {
                           options={o?.options ?? []}
                           renderInput={(params) => <TextField {...params} label={o?.label} />}
                           onChange={(e, value) => { handleInputChange(o?.key, value) }}
-                          onClickCapture={(e, value)=>{
+                          onClickCapture={(e, value) => {
                             handleSelectionError(o?.key, value);
                           }}
                         />

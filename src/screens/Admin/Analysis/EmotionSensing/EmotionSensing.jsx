@@ -14,6 +14,8 @@ const EmotionSensing = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
+    localStorage.setItem("user", "All Users");
+
   }
   const [branchesData, setBranchesData] = useState(branchesList);
   const [active, setActive] = useState("All Branches");
@@ -21,7 +23,7 @@ const EmotionSensing = () => {
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
 
-  const { emotionStats, branchList, courseList, departmentList } = useSelector((state) => state.data);
+  const { emotionStats, branchList, courseList, departmentList, userListByDepartment } = useSelector((state) => state.data);
 
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -84,8 +86,8 @@ const EmotionSensing = () => {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <div>
-            <span className="text-2xl ">Emotion Sensing - </span>
-            <span className="text-lg">Time wise emotions</span>
+            <span className="text-2xl ">Emotion Sensing  </span>
+            {/* <span className="text-lg">Time wise emotions</span> */}
           </div>
           <div>
           <div className="flex justify-end mr-10 mb-3">
@@ -97,6 +99,9 @@ const EmotionSensing = () => {
             </div>
             <div className="">
               <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList}/>
+            </div>
+            <div className="">
+              <PopUpFilter route="EmotionSensing" list="user" dependencyList={userListByDepartment}/>
             </div>
           </div>
           </div>

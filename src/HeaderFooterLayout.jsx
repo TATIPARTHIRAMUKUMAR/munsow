@@ -146,11 +146,11 @@ export default function HeaderFooterLayout({ Component }) {
           icon: <BiSolidReport size={20} className="" />,
           route: "/dashboard",
           subItems: [
-            {
-              label: "Behavioral Analysis",
-              icon: <FaBrain size={20} className="" />,
-              route: "/behaviourAnalysis",
-            },
+            // {
+            //   label: "Behavioral Analysis",
+            //   icon: <FaBrain size={20} className="" />,
+            //   route: "/behaviourAnalysis",
+            // },
             {
               label: "KS Analysis",
               icon: <FaChartLine size={20} className="" />,
@@ -279,6 +279,8 @@ export default function HeaderFooterLayout({ Component }) {
       localStorage.setItem("branch", "All Branches");
       localStorage.setItem("course", "All Courses");
       localStorage.setItem("department", "All Departments");
+      localStorage.setItem("user", "All Users");
+
     }
     setSelectedItem(index);
     navigate(route);

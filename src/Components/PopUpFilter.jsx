@@ -11,7 +11,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import { useDispatch } from "react-redux";
-import { loadDepartmentList, loadInstitutionStats, loadCourseList, loadBehaviourAnalysis, loadKSAnalysis, loadEmotionStats } from "../redux/action";
+import { loadDepartmentList, loadInstitutionStats, loadCourseList, loadBehaviourAnalysis, loadKSAnalysis, loadEmotionStats, loadUserList, loadUsersList } from "../redux/action";
 import { capitalizeString, capitalizeWords } from "../utils/stringUtils";
 import { capitalize } from "@mui/material";
 
@@ -66,11 +66,11 @@ export default function PopUpFilter(props) {
   //     { name: "HR", value: "" },
   //   ]);
 
-  const {route, list, dependencyList } = props;
+  const { route, list, dependencyList } = props;
   const dispatch = useDispatch();
-    // const [branchActive, setBranchActive] = React.useState(`All Branches`);
-    // const [courseActive, setCourseActive] = React.useState(`All Courses`);
-    // const [departmentActive, setDepartmentActive] = React.useState(`All Departments`);
+  // const [branchActive, setBranchActive] = React.useState(`All Branches`);
+  // const [courseActive, setCourseActive] = React.useState(`All Courses`);
+  // const [departmentActive, setDepartmentActive] = React.useState(`All Departments`);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -78,20 +78,33 @@ export default function PopUpFilter(props) {
   };
 
   const handleMenuItemClick = (item, id) => {
-    list=="Branches"?localStorage.setItem("branch",item):(list=="Courses"?localStorage.setItem("course",item):localStorage.setItem("department",item));
+    console.log("ii",item,id)
+    if (list == "user") {
+      localStorage.setItem("user", item)
+      localStorage.setItem("user_id", id)
+    }
+    else {
+      list == "Branches" ? localStorage.setItem("branch", item) : (list == "Courses" ? localStorage.setItem("course", item) : localStorage.setItem("department", item));
+    }
     // if (item == `All ${list}`) {
     //   dispatch(loadInstitutionStats());
     // } else {
-      list=="Branches"?dispatch(loadCourseList(`branch_id=${id}`)):(list=="Courses"?dispatch(loadDepartmentList(`course_id=${id}`)):"");
-        let params = {
-          branch: capitalizeWords(localStorage.getItem("branch")),
-          course: capitalizeWords(localStorage.getItem("course")),
-          department: capitalizeWords(localStorage.getItem("department")),
-        };
-        list=="Branches"?params.branch=capitalizeWords(item):(list=="Courses"?params.course=capitalizeWords(item):params.department=capitalizeWords(item));
-        route=="AdminDashboard"?dispatch(loadInstitutionStats(params)):(route=="BehaviourAnanlysis"?dispatch(loadBehaviourAnalysis(params)):
-        (route=="KSAnalysis"?dispatch(loadKSAnalysis(params)):
-        (route=="PracticalThinking"?"":(route=="EmotionSensing"?dispatch(loadEmotionStats(params)):""))));
+    list == "Branches" ? dispatch(loadCourseList(`branch_id=${id}`)) : (list == "Courses" ? dispatch(loadDepartmentList(`course_id=${id}`)) : list == "Departments" ? dispatch(loadUsersList(`department_id=${id}`)) : "");
+    let params = {
+      branch: localStorage.getItem("branch"),
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+    };
+    if (list == "user") {
+      params.student_id = id
+    }
+    else {
+    list == "Branches" ? params.branch = item : (list == "Courses" ? params.course = item : params.department = item);
+    }
+    route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      (route == "KSAnalysis" ? dispatch(loadKSAnalysis(params)) :
+        (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
     // }
     handleClose();
   };
@@ -118,8 +131,8 @@ export default function PopUpFilter(props) {
           fontWeight: 600,
         }}
       >
-        
-        {list=="Branches"?localStorage.getItem("branch"):(list=="Courses"?localStorage.getItem("course"):localStorage.getItem("department"))}
+
+        {list == "Branches" ? localStorage.getItem("branch") : (list == "Courses" ? localStorage.getItem("course") : list == "user" ? localStorage.getItem("user"): localStorage.getItem("department"))}
       </Button>
       <StyledMenu
         id="demo-customized-menu"

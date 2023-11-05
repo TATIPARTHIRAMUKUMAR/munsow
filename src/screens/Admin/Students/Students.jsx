@@ -110,7 +110,7 @@ const Students = () => {
   return (
     <div className="flex-grow-1 p-5 h-[100vh] " >
       <div className="ag-theme-alpine grid gap-4">
-        <div className="flex gap-4 py-3">
+        {/* <div className="flex gap-4 py-3">
           <Autocomplete
             size="small"
             sx={{ width: "300px" }}
@@ -129,7 +129,7 @@ const Students = () => {
             renderInput={(params) => <TextField {...params} label="Filter by Branch" />}
             onChange={(e, value) => { setParams((prev) => ({ ...prev, branch_name: value?.label })) }}
           />
-        </div>
+        </div> */}
         <AgGridReact // resizable, sortable
           rowData={studentsList?.data?.map(o => ({ 
             ...o, 

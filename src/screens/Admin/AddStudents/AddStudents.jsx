@@ -21,9 +21,39 @@ const AddStudents = () => {
   const input = useRef(null);
 
   // utils
+  // const handleSelectFiles = (e) => {
+  //   formData.append('file', e.currentTarget.files[0]);
+  //   dispatch(uploadUser(formData))
+  // };
+
   const handleSelectFiles = (e) => {
-    formData.append('file', e.currentTarget.files[0]);
-    dispatch(uploadUser(formData))
+    const file = e.currentTarget.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      let base64Data = event.target.result.split(",")[1]; // Get the base64 data part
+
+      const mimeRegex = /^data:.+;base64,/;
+      if (mimeRegex.test(base64Data)) {
+        base64Data = base64Data.replace(mimeRegex, '');
+      }
+      // Ensure the base64 data length is a multiple of 4
+      while (base64Data.length % 4 !== 0) {
+        base64Data += '=';
+      }
+
+      // console.log("base64Data", base64Data)
+      const payload = {
+        mode: "student",
+        base64: base64Data
+      }
+      dispatch(uploadUser(payload))
+      // setFileData(base64Data); // Store the base64 data in state
+    };
+
+    reader.readAsDataURL(file);
+
+    // console.log("base64", fileData, file)
   };
 
   const [value, setValue] = React.useState("1");

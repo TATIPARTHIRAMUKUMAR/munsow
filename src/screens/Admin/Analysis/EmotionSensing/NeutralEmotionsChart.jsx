@@ -26,6 +26,28 @@ const NeutralEmotionsChart = (props) => {
         </div>
       );
     };
+    // if (data?.length === 0) {
+    //   return (
+    //     <div
+    //     className="mt-5 pt-3 d-flex justify-content-center align-items-center"
+    //       style={{
+    //         background: "#FFFAFA",
+    //         borderRadius: "30px",
+    //         height: "250px", // Set the same height as the graph
+    //         width: "100%", // Set the same width as the graph
+    //       }}
+    //     >
+    //       <div
+    //         className="fs-5 fw-bold text mb-4 pb-4"
+    //         style={{ left: "30%", position: "relative", color: "#005B82" }}
+    //       >
+    //         {name}
+    //       </div>
+    //       <div className="text-center">No Data</div>
+    //     </div>
+    //   );
+    // }
+  
     return (
       <div
         className="mt-5 pt-3"

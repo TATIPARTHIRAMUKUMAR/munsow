@@ -15,10 +15,12 @@ import {
 } from "../../../redux/action";
 
 const KSAnalysis = () => {
-  window.onbeforeunload = ()=>{
+  window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
+    localStorage.setItem("user", "All Users");
+
   }
   const hardSkills = [
     {
@@ -97,14 +99,14 @@ const KSAnalysis = () => {
       ],
     },
   ];
-  const [hardSkillData, setHardSkillsData] = useState(hardSkills);
-  const [softSkillData, setSoftSkillsData] = useState(softSkills);
+  const [hardSkillData, setHardSkillsData] = useState([]);
+  const [softSkillData, setSoftSkillsData] = useState([]);
   const [branchesData, setBranchesData] = useState(branchesList);
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
 
-  const { departmentList, ksAnalysis, courseList, branchList } = useSelector((state) => state?.data);
+  const { departmentList, ksAnalysis, courseList, branchList,userListByDepartment } = useSelector((state) => state?.data);
   const open = Boolean(anchorEl);
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -116,6 +118,12 @@ const KSAnalysis = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  useEffect(() => {
+    setHardSkillsData(ksAnalysis?.graph_1?.data)
+    setSoftSkillsData(ksAnalysis?.graph_2?.data)
+    console.log("ksAnalysis", hardSkillData, softSkillData)
+  }, [ksAnalysis])
 
   const handleMenuItemClick = (value) => {
     if (value == "All Branches") {
@@ -172,118 +180,125 @@ const KSAnalysis = () => {
                   Knowledge and Skill Analysis
                 </span>
                 <div>
-                <div className="flex justify-end mr-10 mb-3">
-                  <div className="">
-                    <PopUpFilter route="KSAnalysis" list="Branches" dependencyList={branchList}/>
+                  <div className="flex justify-end mr-10 mb-3">
+                    <div className="">
+                      <PopUpFilter route="KSAnalysis" list="Branches" dependencyList={branchList} />
+                    </div>
+                    <div className="">
+                      <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList} />
+                    </div>
+                    <div className="">
+                      <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList} />
+                    </div>
+                    <div className="">
+                      <PopUpFilter route="KSAnalysis" list="user" dependencyList={userListByDepartment} />
+                    </div>
                   </div>
-                  <div className="">
-                    <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList}/>
-                  </div>
-                </div>
                 </div>
               </div>
               <div className="mt-5 pt-3" style={{ height: 500 }}>
                 <span className="text-2xl font-normal text-gray-900">
                   Hard skills
                 </span>
-                <ResponsiveHeatMap
-                  data={hardSkillData}
-                  margin={{ top: 70, right: 90, bottom: 60, left: 90 }}
-                  valueFormat=">-.2s"
-                  axisTop={{
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: -90,
-                    legend: "",
-                    legendOffset: 46,
-                  }}
-                  axisLeft={{
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: 0,
-                    legend: "Hard Skills",
-                    legendPosition: "middle",
-                    legendOffset: -80,
-                  }}
-                  colors={{
-                    type: "sequential",
-                    scheme: "purples",
-                    minValue: 0,
-                    maxValue: 100,
-                  }}
-                  emptyColor="#555555"
-                  legends={[
-                    {
-                      anchor: "bottom",
-                      translateX: 0,
-                      translateY: 30,
-                      length: 400,
-                      thickness: 8,
-                      direction: "row",
-                      tickPosition: "after",
-                      tickSize: 3,
-                      tickSpacing: 4,
-                      tickOverlap: false,
-                      tickFormat: ">-.2s",
-                      title: "Value →",
-                      titleAlign: "start",
-                      titleOffset: 4,
-                    },
-                  ]}
-                />
+                {hardSkillData?.length > 0 && (
+                  <ResponsiveHeatMap
+                    data={hardSkillData}
+                    margin={{ top: 70, right: 90, bottom: 60, left: 90 }}
+                    valueFormat=">-.2s"
+                    axisTop={{
+                      tickSize: 5,
+                      tickPadding: 5,
+                      tickRotation: -90,
+                      legend: "",
+                      legendOffset: 46,
+                    }}
+                    axisLeft={{
+                      tickSize: 5,
+                      tickPadding: 5,
+                      tickRotation: 0,
+                      legend: "Hard Skills",
+                      legendPosition: "middle",
+                      legendOffset: -80,
+                    }}
+                    colors={{
+                      type: "sequential",
+                      scheme: "purples",
+                      minValue: 0,
+                      maxValue: 100,
+                    }}
+                    emptyColor="#555555"
+                    legends={[
+                      {
+                        anchor: "bottom",
+                        translateX: 0,
+                        translateY: 30,
+                        length: 400,
+                        thickness: 8,
+                        direction: "row",
+                        tickPosition: "after",
+                        tickSize: 3,
+                        tickSpacing: 4,
+                        tickOverlap: false,
+                        tickFormat: ">-.2s",
+                        title: "Value →",
+                        titleAlign: "start",
+                        titleOffset: 4,
+                      },
+                    ]}
+                  />
+                )}
               </div>
               <div className="mt-5 pt-3" style={{ height: 500 }}>
                 <span className="text-2xl font-normal text-gray-900">
                   Soft skills
                 </span>
-                <ResponsiveHeatMap
-                  data={softSkillData}
-                  margin={{ top: 90, right: 90, bottom: 60, left: 90 }}
-                  valueFormat=">-.2s"
-                  axisTop={{
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: -90,
-                    legend: "",
-                    legendOffset: 50,
-                  }}
-                  axisLeft={{
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: 0,
-                    legend: "Soft Skills",
-                    legendPosition: "middle",
-                    legendOffset: -85,
-                  }}
-                  colors={{
-                    type: "sequential",
-                    scheme: "greens",
-                    minValue: 0,
-                    maxValue: 100,
-                  }}
-                  emptyColor="#555555"
-                  legends={[
-                    {
-                      anchor: "bottom",
-                      translateX: 0,
-                      translateY: 30,
-                      length: 400,
-                      thickness: 8,
-                      direction: "row",
-                      tickPosition: "after",
-                      tickSize: 3,
-                      tickSpacing: 4,
-                      tickOverlap: false,
-                      tickFormat: ">-.2s",
-                      title: "Value →",
-                      titleAlign: "start",
-                      titleOffset: 4,
-                    },
-                  ]}
-                />
+                {softSkillData?.length > 0 && (
+                  <ResponsiveHeatMap
+                    data={softSkillData}
+                    margin={{ top: 90, right: 90, bottom: 60, left: 90 }}
+                    valueFormat=">-.2s"
+                    axisTop={{
+                      tickSize: 5,
+                      tickPadding: 5,
+                      tickRotation: -90,
+                      legend: "",
+                      legendOffset: 50,
+                    }}
+                    axisLeft={{
+                      tickSize: 5,
+                      tickPadding: 5,
+                      tickRotation: 0,
+                      legend: "Soft Skills",
+                      legendPosition: "middle",
+                      legendOffset: -85,
+                    }}
+                    colors={{
+                      type: "sequential",
+                      scheme: "greens",
+                      minValue: 0,
+                      maxValue: 100,
+                    }}
+                    emptyColor="#555555"
+                    legends={[
+                      {
+                        anchor: "bottom",
+                        translateX: 0,
+                        translateY: 30,
+                        length: 400,
+                        thickness: 8,
+                        direction: "row",
+                        tickPosition: "after",
+                        tickSize: 3,
+                        tickSpacing: 4,
+                        tickOverlap: false,
+                        tickFormat: ">-.2s",
+                        title: "Value →",
+                        titleAlign: "start",
+                        titleOffset: 4,
+                      },
+                    ]}
+                  />
+                )}
               </div>
             </div>
           </div>
