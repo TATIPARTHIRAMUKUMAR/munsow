@@ -32,7 +32,7 @@ export default function StudentDashboard() {
                                 Practice Now
                             </button>
                             <button className=" text-white font-semibold py-2 px-4 border rounded-lg shadow" onClick={()=>{navigate("/report")}}>
-                                View My Interviews
+                                View My Interview Reports
                             </button>
                         </div>
                     </div>
