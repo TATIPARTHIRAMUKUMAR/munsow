@@ -26,7 +26,7 @@ export default function ReportIndex() {
     const navigate = useNavigate();
 
 
-    const ReportCards = ({ id, role, level, report_ready,report_data }) => {
+    const ReportCards = ({ id, role, level, report_ready,report_data,skill_type }) => {
 
         const viewReport = (data) => {
            console.log("d",data)
@@ -40,7 +40,7 @@ export default function ReportIndex() {
             <div className="max-h-[320px] transition-transform duration-300 hover:scale-105">
                 <div className="flex flex-col h-full  p-4 border border-[#886cc050] rounded-lg shadow-lg">
                     <div className="flex-grow p-2 flex flex-col gap-y-2">
-                        <div className="text-xl font-semibold">Role: {role}</div>
+                      {skill_type=="role based report"?<div className="text-xl font-semibold">Role: {role}</div>:<div  className="text-xl font-semibold">Skill based report</div>}  
                         <div className="font-medium">Level: {level}</div>
                     </div>
                     <Divider className="my-5" />
@@ -67,7 +67,8 @@ export default function ReportIndex() {
         role: PropTypes.string.isRequired,
         level: PropTypes.bool.isRequired,
         report_ready:PropTypes.bool.isRequired,
-        report_data:PropTypes.bool.isRequired
+        report_data:PropTypes.bool.isRequired,
+        skill_type:PropTypes.string.isRequired
     }
     return (
         <div className="w-full h-full overflow-y-auto px-4 ">
@@ -85,7 +86,7 @@ export default function ReportIndex() {
                     }}
                 >
                     {lessonsList?.map((o, index) => (
-                        <ReportCards id={o?.id} role={o?.specifications?.role} report_data={o?.report_json==null?{}:o?.report_json} report_ready={o?.report_json==null?"false":"true"} level={o?.level} key={index} />
+                        <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json==null?{}:o?.report_json} report_ready={o?.report_json==null?"false":"true"} level={o?.level} key={index} />
                     ))}
                 </div>
             )}
