@@ -85,10 +85,9 @@ const EmotionSensing = () => {
           className="pb-5"
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <div>
+          {/* <div>
             <span className="text-2xl ">Emotion Sensing  </span>
-            {/* <span className="text-lg">Time wise emotions</span> */}
-          </div>
+          </div> */}
           <div>
           <div className="flex justify-end mr-10 mb-3">
             <div className="">

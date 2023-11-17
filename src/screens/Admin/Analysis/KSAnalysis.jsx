@@ -121,7 +121,7 @@ const KSAnalysis = () => {
 
   useEffect(() => {
     setHardSkillsData(ksAnalysis?.graph_1?.data)
-    setSoftSkillsData(ksAnalysis?.graph_2?.data)
+    setSoftSkillsData(ksAnalysis?.graph_2?.date)
     console.log("ksAnalysis", hardSkillData, softSkillData)
   }, [ksAnalysis])
 
@@ -176,9 +176,9 @@ const KSAnalysis = () => {
                 className="bg-white mb-10"
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <span className="text-2xl font-normal text-gray-900">
+                {/* <span className="text-2xl font-normal text-gray-900">
                   Knowledge and Skill Analysis
-                </span>
+                </span> */}
                 <div>
                   <div className="flex justify-end mr-10 mb-3">
                     <div className="">
@@ -216,7 +216,7 @@ const KSAnalysis = () => {
                       tickSize: 5,
                       tickPadding: 5,
                       tickRotation: 0,
-                      legend: "Hard Skills",
+                      // legend: "Hard Skills",
                       legendPosition: "middle",
                       legendOffset: -80,
                     }}
@@ -268,7 +268,7 @@ const KSAnalysis = () => {
                       tickSize: 5,
                       tickPadding: 5,
                       tickRotation: 0,
-                      legend: "Soft Skills",
+                      // legend: "Soft Skills",
                       legendPosition: "middle",
                       legendOffset: -85,
                     }}

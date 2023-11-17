@@ -113,9 +113,9 @@ const PracticalThinking = () => {
                 className="bg-white mb-10"
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <span className="text-2xl font-normal text-gray-900">
+                {/* <span className="text-2xl font-normal text-gray-900">
                   Practical Thinking
-                </span>
+                </span> */}
                 <div>
                 <div className="flex justify-end mr-10 mb-3">
                   <div className="">
