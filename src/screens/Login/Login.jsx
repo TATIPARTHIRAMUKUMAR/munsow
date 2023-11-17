@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import interview from "../../assets/admin_ui.png";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -24,11 +24,12 @@ const style = {
 };
 
 const LoginPage = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [universityId, setUniversityId] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const [loginType, setLoginType] = useState("institution"); 
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -50,26 +51,37 @@ const LoginPage = () => {
   const handleSubmit = async () => {
     const payload = {
       email: universityId,
-      password: password
-    }
+      password: password,
+    };
     dispatch(institution_login(payload, () => {
       localStorage.setItem("branch", "All Branches");
       localStorage.setItem("course", "All Courses");
       localStorage.setItem("department", "All Departments");
       localStorage.setItem("user", "All Users");
       window.location.href = "./adminDashboard";
-    }))
+    }));
+  };
+
+  const handleLoginTypeChange = (type) => {
+    setLoginType(type);
+    if (type == 'student') {
+      navigate("/studentLogin")
+    }
   };
 
   return (
     <div className="p-4">
+
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/6 p-5 md:p-20">
           <div className="bg-white rounded-lg p-6">
-            <h2 className="text-4xl font-semibold mb-4">Institution Login</h2>
-            <p className="text-base text-gray-600 mb-7">
-              Get access to our expert insights about your students across departments, branches, and cities today!
-            </p>
+            <div className="mb-4">
+              <h2 className="text-4xl font-semibold  mb-4">Institution Login</h2>
+              <p className="text-base text-gray-600 mb-7">
+                Get access to our expert insights about your students across departments, branches, and cities today!
+              </p>
+            </div>
+
             <div className="space-y-4">
               <div className="mb-2">
                 <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
@@ -109,44 +121,7 @@ const LoginPage = () => {
                 Login
               </button>
             </div>
-            <div className="mt-3 text-center">
-              <span className="text-blue-600 hover:underline cursor-pointer" onClick={handleClickOpen}>
-                Forget Password?
-              </span>
-            </div>
-            <div>
-              {open ? <ForgotPassword open={open} setOpen={setOpen} /> : <></>}
-              {/* <Modal
-                open={open}
-                onClose={handleClickOpen}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Forget Password?
-                  </Typography>
-                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Enter Your Email-Id
-                  </Typography>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                    onChange={loginInputHandler}
-                  />
-                  <div className="mt-4 space-x-2">
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Submit</Button>
-                  </div>
-                </Box>
-              </Modal> */}
-            </div>
-            <div className="mt-12 text-center">
+            <div className="mt-7 text-center">
               <span className="text-gray-600">
                 Not a member with us yet? {" "}
               </span>
@@ -154,26 +129,26 @@ const LoginPage = () => {
                 <Link to={"/registration"}>Join Us Today!</Link>
               </span>
             </div>
-            <div className="mt-5 text-center">
-              <span className="text-gray-600">
-                Are you a student?
-              </span>
-              <span className="text-blue-600 font-semibold cursor-pointer">
-                {" "}
-                <Link to={"/studentLogin"}>Login here!</Link>
-              </span>
+            
+            <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
+              <div className="flex items-center justify-center">
+                <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome, Students!</h2>
+                <Link to={"/studentLogin"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
+                  Login Here!
+                </Link>
+              </div>
             </div>
             <div className="mt-10 text-center text-gray-600">
               <span>
                 By continuing, you agree to our
               </span>
-              <a href=" https://www.munsow.com/terms-and-conditions" target="_blank"><span className="font-semibold text-blue-500">  Terms of Service  </span></a>
-
-              {/* <span className="font-semibold"> Terms of Service </span> */}
-              <span>and</span>
-              <a href=" https://www.munsow.com/privacy-policy" target="_blank"><span className="font-semibold text-blue-500">  Privacy Policy  </span></a>
-
-              {/* <span className="font-semibold"> Privacy Policy</span> */}
+              <a href="https://www.munsow.com/terms-and-conditions" target="_blank" className="font-semibold text-blue-500 ml-1">
+                Terms of Service
+              </a>
+              <span> and </span>
+              <a href="https://www.munsow.com/privacy-policy" target="_blank" className="font-semibold text-blue-500">
+                Privacy Policy
+              </a>
             </div>
           </div>
         </div>

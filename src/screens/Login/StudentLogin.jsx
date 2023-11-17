@@ -153,7 +153,17 @@ const StudentLogin = () => {
                 <Link to={"/studentRegister"}>Sign Up!</Link>
               </span>
             </div>
-            <div className="mt-5 text-center">
+
+            <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
+              <div className="flex items-center justify-center">
+                <h2 className="text-lg font-semibold text-gray-700 mr-4">Institution login here!</h2>
+                <Link to={"/"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
+                  Click me
+                </Link>
+              </div>
+            </div>
+
+            {/* <div className="mt-5 text-center">
               <span className="text-gray-600">
                 Institution login here!
               </span>
@@ -161,8 +171,8 @@ const StudentLogin = () => {
                 {" "}
                 <Link to={"/"}>Login here!</Link>
               </span>
-            </div>
-            <div className="mt-10 text-center">
+            </div> */}
+            {/* <div className="mt-10 text-center">
               <span className="text-gray-600">
                 Having issues logging in?
               </span>
@@ -170,7 +180,7 @@ const StudentLogin = () => {
                 {" "}
                 forget Password
               </span>
-            </div>
+            </div> */}
             <div className="mt-10 text-center text-gray-600">
               <span>
                 By continuing, you agree to our
