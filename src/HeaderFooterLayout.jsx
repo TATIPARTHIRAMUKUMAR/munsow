@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
@@ -12,10 +12,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
-import RuleOutlinedIcon from "@mui/icons-material/RuleOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
@@ -26,24 +22,15 @@ import GLOBAL_CONSTANTS from "../GlobalConstants";
 import { Collapse } from "@mui/material";
 import AppHeader from "./screens/Admin/AppHeader";
 
-import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
-import FilterNoneRoundedIcon from '@mui/icons-material/FilterNoneRounded';
-import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
-
 import {
   FaThLarge,
   FaClone,
   FaChartLine,
-  FaBell,
   FaUser,
   FaUserCog,
   FaCog,
   FaQuestionCircle,
-  FaBrain,
   FaLightbulb,
-  FaBalanceScale,
   FaFileAlt,
   FaUserGraduate,
   FaChalkboardTeacher,

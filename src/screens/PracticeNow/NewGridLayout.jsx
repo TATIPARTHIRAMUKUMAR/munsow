@@ -184,7 +184,7 @@ export default function NewGridLayout({ questions }) {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(() => { 
       if (questionTimeLeft > 0) {
         setQuestionTimeLeft((prevTime) => prevTime - 1);
       } else {

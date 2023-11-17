@@ -72,6 +72,9 @@ const StepperComponent = () => {
         }
     }
 
+    const [audioValidated, setAudioValidated] = useState(false);
+    const [videoValidated, setVideoValidated] = useState(false);
+
     const handleSelection = () => {
         if (selectedCategory == 'skills') {
 
@@ -416,7 +419,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                             </div>
 
                             <div className="bg-gray-200 rounded w-full" >
-                                <Audio_Video />
+                                <Audio_Video audioValidated={audioValidated} setAudioValidated={setAudioValidated} videoValidated={videoValidated} setVideoValidated={setVideoValidated}/>
                             </div>
 
 
@@ -454,7 +457,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                     )} */}
                     {currentStep === steps.length - 1 && (
                         <span>
-                            {chosenCompany ? (
+                            {(chosenCompany && audioValidated && videoValidated) ? (
                                 <button
                                     onClick={handleNext}
                                     className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md"

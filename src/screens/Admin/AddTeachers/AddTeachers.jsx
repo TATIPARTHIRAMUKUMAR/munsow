@@ -15,6 +15,7 @@ const AddTeachers = () => {
   const dispatch = useDispatch()
   const { institutionList, departmentList, branchList, courseList } = useSelector(state => state.data)
   const [fileData, setFileData] = useState(null);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const formData = new FormData();
   formData.append("mode", "Teacher")
@@ -72,44 +73,51 @@ const AddTeachers = () => {
         label: "First Name",
         key: "first_name",
         value: mainData?.first_name ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Last Name",
         key: "last_name",
         value: mainData?.last_name ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Email",
         key: "email",
         value: mainData?.email ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         key: "mobile_number",
         label: "Mobile Number",
         value: mainData?.mobile_number ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Address",
         key: "address",
         value: mainData?.address ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Password",
         key: "password",
         value: mainData?.password ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Branch",
         key: "branch",
         value: mainData?.branch ?? null,
         options: branchList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
-        type: "select"
+        type: "select",
+        required:true
       },
       {
         label: "Course",
@@ -117,13 +125,15 @@ const AddTeachers = () => {
         value: mainData?.course ?? null,
         type: "select",
         options: courseList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
+        required:true
       },
       {
         label: "Department",
         key: "department",
         value: mainData?.department ?? null,
         options: departmentList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
-        type: "select"
+        type: "select",
+        required:true
       },
     ]
 
@@ -156,6 +166,13 @@ const AddTeachers = () => {
       );
     }
   }
+
+  useEffect(() => {
+    const requiredFields = userFeilds.filter((field) => field.required);
+    const isValid =
+      requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) 
+    setIsFormValid(isValid);
+  }, [mainData]);
 
   useEffect(() => {
     dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
@@ -291,7 +308,14 @@ const AddTeachers = () => {
                           defaultValue={o?.value}
                           id="combo-box-demo"
                           options={o?.options ?? []}
-                          renderInput={(params) => <TextField {...params} label={o?.label} />}
+                          renderInput={(params) => <TextField {...params} label={(
+                            <div>
+                              {o?.label}
+                              {o?.required && (
+                                <span style={{ color: 'red' }}>*</span>
+                              )}
+                            </div>
+                          )} />}
                           onChange={(e, value) => { handleInputChange(o?.key, value) }}
                           onClickCapture={(e, value) => {
                             handleSelectionError(o?.key, value);
@@ -303,7 +327,14 @@ const AddTeachers = () => {
                       <TextField
                         key={o?.key}
                         type={o?.type}
-                        label={o?.label}
+                        label={(
+                          <div>
+                            {o?.label}
+                            {o?.required && (
+                              <span style={{ color: 'red' }}>*</span>
+                            )}
+                          </div>
+                        )}
                         value={o?.value}
                         size="small"
                         onChange={(e) => { handleInputChange(o?.key, e.target.value) }}
@@ -318,7 +349,7 @@ const AddTeachers = () => {
             <Button variant="outlined" color="error" onClick={() => { setMainData(() => ({ branch: null })) }} >
               Clear Data
             </Button>
-            <Button variant="contained" onClick={() => { onHandleCreate() }}>
+            <Button variant="contained" onClick={() => { onHandleCreate() }} disabled={!isFormValid}>
               Create Teacher
             </Button>
           </div>

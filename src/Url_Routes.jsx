@@ -1,12 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./screens/Login/Login";
 import HeaderFooterLayout from "./HeaderFooterLayout";
-import Dashboard from "./screens/Dashboard";
 import Profile from "./screens/Profile";
 import Users from "./screens/Users";
-import LessonIndex from "./screens/Quiz/LessonIndex";
 import GLOBAL_CONSTANTS from "../GlobalConstants";
-import LessonView from "./screens/Quiz/LessonView";
 import QuizListing from "./screens/QuizListing";
 import Register from "./screens/Login/Register";
 import StudentLogin from "./screens/Login/StudentLogin";
@@ -20,36 +17,29 @@ import AddTeachers from "./screens/Admin/AddTeachers/AddTeachers";
 import UserReport from "./screens/UserReport/UserReport";
 import StudentDashboard from "./screens/Student Dashboard/StudentDashboard";
 import EmotionSensing from "../src/screens/Admin/Analysis/EmotionSensing/EmotionSensing";
-// import Practice from "./screens/PracticeNow/Practice";
 import StepperComponent from "./screens/PracticeNow/Practice";
 import NotificationsPage from "./screens/Notifications/Notifications";
 import SettingsPage from "./screens/StudentSettings/Settings";
 import HelpAndSupportPage from "./screens/Help/Help";
-// import Interview from "./screens/InterviewSection/Interview";
 import KSAnalysis from "./screens/Admin/Analysis/KSAnalysis";
 import Skills from "./screens/Admin/Analysis/Skills";
 import BehaviourAnalysis from "./screens/Admin/Analysis/BehaviourAnalysis";
 import PracticalThinking from "./screens/Admin/Analysis/PracticalThinking";
 import HelpSupportAdmin from "./screens/Help/AdminHelp";
 import SettingsPageAdmin from "./screens/AdminSettings/Settings";
-import NewGridLayout from "./screens/PracticeNow/NewGridLayout";
 import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 
 
 function Url_Routes() {
-
-
-
   return (
     <BrowserRouter>
       <Routes>
         {
-          (GLOBAL_CONSTANTS?.loggedIn || true ) &&
+          (GLOBAL_CONSTANTS?.loggedIn || true) &&
           <>
             {
               GLOBAL_CONSTANTS?.user_cred?.role_id == 1 ? <>
-                {/* <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} />} /> */}
                 <Route excat path="/quiz" element={<HeaderFooterLayout Component={<QuizListing />} />} />
                 <Route excat path="/users" element={<HeaderFooterLayout Component={<Users />} />} />
                 <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
@@ -67,16 +57,13 @@ function Url_Routes() {
                 <Route excat path="/adminHelp" element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />} />
                 <Route excat path="/adminSettings" element={<HeaderFooterLayout Component={<SettingsPageAdmin />} />} />
               </> : <>
-                {/* <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} />} /> */}
                 <Route excat path="/report" element={<HeaderFooterLayout Component={<ReportIndex />} />} />
                 <Route excat path="/reportView" element={<HeaderFooterLayout Component={<UserReport />} />} />
                 <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
-                {/* <Route excat path="/report" element={<HeaderFooterLayout Component={<UserReport />} />} /> */}
                 <Route excat path="/interview" element={<HeaderFooterLayout Component={<LoadQuestionsData />} />} />
                 <Route excat path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
                 <Route excat path="/notifications" element={<HeaderFooterLayout Component={<NotificationsPage />} />} />
                 <Route excat path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
-                {/* <Route excat path="/interview" element={<HeaderFooterLayout Component={<Interview />} />} /> */}
                 <Route excat path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
                 <Route excat path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
               </>
@@ -88,7 +75,6 @@ function Url_Routes() {
         <Route excat path="/studentRegister" element={<StudentRegister />} />
         <Route exact path="/registration" element={<Register />} />
         <Route path="*" element={<Navigate to="/" />} />
-
       </Routes>
     </BrowserRouter>
   );

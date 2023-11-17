@@ -143,15 +143,14 @@ export default function PopUpFilter(props) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             handleMenuItemClick(`All ${list}`);
           }}
           disableRipple
         >
-          {/* <EditIcon /> */}
           All {list}
-        </MenuItem>
+        </MenuItem> */}
         {dependencyList?.map((item) => (
           <MenuItem
             key={item?.name}

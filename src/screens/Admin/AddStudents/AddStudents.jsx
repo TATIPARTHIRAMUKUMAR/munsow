@@ -64,50 +64,59 @@ const AddStudents = () => {
 
 
   const [mainData, setMainData] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const userFeilds =
     [
       {
         label: "First Name",
         key: "first_name",
         value: mainData?.first_name ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Last Name",
         key: "last_name",
         value: mainData?.last_name ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Email",
         key: "email",
         value: mainData?.email ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         key: "mobile_number",
         label: "Mobile Number",
         value: mainData?.mobile_number ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Address",
         key: "address",
         value: mainData?.address ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Password",
         key: "password",
         value: mainData?.password ?? "",
-        type: "text"
+        type: "text",
+        required:true
       },
       {
         label: "Branch",
         key: "branch",
         value: mainData?.branch ?? null,
         options: branchList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
-        type: "select"
+        type: "select",
+        required:true
       },
       {
         label: "Course",
@@ -115,12 +124,14 @@ const AddStudents = () => {
         value: mainData?.course ?? null,
         type: "select",
         options: courseList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
+        required:true
       },
       {
         label: "Department",
         key: "department",
         value: mainData?.department ?? null,
         options: departmentList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
+        required:true,
         type: "select"
       },
     ]
@@ -152,6 +163,13 @@ const AddStudents = () => {
       );
     }
   }
+
+  useEffect(() => {
+    const requiredFields = userFeilds.filter((field) => field.required);
+    const isValid =
+      requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) 
+    setIsFormValid(isValid);
+  }, [mainData]);
 
   useEffect(() => {
     dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
@@ -302,7 +320,14 @@ const AddStudents = () => {
                           renderInput={(params) => (
                             <TextField 
                             {...params} 
-                            label={o?.label} 
+                            label={(
+                              <div>
+                                {o?.label}
+                                {o?.required && (
+                                  <span style={{ color: 'red' }}>*</span>
+                                )}
+                              </div>
+                            )} 
                             InputProps={{
                               ...params.InputProps,
                               style: {
@@ -322,7 +347,14 @@ const AddStudents = () => {
                       <TextField
                         key={o?.key}
                         type={o?.type}
-                        label={o?.label}
+                        label={(
+                          <div>
+                            {o?.label}
+                            {o?.required && (
+                              <span style={{ color: 'red' }}>*</span>
+                            )}
+                          </div>
+                        )}
                         value={o?.value}
                         size="small"
                         onChange={(e) => { handleInputChange(o?.key, e.target.value) }}
@@ -342,7 +374,7 @@ const AddStudents = () => {
             <Button variant="outlined" color="error" onClick={() => { setMainData(() => ({ branch: null })) }} >
               Clear Data
             </Button>
-            <Button variant="contained" onClick={() => { onHandleCreate() }}>
+            <Button variant="contained" onClick={() => { onHandleCreate() }} disabled={!isFormValid}>
               Create Student
             </Button>
           </div>

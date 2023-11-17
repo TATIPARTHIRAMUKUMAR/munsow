@@ -20,48 +20,57 @@ const StudentRegister = () => {
     useSelector((state) => state.data);
 
   const [mainData, setMainData] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const userFeilds = [
     {
       label: "First Name",
       key: "first_name",
       value: mainData?.first_name ?? "",
       type: "text",
+      required:true
     },
     {
       label: "Last Name",
       key: "last_name",
       value: mainData?.last_name ?? "",
       type: "text",
+      required:true
     },
     {
       label: "Email",
       key: "email",
       value: mainData?.email ?? "",
       type: "text",
+      required:true
     },
     {
       key: "mobile_number",
       label: "Mobile Number",
       value: mainData?.mobile_number ?? "",
       type: "text",
+      required:true
     },
     {
       label: "Address",
       key: "address",
       value: mainData?.address ?? "",
       type: "text",
+      required:true
     },
     {
       label: "Password",
       key: "password",
       value: mainData?.password ?? "",
       type: "text",
+      required:true
     },
     {
       label: "Institution",
       key: "institution",
       value: mainData?.institution ?? null,
       type: "select",
+      required:true,
       options:
         institutionList?.map((o) => ({
           label: o?.institution_name ?? "-",
@@ -74,12 +83,14 @@ const StudentRegister = () => {
       value: mainData?.branch ?? null,
       options: branchList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
       type: "select",
+      required:true
     },
     {
       label: "Course",
       key: "course",
       value: mainData?.course ?? null,
       type: "select",
+      required:true,
       options: courseList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
     },
     {
@@ -89,6 +100,7 @@ const StudentRegister = () => {
       options:
         departmentList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
       type: "select",
+      required:true
     },
   ];
 
@@ -187,6 +199,13 @@ const StudentRegister = () => {
 
   };
 
+  useEffect(() => {
+    const requiredFields = userFeilds.filter((field) => field.required);
+    const isValid =
+      requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) 
+    setIsFormValid(isValid);
+  }, [mainData]);
+
   return (
     <div
       className="p-4 bg-[#f5f5f5] h-[100vh] flex flex-col justify-center  items-center"
@@ -214,7 +233,14 @@ const StudentRegister = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={o?.label}
+                        label={(
+                          <div>
+                            {o?.label}
+                            {o?.required && (
+                              <span style={{ color: 'red' }}>*</span>
+                            )}
+                          </div>
+                        )}
                         InputProps={{
                           ...params.InputProps,
                           style: {
@@ -235,7 +261,14 @@ const StudentRegister = () => {
                 <TextField
                   key={o?.key}
                   type={o?.type}
-                  label={o?.label}
+                  label={(
+                    <div>
+                      {o?.label}
+                      {o?.required && (
+                        <span style={{ color: 'red' }}>*</span>
+                      )}
+                    </div>
+                  )}
                   value={o?.value}
                   size="small"
                   onChange={(e) => {
@@ -266,6 +299,7 @@ const StudentRegister = () => {
             onClick={() => {
               onHandleCreate();
             }}
+            disabled={!isFormValid}
           >
             Register
           </Button>

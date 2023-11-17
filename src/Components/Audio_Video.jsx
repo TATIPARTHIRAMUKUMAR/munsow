@@ -9,11 +9,11 @@ const sampleText = "Today is a beautiful day and I am happy";
 
 var localstream;
 
-export default function Audio_Video() {
+export default function Audio_Video({audioValidated, setAudioValidated, videoValidated, setVideoValidated}) {
     const [permission, setPermission] = useState(false);
     const [micPermission, setMicPermission] = useState(false);
-    const [audioValidated, setAudioValidated] = useState(false);
-    const [videoValidated, setVideoValidated] = useState(false);
+    // const [audioValidated, setAudioValidated] = useState(false);
+    // const [videoValidated, setVideoValidated] = useState(false);
     const mediaRecorder = useRef(null);
     const [audioChunks, setAudioChunks] = useState([]);
     const audioContext = useRef(new AudioContext());
