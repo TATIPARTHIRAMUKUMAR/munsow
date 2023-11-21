@@ -3,14 +3,15 @@ import NeutralEmotionsChart from "./NeutralEmotionsChart";
 import NegativeEmotionsChart from "./NegativeEmotionsChart";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { loadEmotionStats, setReduxState,loadBrachList, getDepartmentList, getCourseList } from "../../../../redux/action";
+import { loadEmotionStats, setReduxState, loadBrachList, getDepartmentList, getCourseList } from "../../../../redux/action";
 import FilterCommon from "../../../../Components/FilterCommon";
 import { branchesList } from "../mockbranchesdata";
 import PopUpFilter from "../../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../../GlobalConstants.js";
+import CustomDateRangePicker from "../../../../Components/DateRange.jsx";
 
 const EmotionSensing = () => {
-  window.onbeforeunload = ()=>{
+  window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
@@ -22,6 +23,8 @@ const EmotionSensing = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const { emotionStats, branchList, courseList, departmentList, userListByDepartment } = useSelector((state) => state.data);
 
@@ -45,31 +48,33 @@ const EmotionSensing = () => {
       copyEmotionstats.graph_1 = {
         ...copyEmotionstats.graph_1,
         data: copyEmotionstats.graph_1.data.map((data) => {
-        return {
-          ...data,
-          Happiness: Math.floor(Math.random() * 100),
-        };
-      })
-    }
+          return {
+            ...data,
+            Happiness: Math.floor(Math.random() * 100),
+          };
+        })
+      }
       copyEmotionstats.graph_2 = {
         ...copyEmotionstats.graph_2,
         data: copyEmotionstats.graph_2.data.map((data) => {
-        return {
-          ...data,
-          Happiness: Math.floor(Math.random() * 100),
-        };
-      })}
+          return {
+            ...data,
+            Happiness: Math.floor(Math.random() * 100),
+          };
+        })
+      }
       const emotions = ["Anger", "Contempt", "Disgust", "Fear", "Happiness", "Sadness", "Surprise"];
       copyEmotionstats.graph_3 = {
         ...copyEmotionstats.graph_3,
         data: copyEmotionstats.graph_3.data.map((data) => {
           for (const emotion of emotions) {
-              const randomValue = Math.floor(Math.random() * 100) + 1;
-              data[emotion] = randomValue;
-            }
-        return data
-      })}
-      dispatch(setReduxState({name: 'emotionStats', value: copyEmotionstats}))
+            const randomValue = Math.floor(Math.random() * 100) + 1;
+            data[emotion] = randomValue;
+          }
+          return data
+        })
+      }
+      dispatch(setReduxState({ name: 'emotionStats', value: copyEmotionstats }))
     }
     setActive(value);
     handleClose();
@@ -89,20 +94,23 @@ const EmotionSensing = () => {
             <span className="text-2xl ">Emotion Sensing  </span>
           </div> */}
           <div>
-          <div className="flex justify-end mr-10 mb-3">
-            <div className="">
-              <PopUpFilter route="EmotionSensing" list="Branches" dependencyList={branchList}/>
+            <div className="flex justify-end mr-10 mb-3">
+              <div className="">
+                <PopUpFilter route="EmotionSensing" list="Branches" dependencyList={branchList} />
+              </div>
+              <div className="">
+                <PopUpFilter route="EmotionSensing" list="Courses" dependencyList={courseList} />
+              </div>
+              <div className="">
+                <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList} />
+              </div>
+              <div className="">
+                <PopUpFilter route="EmotionSensing" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate}/>
+              </div>
+              <div className="">
+                <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} />
+              </div>
             </div>
-            <div className="">
-              <PopUpFilter route="EmotionSensing" list="Courses" dependencyList={courseList}/>
-            </div>
-            <div className="">
-              <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList}/>
-            </div>
-            <div className="">
-              <PopUpFilter route="EmotionSensing" list="user" dependencyList={userListByDepartment}/>
-            </div>
-          </div>
           </div>
         </div>
         <div className="flex">

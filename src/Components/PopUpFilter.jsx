@@ -66,7 +66,7 @@ export default function PopUpFilter(props) {
   //     { name: "HR", value: "" },
   //   ]);
 
-  const { route, list, dependencyList } = props;
+  const { route, list, dependencyList,startDate, endDate } = props;
   const dispatch = useDispatch();
   // const [branchActive, setBranchActive] = React.useState(`All Branches`);
   // const [courseActive, setCourseActive] = React.useState(`All Courses`);
@@ -95,6 +95,8 @@ export default function PopUpFilter(props) {
       course: localStorage.getItem("course"),
       department: localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
+      start_date:startDate,
+      end_date:endDate
     };
     if (list == "user") {
       params.student_id = id

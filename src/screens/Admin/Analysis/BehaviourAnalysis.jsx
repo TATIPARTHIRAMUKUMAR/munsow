@@ -26,6 +26,7 @@ import FilterCommon from "../../../Components/FilterCommon";
 import { branchesList } from "./mockbranchesdata";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
+import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 
 const BehaviourAnalysis = () => {
   window.onbeforeunload = ()=>{
@@ -43,7 +44,8 @@ const BehaviourAnalysis = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [branchesData, setBranchesData] = useState(branchesList);
   const open = Boolean(anchorEl);
-  
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
 
   useEffect(() => {
@@ -125,6 +127,9 @@ const BehaviourAnalysis = () => {
                   <div className="">
                     <PopUpFilter route="BehaviourAnanlysis" list="Departments" dependencyList={departmentList}/>
                   </div>
+                  <div className="">
+                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
+                    </div>
                 </div>
                 {/* <FilterCommon
                     handleClose={handleClose}

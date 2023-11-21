@@ -13,6 +13,7 @@ import {
   getCourseList,
   getDepartmentList
 } from "../../../redux/action";
+import DateRangePicker from "../../../Components/DateRange.jsx";
 
 const KSAnalysis = () => {
   window.onbeforeunload = () => {
@@ -106,6 +107,10 @@ const KSAnalysis = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
 
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+
   const { departmentList, ksAnalysis, courseList, branchList,userListByDepartment } = useSelector((state) => state?.data);
   const open = Boolean(anchorEl);
   useEffect(() => {
@@ -191,7 +196,10 @@ const KSAnalysis = () => {
                       <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList} />
                     </div>
                     <div className="">
-                      <PopUpFilter route="KSAnalysis" list="user" dependencyList={userListByDepartment} />
+                      <PopUpFilter route="KSAnalysis" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate}/>
+                    </div>
+                    <div className="">
+                      <DateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
                     </div>
                   </div>
                 </div>

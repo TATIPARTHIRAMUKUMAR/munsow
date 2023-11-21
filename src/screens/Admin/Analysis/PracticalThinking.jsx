@@ -21,6 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
+import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 
 const PracticalThinking = () => {
   window.onbeforeunload = ()=>{
@@ -59,6 +60,9 @@ const PracticalThinking = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
@@ -125,8 +129,11 @@ const PracticalThinking = () => {
                     <PopUpFilter route="PracticalThinking" list="Courses" dependencyList={courseList}/>
                   </div>
                   <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList}/>
+                    <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
                   </div>
+                  <div className="">
+                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
+                    </div>
                 </div>
                 </div>
               </div>
