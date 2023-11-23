@@ -66,22 +66,33 @@ export default function PopUpFilter(props) {
   };
 
   const handleMenuItemClick = (item, id) => {
-    console.log("ii", item, id)
+    console.log("ii", item, id,list)
     if (list == "user") {
       localStorage.setItem("user", item)
       localStorage.setItem("user_id", id)
     }
-    else {
-      list == "Branches" ? localStorage.setItem("branch", item) : (list == "Courses" ? localStorage.setItem("course", item) : localStorage.setItem("department", item));
+    else if(list == "Branches"){
+      localStorage.setItem("branch", item);
+      localStorage.setItem("course","All Courses")
+      localStorage.setItem("department","All Departments")
+      // list == "Branches" ? localStorage.setItem("branch", item) : (list == "Courses" ? localStorage.setItem("course", item) : localStorage.setItem("department", item));
     }
-    // if (item == `All ${list}`) {
-    //   dispatch(loadInstitutionStats());
-    // } else {
+    else if(list == "Courses"){
+      localStorage.setItem("course", item);
+      localStorage.setItem("department","All Departments")
+    }
+    else if(list == "Departments"){
+      localStorage.setItem("department", item);
+
+    }
+
+
+
     list == "Branches" ? dispatch(loadCourseList(`branch_id=${id}`)) : (list == "Courses" ? dispatch(loadDepartmentList(`course_id=${id}`)) : list == "Departments" ? dispatch(loadUsersList(`department_id=${id}`)) : "");
     let params = {
       branch: localStorage.getItem("branch"),
-      course: localStorage.getItem("course"),
-      department: localStorage.getItem("department"),
+      course: localStorage.getItem("course")=="All Courses"?null:localStorage.getItem("course"),
+      department: localStorage.getItem("department")=="All Departments"?null:localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
       start_date: startDate,
       end_date: endDate
@@ -101,25 +112,6 @@ export default function PopUpFilter(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-//   useEffect(() => {
-
-//     let params = {
-//       branch: localStorage.getItem("branch"),
-//       course: localStorage.getItem("course"),
-//       department: localStorage.getItem("department"),
-//       student_id: localStorage.getItem("user_id"),
-//       start_date: startDate,
-//       end_date: endDate
-//     };
-// if(startDate && endDate){
-
-
-//     route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
-//       (route == "KSAnalysis" ? dispatch(loadKSAnalysis(params)) :
-//         (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
-//       }
-//   }, [startDate, endDate])
 
   return (
     <div>
