@@ -28,6 +28,7 @@ const initialState = {
   interviewRolesList: [],
   companiesList: [],
   emotionStats: {},
+  emotionFilters: {},
   userReport:[],
   userReportList:[],
   questionsList:[],
@@ -159,6 +160,7 @@ const DataReducers = (state = initialState, action) => {
     case types.EMOTION_STATS: return{
       ...state,
       emotionStats:action.payload.data,
+      emotionFilters:action.payload.filters,
       loading:false
     }
     case types.USER_REPORT: return{

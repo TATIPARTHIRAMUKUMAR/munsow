@@ -3,12 +3,13 @@ import NeutralEmotionsChart from "./NeutralEmotionsChart";
 import NegativeEmotionsChart from "./NegativeEmotionsChart";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { loadEmotionStats, setReduxState, loadBrachList, getDepartmentList, getCourseList } from "../../../../redux/action";
+import { loadEmotionStats, setReduxState, loadBrachList, getDepartmentList, getCourseList, loadCourseList, loadDepartmentList, loadUsersList } from "../../../../redux/action";
 import FilterCommon from "../../../../Components/FilterCommon";
 import { branchesList } from "../mockbranchesdata";
 import PopUpFilter from "../../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../../GlobalConstants.js";
 import CustomDateRangePicker from "../../../../Components/DateRange.jsx";
+import format from 'date-fns/format';
 
 const EmotionSensing = () => {
   window.onbeforeunload = () => {
@@ -26,7 +27,7 @@ const EmotionSensing = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const { emotionStats, branchList, courseList, departmentList, userListByDepartment } = useSelector((state) => state.data);
+  const { emotionStats, emotionFilters, branchList, courseList, departmentList, userListByDepartment } = useSelector((state) => state.data);
 
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -80,6 +81,45 @@ const EmotionSensing = () => {
     handleClose();
   };
 
+  useEffect(()=>{
+    if (emotionFilters?.branch != undefined && emotionFilters?.branch != null) {
+      localStorage.setItem("branch", emotionFilters?.branch);
+      localStorage.setItem("course", emotionFilters?.course);
+      localStorage.setItem("department", emotionFilters?.department);
+
+      setEndDate(emotionFilters?.end_date)
+      setStartDate(emotionFilters?.start_date)
+
+      dispatch(loadCourseList(`branch_id=${emotionFilters?.branch_id}`));
+      dispatch(loadDepartmentList(`course_id=${emotionFilters?.course_id}`));
+      dispatch(loadUsersList(`department_id=${emotionFilters?.department_id}`));
+
+
+    }
+
+  },[emotionStats])
+
+  const onDateSelect = (value) => {
+    console.log("api calls",value)
+    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
+    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    let params = {
+      branch: localStorage.getItem("branch"),
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+      start_date: formattedStartDate,
+      end_date: formattedEndDate
+    };
+    if (startDate && endDate) {
+
+
+      // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      dispatch(loadEmotionStats(params))
+      // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+    }
+  }
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -96,20 +136,20 @@ const EmotionSensing = () => {
           <div>
             <div className="flex justify-end mr-10 mb-3">
               <div className="">
-                <PopUpFilter route="EmotionSensing" list="Branches" dependencyList={branchList} />
+                <PopUpFilter route="EmotionSensing" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
               </div>
               <div className="">
-                <PopUpFilter route="EmotionSensing" list="Courses" dependencyList={courseList} />
+                <PopUpFilter route="EmotionSensing" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
               </div>
               <div className="">
-                <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList} />
+                <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
               </div>
               <div className="">
                 <PopUpFilter route="EmotionSensing" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate}/>
               </div>
               {startDate != "" && (
               <div className="">
-                <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} />
+                <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect}/>
               </div>
               )}
             </div>
