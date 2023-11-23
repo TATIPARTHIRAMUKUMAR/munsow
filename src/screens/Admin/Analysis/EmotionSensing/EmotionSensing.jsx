@@ -107,9 +107,11 @@ const EmotionSensing = () => {
               <div className="">
                 <PopUpFilter route="EmotionSensing" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate}/>
               </div>
+              {startDate != "" && (
               <div className="">
                 <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} />
               </div>
+              )}
             </div>
           </div>
         </div>

@@ -6,12 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { branchesList } from "./mockbranchesdata";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
-
+import format from 'date-fns/format';
 import {
   loadKSAnalysis,
   loadBrachList,
   getCourseList,
-  getDepartmentList
+  getDepartmentList,
+  loadCourseList,
+  loadDepartmentList,
+  loadUsersList
 } from "../../../redux/action";
 import DateRangePicker from "../../../Components/DateRange.jsx";
 
@@ -111,7 +114,7 @@ const KSAnalysis = () => {
   const [endDate, setEndDate] = useState("");
 
 
-  const { departmentList, ksAnalysis, courseList, branchList,userListByDepartment } = useSelector((state) => state?.data);
+  const { departmentList, ksAnalysis, ksFilters, courseList, branchList, userListByDepartment } = useSelector((state) => state?.data);
   const open = Boolean(anchorEl);
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -128,6 +131,21 @@ const KSAnalysis = () => {
     setHardSkillsData(ksAnalysis?.graph_1?.data)
     setSoftSkillsData(ksAnalysis?.graph_2?.date)
     console.log("ksAnalysis", hardSkillData, softSkillData)
+    if (ksFilters?.branch != undefined && ksFilters?.branch != null) {
+      localStorage.setItem("branch", ksFilters?.branch);
+      localStorage.setItem("course", ksFilters?.course);
+      localStorage.setItem("department", ksFilters?.department);
+
+      setEndDate(ksFilters?.end_date)
+      setStartDate(ksFilters?.start_date)
+
+      dispatch(loadCourseList(`branch_id=${ksFilters?.branch_id}`));
+      dispatch(loadDepartmentList(`course_id=${ksFilters?.course_id}`));
+      dispatch(loadUsersList(`department_id=${ksFilters?.department_id}`));
+
+
+    }
+
   }, [ksAnalysis])
 
   const handleMenuItemClick = (value) => {
@@ -171,6 +189,27 @@ const KSAnalysis = () => {
     setAnchorEl(null);
   };
 
+  const onDateSelect = (value) => {
+    console.log("api calls",value)
+    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
+    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    let params = {
+      branch: localStorage.getItem("branch"),
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+      start_date: formattedStartDate,
+      end_date: formattedEndDate
+    };
+    if (startDate && endDate) {
+
+
+      // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      dispatch(loadKSAnalysis(params))
+      // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+    }
+  }
+
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
@@ -187,20 +226,21 @@ const KSAnalysis = () => {
                 <div>
                   <div className="flex justify-end mr-10 mb-3">
                     <div className="">
-                      <PopUpFilter route="KSAnalysis" list="Branches" dependencyList={branchList} />
+                      <PopUpFilter route="KSAnalysis" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
                     </div>
                     <div className="">
-                      <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList} />
+                      <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
                     </div>
                     <div className="">
-                      <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList} />
+                      <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate} />
                     </div>
                     <div className="">
-                      <PopUpFilter route="KSAnalysis" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate}/>
+                      <PopUpFilter route="KSAnalysis" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate} />
                     </div>
-                    <div className="">
-                      <DateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
-                    </div>
+                    {startDate != "" && (
+                      <div className="">
+                        <DateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect} />
+                      </div>)}
                   </div>
                 </div>
               </div>

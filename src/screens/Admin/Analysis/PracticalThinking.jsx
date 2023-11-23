@@ -131,9 +131,11 @@ const PracticalThinking = () => {
                   <div className="">
                     <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
                   </div>
+                  {startDate != "" && (
                   <div className="">
                       <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
                     </div>
+                  )}
                 </div>
                 </div>
               </div>

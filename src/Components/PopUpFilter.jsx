@@ -3,17 +3,11 @@ import { styled, alpha } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import Divider from "@mui/material/Divider";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import { useDispatch } from "react-redux";
 import { loadDepartmentList, loadInstitutionStats, loadCourseList, loadBehaviourAnalysis, loadKSAnalysis, loadEmotionStats, loadUserList, loadUsersList } from "../redux/action";
-import { capitalizeString, capitalizeWords } from "../utils/stringUtils";
-import { capitalize } from "@mui/material";
+import { useEffect } from "react";
+
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -59,14 +53,8 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function PopUpFilter(props) {
-  //   const [branchList] = React.useState([
-  //     { name: "All branches", value: "" },
-  //     { name: "Finance", value: "" },
-  //     { name: "Operations", value: "" },
-  //     { name: "HR", value: "" },
-  //   ]);
 
-  const { route, list, dependencyList,startDate, endDate } = props;
+  const { route, list, dependencyList, startDate, endDate } = props;
   const dispatch = useDispatch();
   // const [branchActive, setBranchActive] = React.useState(`All Branches`);
   // const [courseActive, setCourseActive] = React.useState(`All Courses`);
@@ -78,7 +66,7 @@ export default function PopUpFilter(props) {
   };
 
   const handleMenuItemClick = (item, id) => {
-    console.log("ii",item,id)
+    console.log("ii", item, id)
     if (list == "user") {
       localStorage.setItem("user", item)
       localStorage.setItem("user_id", id)
@@ -95,25 +83,43 @@ export default function PopUpFilter(props) {
       course: localStorage.getItem("course"),
       department: localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
-      start_date:startDate,
-      end_date:endDate
+      start_date: startDate,
+      end_date: endDate
     };
     if (list == "user") {
       params.student_id = id
     }
     else {
-    list == "Branches" ? params.branch = item : (list == "Courses" ? params.course = item : params.department = item);
+      list == "Branches" ? params.branch = item : (list == "Courses" ? params.course = item : params.department = item);
     }
     route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
       (route == "KSAnalysis" ? dispatch(loadKSAnalysis(params)) :
         (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
-    // }
     handleClose();
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+//   useEffect(() => {
+
+//     let params = {
+//       branch: localStorage.getItem("branch"),
+//       course: localStorage.getItem("course"),
+//       department: localStorage.getItem("department"),
+//       student_id: localStorage.getItem("user_id"),
+//       start_date: startDate,
+//       end_date: endDate
+//     };
+// if(startDate && endDate){
+
+
+//     route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+//       (route == "KSAnalysis" ? dispatch(loadKSAnalysis(params)) :
+//         (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+//       }
+//   }, [startDate, endDate])
 
   return (
     <div>
@@ -134,7 +140,7 @@ export default function PopUpFilter(props) {
         }}
       >
 
-        {list == "Branches" ? localStorage.getItem("branch") : (list == "Courses" ? localStorage.getItem("course") : list == "user" ? localStorage.getItem("user"): localStorage.getItem("department"))}
+        {list == "Branches" ? localStorage.getItem("branch") : (list == "Courses" ? localStorage.getItem("course") : list == "user" ? localStorage.getItem("user") : localStorage.getItem("department"))}
       </Button>
       <StyledMenu
         id="demo-customized-menu"

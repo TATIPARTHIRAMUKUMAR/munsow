@@ -15,6 +15,7 @@ const initialState = {
   institutiondata_meta: {},
   countryList: {},
   institutionStats:{},
+  institutionFilters:{},
   studentsList:{},
   teachersList:{},
   courseList:[],
@@ -32,6 +33,7 @@ const initialState = {
   questionsList:[],
   behaviourAnalysis:[],
   ksAnalysis: [],
+  ksFilters: [],
   userListByDepartment:[],
   summaryData:{},
   loading: false
@@ -106,6 +108,7 @@ const DataReducers = (state = initialState, action) => {
     case types.INSTITUTION_STATS: return{
       ...state,
       institutionStats:action.payload.data,
+      institutionFilters:action.payload.filters,
       loading:false
     }
     case types.STUDENTS_LIST: return{
@@ -196,6 +199,7 @@ const DataReducers = (state = initialState, action) => {
     case types.KS_ANALYSIS: return{
       ...state,
       ksAnalysis: action.payload.data,
+      ksFilters:action.payload.filters,
       loading:false
     }
     case types.USERS_LIST_BY_DEPARTMENT: return{

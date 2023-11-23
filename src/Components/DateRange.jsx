@@ -4,11 +4,12 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import format from 'date-fns/format';
 
-const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate }) => {
+const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate,onDateSelect }) => {
+    console.log("new Date()",startDate)
     const [dateRange, setDateRange] = useState([
         {
-            startDate: new Date(),
-            endDate: new Date(),
+            startDate: new Date(startDate) ,
+            endDate: new Date(endDate) ,
             key: 'selection',
         },
     ]);
@@ -21,18 +22,26 @@ const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate })
     const handleSelect = (ranges) => {
         setDateRange([ranges.selection]);
         setShowPicker(false);
+        if (onDateSelect) {
+            onDateSelect(ranges.selection);
+        }
     };
 
     useEffect(() => {
         if (showPicker) {
             if (focusInput === 'startDate') {
+                console.log("afterstartclick")
                 startDateInputRef.current.focus();
             } else {
                 endDateInputRef.current.focus();
             }
         }
-        setStartDate(startDateInputRef?.current?.value)
-        setEndDate(endDateInputRef.current?.value)
+        if (startDateInputRef?.current?.value) {
+            setStartDate(startDateInputRef?.current?.value)
+        }
+        if (endDateInputRef?.current?.value) {
+            setEndDate(endDateInputRef.current?.value)
+        }
         console.log(startDateInputRef?.current?.value, endDateInputRef.current?.value)
     }, [showPicker, focusInput]);
 
@@ -51,6 +60,7 @@ const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate })
                     setFocusInput('startDate');
                 }}
             />
+            
             <input
                 readOnly
                 ref={endDateInputRef}

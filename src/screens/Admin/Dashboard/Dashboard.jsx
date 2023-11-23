@@ -36,6 +36,8 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import CustomDateRangePicker from "../../../Components/DateRange.jsx";
+import format from 'date-fns/format';
 
 const AdminDashboard = () => {
   window.onbeforeunload = () => {
@@ -47,7 +49,8 @@ const AdminDashboard = () => {
   }
 
   const [barChartFullScreen, setBarChartFullScreen] = useState(false);
-
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   // ... other code
 
   const handleViewMoreClick = () => {
@@ -101,7 +104,7 @@ const AdminDashboard = () => {
   const [pie, setPie] = useState([]);
 
   const dispatch = useDispatch();
-  const { institutionStats, branchList, departmentList, courseList } = useSelector((state) => state?.data)
+  const { institutionStats, institutionFilters, branchList, departmentList, courseList } = useSelector((state) => state?.data)
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -145,25 +148,66 @@ const AdminDashboard = () => {
       })
 
     }
+
+    if (institutionFilters?.branch != undefined && institutionFilters?.branch != null) {
+      localStorage.setItem("branch", institutionFilters?.branch);
+      localStorage.setItem("course", institutionFilters?.course);
+      localStorage.setItem("department", institutionFilters?.department);
+
+      setEndDate(institutionFilters?.end_date)
+      setStartDate(institutionFilters?.start_date)
+
+      dispatch(loadCourseList(`branch_id=${institutionFilters?.branch_id}`));
+      dispatch(loadDepartmentList(`course_id=${institutionFilters?.course_id}`));
+      // dispatch(loadUsersList(`department_id=${institutionFilters?.department_id}`));
+
+
+    }
+
   }, [institutionStats])
 
+  const onDateSelect = (value) => {
+    console.log("api calls", value)
+    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
+    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    let params = {
+      branch: localStorage.getItem("branch"),
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+      start_date: formattedStartDate,
+      end_date: formattedEndDate
+    };
+    if (startDate && endDate) {
+
+
+      // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      dispatch(loadInstitutionStats(params))
+      // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+    }
+  }
 
   return (
     <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll ">
       <div className="container ">
         {/* Card section */}
         <div className="">
-          <div className="flex justify-end mr-10 mb-3">
+          <div className="flex justify-start mr-10 mb-3">
             <div className="">
-              <PopUpFilter route="AdminDashboard" list="Branches" dependencyList={branchList} />
+              <PopUpFilter route="AdminDashboard" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
             </div>
             <div className="">
-              <PopUpFilter route="AdminDashboard" list="Courses" dependencyList={courseList} />
+              <PopUpFilter route="AdminDashboard" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate} />
             </div>
             <div className="">
-              <PopUpFilter route="AdminDashboard" list="Departments" dependencyList={departmentList} />
+              <PopUpFilter route="AdminDashboard" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
             </div>
+            {startDate != "" && (
+            <div className="">
+              <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect} />
+            </div>)}
           </div>
+          
           <div className=" grid grid-cols-3 gap-2 ">
             {cardLists.length ? (
               <CardContainer cardLists={cardLists} />
@@ -182,14 +226,14 @@ const AdminDashboard = () => {
                   Department wise Participation
                 </span>
                 <span>
-                {barPlot.length > 5 && !barChartFullScreen && (
-                  <div
-                    className="text-center font-bold cursor-pointer text-blue-500"
-                    onClick={handleViewMoreClick}
-                  >
-                    View More
-                  </div>
-                )}
+                  {barPlot.length > 5 && !barChartFullScreen && (
+                    <div
+                      className="text-center font-bold cursor-pointer text-blue-500"
+                      onClick={handleViewMoreClick}
+                    >
+                      View More
+                    </div>
+                  )}
                 </span>
               </div>
               <div className="h-80">
@@ -253,7 +297,7 @@ const AdminDashboard = () => {
 
                   </BarChart>
                 </ResponsiveContainer>
-                
+
               </div>
             </div>
           </div>
@@ -359,14 +403,14 @@ const AdminDashboard = () => {
                   Critical Improvement Areas
                 </span>
                 <span>
-                {pie.length > 2 && !pieChartFullScreen && (
-                  <div
-                    className="text-center font-bold cursor-pointer text-blue-500"
-                    onClick={handleViewPieChartClick}
-                  >
-                    View More
-                  </div>
-                )}
+                  {pie.length > 2 && !pieChartFullScreen && (
+                    <div
+                      className="text-center font-bold cursor-pointer text-blue-500"
+                      onClick={handleViewPieChartClick}
+                    >
+                      View More
+                    </div>
+                  )}
                 </span>
               </div>
               <div className="h-80">
@@ -402,7 +446,7 @@ const AdminDashboard = () => {
                   </PieChart>
                 </ResponsiveContainer>
 
-                
+
 
               </div>
             </div>
