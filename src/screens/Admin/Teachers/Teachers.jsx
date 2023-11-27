@@ -46,19 +46,27 @@ const Teachers = () => {
       "flex": 1
     },
     {
-      "field": "department_name",
-      "headerName": "Department",
-      "resizable": true,
-      // "sortable": true,
-      "flex": 1
-    },
-    {
       "field": "branch_name",
       "headerName": "Branch",
       "resizable": true,
       // "sortable": true,
       "flex": 1
     },
+    {
+      "field": "course_name",
+      "headerName": "Course",
+      "resizable": true,
+      // "sortable": true,
+      "flex": 1
+    },
+    {
+      "field": "department_name",
+      "headerName": "Department",
+      "resizable": true,
+      // "sortable": true,
+      "flex": 1
+    },
+    
     {
       headerName: "Actions",
       field: "actions",
