@@ -1,49 +1,56 @@
 import { useEffect, useState } from "react";
+import LinearProgress from "@mui/material/LinearProgress";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import { useNavigate } from "react-router-dom";
 import { submit_interview } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import image from "../../assets/h.jpeg"
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import image from "../../assets/h.jpeg";
 import InterviewOver from "./InterviewOver";
+import { Step, StepLabel, Stepper } from '@mui/material';
 
 let mediaRecorder;
-// let recordedChunks = [];
 
 function formatTime(seconds) {
   const hrs = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds - hrs * 3600) / 60);
   const secs = seconds - hrs * 3600 - mins * 60;
-  return <div className="flex items-center gap-1" >
-    <TimerOutlinedIcon />
-    {`${hrs < 10 ? "0" + hrs : hrs}:${mins < 10 ? "0" + mins : mins}:${secs < 10 ? "0" + secs : secs}`}
-  </div>
+  return (
+    <div className="flex items-center gap-1">
+      <TimerOutlinedIcon />
+      {`${hrs < 10 ? "0" + hrs : hrs}:${mins < 10 ? "0" + mins : mins}:${
+        secs < 10 ? "0" + secs : secs
+      }`}
+    </div>
+  );
 }
 
 export default function NewGridLayout({ questions }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [voices, setVoices] = useState([]);
+  // const [voices, setVoices] = useState([]);
   const [recordedChunks, setRecordedChunks] = useState([]);
 
 
-  useEffect(() => {
-    if ('speechSynthesis' in window) {
-      if (window.speechSynthesis.onvoiceschanged !== undefined) {
-        window.speechSynthesis.onvoiceschanged = () => {
-          setVoices(window.speechSynthesis.getVoices());
-        };
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if ('speechSynthesis' in window) {
+  //     if (window.speechSynthesis.onvoiceschanged !== undefined) {
+  //       window.speechSynthesis.onvoiceschanged = () => {
+  //         setVoices(window.speechSynthesis.getVoices());
+  //       };
+  //     }
+  //   }
+  // }, []);
 
-  const { questionsList } = useSelector(state => state?.data)
+  const { questionsList } = useSelector((state) => state?.data);
   const TOTAL_TIME = questions?.reduce((acc, q) => acc + q.duration, 0);
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [questionTimeLeft, setQuestionTimeLeft] = useState(questions?.[0]?.duration);
+  const [questionTimeLeft, setQuestionTimeLeft] = useState(
+    questions?.[0]?.duration
+  );
   const [totalTimeLeft, setTotalTimeLeft] = useState(TOTAL_TIME);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [interviewCompleted, setInterviewCompleted] = useState(false);
@@ -52,12 +59,12 @@ export default function NewGridLayout({ questions }) {
 
   const handleFinishInterview = () => {
     setShowConfirmationPopup(true);
-  }
+  };
 
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
       stopRecording();
-      setRecordedChunks([]);  // Reset the recordedChunks array here
+      setRecordedChunks([]); // Reset the recordedChunks array here
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       startStreamAndRecording();
@@ -67,22 +74,21 @@ export default function NewGridLayout({ questions }) {
   const confirmEndInterview = () => {
     setTotalTimeLeft(0);
     setShowConfirmationPopup(false);
-  }
+  };
 
   function startStreamAndRecording() {
-    setRecordedChunks([]);  // Reset the recordedChunks array here
+    setRecordedChunks([]); // Reset the recordedChunks array here
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then(function (stream) {
-        let videoElement = document.getElementById("vid")
-        videoElement.srcObject = stream
+        let videoElement = document.getElementById("vid");
+        videoElement.srcObject = stream;
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = function (event) {
           if (event.data.size > 0) {
-            setRecordedChunks(prevChunks => [...prevChunks, event.data]);
+            setRecordedChunks((prevChunks) => [...prevChunks, event.data]);
           }
         };
-        // console.log("recorded",recordedChunks)
         mediaRecorder.onstop = function () {
           const blob = new Blob(recordedChunks, { type: "video/mp4" });
           const url = URL.createObjectURL(blob);
@@ -113,40 +119,37 @@ export default function NewGridLayout({ questions }) {
         const reader = new FileReader();
         reader.onloadend = function () {
           let base64data = reader.result;
-          // console.log("base64data",base64data);
-          const status = (questionIndex === questions.length - 1) ? "Completed" : "Inprogress";
+          const status =
+            questionIndex === questions.length - 1 ? "Completed" : "Inprogress";
           const mimeRegex = /^data:.+;base64,/;
           if (mimeRegex.test(base64data)) {
-            base64data = base64data.replace(mimeRegex, '');
+            base64data = base64data.replace(mimeRegex, "");
           }
-          // Ensure the base64 data length is a multiple of 4
           while (base64data.length % 4 !== 0) {
-            base64data += '=';
+            base64data += "=";
           }
-          // console.log("base64data1",base64data);
           const payload = {
             question: questions[questionIndex]?.question,
             interview_id: questionsList?.interview_id,
             status: status,
             video: base64data,
             question_id: questions[questionIndex]?.id,
-            category:questions[questionIndex]?.category,
-            sub_category:questions[questionIndex]?.sub_category,
-            tag: questions[questionIndex]?.tag?questions[questionIndex]?.tag:""
-          }
-          console.log("payload",payload);
+            category: questions[questionIndex]?.category,
+            sub_category: questions[questionIndex]?.sub_category,
+            tag: questions[questionIndex]?.tag ? questions[questionIndex]?.tag : "",
+          };
+          console.log("payload", payload);
           dispatch(submit_interview(payload));
-          // If it's the last question, turn off the camera
           if (status === "completed") {
             const videoElement = document.getElementById("vid");
             const stream = videoElement.srcObject;
             const tracks = stream.getTracks();
-            tracks.forEach(track => {
+            tracks.forEach((track) => {
               track.stop();
             });
             videoElement.srcObject = null;
           }
-        }
+        };
         reader.readAsDataURL(blob);
       };
     } else {
@@ -155,36 +158,37 @@ export default function NewGridLayout({ questions }) {
   }
 
   const speakOut = (text) => {
-    if ('speechSynthesis' in window && isSpeakerOn && !spokenQuestions.includes(text)) {
-      // Fetch voices
+    if (
+      "speechSynthesis" in window &&
+      isSpeakerOn &&
+      !spokenQuestions.includes(text)
+    ) {
       let allVoices = window.speechSynthesis.getVoices();
       if (!allVoices.length) {
         window.speechSynthesis.onvoiceschanged = function () {
           allVoices = window.speechSynthesis.getVoices();
-          const femaleVoice = allVoices.find(voice => /female/i.test(voice.name));
+          const femaleVoice = allVoices.find((voice) => /female/i.test(voice.name));
           speak(text, femaleVoice);
         };
         window.speechSynthesis.getVoices();
       } else {
-        const femaleVoice = allVoices.find(voice => /female/i.test(voice.name));
+        const femaleVoice = allVoices.find((voice) => /female/i.test(voice.name));
         speak(text, femaleVoice);
       }
     }
-  }
+  };
 
-  // Helper function to actually perform the speaking
   const speak = (text, voice) => {
     const utterance = new SpeechSynthesisUtterance(text);
     if (voice) {
       utterance.voice = voice;
     }
     window.speechSynthesis.speak(utterance);
-    // Update the spokenQuestions array
-    setSpokenQuestions(prev => [...prev, text]);
-  }
+    setSpokenQuestions((prev) => [...prev, text]);
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => { 
+    const interval = setInterval(() => {
       if (questionTimeLeft > 0) {
         setQuestionTimeLeft((prevTime) => prevTime - 1);
       } else {
@@ -195,12 +199,11 @@ export default function NewGridLayout({ questions }) {
       } else {
         stopRecording();
         setInterviewCompleted(true);
-        // Turn off the camera
         const videoElement = document.getElementById("vid");
         const stream = videoElement.srcObject;
         if (stream) {
           const tracks = stream.getTracks();
-          tracks.forEach(track => {
+          tracks.forEach((track) => {
             track.stop();
           });
           videoElement.srcObject = null;
@@ -217,109 +220,125 @@ export default function NewGridLayout({ questions }) {
 
   useEffect(() => {
     if (isLoading) {
-      // camOn();
-      startStreamAndRecording()
+      startStreamAndRecording();
     }
   }, [isLoading]);
 
   return (
-
     <>
       {questions?.length > 0 && (
         <>
-          {interviewCompleted ? <>
-            <InterviewOver />
-          </> : <>
-
-            <div className="p-5">
-              <div className="flex justify-end">
-                <button
-                  className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
-                  onClick={handleFinishInterview}
-                >
-                  Finish Interview
-                </button>
-              </div>
-              <div>
-                <div className="grid grid-cols-3  gap-4 ">
-                  {/* Left Top Cell */}
-                  <div className="col-span-2 flex flex-col">
-                    <div className="flex-grow">
-                      <img src={image} className="w-full h-full" />
-                    </div>
-
-                    <div className="col-span-2 bg-white p-3 ">
-                      <div className="flex justify-between leading-6 text-sm py-2">
-                        <div className="text-xl font-bold">Question Duration</div>
-                        <div className="text-xl font-bold">{formatTime(questionTimeLeft)}</div>
-                        <div className="cursor-pointer" onClick={() => setIsSpeakerOn(!isSpeakerOn)}>
-                          {isSpeakerOn ?
-                            <VolumeUpIcon /> :
-                            <VolumeOffIcon />
-                          }
-                        </div>
-                      </div>
-                      <div className="text-2xl py-5">
-                        {questionIndex + 1}
-                        {". "}
-                        {questions[questionIndex]?.question}
-                      </div>
-                      <div className="flex w-full justify-between items-center">
-                        {/* <Button variant="contained" size="large" color="secondary">
-                      Answer
-                    </Button> */}
-                        <div></div>
-                        <div className="flex items-center gap-4">
-                          <button
-                            onClick={nextQuestion}
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "18px",  // Adjusted the font size suitable for text
-                              // border: "1px solid lightblue",
-                              borderRadius: "8px",
-                              padding: "10px",
-                              background: "#886cc0",
-                              color: "white",
-                              visibility:
-                                questionIndex < questions?.length - 1 ? "" : "hidden",
-                            }}
-                            className="text-secondary"  // Assuming you have a utility class for secondary text color
-                          >
-                            Next Question
-                          </button>
-
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Right Vertical Cell */}
-                  <div className="col-span-1 bg-white p-4 rounded-xl">
-                    <div>
-                      <div className="text-xl font-bold">Total Interview Duration</div>
-                      <div className="py-5 text-xl">{formatTime(totalTimeLeft)}</div>
-                    </div>
-                    <div className="relative">
-                      {/* REC Indicator */}
-                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">REC</div>
-
-                      <video
-                        id="vid"
-                        className="rounded-md"
-                        muted
-                        autoPlay
-                      ></video>
-                    </div>
-                  </div>
-
-
-                  {/* Left Bottom Cell */}
-
-
+          {interviewCompleted ? (
+            <>
+              <InterviewOver />
+            </>
+          ) : (
+            <>
+              <div className="p-5">
+                <div className="flex justify-end">
+                  <button
+                    className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
+                    onClick={handleFinishInterview}
+                  >
+                    Finish Interview
+                  </button>
                 </div>
+                <div>
+                  {/* <LinearProgress
+                  className="my-2"
+                    variant="determinate"
+                    style={{ backgroundColor: 'orange' }} 
+                    value={
+                      ((questionIndex + 1) / questions.length) * 100
+                    } 
+                  /> */}
+                  <Stepper activeStep={questionIndex} alternativeLabel>
+              {questions.map((question, index) => (
+                <Step key={index} completed={index < questionIndex}>
+                  <StepLabel>{index + 1}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            
+                  <div className="grid grid-cols-3  gap-4 ">
+                    {/* Left Top Cell */}
+                    <div className="col-span-2 flex flex-col">
+                      <div className="flex-grow">
+                        <img src={image} className="w-full h-full" alt="User" />
+                      </div>
 
-                {showConfirmationPopup && (
+                      <div className="col-span-2 bg-white p-3 ">
+                        <div className="flex justify-between leading-6 text-sm py-2">
+                          <div className="text-xl font-bold">Question Duration</div>
+                          <div className="text-xl font-bold">
+                            {formatTime(questionTimeLeft)}
+                          </div>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => setIsSpeakerOn(!isSpeakerOn)}
+                          >
+                            {isSpeakerOn ? (
+                              <VolumeUpIcon />
+                            ) : (
+                              <VolumeOffIcon />
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-2xl py-5">
+                          {questionIndex + 1}
+                          {". "}
+                          {questions[questionIndex]?.question}
+                        </div>
+                        <div className="flex w-full justify-between items-center">
+                          <div></div>
+                          <div className="flex items-center gap-4">
+                            <button
+                              onClick={nextQuestion}
+                              style={{
+                                cursor: "pointer",
+                                fontSize: "18px",
+                                borderRadius: "8px",
+                                padding: "10px",
+                                background: "#886cc0",
+                                color: "white",
+                                visibility:
+                                  questionIndex < questions?.length - 1
+                                    ? ""
+                                    : "hidden",
+                              }}
+                              className="text-secondary"
+                            >
+                              Next Question
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Vertical Cell */}
+                    <div className="col-span-1 bg-white p-4 rounded-xl">
+                      <div>
+                        <div className="text-xl font-bold">
+                          Total Interview Duration
+                        </div>
+                        <div className="py-5 text-xl">
+                          {formatTime(totalTimeLeft)}
+                        </div>
+                      </div>
+                      <div className="relative">
+                        <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
+                          REC
+                        </div>
+                        <video
+                          id="vid"
+                          className="rounded-md"
+                          muted
+                          autoPlay
+                        ></video>
+                      </div>
+                    </div>
+                  </div>
+                  {showConfirmationPopup && (
                   <div className="fixed z-99999999999999999 inset-0 overflow-y-auto">
                     {/* Rest of the modal code */}
                     <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -363,11 +382,10 @@ export default function NewGridLayout({ questions }) {
                     </div>
                   </div>
                 )}
+                </div>
               </div>
-            </div>
-
-          </>
-          }
+            </>
+          )}
         </>
       )}
     </>

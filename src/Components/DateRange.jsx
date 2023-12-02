@@ -3,13 +3,16 @@ import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import format from 'date-fns/format';
+import CloseIcon from '@mui/icons-material/Close';
+import DateRangeIcon from '@mui/icons-material/DateRange'; 
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
-const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate,onDateSelect }) => {
-    console.log("new Date()",startDate)
+const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate, onDateSelect }) => {
     const [dateRange, setDateRange] = useState([
         {
-            startDate: new Date(startDate) ,
-            endDate: new Date(endDate) ,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
             key: 'selection',
         },
     ]);
@@ -30,19 +33,17 @@ const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate,on
     useEffect(() => {
         if (showPicker) {
             if (focusInput === 'startDate') {
-                console.log("afterstartclick")
                 startDateInputRef.current.focus();
             } else {
                 endDateInputRef.current.focus();
             }
         }
         if (startDateInputRef?.current?.value) {
-            setStartDate(startDateInputRef?.current?.value)
+            setStartDate(startDateInputRef?.current?.value);
         }
         if (endDateInputRef?.current?.value) {
-            setEndDate(endDateInputRef.current?.value)
+            setEndDate(endDateInputRef.current?.value);
         }
-        console.log(startDateInputRef?.current?.value, endDateInputRef.current?.value)
     }, [showPicker, focusInput]);
 
     const formattedStartDate = format(dateRange[0].startDate, 'yyyy-MM-dd');
@@ -50,27 +51,50 @@ const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate,on
 
     return (
         <div className="App">
-            <input
-                readOnly
-                ref={startDateInputRef}
-                className="p-2 border rounded"
-                value={formattedStartDate}
-                onFocus={() => {
-                    setShowPicker(true);
-                    setFocusInput('startDate');
-                }}
-            />
-            
-            <input
-                readOnly
-                ref={endDateInputRef}
-                className="p-2 border rounded"
-                value={formattedEndDate}
-                onFocus={() => {
-                    setShowPicker(true);
-                    setFocusInput('endDate');
-                }}
-            />
+            <div className="flex items-center space-x-4">
+                <TextField
+                    InputProps={{
+                        readOnly: true,
+                        startAdornment: ( 
+                            <InputAdornment position="start">
+                                <DateRangeIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    inputRef={startDateInputRef}
+                    variant="outlined"
+                    value={formattedStartDate}
+                    onFocus={() => {
+                        setShowPicker(true);
+                        setFocusInput('startDate');
+                    }}
+                    className="h-8" 
+                />
+                <TextField
+                    InputProps={{
+                        readOnly: true,
+                        startAdornment: ( 
+                            <InputAdornment position="start">
+                                <DateRangeIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    inputRef={endDateInputRef}
+                    variant="outlined"
+                    value={formattedEndDate}
+                    onFocus={() => {
+                        setShowPicker(true);
+                        setFocusInput('endDate');
+                    }}
+                    className="h-8" 
+                />
+                {showPicker && (
+                    <CloseIcon
+                        onClick={() => setShowPicker(false)}
+                        style={{ cursor: 'pointer', fontSize: 24, color: 'gray' }}
+                    />
+                )}
+            </div>
             {showPicker && (
                 <DateRangePicker
                     ranges={dateRange}

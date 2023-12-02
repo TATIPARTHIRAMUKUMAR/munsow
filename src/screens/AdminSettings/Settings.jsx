@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const SettingsPageAdmin = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +9,21 @@ const SettingsPageAdmin = () => {
     emailNotifications: false,
     smsNotifications: false,
   });
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user_data'));
+
+    if (userData) {
+      setFormData({
+        name: userData?.data?.contact_name || '',
+        email: userData?.data?.email || '',
+        password: '', 
+        twoFactorAuth: false, 
+        emailNotifications: false, 
+        smsNotifications: false,
+      });
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
