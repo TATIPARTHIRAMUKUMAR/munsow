@@ -41,7 +41,7 @@ const UserReportTitle = ({ userData }) => {
             <div className="line-bar"></div>
             <div className="p-4 report1-cap-container-middle pt-16">
               <div className="font-bold mt-2 report1-cap">
-                Candidate Assessment Report
+                Candidate Interview Assessment Report
               </div>
             </div>
 
