@@ -5,12 +5,12 @@ const UserReportPartTwo = ({ userData, user }) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    const filteredData = userData?.data.filter(o => o.main_title === "Growth Mindset");
-    if (filteredData?.length > 0) {
-      setData(filteredData[0]);
-    }
-    console.log("data", data, filteredData)
-    // setData(userData);
+    // const filteredData = userData?.data.filter(o => o.main_title === "Growth Mindset");
+    // if (filteredData?.length > 0) {
+    //   setData(filteredData[0]);
+    // }
+    // console.log("data", data, filteredData)
+    setData(userData);
   }, [userData])
 
   function getScoreClass(secured, total) {
