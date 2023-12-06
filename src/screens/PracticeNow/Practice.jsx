@@ -404,7 +404,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                                     <ComputerRoundedIcon sx={{ fontSize: "5rem" }} />
                                 </div>
                                 <h2 className="text-center text-2xl font-semibold mb-3 text-purple-600">System Checks</h2>
-                                <div className="text-sm max-w-xs text-center font-semibold text-gray-500 mb-4">Please complete this 3 minutes walk through to confirm your device/system is ready for a Validity test.</div>
+                                <div className="text-sm max-w-xs text-center font-semibold text-gray-500 mb-4">Please complete this quick walk through to confirm your device/system is ready for a Validity test.</div>
                                 <label className="max-w-xs flex space-x-3 my-3">
                                     <input
                                         type="checkbox"
