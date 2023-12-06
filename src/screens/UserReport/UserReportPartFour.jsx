@@ -126,7 +126,7 @@ const UserReportPartFour = ({ userData,user }) => {
                   </div>
                   <div className="md:w-6/12 p-4">
                     <span className="md:text-2xl md:font-semibold text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                      Curated Answer
+                      Sample answer for reference
                     </span>
                     <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
                       {o.suggested_answer}                     </p>
