@@ -337,7 +337,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                                         onClick={() => { setLevel(0); setExperienceLevel("low") }}
                                         className="bg-green-500 hover:bg-green-700 text-white  py-1 px-3 rounded-md"
                                     >
-                                        Begginer
+                                        Beginner
                                     </button>
                                     <button
                                         onClick={() => { setLevel(50); setExperienceLevel("medium") }}
