@@ -7,7 +7,7 @@ const UserReportTitle = ({ userData }) => {
             <div className="p-4">
               <div className="mt-5">
                 <div className="text-2xl font-semibold report1-header">
-                  MUNSOW REPORT
+                MUNSOW INTERVIEW FEEDBACK REPORT'
                 </div>
               </div>
             </div>
@@ -23,7 +23,7 @@ const UserReportTitle = ({ userData }) => {
                     <span className="text-2xl font-semibold">{userData?.user_name}</span>
                   </div>
                 </div>
-                <div className="md:w-6/12">
+                {/* <div className="md:w-6/12">
                   <div>
                     <span className="text-2xl font-semibold report1-title">
                       CONTACT YOUR GUIDE
@@ -35,7 +35,7 @@ const UserReportTitle = ({ userData }) => {
                   <div className="mt-2">
                     <span className="text-2xl font-semibold">{userData?.teacher_number}</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="line-bar"></div>
