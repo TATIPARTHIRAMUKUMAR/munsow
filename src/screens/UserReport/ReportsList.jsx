@@ -29,7 +29,7 @@ export default function ReportIndex() {
     const navigate = useNavigate();
 
 
-    const ReportCards = ({ id, role, level, report_ready, report_data, skill_type,skills_list,generated }) => {
+    const ReportCards = ({ id, role, level, report_ready, report_data, skill_type, skills_list, generated, company }) => {
 
         const viewReport = (data) => {
             console.log("d", data)
@@ -43,7 +43,8 @@ export default function ReportIndex() {
             <div className="max-h-[320px] transition-transform duration-300 hover:scale-105">
                 <div className="flex flex-col h-full  p-4 border border-[#886cc050] rounded-lg shadow-lg">
                     <div className="flex-grow p-2 flex flex-col gap-y-2">
-                        {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}</div> : <div className="text-xl font-semibold">Skill based report
+                        {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}                         
+                        </div> : <div className="text-xl font-semibold">Skill based report
                             <div className="text-base text-[#886cc0]">
                                 Skills : {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
                                     <>
@@ -57,6 +58,7 @@ export default function ReportIndex() {
                                 ))}
                             </div>
                         </div>}
+                        {skill_type == "role based report" ? <div className="font-medium"><span className="font-bold">Company:</span> {company}</div>  :<></>}
                         <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>
                         <div className="font-medium"><span className="font-bold">Generated On:</span> {moment(generated)?.format('MMMM DD, YYYY HH:mm:ss')}</div>
 
@@ -87,8 +89,10 @@ export default function ReportIndex() {
         report_ready: PropTypes.bool.isRequired,
         report_data: PropTypes.bool.isRequired,
         skill_type: PropTypes.string.isRequired,
-        skills_list:PropTypes.string.isRequired,
-        generated:PropTypes.string.isRequired,
+        skills_list: PropTypes.string.isRequired,
+        generated: PropTypes.string.isRequired,
+        company: PropTypes.string.isRequired,
+
     }
     return (
         <>
@@ -110,7 +114,7 @@ export default function ReportIndex() {
                             }}
                         >
                             {lessonsList?.map((o, index) => (
-                                <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json == null ? {} : o?.report_json} report_ready={o?.report_json == null ? "false" : "true"} skills_list={o?.report_json?.hard_and_soft_skill_dic} level={o?.level} generated={o?.updated_date} key={index} />
+                                <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json == null ? {} : o?.report_json} report_ready={o?.report_json == null ? "false" : "true"} skills_list={o?.report_json?.hard_and_soft_skill_dic} level={o?.level} generated={o?.updated_date} key={index} company={o?.report_json?.interview_company} />
                             ))}
                         </div>
                     )}
