@@ -199,9 +199,9 @@ const AdminDashboard = () => {
             <div className="">
               <PopUpFilter route="AdminDashboard" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate} />
             </div>
-            <div className="">
+            {/* <div className="">
               <PopUpFilter route="AdminDashboard" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
-            </div>
+            </div> */}
             {startDate != "" && (
             <div className="">
               <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect} />
