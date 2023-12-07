@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { loadReportsList, loadUserReport } from "../../redux/action";
 import NoDataPage from "./NoData";
+import { prototype } from "postcss/lib/previous-map";
+import moment from "moment";
 
 export default function ReportIndex() {
     const dispatch = useDispatch();
@@ -27,7 +29,7 @@ export default function ReportIndex() {
     const navigate = useNavigate();
 
 
-    const ReportCards = ({ id, role, level, report_ready, report_data, skill_type,skills_list }) => {
+    const ReportCards = ({ id, role, level, report_ready, report_data, skill_type,skills_list,generated }) => {
 
         const viewReport = (data) => {
             console.log("d", data)
@@ -55,7 +57,9 @@ export default function ReportIndex() {
                                 ))}
                             </div>
                         </div>}
-                        <div className="font-medium">Level: {level}</div>
+                        <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>
+                        <div className="font-medium"><span className="font-bold">Generated On:</span> {moment(generated)?.format('MMMM DD, YYYY HH:mm:ss')}</div>
+
                     </div>
                     <Divider className="my-5" />
                     <div className="py-2 w-full">
@@ -83,7 +87,8 @@ export default function ReportIndex() {
         report_ready: PropTypes.bool.isRequired,
         report_data: PropTypes.bool.isRequired,
         skill_type: PropTypes.string.isRequired,
-        skills_list:PropTypes.string.isRequired
+        skills_list:PropTypes.string.isRequired,
+        generated:PropTypes.string.isRequired,
     }
     return (
         <>
@@ -105,7 +110,7 @@ export default function ReportIndex() {
                             }}
                         >
                             {lessonsList?.map((o, index) => (
-                                <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json == null ? {} : o?.report_json} report_ready={o?.report_json == null ? "false" : "true"} skills_list={o?.report_json?.hard_and_soft_skill_dic} level={o?.level} key={index} />
+                                <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json == null ? {} : o?.report_json} report_ready={o?.report_json == null ? "false" : "true"} skills_list={o?.report_json?.hard_and_soft_skill_dic} level={o?.level} generated={o?.updated_date} key={index} />
                             ))}
                         </div>
                     )}

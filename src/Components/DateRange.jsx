@@ -68,7 +68,6 @@ const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate, o
                         setShowPicker(true);
                         setFocusInput('startDate');
                     }}
-                    className="h-8" 
                 />
                 <TextField
                     InputProps={{
@@ -86,7 +85,6 @@ const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate, o
                         setShowPicker(true);
                         setFocusInput('endDate');
                     }}
-                    className="h-8" 
                 />
                 {showPicker && (
                     <CloseIcon
@@ -96,14 +94,16 @@ const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate, o
                 )}
             </div>
             {showPicker && (
-                <DateRangePicker
-                    ranges={dateRange}
-                    onChange={handleSelect}
-                    className="dateRangePicker"
-                    moveRangeOnFirstSelection={false}
-                    rangeColors={['#3d91ff']}
-                    focusedRange={[0, focusInput === 'startDate' ? 0 : 1]}
-                />
+                <div className='border p-5 my-2' style={{ borderRadius: '8px', padding: '5px', background: 'gray' }}>
+                    <DateRangePicker
+                        ranges={dateRange}
+                        onChange={handleSelect}
+                        className="dateRangePicker"
+                        moveRangeOnFirstSelection={false}
+                        rangeColors={['#3d91ff']}
+                        focusedRange={[0, focusInput === 'startDate' ? 0 : 1]}
+                    />
+                </div>
             )}
         </div>
     );

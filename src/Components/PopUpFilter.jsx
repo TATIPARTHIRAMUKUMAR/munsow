@@ -115,6 +115,7 @@ export default function PopUpFilter(props) {
 
   return (
     <div>
+      <div style={{ fontWeight: 600, fontSize: '1rem' }}>{list}</div>
       <Button
         id="demo-customized-button"
         aria-controls={open ? "demo-customized-menu" : undefined}
@@ -127,8 +128,8 @@ export default function PopUpFilter(props) {
         sx={{
           textTransform: "none",
           fontSize: "1rem",
-          marginRight: "2rem",
-          fontWeight: 600,
+          marginRight: "1rem",
+          fontWeight: 400,
         }}
       >
 

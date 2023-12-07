@@ -86,6 +86,7 @@ const EmotionSensing = () => {
       localStorage.setItem("branch", emotionFilters?.branch);
       localStorage.setItem("course", emotionFilters?.course);
       localStorage.setItem("department", emotionFilters?.department);
+      localStorage.setItem("user", emotionFilters?.user_name);
 
       setEndDate(emotionFilters?.end_date)
       setStartDate(emotionFilters?.start_date)

@@ -135,6 +135,8 @@ const KSAnalysis = () => {
       localStorage.setItem("branch", ksFilters?.branch);
       localStorage.setItem("course", ksFilters?.course);
       localStorage.setItem("department", ksFilters?.department);
+      localStorage.setItem("user", ksFilters?.user_name);
+
 
       setEndDate(ksFilters?.end_date)
       setStartDate(ksFilters?.start_date)
@@ -231,16 +233,16 @@ const KSAnalysis = () => {
                     <div className="">
                       <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
                     </div>
-                    <div className="">
+                    {/* <div className="">
                       <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate} />
                     </div>
                     <div className="">
                       <PopUpFilter route="KSAnalysis" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate} />
-                    </div>
-                    {startDate != "" && (
+                    </div> */}
+                    {/* {startDate != "" && (
                       <div className="">
                         <DateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect} />
-                      </div>)}
+                      </div>)} */}
                   </div>
                 </div>
               </div>
