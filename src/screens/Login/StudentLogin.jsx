@@ -10,6 +10,26 @@ import TextField from "@mui/material/TextField";
 import { user_login } from "../../redux/action";
 import { useDispatch } from "react-redux";
 import ForgotPassword from "./ForgotPassword";
+import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledRadioGroup = styled(RadioGroup)({
+  flexDirection: 'row',
+  justifyContent: 'center',
+  marginBottom: '30px',
+});
+
+const StyledFormControlLabel = styled(FormControlLabel)({
+  fontSize: "50px",
+  '& .MuiSvgIcon-root': {
+    color: '#4A90E2',
+  },
+  '& .MuiTypography-root': {
+    color: '#333',
+    fontSize: "20px",
+    paddingRight:"30px"
+  }
+});
 
 const style = {
   position: "absolute",
@@ -26,6 +46,8 @@ const style = {
 
 const StudentLogin = () => {
   const dispatch = useDispatch()
+  const [loginType, setLoginType] = useState("student");
+
 
   const [universityId, setUniversityId] = useState("");
   const [password, setPassword] = useState("");
@@ -60,15 +82,36 @@ const StudentLogin = () => {
     }))
   };
 
+  const handleRadioChange = (event) => {
+    const selectedType = event.target.value;
+    setLoginType(selectedType);
+    if (selectedType === 'institution') {
+      navigate("/");
+    } else if (selectedType === 'teacher') {
+      navigate("/teacherLogin");
+    }
+    // Add more conditions for other types if necessary
+  };
+
   return (
     <div className="p-4">
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/6 p-5 md:p-20">
           <div className="bg-white   rounded-lg p-6">
-            <h2 className="text-4xl font-semibold mb-4">Interviewee Login</h2>
-            <p className="text-base text-gray-600 mb-4">
+
+          <FormControl component="fieldset">
+              {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
+              <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
+                <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
+                <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
+                {/* <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" /> */}
+              </StyledRadioGroup>
+            </FormControl>
+
+            <h2 className="text-2xl font-semibold mb-4">Student Login</h2>
+            {/* <p className="text-base text-gray-600 mb-4">
               Get personalized insights on your interview skills, strengths, and areas for improvement.
-            </p>
+            </p> */}
             <div className="space-y-4">
               <div className="mb-2">
                 <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
@@ -145,20 +188,20 @@ const StudentLogin = () => {
                 </Box>
               </Modal> */}
             </div>
-            <div className="mt-4 text-center">
+            {/* <div className="mt-4 text-center">
               <span className="text-gray-600">
                 New to Munsow? {" "}
               </span>
               <span className="text-blue-600 hover:underline">
                 <Link to={"/studentRegister"}>Sign Up!</Link>
               </span>
-            </div>
+            </div> */}
 
             <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
               <div className="flex items-center justify-center">
-                <h2 className="text-lg font-semibold text-gray-700 mr-4">Institution login here!</h2>
-                <Link to={"/"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
-                  Click me
+                <h2 className="text-lg font-semibold text-gray-700 mr-4">New to Munsow? {" "}</h2>
+                <Link to={"/studentRegister"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
+                Sign Up
                 </Link>
               </div>
             </div>

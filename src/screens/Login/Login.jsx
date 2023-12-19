@@ -10,6 +10,26 @@ import TextField from "@mui/material/TextField";
 import { useDispatch } from "react-redux";
 import { institution_login } from "../../redux/action";
 import ForgotPassword from "./ForgotPassword";
+import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledRadioGroup = styled(RadioGroup)({
+  flexDirection: 'row',
+  justifyContent: 'center',
+  marginBottom: '30px',
+});
+
+const StyledFormControlLabel = styled(FormControlLabel)({
+  fontSize: "50px",
+  '& .MuiSvgIcon-root': {
+    color: '#4A90E2',
+  },
+  '& .MuiTypography-root': {
+    color: '#333',
+    fontSize: "20px",
+    paddingRight:"30px"
+  }
+});
 
 const style = {
   position: "absolute",
@@ -29,7 +49,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
-  const [loginType, setLoginType] = useState("institution"); 
+  const [loginType, setLoginType] = useState("institution");
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -69,17 +89,38 @@ const LoginPage = () => {
     }
   };
 
+  const handleRadioChange = (event) => {
+    const selectedType = event.target.value;
+    setLoginType(selectedType);
+    if (selectedType === 'student') {
+      navigate("/studentLogin");
+    } else if (selectedType === 'teacher') {
+      navigate("/teacherLogin");
+    }
+    // Add more conditions for other types if necessary
+  };
+
   return (
     <div className="p-4">
 
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/6 p-5 md:p-20">
           <div className="bg-white rounded-lg p-6">
+
+            <FormControl component="fieldset">
+              {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
+              <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
+                <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
+                <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
+                {/* <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" /> */}
+              </StyledRadioGroup>
+            </FormControl>
+
             <div className="mb-4">
-              <h2 className="text-4xl font-semibold  mb-4">Institution Login</h2>
-              <p className="text-base text-gray-600 mb-7">
+              <h2 className="text-2xl font-semibold  mb-4">Institution Login</h2>
+              {/* <p className="text-base text-gray-600 mb-7">
                 Get access to our expert insights about your students across departments, branches, and cities today!
-              </p>
+              </p> */}
             </div>
 
             <div className="space-y-4">
@@ -92,7 +133,7 @@ const LoginPage = () => {
                   className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="universityId"
                   name="universityId"
-                  placeholder="UNIV01UB"
+                  placeholder=""
                   value={universityId}
                   onChange={loginInputHandler}
                 />
@@ -121,20 +162,20 @@ const LoginPage = () => {
                 Login
               </button>
             </div>
-            <div className="mt-7 text-center">
+            {/* <div className="mt-7 text-center">
               <span className="text-gray-600">
                 Not a member with us yet? {" "}
               </span>
               <span className="text-blue-600 hover:underline">
                 <Link to={"/registration"}>Join Us Today!</Link>
               </span>
-            </div>
-            
+            </div> */}
+
             <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
               <div className="flex items-center justify-center">
-                <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome, Students!</h2>
-                <Link to={"/studentLogin"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
-                  Login Here!
+                <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome !</h2>
+                <Link to={"/registration"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
+                  Join Us Today!
                 </Link>
               </div>
             </div>
