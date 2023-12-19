@@ -44,6 +44,7 @@ import {
   BiSolidReport
 } from 'react-icons/bi';
 import { classNames } from "./utils/generalUtils";
+import { useDarkMode } from "./Dark";
 
 const drawerWidth = 270;
 
@@ -118,6 +119,10 @@ export default function HeaderFooterLayout({ Component }) {
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedSubItem, setSelectedSubItem] = useState(null);
+
+
+  const { isDarkMode } = useDarkMode();
+  const backgroundColorClass = isDarkMode ? "bg-dark-primary" : "bg-primary";
 
   useEffect(() => {
     if (GLOBAL_CONSTANTS?.user_cred?.role_id === 1) {
@@ -278,7 +283,7 @@ export default function HeaderFooterLayout({ Component }) {
     <Box sx={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden" }}>
       <CssBaseline />
       <CustomDrawer variant="permanent" open={open} role1={GLOBAL_CONSTANTS?.user_cred?.role_id ? GLOBAL_CONSTANTS?.user_cred?.role_id : 1}>
-        <DrawerHeader style={{ background: "#f1e8f5" }}>
+        <DrawerHeader style={{ background: `${backgroundColorClass}` }}>
           <div className="font-bold  text-[#4e3f6b] text-2xl pr-10">MUNSOW</div>
           {!open ? (
             <IconButton onClick={handleDrawerOpen}>
@@ -459,9 +464,9 @@ export default function HeaderFooterLayout({ Component }) {
 
       <AppHeader open={open} role1={GLOBAL_CONSTANTS?.user_cred ? GLOBAL_CONSTANTS?.user_cred : {}} />
 
-      <div className="mt-[60px] bg-red-500 overflow-y-scroll " style={{ flexGrow: 1, background: "#f3f0f9" }}>
-        {Component}
-      </div>
+      <div className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`} style={{ flexGrow: 1 }}>
+      {Component}
+    </div>
     </Box>
   );
 }

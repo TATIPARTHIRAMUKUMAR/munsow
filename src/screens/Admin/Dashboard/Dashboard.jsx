@@ -202,10 +202,10 @@ const AdminDashboard = () => {
             {/* <div className="">
               <PopUpFilter route="AdminDashboard" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
             </div> */}
-            {startDate != "" && (
+            {/* {startDate != "" && (
             <div className="">
               <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect} />
-            </div>)}
+            </div>)} */}
           </div>
           
           <div className=" grid grid-cols-3 gap-2 ">
