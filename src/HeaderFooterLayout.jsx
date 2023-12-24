@@ -21,6 +21,8 @@ import PropTypes from "prop-types";
 import GLOBAL_CONSTANTS from "../GlobalConstants";
 import { Collapse } from "@mui/material";
 import AppHeader from "./screens/Admin/AppHeader";
+import { IoMdSettings } from "react-icons/io";
+import { RiDashboardFill } from "react-icons/ri";
 
 import {
   FaThLarge,
@@ -34,10 +36,12 @@ import {
   FaFileAlt,
   FaUserGraduate,
   FaChalkboardTeacher,
+  FaCode,
+  FaUserSecret,
 } from 'react-icons/fa';
 
 import {
-  FaHeartPulse,
+  FaHeartPulse, FaSection,
 } from 'react-icons/fa6';
 
 import {
@@ -129,7 +133,7 @@ export default function HeaderFooterLayout({ Component }) {
       setMenuData([
         {
           label: "Home",
-          icon: <FaThLarge size={20} className="" />,
+          icon: <RiDashboardFill size={20} className="" />,
           route: "/adminDashboard",
           subItems: [],
         },
@@ -188,14 +192,20 @@ export default function HeaderFooterLayout({ Component }) {
           ],
         },
         {
+          label: "Configurations",
+          icon: <FaCode size={20} className="" />,
+          route: "/configurations",
+          subItems: [],
+        },
+        {
           label: "Help & Support",
-          icon: <FaThLarge size={20} className="" />,
+          icon: <FaQuestionCircle size={20} className="" />,
           route: "/adminHelp",
           subItems: [],
         },
         {
           label: "Settings",
-          icon: <FaThLarge size={20} className="" />,
+          icon: <IoMdSettings size={20} className="" />,
           route: "/adminSettings",
           subItems: [],
         },

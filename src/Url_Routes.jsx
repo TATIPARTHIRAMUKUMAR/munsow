@@ -29,6 +29,7 @@ import HelpSupportAdmin from "./screens/Help/AdminHelp";
 import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
+import Configurations from "./screens/Admin/Configurations/Configurations";
 
 
 function Url_Routes() {
@@ -56,6 +57,8 @@ function Url_Routes() {
                 <Route excat path="/practicalThinking" element={<HeaderFooterLayout Component={<PracticalThinking />} />} />
                 <Route excat path="/adminHelp" element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />} />
                 <Route excat path="/adminSettings" element={<HeaderFooterLayout Component={<SettingsPageAdmin />} />} />
+                <Route excat path="/configurations" element={<HeaderFooterLayout Component={<Configurations />} />} />
+
               </> : <>
                 <Route excat path="/report" element={<HeaderFooterLayout Component={<ReportIndex />} />} />
                 <Route excat path="/reportView" element={<HeaderFooterLayout Component={<UserReport />} />} />
