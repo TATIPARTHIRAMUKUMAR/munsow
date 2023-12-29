@@ -31,6 +31,7 @@
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.9.2",
     "react-date-range": "^1.4.0",
     "react-datepicker": "^4.23.0",
     "react-dom": "^18.2.0",
