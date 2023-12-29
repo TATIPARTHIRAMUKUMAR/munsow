@@ -427,3 +427,26 @@
     transform: translateY(0);
   }
 }
+
+/* Report overview styles */
+.bg-purple{
+  background-color: #EBD8EC;
+}
+.bg-green{
+  background-color: #D5E6D0;
+}
+.bg-orange{
+  background-color: #FDE0BE;
+}
+.text-purple{
+  color: #462C4C;
+}
+.text-red{
+  color: #FF555B;
+}
+.text-orange{
+  color: #FE9663;
+}
+.text-green{
+  color: #00BF6F;
+}

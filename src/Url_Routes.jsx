@@ -30,6 +30,7 @@ import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 import Configurations from "./screens/Admin/Configurations/Configurations";
+import MainReportOverview from "./screens/UserReport/MainReportOverview";
 
 
 function Url_Routes() {
@@ -76,7 +77,7 @@ function Url_Routes() {
         <Route excat path="/" element={<Login />} />
         <Route excat path="/studentLogin" element={<StudentLogin />} />
         <Route excat path="/studentRegister" element={<StudentRegister />} />
-        <Route exact path="/registration" element={<Register />} />
+        <Route exact path="/registration" element={<MainReportOverview/>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

@@ -18,6 +18,7 @@ import { loadUserReport } from "../../redux/action";
 import { useNavigate } from 'react-router-dom';
 import SkillSuggestions from "./SkillSuggestions";
 import SkillsDisplay from "./SkillsDisplay";
+import MainReportOverview from "./MainReportOverview";
 
 
 const UserReport = () => {
@@ -77,6 +78,7 @@ const UserReport = () => {
           <div>
             <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming} />
           </div>
+
 
           {reportData?.interview_score_by_category?.data?.map((o, index) => {
             return (
