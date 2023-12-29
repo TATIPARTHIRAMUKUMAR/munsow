@@ -33,7 +33,7 @@ function Subtopic({ topic, id, setShowModal }) {
           >
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               <div className="border-0 rounded-3xl shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
+                
                 <div className="flex items-start justify-between p-5">
                   <h3 className="text-xl font-semibold">
                   Add Sub topics Details
