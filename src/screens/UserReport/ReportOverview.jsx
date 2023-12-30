@@ -7,7 +7,7 @@ const ReportOverview = (props) => {
     return (
         <>
         <div className={`mt-5 flex justify-around items-center bg-purple pb-8 ${bgcolor}`}>
-            <h1 className="md:ms-4 text-4xl font-semibold text-purple">{head} Overview...</h1>
+            <h1 className="md:ms-4 text-4xl font-semibold text-purple">{head} Overview</h1>
             <div className="flex flex-col bg-white p-8 rounded-b-3xl">
                 <span className={`flex text-4xl font-bold justify-center ${scoreclr}`}>{score}</span>
                 <span className="flex justify-center text-lg font-semibold text-purple">Overall Score</span>
