@@ -1,0 +1,155 @@
+.s-container{
+    display:grid;
+    grid-template-columns: 500px 500px;
+    grid-column-gap: 50px;
+}
+.behvaioural-container{
+    background-color: #EBD8EC;
+   font-size: 22px;
+   padding:12px;
+   margin:1px;
+   font-weight: 500;
+   color:#462c4c;
+}
+.Concepts-roi{
+    background-color: #EBD8EC;
+        font-size: 18px;
+        padding: 12px;
+        margin-top: 15px;
+        font-weight: 500;
+        color: #462c4c;
+}
+.Answers-container{
+    margin-top:23px;
+    margin-left:13px;
+    
+
+}
+.heading-1{
+    font-weight:400;
+    color: #462c4c;
+    font-style: italic;
+    font-weight: 600
+}
+.green-colors{
+    background-color:#d5e6d0;
+    margin-top:12px;
+    margin-left: 13px;
+    display: flex;
+        align-items: center;
+        width:fit-content;
+    /* display: inline-block; */
+}
+.brown-colors{
+    background-color: #f4eded;
+    display: flex;
+        align-items: center;
+        width: fit-content;
+        margin-top: 12px;
+}
+.Reference-container{
+    margin-top: 23px;
+        margin-left: 13px;
+}
+.para-01{
+    color: #462c4c;
+}
+.colored{
+    color: green;
+    
+    margin-left:5px;
+   
+  
+}
+
+.insights{
+    margin-left: 13px;
+    font-weight: 500;
+}
+.colorbrownds{
+    color:brown;
+    margin-left: 5px;
+  
+}
+.colors-container{
+    display: grid;
+        grid-template-columns: 500px 500px;
+        grid-column-gap: 60px;
+}
+.some-points-container{
+    display: grid;
+        grid-template-columns: 500px 500px;
+        grid-column-gap: 60px;
+}
+.colorGreen{
+    background-color: #d5e6d0;
+    margin-top:13px;
+    margin-left: 12px;
+    border-radius: 12px;
+}
+.greenPara{
+    padding:3px;
+    color:#37582d;
+    margin-top: 13px;
+}
+.colorPink{
+    background-color:#f4eded;
+    height:15vh;
+
+        margin-top: 13px;
+        margin-left: 4px;
+        border-radius: 12px;
+      
+
+}
+.pinkPara{
+    padding-left: 4px;
+        color:brown;
+        margin-top: 13px;
+        
+}
+.feedbackss{
+    margin-top: 20px;
+    margin-left:13px
+
+}
+.fedbackHeads{
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+.Technical-container{
+    margin-top: 43PX;
+    background-color: #D5E6D0;
+        font-size: 22px;
+        padding: 12px;
+      
+        font-weight: 500;
+        color: #462c4c;
+}
+.Conceptsrois
+{
+    background-color: #D5E6D0;
+        font-size: 18px;
+        padding: 12px;
+        margin-top: 15px;
+        font-weight: 500;
+        color: #462c4c;
+}
+.Practical-container{
+    margin-top: 43PX;
+        background-color: #FDE0BE;
+        font-size: 22px;
+        padding: 12px;
+    
+        font-weight: 500;
+        color: #462c4c;
+
+}
+.Conceptsroist{
+    background-color: #FDE0BE;
+        font-size: 18px;
+        padding: 12px;
+        margin-top: 15px;
+        font-weight: 500;
+        color: #462c4c;
+}
