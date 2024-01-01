@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import SkillSuggestions from "./SkillSuggestions";
 import SkillsDisplay from "./SkillsDisplay";
 import MainReportOverview from "./MainReportOverview";
+import ReportOverview from "./ReportOverview";
 
 
 const UserReport = () => {
@@ -39,27 +40,34 @@ const UserReport = () => {
   const handleGeneratePdf = async () => {
     setLoading(true);
     const pdfContainer = reportTemplateRef.current;
-    const pdfWidth = 210; // A4 width in points (about 8.27 inches)
-    const pdfHeight =
-      (pdfContainer.clientHeight * pdfWidth) / pdfContainer.clientWidth; // Maintain aspect ratio
-
-    // Create a canvas from your HTML content
-    const canvas = await html2canvas(pdfContainer);
-
-    // Convert the canvas to a data URL
-    const imgData = canvas.toDataURL("image/png");
-
-    // Create a jsPDF instance
-    const doc = new jsPDF({
-      format: [pdfWidth, pdfHeight],
-      orientation: "portrait", // You can also use 'landscape' for landscape mode
+    const components = pdfContainer.children;
+  
+    const pdf = new jsPDF({
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait",
     });
-
-    // Insert the image into the PDF
-    doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, "", "FAST");
-    doc.save("UserReports.pdf");
+  
+    for (let i = 0; i < components.length; i++) {
+      if (i > 0) {
+        pdf.addPage();
+      }
+  
+      const canvas = await html2canvas(components[i],{
+        scale: 2, // Adjust the scale as needed
+        logging: false, // Disable logging for cleaner output
+      });
+      const imageData = canvas.toDataURL("image/png");
+  
+      pdf.addImage(imageData, "PNG", 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+    }
+  
+    pdf.save("UserReports.pdf");
     setLoading(false);
   };
+  
+  
+  
 
   return (
     <div className="body flex-grow-1 overflow-y-scroll">
@@ -75,9 +83,20 @@ const UserReport = () => {
           <div>
             <UserReportTitle userData={reportData} />
           </div>
-          <div>
+          {/* <div>
             <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming} />
+          </div> */}
+          <div>
+            <ReportOverview/>
           </div>
+          <div>
+            <ReportOverview/>
+          </div>
+          <div>
+            <MainReportOverview/>
+          </div>
+        
+
 
 
           {reportData?.interview_score_by_category?.data?.map((o, index) => {
@@ -90,6 +109,8 @@ const UserReport = () => {
                 </div>
               </>)
           })}
+
+
 
           {/* <div>
             <Divider className="pt-5" />
@@ -109,6 +130,9 @@ const UserReport = () => {
             <UserReportPartFive userData={reportData?.where_you_stand} />
             <Divider className="pt-5" />
           </div> */}
+
+
+
           {reportData?.report_type == "role based report" && (
             <div>
               <Divider className="pt-5" />
@@ -134,7 +158,10 @@ const UserReport = () => {
           <div>
             <UserReportPartSeven userData={reportData} />
           </div>
+
+
         </div>
+
         <div className="mt-5">
           <div className="flex justify-center items-center mt-4 mb-5">
             <button
@@ -144,7 +171,7 @@ const UserReport = () => {
             >
               DOWNLOAD AS PDF{" "}
               {loading && (
-                <CircularProgress style={{ color: "#fff", marginLeft: "10px" }} />
+                <CircularProgress style={{ color: "#fff", marginLeft: "10px", }} />
               )}
             </button>
           </div>
