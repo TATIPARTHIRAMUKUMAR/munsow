@@ -29,6 +29,7 @@ function TopicandSubtopic() {
       const newTopic = { id: topics.length + 1, title: topicInput };
       setTopics([...topics, newTopic]);
       setTopicInput('');
+      //console.log(topic);
     }
   };
 

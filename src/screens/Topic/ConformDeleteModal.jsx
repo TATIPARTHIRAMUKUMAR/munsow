@@ -7,6 +7,7 @@ const ConformDeleteModal = ({ deleteTopicId, topics, setTopics, setShowDeleteMod
           const updatedTopics = topics.filter(topic => topic.id !== deleteTopicId);    
             setTopics(updatedTopics);
             setShowDeleteModal(false);
+            //console.log(updatedTopics);
          } catch (error) {
             console.error("Error deleting topic:", error);
          }

@@ -8,6 +8,7 @@ function Subtopic({ title, subtopicId, setSubtopics, setShowModal }) {
   const saveSubtopic = () => {
     setSubtopics([{subTopic, subTopicDesc, title, subtopicId}])
     setShowModal(false);
+    //console.log(title);
   };
   
 
