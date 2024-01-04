@@ -30,6 +30,7 @@ import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 import Configurations from "./screens/Admin/Configurations/Configurations";
+import TopicandSubtopic from "./screens/Topic/TopicandSubtopic";
 
 
 function Url_Routes() {
@@ -77,6 +78,8 @@ function Url_Routes() {
         <Route excat path="/studentLogin" element={<StudentLogin />} />
         <Route excat path="/studentRegister" element={<StudentRegister />} />
         <Route exact path="/registration" element={<Register />} />
+        <Route exact path="/topicandSubtopic" element={<TopicandSubtopic />} />
+        
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
