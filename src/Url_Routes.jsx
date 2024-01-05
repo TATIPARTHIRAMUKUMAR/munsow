@@ -30,53 +30,181 @@ import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 import Configurations from "./screens/Admin/Configurations/Configurations";
-
+import Intro from "./Components/Intro_Extro/Intro";
 
 function Url_Routes() {
   return (
     <BrowserRouter>
       <Routes>
-        {
-          (GLOBAL_CONSTANTS?.loggedIn || true) &&
+        {(GLOBAL_CONSTANTS?.loggedIn || true) && (
           <>
-            {
-              GLOBAL_CONSTANTS?.user_cred?.role_id == 1 ? <>
-                <Route excat path="/quiz" element={<HeaderFooterLayout Component={<QuizListing />} />} />
-                <Route excat path="/users" element={<HeaderFooterLayout Component={<Users />} />} />
-                <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
-                <Route excat path="/studentList" element={<HeaderFooterLayout Component={<Students />} />} />
-                <Route excat path="/teachersList" element={<HeaderFooterLayout Component={<Teachers />} />} />
-                <Route excat path="/adminDashboard" element={<HeaderFooterLayout Component={<AdminDashboard />} />} />
-                <Route excat path="/addStudent" element={<HeaderFooterLayout Component={<AddStudents />} />} />
-                <Route excat path="/addTeacher" element={<HeaderFooterLayout Component={<AddTeachers />} />} />
-                <Route excat path="/summary" element={<HeaderFooterLayout Component={<Summary />} />} />
-                <Route excat path="/emotionSensing" element={<HeaderFooterLayout Component={<EmotionSensing />} />} />
-                <Route excat path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} />
-                <Route excat path="/skills" element={<HeaderFooterLayout Component={<Skills />} />} />
-                <Route excat path="/behaviourAnalysis" element={<HeaderFooterLayout Component={<BehaviourAnalysis />} />} />
-                <Route excat path="/practicalThinking" element={<HeaderFooterLayout Component={<PracticalThinking />} />} />
-                <Route excat path="/adminHelp" element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />} />
-                <Route excat path="/adminSettings" element={<HeaderFooterLayout Component={<SettingsPageAdmin />} />} />
-                <Route excat path="/configurations" element={<HeaderFooterLayout Component={<Configurations />} />} />
-
-              </> : <>
-                <Route excat path="/report" element={<HeaderFooterLayout Component={<ReportIndex />} />} />
-                <Route excat path="/reportView" element={<HeaderFooterLayout Component={<UserReport />} />} />
-                <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
-                <Route excat path="/interview" element={<HeaderFooterLayout Component={<LoadQuestionsData />} />} />
-                <Route excat path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
-                <Route excat path="/notifications" element={<HeaderFooterLayout Component={<NotificationsPage />} />} />
-                <Route excat path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
-                <Route excat path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
-                <Route excat path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
+            {GLOBAL_CONSTANTS?.user_cred?.role_id == 1 ? (
+              <>
+                <Route
+                  excat
+                  path="/quiz"
+                  element={<HeaderFooterLayout Component={<QuizListing />} />}
+                />
+                <Route
+                  excat
+                  path="/users"
+                  element={<HeaderFooterLayout Component={<Users />} />}
+                />
+                <Route
+                  excat
+                  path="/profile"
+                  element={<HeaderFooterLayout Component={<Profile />} />}
+                />
+                <Route
+                  excat
+                  path="/studentList"
+                  element={<HeaderFooterLayout Component={<Students />} />}
+                />
+                <Route
+                  excat
+                  path="/teachersList"
+                  element={<HeaderFooterLayout Component={<Teachers />} />}
+                />
+                <Route
+                  excat
+                  path="/adminDashboard"
+                  element={
+                    <HeaderFooterLayout Component={<AdminDashboard />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/addStudent"
+                  element={<HeaderFooterLayout Component={<AddStudents />} />}
+                />
+                <Route
+                  excat
+                  path="/addTeacher"
+                  element={<HeaderFooterLayout Component={<AddTeachers />} />}
+                />
+                <Route
+                  excat
+                  path="/summary"
+                  element={<HeaderFooterLayout Component={<Summary />} />}
+                />
+                <Route
+                  excat
+                  path="/emotionSensing"
+                  element={
+                    <HeaderFooterLayout Component={<EmotionSensing />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/ksanalysis"
+                  element={<HeaderFooterLayout Component={<KSAnalysis />} />}
+                />
+                <Route
+                  excat
+                  path="/skills"
+                  element={<HeaderFooterLayout Component={<Skills />} />}
+                />
+                <Route
+                  excat
+                  path="/behaviourAnalysis"
+                  element={
+                    <HeaderFooterLayout Component={<BehaviourAnalysis />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/practicalThinking"
+                  element={
+                    <HeaderFooterLayout Component={<PracticalThinking />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/adminHelp"
+                  element={
+                    <HeaderFooterLayout Component={<HelpSupportAdmin />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/adminSettings"
+                  element={
+                    <HeaderFooterLayout Component={<SettingsPageAdmin />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/configurations"
+                  element={
+                    <HeaderFooterLayout Component={<Configurations />} />
+                  }
+                />
               </>
-            }
+            ) : (
+              <>
+                <Route
+                  excat
+                  path="/report"
+                  element={<HeaderFooterLayout Component={<ReportIndex />} />}
+                />
+                <Route
+                  excat
+                  path="/reportView"
+                  element={<HeaderFooterLayout Component={<UserReport />} />}
+                />
+                <Route
+                  excat
+                  path="/profile"
+                  element={<HeaderFooterLayout Component={<Profile />} />}
+                />
+                <Route
+                  excat
+                  path="/interview"
+                  element={
+                    <HeaderFooterLayout Component={<LoadQuestionsData />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/practice"
+                  element={
+                    <HeaderFooterLayout Component={<StepperComponent />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/notifications"
+                  element={
+                    <HeaderFooterLayout Component={<NotificationsPage />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/help"
+                  element={
+                    <HeaderFooterLayout Component={<HelpAndSupportPage />} />
+                  }
+                />
+                <Route
+                  excat
+                  path="/settings"
+                  element={<HeaderFooterLayout Component={<SettingsPage />} />}
+                />
+                <Route
+                  excat
+                  path="/studentDashboard"
+                  element={
+                    <HeaderFooterLayout Component={<StudentDashboard />} />
+                  }
+                />
+              </>
+            )}
           </>
-        }
+        )}
         <Route excat path="/" element={<Login />} />
         <Route excat path="/studentLogin" element={<StudentLogin />} />
         <Route excat path="/studentRegister" element={<StudentRegister />} />
-        <Route exact path="/registration" element={<Register />} />
+        <Route exact path="/registration" element={<Intro />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
