@@ -38,6 +38,7 @@
     display: flex;
         align-items: center;
         width:fit-content;
+        border-radius: 5px;
     /* display: inline-block; */
 }
 .brown-colors{
@@ -46,6 +47,7 @@
         align-items: center;
         width: fit-content;
         margin-top: 12px;
+        border-radius: 5px;
 }
 .Reference-container{
     margin-top: 23px;
@@ -58,6 +60,7 @@
     color: green;
     
     margin-left:5px;
+    padding:6px
    
   
 }
@@ -69,6 +72,8 @@
 .colorbrownds{
     color:brown;
     margin-left: 5px;
+    padding:6px
+    
   
 }
 .colors-container{
@@ -91,6 +96,8 @@
     padding:3px;
     color:#37582d;
     margin-top: 13px;
+    margin-left:7px;
+    margin-right:3px;
 }
 .colorPink{
     background-color:#f4eded;
@@ -106,6 +113,8 @@
     padding-left: 4px;
         color:brown;
         margin-top: 13px;
+        margin-left: 7px;
+            margin-right: 3px;
         
 }
 .feedbackss{
@@ -152,4 +161,15 @@
         margin-top: 15px;
         font-weight: 500;
         color: #462c4c;
+}
+.dd{
+
+    margin-left:7px;
+}
+.ff{
+    margin-left: 7px;
+}
+.main-container{
+    padding:14px;
+    margin:14px;
 }

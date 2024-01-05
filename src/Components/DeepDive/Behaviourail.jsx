@@ -6,7 +6,7 @@ import { FaRegThumbsDown } from "react-icons/fa";
 // import { faThumpsUp } from "@fortawesome/sharp-regular-svg-icons";
 const Behaviourail = () => {
   return (
-    <div>
+    <div class="main-container">
       <div className="behvaioural-container">
         <h1>Behavioural Questions DeepDive</h1>
       </div>
@@ -52,7 +52,7 @@ const Behaviourail = () => {
           </div>
 
           <div className="brown-colors">
-            <FaRegThumbsDown color="brown" />
+            <FaRegThumbsDown color="brown" className="ff" />
             <span className="colorbrownds">
               What you got wrong/what you missed
             </span>
@@ -147,7 +147,7 @@ const Behaviourail = () => {
           </div>
 
           <div className="brown-colors">
-            <FaRegThumbsDown color="brown" />
+            <FaRegThumbsDown color="brown" className="ff" />
             <span className="colorbrownds">
               What you got wrong/what you missed
             </span>
@@ -242,7 +242,7 @@ const Behaviourail = () => {
           </div>
 
           <div className="brown-colors">
-            <FaRegThumbsDown color="brown" />
+            <FaRegThumbsDown color="brown" className="ff" />
             <span className="colorbrownds">
               What you got wrong/what you missed
             </span>
