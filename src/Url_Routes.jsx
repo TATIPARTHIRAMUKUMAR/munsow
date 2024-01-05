@@ -30,6 +30,7 @@ import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 import Configurations from "./screens/Admin/Configurations/Configurations";
+import QuestionBankForm from "./screens/Teacher/CreateQuestionBank/CreateQuestionBank";
 
 
 function Url_Routes() {
@@ -78,6 +79,8 @@ function Url_Routes() {
         <Route excat path="/studentRegister" element={<StudentRegister />} />
         <Route exact path="/registration" element={<Register />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route excat path="/questionBank" element={<HeaderFooterLayout Component={<QuestionBankForm />} />} />
+
       </Routes>
     </BrowserRouter>
   );
