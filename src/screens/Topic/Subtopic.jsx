@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import xmark from '../../assets/icons/xmark.svg'
 
-function Subtopic({ title, subtopicId, setSubtopics, setShowModal }) {
+function Subtopic({ setTopics, topicIndex, subtopic, setShowModal }) {
   const [subTopic, setSubTopic] = useState([]);
   const [subTopicDesc, setSubTopicDesc] = useState([]);
 
   const saveSubtopic = () => {
-    setSubtopics([{subTopic, subTopicDesc, title, subtopicId}])
+    setTopics((prevTopics) => {
+      const newTopics = [...prevTopics];
+      newTopics[topicIndex].subtopics.push(subtopic);
+      return newTopics;
+    });
     setShowModal(false);
-    //console.log(title);
   };
   
 
@@ -49,7 +52,7 @@ function Subtopic({ title, subtopicId, setSubtopics, setShowModal }) {
 
                 </div>
                 <div className='flex items-start justify-between px-5'>
-                  <h4 className='text-xl text-gray-500'>{title}</h4>
+                  <h4 className='text-xl text-gray-500'>{subtopic}</h4>
                 </div>
                 <form>
 

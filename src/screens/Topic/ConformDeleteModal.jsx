@@ -1,10 +1,10 @@
 
 
-const ConformDeleteModal = ({ deleteTopicId, topics, setTopics, setShowDeleteModal }) => {
+const ConformDeleteModal = ({ topicIndex, topics, setTopics, setShowDeleteModal }) => {
 
-    const deleteTopic = () => {
+    const deleteTopic = () => {      
         try {
-          const updatedTopics = topics.filter(topic => topic.id !== deleteTopicId);    
+          const updatedTopics = topics.filter(topic => topic.id !== topicIndex);    
             setTopics(updatedTopics);
             setShowDeleteModal(false);
             //console.log(updatedTopics);
