@@ -142,7 +142,7 @@ li {
 
 /* Extro CSS */
 .extro {
-  background-image: url("./Images/munsowbackgroundimg.png");
+  background-image: url("./../../assets/Images/munsowbackgroundimg.png");
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
