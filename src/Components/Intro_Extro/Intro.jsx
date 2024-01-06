@@ -4,7 +4,7 @@ import CompanyAndRoleSummary from "./CompanyAndRoleSummary";
 import Extro from "./Extro";
 import SummarySnapshot from "./SummarySnapshot";
 import Presentation from "./Presentation";
-import MunsowLogo from "./Images/MunsowLogo.png";
+import MunsowLogo from "./../../assets/Images/MunsowLogo.png";
 const Intro = () => {
   return (
     <>

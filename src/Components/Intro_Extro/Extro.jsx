@@ -1,6 +1,6 @@
 import React from "react";
-import mailIcon from "./Images/mailicon.jpg";
-import globe from "./Images/globe.png";
+import mailIcon from "./../../assets/Images/mailicon.jpg";
+import globe from "./../../assets/Images/globe.png";
 
 const Extro = () => {
   return (
