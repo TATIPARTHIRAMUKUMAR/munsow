@@ -37,6 +37,7 @@ const initialState = {
   ksFilters: [],
   userListByDepartment:[],
   summaryData:{},
+  courses:[],
   loading: false
 };
 
@@ -207,6 +208,11 @@ const DataReducers = (state = initialState, action) => {
     case types.USERS_LIST_BY_DEPARTMENT: return{
       ...state,
       userListByDepartment: action.payload.data,
+      loading:false
+    }
+    case types.COURSES: return{
+      ...state,
+      courses: action.payload.courses,
       loading:false
     }
     case types.SET_REDUX_STATE : { 

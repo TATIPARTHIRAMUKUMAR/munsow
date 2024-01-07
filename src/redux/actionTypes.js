@@ -36,7 +36,7 @@ export const SET_REDUX_STATE = "SET_REDUX_STATE"
 
 export const USERS_LIST_BY_DEPARTMENT="USERS_LIST_BY_DEPARTMENT"
 
-
+export const COURSES="COURSES"
  
  
  

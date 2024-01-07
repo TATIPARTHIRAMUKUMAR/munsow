@@ -791,6 +791,8 @@ export const user_create = (data, params, callback) => {
   };
 };
 
+
+
 export const user_delete = (params, callback) => {
   return function () {
     var headers = {
@@ -1133,5 +1135,120 @@ export const loadSummaryData = (params) => {
         dispatch(getSummmaryData(resp?.data));
       })
       .catch((error) => console.log(error));
+  };
+};
+
+const getCourses = (data) => ({
+  type: types.COURSES,
+  payload: data,
+});
+
+export const loadcourses = () => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}course/list`, {  headers })
+      .then((resp) => {
+        dispatch(getCourses(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+export const create_course = (data, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Creating Course .. please wait", { autoClose: false });
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/create`, JSON.stringify(data), {
+         headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+        }
+        else {
+          toast.update(toastId, { render: "Course Created and now assign users", type: "success", autoClose: true })
+          callback(resp)
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
+  };
+};
+
+export const assign_users = (data, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Assigning to users .. please wait", { autoClose: false });
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/assign`, JSON.stringify(data), {
+         headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+        }
+        else {
+          toast.update(toastId, { render: "Users Added and now create content", type: "success", autoClose: true })
+          callback(resp)
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
+  };
+};
+
+export const course_content = (data, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Creating topics .. please wait", { autoClose: false });
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/create_content`, JSON.stringify(data), {
+         headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+        }
+        else {
+          toast.update(toastId, { render: "Content Created", type: "success", autoClose: true })
+          callback(resp)
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
   };
 };

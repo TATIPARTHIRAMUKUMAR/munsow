@@ -44,9 +44,9 @@ const style = {
   p: 4,
 };
 
-const StudentLogin = () => {
+const TeacherLogin = () => {
   const dispatch = useDispatch()
-  const [loginType, setLoginType] = useState("student");
+  const [loginType, setLoginType] = useState("teacher");
 
 
   const [universityId, setUniversityId] = useState("");
@@ -76,11 +76,10 @@ const StudentLogin = () => {
     const payload = {
       email: universityId,
       password: password,
-      role:"student"
-
+      role:"teacher"
     }
     dispatch(user_login(payload, () => {
-      window.location.href = "./studentDashboard";
+      window.location.href = "./adminDashboard";
     }))
   };
 
@@ -89,8 +88,8 @@ const StudentLogin = () => {
     setLoginType(selectedType);
     if (selectedType === 'institution') {
       navigate("/");
-    } else if (selectedType === 'teacher') {
-      navigate("/teacherLogin");
+    } else if (selectedType === 'student') {
+      navigate("/studentLogin");
     }
     // Add more conditions for other types if necessary
   };
@@ -110,7 +109,7 @@ const StudentLogin = () => {
               </StyledRadioGroup>
             </FormControl>
 
-            <h2 className="text-2xl font-semibold mb-4">Student Login</h2>
+            <h2 className="text-2xl font-semibold mb-4">Teacher Login</h2>
             {/* <p className="text-base text-gray-600 mb-4">
               Get personalized insights on your interview skills, strengths, and areas for improvement.
             </p> */}
@@ -199,33 +198,16 @@ const StudentLogin = () => {
               </span>
             </div> */}
 
-            <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
+            {/* <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
               <div className="flex items-center justify-center">
                 <h2 className="text-lg font-semibold text-gray-700 mr-4">New to Munsow? {" "}</h2>
                 <Link to={"/studentRegister"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
                 Sign Up
                 </Link>
               </div>
-            </div>
+            </div> */}
 
-            {/* <div className="mt-5 text-center">
-              <span className="text-gray-600">
-                Institution login here!
-              </span>
-              <span className="text-blue-600 font-semibold cursor-pointer">
-                {" "}
-                <Link to={"/"}>Login here!</Link>
-              </span>
-            </div> */}
-            {/* <div className="mt-10 text-center">
-              <span className="text-gray-600">
-                Having issues logging in?
-              </span>
-              <span className="text-blue-600 font-semibold cursor-pointer" onClick={handleClickOpen}>
-                {" "}
-                forget Password
-              </span>
-            </div> */}
+            
             <div className="mt-10 text-center text-gray-600">
               <span>
                 By continuing, you agree to our
@@ -252,4 +234,4 @@ const StudentLogin = () => {
   );
 };
 
-export default StudentLogin;
+export default TeacherLogin;

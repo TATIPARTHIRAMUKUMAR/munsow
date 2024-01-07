@@ -210,7 +210,47 @@ export default function HeaderFooterLayout({ Component }) {
           subItems: [],
         },
       ]);
-    } else {
+    } else if(GLOBAL_CONSTANTS?.user_cred?.role_id===2){
+      setMenuData([
+        {
+          label: "Dashboard",
+          icon: <FaThLarge size={20} className="" />,
+          route: "/adminDashboard",
+          subItems: [],
+        },
+        {
+          label: "Courses",
+          icon: <FaClone size={20} className="" />,
+          route: "/courseList",
+          subItems: [],
+        },
+        {
+          label: "Question Bank",
+          icon: <FaChartLine size={20} className="" />,
+          route: "/comingSoon",
+          subItems: [],
+        },
+        {
+          label: "Assignments",
+          icon: <FaUser size={20} className="" />,
+          route: "/comingSoon",
+          subItems: [],
+        },
+        // {
+        //   label: "Settings",
+        //   icon: <FaCog size={20} className="" />,
+        //   route: "/settings",
+        //   subItems: [],
+        // },
+        // {
+        //   label: "Help & Support",
+        //   icon: <FaQuestionCircle size={20} className="" />,
+        //   route: "/help",
+        //   subItems: [],
+        // },
+      ]);
+    }
+    else{
       setMenuData([
         {
           label: "Dashboard",
