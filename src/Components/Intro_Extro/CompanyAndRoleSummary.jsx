@@ -2,23 +2,21 @@ import React from "react";
 
 const CompanyAndRoleSummary = () => {
   return (
-    <div className="container  mt-3">
-      <div className="content pt-5">
+    <div className="container  ">
+      <div className="content pt-2">
         <div
           className=" text mb-4"
           style={{
             color: "#452B4E",
             fontWeight: "700",
-            fontSize: "16px",
+            fontSize: "23.5px",
             margin: "20px",
           }}
         >
           Company and Role Based Curated Summary
         </div>
         <div className="about d-flex mb-4">
-          <div className="lefttitles" style={{ height: "185px" }}>
-            About the Company
-          </div>
+          <div className="lefttitles">About the Company</div>
           <div className="rightcontent">
             <ul className="ul-part">
               <li>
@@ -41,9 +39,7 @@ const CompanyAndRoleSummary = () => {
           </div>
         </div>
         <div className="about d-flex mb-4">
-          <div className="lefttitles" style={{ height: "100px" }}>
-            Company related recent news
-          </div>
+          <div className="lefttitles">Company related recent news</div>
           <div className="rightcontent">
             <ul className="ul-part">
               <li>
@@ -74,9 +70,7 @@ const CompanyAndRoleSummary = () => {
           </div>
         </div>
         <div className="about d-flex">
-          <div className="lefttitles" style={{ height: "140px" }}>
-            Industry Trends
-          </div>
+          <div className="lefttitles">Industry Trends</div>
           <div className="rightcontent">
             <ul className="ul-part">
               <li>

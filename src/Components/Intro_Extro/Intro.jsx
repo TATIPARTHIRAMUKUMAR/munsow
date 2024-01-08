@@ -10,7 +10,7 @@ const Intro = () => {
     <>
       <div className="body d-flex flex-grow-1 overflow-y-scroll ">
         <div className="container mx-auto d-flex align-items-center justify-content-center">
-          <div style={{ marginLeft: "450px", marginTop: "10%" }}>
+          <div style={{ marginLeft: "450px" }}>
             <img
               src={MunsowLogo}
               alt="munsow"
@@ -34,7 +34,7 @@ const Intro = () => {
               </div>
             </div>
 
-            <div className="ml-4 text-center title2">
+            <div className="ml-4  text-center title2">
               Position: HR Transformation Consultant | Deloitte
             </div>
 
@@ -47,9 +47,9 @@ const Intro = () => {
       </div>
       <div>
         <CompanyAndRoleSummary />
-        <Extro />
         <SummarySnapshot />
         <Presentation />
+        <Extro />
       </div>
     </>
   );

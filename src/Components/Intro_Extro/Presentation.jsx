@@ -4,10 +4,10 @@ const Presentation = () => {
   return (
     <div className="container ">
       <div className="content">
-        <div className="header   flex gap-40 p-6 ">
+        <div className="header   p-6 ">
           <div
             className="fs-5 "
-            style={{ fontSize: "18px", fontWeight: "700" }}
+            style={{ fontSize: "23.5px", fontWeight: "700" }}
           >
             Presentation and Grooming
           </div>
