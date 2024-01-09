@@ -19,6 +19,13 @@ const CourseView = () => {
         setSelectedSubtopic(subtopic);
     };
 
+    useEffect(() => {
+        // dispatch(loadDetailedCourse(id));
+        // Set the first uncompleted subtopic as the default selected subtopic
+        const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic.subtopics).find(subtopic => !subtopic.completed);
+        setSelectedSubtopic(firstUncompletedSubtopic);
+    }, [detailedCourse]);
+
     return (
         <div className="container mx-auto p-4">
             <CourseOverview course={detailedCourse} />
@@ -31,15 +38,24 @@ const CourseView = () => {
                         </div>
                     )}
                 </div>
-                <div className="w-2/6">
-                    {detailedCourse?.content_data?.map((topic) => (
-                        <TopicAccordion
-                            key={topic.id}
-                            topic={topic}
-                            onSelectSubtopic={handleSelectSubtopic}
-                        />
-                    ))}
-                </div>
+
+
+<div className="w-2/6">
+    {detailedCourse?.content_data?.map((topic) => {
+        const isDefaultOpen = topic.subtopics.some(sub => sub === selectedSubtopic && !sub.completed);
+        return (
+            <TopicAccordion
+                key={topic.id}
+                topic={topic}
+                onSelectSubtopic={setSelectedSubtopic}
+                selectedSubtopic={selectedSubtopic}
+                defaultOpen={isDefaultOpen}
+            />
+        );
+    })}
+</div>
+
+
 
             </div>
         </div>

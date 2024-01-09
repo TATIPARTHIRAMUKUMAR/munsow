@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SubtopicCheckbox from './SubtopicCheckbox';
 
-const TopicAccordion = ({ topic, onSelectSubtopic }) => {
+const TopicAccordion = ({ topic, onSelectSubtopic, selectedSubtopic, defaultOpen }) => {
     const handleCheckboxChange = (subtopic, completed) => {
         // Handle checkbox change logic, potentially updating Redux store
     };
+    const [isExpanded, setIsExpanded] = useState(defaultOpen);
+    const allSubtopicsCompleted = topic?.subtopics?.every(sub => sub.completed);
+
+    const handleAccordionChange = (event, isExpanded) => {
+        setIsExpanded(isExpanded);
+    };
 
     return (
-        <Accordion className="bg-white shadow-md rounded-lg">
+        <Accordion 
+            className={`bg-white rounded-xl ${allSubtopicsCompleted ? 'bg-blue-200' : ''}`}
+            expanded={isExpanded}
+            onChange={handleAccordionChange}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls={`panel${topic.id}-content`}
@@ -24,7 +33,7 @@ const TopicAccordion = ({ topic, onSelectSubtopic }) => {
                 {topic.subtopics.map(subtopic => (
                     <div
                         key={subtopic.name}
-                        className="flex items-center justify-between"
+                        className={`flex items-center justify-between hover:bg-gray-300 ${selectedSubtopic?.name === subtopic.name ? 'bg-gray-300' : ''}`}
                         onClick={() => onSelectSubtopic(subtopic)}
                     >
                         <SubtopicCheckbox
@@ -35,7 +44,6 @@ const TopicAccordion = ({ topic, onSelectSubtopic }) => {
                             }}
                         />
                         <span className="flex-grow cursor-pointer">{subtopic.name}</span>
-                        
                     </div>
                 ))}
             </AccordionDetails>

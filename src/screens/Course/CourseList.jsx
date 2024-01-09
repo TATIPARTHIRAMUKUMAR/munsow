@@ -23,7 +23,7 @@ const CourseCard = ({ course, onClick }) => {
       onClick={handleCardClick}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={controls}
-      whileHover={{ scale: 1.03 }}
+    //   whileHover={{ scale: 1.03 }}
     >
       <img src={courseImg} alt="Course" className="w-full h-44 object-cover" />
       <div className="p-6">
