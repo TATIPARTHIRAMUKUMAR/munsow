@@ -1303,3 +1303,36 @@ export const delete_course = (id, callback) => {
       });
   };
 };
+
+
+export const track_course = (data, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Updating Course .. please wait", { autoClose: false });
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/update_task`,JSON.stringify(data), {
+         headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+        }
+        else {
+          toast.update(toastId, { render: "Course Updated", type: "success", autoClose: true })
+          callback(resp)
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
+  };
+};

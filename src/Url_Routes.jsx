@@ -37,6 +37,8 @@ import TeacherLogin from "./screens/Login/TeacherLogin";
 import ComingSoonPage from "./screens/ComingSoon";
 import CourseList from "./screens/Course/CourseList";
 import CourseView from "./screens/Course/CourseView/CourseView";
+import StudentCourseView from "./screens/Course/StudentCourseView/CourseView";
+import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseList";
 // import CourseView from "./screens/Course/CourseView";
 
 
@@ -94,6 +96,9 @@ function Url_Routes() {
         <Route exact path="/comingSoon"  element={<HeaderFooterLayout Component={<ComingSoonPage />} />} />
         <Route exact path="/courseList"  element={<HeaderFooterLayout Component={<CourseList />} />} />
         <Route exact path="/courseList/view/:id" element={<HeaderFooterLayout Component={<CourseView />} />} />
+
+        <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />
+        <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
 
       </Routes>
     </BrowserRouter>

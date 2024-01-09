@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadDetailedCourse } from '../../../redux/action';
 import CourseOverview from '../CourseOverview';
 
-const CourseView = () => {
+const StudentCourseView = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { detailedCourse } = useSelector((state) => state?.data);
@@ -43,6 +43,7 @@ const CourseView = () => {
                         const isDefaultOpen = topic.subtopics.some(sub => sub === selectedSubtopic && !sub.completed);
                         return (
                             <TopicAccordion
+                                course_id={detailedCourse?.id}
                                 key={topic.id}
                                 topic={topic}
                                 onSelectSubtopic={setSelectedSubtopic}
@@ -58,4 +59,4 @@ const CourseView = () => {
     );
 };
 
-export default CourseView;
+export default StudentCourseView;

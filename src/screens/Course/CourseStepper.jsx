@@ -8,7 +8,6 @@ import AssignUsers from './AssignUsers';
 import TopicandSubtopic from './Topic/TopicandSubtopic';
 import GLOBAL_CONSTANTS from '../../../GlobalConstants';
 import { useNavigate } from 'react-router-dom';
-// import './Practice.css'; // Make sure your stylesheet is correctly imported
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -179,11 +178,9 @@ const CustomStepperComponent = () => {
 
                     )}
                     {currentStep === 1 && (
-                        // Placeholder for your second component
                         <AssignUsers selectedRows={selectedRows} setSelectedRows={setSelectedRows} courseData={courseData} setCoursedata={setCoursedata} />
                     )}
                     {currentStep === 2 && (
-                        // Placeholder for your third component
                         <TopicandSubtopic topics={topics} setTopics={setTopics} />
                     )}
                 </div>
@@ -202,7 +199,6 @@ const CustomStepperComponent = () => {
                     )}
 
                     {currentStep === steps.length - 1 && (
-                        // This is the final step
                         <Button
                             variant="contained"
                             color="secondary"

@@ -1,4 +1,3 @@
-// SubtopicCard.js
 import React from 'react';
 
 const SubtopicCard = ({ subtopic, onClick }) => {

@@ -273,7 +273,7 @@ export default function HeaderFooterLayout({ Component }) {
         {
           label: "My Courses",
           icon: <FaChartLine size={20} className="" />,
-          route: "/courseList",
+          route: "/studentCourseList",
           subItems: [],
         },
         // {

@@ -1,4 +1,3 @@
-// SubtopicPopover.js
 import React, { forwardRef } from 'react';
 import SubtopicCard from './SubtopicCard';
 

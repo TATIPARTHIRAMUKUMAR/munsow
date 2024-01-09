@@ -16,7 +16,7 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
         overflowY: 'auto',
     },
     '& .MuiBackdrop-root': {
-        backgroundColor: 'rgba(0, 0, 0, 0.9)', // Dark black with opacity
+        backgroundColor: 'rgba(0, 0, 0, 0.9)', 
     },
 }));
 
@@ -57,7 +57,7 @@ const Modal = ({ subtopic, onClose, onNext, showNextButton }) => {
             aria-labelledby="customized-dialog-title"
             TransitionProps={{ timeout: 500 }}
             BackdropProps={{
-                style: { backgroundColor: 'rgba(0, 0, 0, 0.9)' }, // Dark black with opacity
+                style: { backgroundColor: 'rgba(0, 0, 0, 0.9)' }, 
             }}
         >
             <CustomDialogTitle id="customized-dialog-title">
