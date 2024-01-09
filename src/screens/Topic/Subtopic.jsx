@@ -2,16 +2,29 @@ import React, { useEffect, useState } from 'react'
 import xmark from '../../assets/icons/xmark.svg'
 
 function Subtopic({ setTopics, topicIndex, subtopic, setShowModal }) {
-  const [subTopic, setSubTopic] = useState([]);
-  const [subTopicDesc, setSubTopicDesc] = useState([]);
+  const [newSubTopicTitle, setnewSubTopicTitle] = useState('');
+  const [newTopicDesc, setnewTopicDesc] = useState('');
+  const [subTopic, setSubTopic] = useState([]); 
 
   const saveSubtopic = () => {
-    setTopics((prevTopics) => {
-      const newTopics = [...prevTopics];
-      newTopics[topicIndex].subtopics.push(subtopic);
-      return newTopics;
-    });
-    setShowModal(false);
+
+    if (newSubTopicTitle.trim() !== '' || newTopicDesc.trim() !== '') {
+      const newSubtopic = {
+        id: Date.now(),
+        subTitle: newSubTopicTitle,
+        subDesc: newTopicDesc,
+      };
+
+      setSubTopic((prevSubTopic) => [...prevSubTopic, newSubtopic]);
+
+      setTopics((prevTopics) => {
+        const newTopics = [...prevTopics];
+        newTopics[topicIndex].subtopics.push(newSubtopic);
+        return newTopics;
+      });
+
+      setShowModal(false);
+    }    
   };
   
 
@@ -65,8 +78,9 @@ function Subtopic({ setTopics, topicIndex, subtopic, setShowModal }) {
                       type="text"
                       className='w-[50%] p-2 border border-gray-300 rounded-md'
                       required
+                      autoFocus={true}
                       placeholder='Choose a name for your audience'
-                      onChange={(e) => setSubTopic(e.target.value)}
+                      onChange={(e) => setnewSubTopicTitle(e.target.value)}
                     />
                   </div>
                   <div className="flex items-start justify-between mt-5 px-5">
@@ -80,7 +94,7 @@ function Subtopic({ setTopics, topicIndex, subtopic, setShowModal }) {
                       className="block p-2.5 w-full h-[116px] text-balance text-gray-900 rounded border border-neutral-400"
                       required
                       placeholder='Choose a name for your audience'
-                      onChange={(e) => setSubTopicDesc(e.target.value)}
+                      onChange={(e) => setnewTopicDesc(e.target.value)}
                     >
                     </textarea>
                   </div>

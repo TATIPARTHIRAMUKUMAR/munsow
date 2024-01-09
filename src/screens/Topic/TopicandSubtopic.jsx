@@ -1,9 +1,11 @@
-import React, { useState, } from 'react'
+import React, { useEffect, useState, } from 'react'
 import circleplus from '../../assets/icons/circleplus.svg'
 import edit from '../../assets/icons/edit.svg'
 import eye from '../../assets/icons/eye.svg'
 import trash from '../../assets/icons/trash.svg'
 import equals from '../../assets/icons/equals.svg'
+import ArrowDown from '../../assets/icons/ArrowDown.png'
+import ArrowUp from '../../assets/icons/ArrowUp.png'
 
 import Subtopic from './Subtopic'
 import ConformDeleteModal from './ConformDeleteModal'
@@ -16,11 +18,14 @@ function TopicandSubtopic() {
   const [showModal, setShowModal] = useState(false);
   const [topicIndex, setTopicIndex] = useState();
   const [subTopic, setSubTopic] = useState();
+  const [subTopicIndex, setSubTopicIndex] = useState();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteSubModal, setShowDeleteSubModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editTopicId, setEditTopicId] = useState(null);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
+  const [showSubtopic, setShowSubtopic] = useState(false);
+  const [subtopicVisibility, setSubtopicVisibility] = useState([]);
 
   const addSubtopic = (topicIndex, subtopic) => {
     setTopicIndex(topicIndex);
@@ -51,14 +56,14 @@ function TopicandSubtopic() {
         setEditMode(false);
       } else {
         // Create new topic when in create mode
-        setTopics((prevTopics) => [
-          ...prevTopics,
-          {
-            id: prevTopics.length + 1,
-            title: newTopicTitle,
-            subtopics: []
-          }
-        ]);
+        const newTopic = {
+          id: topics.length + 1,
+          title: newTopicTitle,
+          subtopics: [],
+          visibility: [], // Initialize visibility for subtopics
+        };
+        setTopics((prevTopics) => [...prevTopics, newTopic]);
+        setSubtopicVisibility((prevVisibility) => [...prevVisibility, []]);
       }
 
       setNewTopicTitle('');
@@ -83,12 +88,35 @@ function TopicandSubtopic() {
     setShowDeleteModal(true);
   };
   const deleteSubTopic = (subIndex) => {
-    console.log(subIndex);
+    setSubTopicIndex(subIndex);
     setShowDeleteSubModal(true);
   };
-  const handleEyeButtonClick = (index) => {
+  const handleEyeButtonClickTopic = (index) => {
     setHighlightedIndex((prevIndex) => (prevIndex === index ? null : index));
+    
   };
+
+  const handleEyeButtonClickSubtopic = (topicIndex, subIndex) => {
+   
+  };
+
+  const toggleSubtopicVisibility = (topicIndex, subIndex) => {
+    setSubtopicVisibility((prevVisibility) => {
+      const newVisibility = [...prevVisibility];
+      newVisibility[topicIndex] = {
+        ...newVisibility[topicIndex],
+        [subIndex]: !newVisibility[topicIndex][subIndex],
+      };
+      return newVisibility;
+    });
+  };
+
+  useEffect(() => {
+    if (highlightedIndex !== null) {
+      console.log('Updated highlightedIndex:', highlightedIndex);
+    } 
+}, [highlightedIndex]);
+  
   
 
 
@@ -120,7 +148,7 @@ function TopicandSubtopic() {
       <div className="relative w-full mt-10">
         {topics.map((topic, index) => (
           <div key={index} >
-            <div className={`mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8 bg-white rounded-full mt-2 p-4 ${highlightedIndex === index ? 'bg-[rgb(0,0,0,0.12)]' : ''}`}>
+            <div className={`mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8  rounded-full mt-2 p-4 ${highlightedIndex === index ? 'bg-gray-300' : 'bg-white'}`}>
               <div className="inline-flex items-center space-x-2">
                 <button>
                   <img src={equals} alt="" className='w-5 h-5' />
@@ -147,7 +175,7 @@ function TopicandSubtopic() {
                   <img src={edit} alt="edit" className='w-5 h-5' />
                 </button>
                 {/* eye button */}
-                <button onClick={() => handleEyeButtonClick(index)}>
+                <button onClick={() => handleEyeButtonClickTopic(index)}>
                   <img src={eye} alt="eye" className='w-5 h-5' />
                 </button>
 
@@ -166,16 +194,28 @@ function TopicandSubtopic() {
               </div>
             </div>
 
-            <div className="relative w-full px-7 mt-5 mb-5">
+            <div className="relative w-full px-7 mt-2 mb-5">
               {topic.subtopics.map((subtopic, subIndex) => (
-                <div className='mx-auto flex max-w-7xl items-center justify-between px-2 py-2 sm:px-6 lg:px-8 bg-white  rounded-full mt-2 p-4' key={subIndex}>
+                <div key={subIndex}>
+                <div className={`mx-auto flex max-w-7xl items-center justify-between px-2 py-2 sm:px-6 lg:px-8   rounded-full mt-2 p-4 ${highlightedIndex === index ? 'bg-gray-300' : 'bg-white'}`}>
                   <div className='inline-flex items-center space-x-2'>
                     <button className=''>
                       <img src={equals} alt="" className='w-5 h-5' />
                     </button>
-                    <div className="ml-5" >
-                      {subtopic}
+                    <div className="ml-5 flex" >
+                      Sub- {topic.title} {subIndex + 1}
+
+                      {/* show subtopic button */}
+                      <button onClick={() => toggleSubtopicVisibility(index, subIndex)}>                        
+                        {subtopicVisibility[index] && subtopicVisibility[index][subIndex] ? (
+                          <img src={ArrowUp} alt="ArrowUp" className='w-5 h-5 ml-3 mt-1' />
+                        ) : (
+                          <img src={ArrowDown} alt="ArrowDown" className='w-5 h-5 ml-3 mt-1' />
+                        )}
+                      </button>                      
+                      
                     </div>
+                    
                   </div>
 
                   <div className='flex gap-7'>
@@ -184,18 +224,17 @@ function TopicandSubtopic() {
                       <img src={edit} alt="edit" className='w-5 h-5' />
                     </button>
 
-                    <button>
+                    <button onClick={() => handleEyeButtonClickSubtopic(index, subIndex)}>
                       <img src={eye} alt="eye" className='w-5 h-5' />
                     </button>
 
                     {showDeleteSubModal && (
                     <SubTopicDeleteModal
                       subtopic={subtopic}
-                      subIndex={subIndex}
+                      subIndex={subTopicIndex}
                       setShowDeleteSubModal={setShowDeleteSubModal}
                       topicIndex={topicIndex}
                       subtopics={topic.subtopics}
-                      setSubtopics={setTopics}
                       topics={topics}
                       setTopics={setTopics}
                     />
@@ -206,8 +245,25 @@ function TopicandSubtopic() {
                       <img src={trash} alt="trash" className='w-5 h-5' />
                     </button>
                   </div>
+                  
                 </div>
+                {subtopicVisibility[index] && subtopicVisibility[index][subIndex] ? (
+                  <div className='mx-auto flex flex-col max-w-7xl items-start justify-between px-2 py-2 sm:px-6 lg:px-8 bg-white  rounded-xl mt-1 p-4'>
+                    <div className='flex gap-5'>
+                      <span className='font-bold'>Sub Title: </span> 
+                      <span>{subtopic.subTitle}</span>
+                      </div>
+                    <div className='flex mt-2 gap-5 '>
+                      <span className='font-bold'>Description:</span> 
+                      <span className='text-justify'>{subtopic.subDesc}</span>
+                    </div>
+                  </div>
+                ) : null}
+                      
+                </div>
+                
               ))}
+              
             </div>
           </div>
 
@@ -221,8 +277,7 @@ function TopicandSubtopic() {
             <input
                 className='w-auto ml-5 pl-3 mt-2 mb-2'
                 required
-                autoFocus={true}
-                
+                autoFocus={true}                
                 type="text"
                 placeholder="Enter Topic Title"
                 value={newTopicTitle}
