@@ -1271,3 +1271,35 @@ export const course_content = (data, callback) => {
       });
   };
 };
+
+export const delete_course = (id, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Deleting Course .. please wait", { autoClose: false });
+    axios
+      .delete(`${GLOBAL_CONSTANTS.backend_url}course/delete/${id}`, {
+         headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+        }
+        else {
+          toast.update(toastId, { render: "Course Deleted", type: "success", autoClose: true })
+          callback(resp)
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
+  };
+};

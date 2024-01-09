@@ -270,6 +270,12 @@ export default function HeaderFooterLayout({ Component }) {
           route: "/report",
           subItems: [],
         },
+        {
+          label: "My Courses",
+          icon: <FaChartLine size={20} className="" />,
+          route: "/courseList",
+          subItems: [],
+        },
         // {
         //   label: "Notifications",
         //   icon: <FaBell size={20} className="" />,

@@ -120,10 +120,10 @@ const CustomStepperComponent = () => {
                                     fontWeight: 'bold',
                                 }}
                             >
-                                Back
+                                Course List
                             </Button>
                        
-                        <p className="text-xl font-semibold mt-5 mx-5 ">Course Creation</p>
+                        {/* <p className="text-xl font-semibold mt-5 mx-5 ">Course Creation</p> */}
                         </div>
                     </div>
                     <div className='w-4/5'>
