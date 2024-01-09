@@ -36,7 +36,8 @@ import CustomStepperComponent from "./screens/Course/CourseStepper";
 import TeacherLogin from "./screens/Login/TeacherLogin";
 import ComingSoonPage from "./screens/ComingSoon";
 import CourseList from "./screens/Course/CourseList";
-import CourseView from "./screens/Course/CourseView";
+import CourseView from "./screens/Course/CourseView/CourseView";
+// import CourseView from "./screens/Course/CourseView";
 
 
 function Url_Routes() {

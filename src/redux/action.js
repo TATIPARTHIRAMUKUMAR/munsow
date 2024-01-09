@@ -1157,6 +1157,25 @@ export const loadcourses = () => {
   };
 };
 
+const getCourseDetails = (data) => ({
+  type: types.DETAILED_COURSES,
+  payload: data,
+});
+
+export const loadDetailedCourse = (id) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}course/get/${id}`, {  headers })
+      .then((resp) => {
+        dispatch(getCourseDetails(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 export const create_course = (data, callback) => {
   return function () {
     var headers = {
