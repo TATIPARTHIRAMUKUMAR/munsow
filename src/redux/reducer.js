@@ -39,6 +39,9 @@ const initialState = {
   summaryData:{},
   detailedCourse:{},
   courses:[],
+  assignedUsers:[],
+  unAssignedUsers:[],
+
   loading: false
 };
 
@@ -214,6 +217,12 @@ const DataReducers = (state = initialState, action) => {
     case types.USERS_LIST_BY_DEPARTMENT: return{
       ...state,
       userListByDepartment: action.payload.data,
+      loading:false
+    }
+    case types.ASSIGNED_USERS: return{
+      ...state,
+      assignedUsers: action.payload?.data?.assined_users,
+      unAssignedUsers:action.payload?.data?.unassined_users,
       loading:false
     }
     case types.COURSES: return{

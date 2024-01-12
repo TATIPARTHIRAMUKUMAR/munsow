@@ -112,7 +112,7 @@ const CourseView = () => {
 
     return (
         <div className="container mx-auto py-8 px-4 md:px-0">
-            <CourseOverview course={detailedCourse} />
+            <CourseOverview course={detailedCourse} show={true}/>
             {detailedCourse?.content_data?.map((topic) => (
                 <TopicAccordion
                     key={topic.id}

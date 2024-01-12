@@ -39,6 +39,7 @@ import CourseList from "./screens/Course/CourseList";
 import CourseView from "./screens/Course/CourseView/CourseView";
 import StudentCourseView from "./screens/Course/StudentCourseView/CourseView";
 import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseList";
+import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
 
 
@@ -99,6 +100,7 @@ function Url_Routes() {
 
         <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />
         <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
+        <Route exact path="/studentCourseList/edit/:id" element={<HeaderFooterLayout Component={<CourseEdit />} />} />
 
       </Routes>
     </BrowserRouter>

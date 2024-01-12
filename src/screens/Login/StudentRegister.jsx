@@ -189,7 +189,7 @@ const StudentRegister = () => {
       address: mainData?.address,
       institution_id: mainData?.institution?.value,
       password: mainData?.password,
-      course: mainData?.course?.label,
+      course_id: mainData?.course?.value,
     };
     dispatch(user_signup(payload, (test) => {
       setMainData({});

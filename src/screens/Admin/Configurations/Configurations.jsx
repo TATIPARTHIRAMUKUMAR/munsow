@@ -47,13 +47,19 @@ const Configurations = () => {
     { label: 'Institution', key: 'institution' },
   ];
 
+  const generateDownloadUrl = (mode) => {
+    // Add your logic to generate the download URL with the access token
+    const downloadUrl = `${GLOBAL_CONSTANTS.backend_url}institution/download_configurations/mode=${mode}?access_token=${GLOBAL_CONSTANTS?.token}`;
+    return downloadUrl;
+  };
+
   return (
     <div className="p-4">
       {configurationOptions.map(option => (
         <div key={option.key} className="mb-8 bg-white shadow-md rounded-lg p-4">
           <div className="flex justify-between items-center mb-4">
             <span className="text-xl font-semibold">{option.label}</span>
-            <a href={`${GLOBAL_CONSTANTS.backend_url}institution/download_configurations?mode=${option.key}`}>
+            <a href={generateDownloadUrl(option.key)}>
               <Button
                 endIcon={<CloudDownloadOutlinedIcon />}
                 variant="outlined"

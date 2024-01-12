@@ -17,9 +17,9 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
     );
 });
 
-const AssignUsers = ({ selectedRows, setSelectedRows, courseData, setCourseData }) => {
-    const { studentsList } = useSelector(state => state?.data);
-    const [data, setData] = useState(studentsList?.data);
+const AssignTable = ({ selectedRows, setSelectedRows, courseData, setCourseData, studentsList }) => {
+    console.log("studentsList",studentsList)
+    const [data, setData] = useState(studentsList);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -61,29 +61,15 @@ const AssignUsers = ({ selectedRows, setSelectedRows, courseData, setCourseData 
 
     useEffect(() => {
         // Map the indices from selectedRowIds to actual row data
-        const selectedDataRows = Object?.keys(selectedRowIds)
+        const selectedDataRows = Object.keys(selectedRowIds || {})
             .filter(key => selectedRowIds[key])
             .map(key => data[parseInt(key, 10)]);
 
         // Extract IDs from these rows
-        const selectedIds = selectedDataRows?.map(row => row.id);
+        const selectedIds = selectedDataRows.map(row => row.id);
         setSelectedRows(selectedIds);
         console.log("Selected Rows IDs:", selectedIds, courseData);
     }, [selectedRowIds, data, setSelectedRows]);
-
-    const AssignUsers = () => {
-
-        const selectedDataRows = Object.keys(selectedRowIds)
-            .filter(key => selectedRowIds[key])
-            .map(key => data[parseInt(key, 10)]);
-
-        const selectedIds = selectedDataRows.map(row => row.id);
-        setSelectedRows(selectedIds);
-        
-        console.log("Selected Rows IDs:", selectedIds, courseData);
-
-    };
-
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -99,12 +85,13 @@ const AssignUsers = ({ selectedRows, setSelectedRows, courseData, setCourseData 
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            {/* <div>test</div> */}
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader {...getTableProps()}>
                     <TableHead>
                         {headerGroups.map(headerGroup => (
                             <TableRow {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup?.headers.map(column => (
+                                {headerGroup?.headers?.map(column => (
                                     <TableCell {...column.getHeaderProps()}>
                                         {column.render('Header')}
                                     </TableCell>
@@ -131,7 +118,7 @@ const AssignUsers = ({ selectedRows, setSelectedRows, courseData, setCourseData 
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={data.length}
+                count={data?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
@@ -141,4 +128,4 @@ const AssignUsers = ({ selectedRows, setSelectedRows, courseData, setCourseData 
     );
 };
 
-export default AssignUsers;
+export default AssignTable;

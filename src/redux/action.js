@@ -1176,6 +1176,26 @@ export const loadDetailedCourse = (id) => {
   };
 };
 
+const getAssignedUsers = (data) => ({
+  type: types.ASSIGNED_USERS,
+  payload: data,
+});
+
+export const loadAssignedUsers = (id) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}course/get_users/${id}`, {  headers })
+      .then((resp) => {
+        dispatch(getAssignedUsers(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+
 export const create_course = (data, callback) => {
   return function () {
     var headers = {
@@ -1323,6 +1343,38 @@ export const track_course = (data, callback) => {
         }
         else {
           toast.update(toastId, { render: "Course Updated", type: "success", autoClose: true })
+          callback(resp)
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
+  };
+};
+
+export const updateUsers = (url,data, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Updating Users .. please wait", { autoClose: false });
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}${url}`,JSON.stringify(data), {
+         headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+        }
+        else {
+          toast.update(toastId, { render: "Users Updated", type: "success", autoClose: true })
           callback(resp)
         }
       })

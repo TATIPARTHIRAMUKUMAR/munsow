@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
 import GLOBAL_CONSTANTS from '../../../GlobalConstants';
 
-const CourseOverview = ({ course }) => {
+const CourseOverview = ({ course,show,text }) => {
+    console.log("show",show)
     const navigate = useNavigate();
     const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -59,14 +60,14 @@ const CourseOverview = ({ course }) => {
                         fontWeight: 'bold',
                     }}
                 >
-                    Back
+                    {text}
                 </Button>
             </div>
             <div className='pl-20'>
                 <h1 className="text-4xl font-bold text-gray-800 mb-4">{course?.name}</h1>
                 <p className="text-gray-600">{course?.description}</p>
             </div>
-            {GLOBAL_CONSTANTS?.user_cred?.role_name == "Student" && (
+            {GLOBAL_CONSTANTS?.user_cred?.role_name === "Student" && (
                 <div className="flex items-center ml-auto">
                     <Tooltip title={tooltipContent} open={tooltipOpen} onClose={handleCloseTooltip} arrow>
                         <div onClick={handleProgressClick}>
@@ -85,6 +86,24 @@ const CourseOverview = ({ course }) => {
                     </Tooltip>
                     <span>{`${progress}% Complete`}</span>
                 </div>
+            )}
+            {(GLOBAL_CONSTANTS?.user_cred?.role_name === "Teacher" && show==true) && (
+                <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                        marginLeft: 'auto',
+                        marginRight: '1rem',
+                        textTransform: 'none',
+                        fontSize: '1rem',
+                        fontWeight: 'bold',
+                    }}
+                    onClick={() => {
+                        navigate(`/studentCourseList/edit/${course?.id}`);
+                    }}
+                >
+                    Edit Assigned Users
+                </Button>
             )}
         </div>
     );

@@ -27,7 +27,7 @@ const CourseView = () => {
 
     return (
         <div className="p-4">
-            <CourseOverview course={detailedCourse} />
+            <CourseOverview course={detailedCourse} show={true} text={"Back"}/>
             {/* <h1 className="text-2xl font-bold mb-4">{detailedCourse?.name}</h1> */}
             <div className="flex w-full"> 
                 <div className="w-4/6 p-4  overflow-y-auto rounded-lg bg-white mr-4" > 
