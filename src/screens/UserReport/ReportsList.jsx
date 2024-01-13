@@ -29,7 +29,7 @@ export default function ReportIndex() {
     const navigate = useNavigate();
 
 
-    const ReportCards = ({ id, role, level, report_ready, report_data, skill_type, skills_list, generated, company }) => {
+    const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company }) => {
 
         const viewReport = (data) => {
             console.log("d", data)
@@ -67,7 +67,7 @@ export default function ReportIndex() {
                     <div className="py-2 w-full">
                         {report_ready === "true" ? (
                             <>
-                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] " endIcon={<ArrowForwardIcon />} onClick={() => { viewReport(report_data) }} > View Report</Button>
+                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] " endIcon={<ArrowForwardIcon />} onClick={() => { viewReport({...report_data, ...result_data}) }} > View Report</Button>
                             </>
                         ) : (
                             <div className="flex items-center justify-center text-orange-300">
@@ -115,7 +115,7 @@ export default function ReportIndex() {
                             }}
                         >
                             {lessonsList?.map((o, index) => (
-                                <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json == null ? {} : o?.report_json} report_ready={o?.report_json == null ? "false" : "true"} skills_list={o?.report_json?.hard_and_soft_skill_dic} level={o?.level} generated={o?.updated_date} key={index} company={o?.report_json?.interview_company} />
+                                <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json == null ? {} : o?.report_json} result_data={o?.result_json == null ? {} : o?.result_json} report_ready={o?.report_json == null ? "false" : "true"} skills_list={o?.report_json?.hard_and_soft_skill_dic} level={o?.level} generated={o?.updated_date} key={index} company={o?.report_json?.interview_company} />
                             ))}
                         </div>
                     )}

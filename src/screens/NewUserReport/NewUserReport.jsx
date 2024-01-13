@@ -31,6 +31,9 @@ const NewUserReport = () => {
     setReportData(userReport);
   }, [userReport])
 
+  console.log(userReport, 'userreport') // use this data to show in reports
+
+  
   // const handleGeneratePdf = async () => {
   //   setLoading(true);
   //   const pdfContainer = reportTemplateRef.current;
@@ -114,8 +117,10 @@ const NewUserReport = () => {
             />
           </div>
           <div>
+            {/* use this Interview Score By Category key to show   */}
             <SummarySnapshot/>
           </div>
+          {/* for presentation and grooming use behavioral_presentation_and_grooming key to show data  */}
           <div>
             <Presentation
               head="Presentation and Grooming"
@@ -124,6 +129,9 @@ const NewUserReport = () => {
               scoreclr="text-green"
             />
           </div>
+
+          {/* report overview is Interview Score By Category key use this and loop accordingly and pass data as props 
+ */}
           <div>
             <ReportOverview
               head="Behavioural Analysis"
@@ -148,6 +156,7 @@ const NewUserReport = () => {
               scoreclr="text-red"
             />
           </div>
+          {/* deep dive data will come form interview_score_by_category  loop ionterview_score_by_category.data it and pass data as props */}
           <div>
             <DeepDive
               head="Behavioural"
