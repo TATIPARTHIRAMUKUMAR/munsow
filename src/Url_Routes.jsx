@@ -38,6 +38,7 @@ import ComingSoonPage from "./screens/ComingSoon";
 import CourseList from "./screens/Course/CourseList";
 import CourseView from "./screens/Course/CourseView/CourseView";
 // import CourseView from "./screens/Course/CourseView";
+import NewUserReport from "./screens/NewUserReport/NewUserReport";
 
 
 function Url_Routes() {
@@ -69,7 +70,7 @@ function Url_Routes() {
 
               </> : <>
                 <Route exact path="/report" element={<HeaderFooterLayout Component={<ReportIndex />} />} />
-                <Route exact path="/reportView" element={<HeaderFooterLayout Component={<UserReport />} />} />
+                <Route exact path="/reportView" element={<HeaderFooterLayout Component={<NewUserReport />} />} />
                 <Route exact path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
                 <Route exact path="/interview" element={<HeaderFooterLayout Component={<LoadQuestionsData />} />} />
                 <Route exact path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
