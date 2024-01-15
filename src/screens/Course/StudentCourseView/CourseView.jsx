@@ -101,12 +101,12 @@ const StudentCourseView = () => {
                     <div className="flex items-center justify-end mb-4">
                         {!isSpeaking ? (
                             <PlayCircleOutlineIcon
-                                style={{ cursor: 'pointer', fontSize: '4rem' }}
+                                style={{ cursor: 'pointer', fontSize: '4rem',color:"blue" }}
                                 onClick={() => handleSpeak(selectedSubtopic?.content)}
                             />
                         ) : (
                             <StopIcon
-                                style={{ cursor: 'pointer', fontSize: '4rem' }}
+                                style={{ cursor: 'pointer', fontSize: '4rem',color:"blue" }}
                                 onClick={handleStop}
                             />
                         )}
