@@ -2,36 +2,36 @@ import React from "react";
 
 const Presentation = (props) => {
 
-  const { head, score, bgcolor, scoreclr } = props;
+  const { overallScore, eyeContact, posture, grooming, handGest, facialExpr, bgAndLight, audioQlty, devicePos } = props;
 
   return (
     
     <>
       <div className="mx-6 my-6">
         <div className="flex justify-around items-center pb-8 munsow-dark-bg">
-          <h1 className="md:ms-4 text-4xl font-semibold text-white">{head}</h1>
+          <h1 className="md:ms-4 text-4xl font-semibold text-white">Presentation and Grooming</h1>
           <div className="flex flex-col bg-white p-8 rounded-b-3xl">
-            <span className={`flex text-4xl font-bold justify-center ${scoreclr}`}>{score}</span>
+            <span className="flex text-4xl font-bold justify-center text-red">{overallScore}</span>
             <span className="flex justify-center text-lg font-semibold text-purple">Overall Score</span>
           </div>
         </div>
         <div className="lg:flex sm:block p-6 items-stretch">
 
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-red">3/10</h1>
+            <h1 className="text-center text-4xl font-bold text-red">{eyeContact}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Eye contact</h3>
             <p className="text-purple">Arpitha could benefit from maintaining more consistent eye
               contact, which can establish trust and foster a sense of
               connection with the interviewer.</p>
           </div>
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-green">8/10</h1>
+            <h1 className="text-center text-4xl font-bold text-green">{posture}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Posture</h3>
             <p className="text-purple">While mostly upright and engaged, there were moments of slouching
               which could indicate a lack of confidence or interest.</p>
           </div>
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-green">6/10</h1>
+            <h1 className="text-center text-4xl font-bold text-green">{grooming}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Grooming</h3>
             <p className="text-purple">Arpitha was well-dressed and professional, in line with Deloitte's
               standards.</p>
@@ -42,14 +42,14 @@ const Presentation = (props) => {
         <div className="lg:flex sm:block p-6 items-stretch">
 
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-red">2/10</h1>
+            <h1 className="text-center text-4xl font-bold text-red">{handGest}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Hand Gestures</h3>
             <p className="text-purple">Hand gestures can add value to verbal communication, but excessive
               or nervous gesturing can be distracting. Arpitha should aim for
               balanced and meaningful hand movements to underline key points.</p>
           </div>
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-green">8/10</h1>
+            <h1 className="text-center text-4xl font-bold text-green">{facialExpr}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Facial Expressions</h3>
             <p className="text-purple">Arpitha has a pleasant facial expression that indicates her
               interest and engagement in the conversation. However she could
@@ -57,7 +57,7 @@ const Presentation = (props) => {
               agreement with the interviewer.</p>
           </div>
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-green">6/10</h1>
+            <h1 className="text-center text-4xl font-bold text-green">{bgAndLight}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Background and Lighting</h3>
             <p className="text-purple">The background was clean and uncluttered, which is ideal for a
               video interview. However, lighting could be improved. Frontal,
@@ -70,14 +70,14 @@ const Presentation = (props) => {
         <div className="lg:flex sm:block justify-center p-6 items-stretch">
 
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-red">9/10</h1>
+            <h1 className="text-center text-4xl font-bold text-red">{audioQlty}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Audio Quality</h3>
             <p className="text-purple">The audio was clear and without significant background noise,
               which is essential for effective communication during the
               interview.</p>
           </div>
           <div className="p-4 lg:w-4/12 sm:w-full">
-            <h1 className="text-center text-4xl font-bold text-green">10/10</h1>
+            <h1 className="text-center text-4xl font-bold text-green">{devicePos}/10</h1>
             <h3 className="text-center text-lg font-semibold text-purple">Device Position</h3>
             <p className="text-purple">The device from which Arpitha was conducting the interview was
               placed at a proper angle, allowing a clear view of her face and

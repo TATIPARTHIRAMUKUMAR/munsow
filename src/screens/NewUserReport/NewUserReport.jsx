@@ -24,6 +24,7 @@ const NewUserReport = () => {
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState({});
   const { userReport } = useSelector(state => state?.data)
+  const componentColors = ["bg-purple", "bg-green", "bg-orange"];
 
   const navigate = useNavigate();
 
@@ -32,6 +33,7 @@ const NewUserReport = () => {
   }, [userReport])
 
   console.log(userReport, 'userreport') // use this data to show in reports
+  // console.log(userReport?.interview_score_by_category.data)
 
   
   // const handleGeneratePdf = async () => {
@@ -94,90 +96,84 @@ const NewUserReport = () => {
     <div className="body flex-grow-1 overflow-y-scroll">
       <div className="container mx-auto">
         {/* Back button */}
-        <button
-          className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
-          onClick={() => navigate(-1)}
-        >
+        <button         
+         className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
+         onClick={() => navigate(-1)}>
           ← View All Reports
         </button>
         <div ref={reportTemplateRef} className="bg-white">
-          {/* <div>
-            <UserReportTitle userData={reportData} />
-          </div>
-          <div>
-            <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming} />
-          </div> */}
-
           
           <div>
             <Intro
               position="HR Transformation Consultant"
               company="Deloitte"
-              user="Manda Arpitha"
-            />
-          </div>
-          <div>
-            {/* use this Interview Score By Category key to show   */}
-            <SummarySnapshot/>
-          </div>
-          {/* for presentation and grooming use behavioral_presentation_and_grooming key to show data  */}
-          <div>
-            <Presentation
-              head="Presentation and Grooming"
-              score="8/10"
-              bgcolor="bg-orange" 
-              scoreclr="text-green"
+              user={userReport?.user_name}
             />
           </div>
 
-          {/* report overview is Interview Score By Category key use this and loop accordingly and pass data as props 
- */}
           <div>
-            <ReportOverview
-              head="Behavioural Analysis"
-              score="8/10"
-              bgcolor="bg-purple" 
-              scoreclr="text-green"
+            <SummarySnapshot
+              title={userReport?.interview_score_by_category.data[0].main_title}
+              interview_score_by_category={userReport?.interview_score_by_category}
+            />
+          </div> 
+    
+          <div>
+            <Presentation              
+              overallScore="8/10"
+              eyeContact={userReport?.behavioral_presentation_and_grooming.data[0].secured_marks}
+              posture={userReport?.behavioral_presentation_and_grooming.data[1].secured_marks}
+              grooming={userReport?.behavioral_presentation_and_grooming.data[2].secured_marks}
+              handGest={userReport?.behavioral_presentation_and_grooming.data[3].secured_marks}
+              facialExpr={userReport?.behavioral_presentation_and_grooming.data[4].secured_marks}
+              bgAndLight={userReport?.behavioral_presentation_and_grooming.data[5].secured_marks}
+              audioQlty={userReport?.behavioral_presentation_and_grooming.data[6].secured_marks}
+              devicePos={userReport?.behavioral_presentation_and_grooming.data[7].secured_marks}
             />
           </div>
+         
           <div>
-            <ReportOverview
-              head="Technical Knowledge"
-              score="6/10"
-              bgcolor="bg-green"
-              scoreclr="text-orange"
-            />
+            {userReport?.interview_score_by_category.data.map((category, index) => (
+              <ReportOverview
+              key={index} // Ensure each component has a unique key
+              head={category.main_title}
+              overallScore={category.secured_marks}
+              bgcolor={componentColors[index % componentColors.length]}
+              scoreclr={`text-${index % 2 === 0 ? "green" : "red"}`} 
+              title1={category.sub_segements[0].title}
+              score1={category.sub_segements[0].secured_marks}
+              desc1={category.sub_segements[0].notes}
+              title2={category.sub_segements[1].title}
+              score2={category.sub_segements[1].secured_marks}
+              desc2={category.sub_segements[1].notes}
+              title3={category.sub_segements[2].title}
+              score3={category.sub_segements[2].secured_marks}
+              desc3={category.sub_segements[2].notes}
+              title4={category.sub_segements[3].title}
+              score4={category.sub_segements[3].secured_marks}
+              desc4={category.sub_segements[3].notes}
+              />
+            ))}
           </div>
+
           <div>
-            <ReportOverview
-              head="Practical Thinking"
-              score="3/10"
-              bgcolor="bg-orange" 
-              scoreclr="text-red"
-            />
+            {userReport?.interview_score_by_category.data[2].interview_questions.map((category, index) => (
+              <DeepDive
+              key={index} 
+              // head={category.title}
+              // overallScore={category.secured_marks}
+              bgcolor={componentColors[index % componentColors.length]} 
+              ques={category.question}
+              candidateAns={category.answer}
+              sampleAns={category.suggested_answer}
+              />
+            ))}
           </div>
-          {/* deep dive data will come form interview_score_by_category  loop ionterview_score_by_category.data it and pass data as props */}
-          <div>
-            <DeepDive
-              head="Behavioural"
-              bgcolor="bg-purple" 
-            />
-          </div>
-          <div>
-            <DeepDive
-              head="Technical"
-              bgcolor="bg-green" 
-            />
-          </div>
-          <div>
-            <DeepDive
-              head="Practical Thinking"
-              bgcolor="bg-orange" 
-            />
-          </div>
+
           <div>
             <CompanyAndRoleSummary/> 
           </div>
+
           <div>
             <Extro/>
           </div>

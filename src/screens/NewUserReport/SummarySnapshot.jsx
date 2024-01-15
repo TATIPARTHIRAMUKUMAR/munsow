@@ -1,7 +1,44 @@
 
+const componentColors = ["bg-purple", "bg-green", "bg-orange"];
 
-const SummarySnapshot = () => {
+const SkillCategory = ({ title, scores, bgcolor, overallScore }) => {
+  const progressBarWidth = (overallScore / 10) * 100; // Calculate percentage width based on overallScore
+
+  return(
+    <div className={`mx-8 my-8 rounded-3xl py-6 ${bgcolor}`}>
+    <div className="flex mb-8 justify-around items-center">
+    <div>
+      <h1 className="text-xl font-bold text-purple">{title}</h1>
+    </div>
+    <div className="rounded-full bg-white w-48 p-4">
+      <div class="relative pt-1"> 
+        <div class="flex mb-2 items-center justify-start">
+          <div class="w-full bg-gray-300 rounded-full">
+            <div style={{ width: `${progressBarWidth}%` }} class="text-center text-xs text-white bg-rose-500 rounded-full">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  <div className="lg:columns-2 sm:columns-1">
+      {scores.map((score, index) => (
+        <div className="flex justify-center" key={index}>
+          <span className="flex items-center justify-start gap-2 p-2">
+            <h1 className={`text-xl font-bold ${score.color}`}>{score.value}/10</h1>
+            <p className="text-purple font-bold underline">{score.title}</p>
+          </span>
+        </div>
+      ))}
+  </div>
+  </div>
+  );
+};
+
+
+const SummarySnapshot = (props) => {
   // const completionPercentage = 50;
+
+  const { interview_score_by_category } = props;
   
   return (
 
@@ -21,10 +58,10 @@ const SummarySnapshot = () => {
         <div className="munsow-dark-bg text-white py-1">
           <h2 className="text-center font-bold">Munsow Interview Classification Highlights</h2>
         </div>
-        <div className="mx-8 my-8 rounded-3xl py-6 bg-purple">
+        {/* <div className="mx-8 my-8 rounded-3xl py-6 bg-purple">
           <div className="flex mb-8 justify-around items-center">
             <div>
-              <h1 className="text-xl font-bold text-purple">Behavioural Analysis</h1>
+              <h1 className="text-xl font-bold text-purple">{head}</h1>
             </div>
             <div className="rounded-full bg-white w-48 p-4">
               <div class="relative pt-1"> 
@@ -38,69 +75,30 @@ const SummarySnapshot = () => {
           </div>
           <div className="flex justify-around">
             <div className="">
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">2/10</h1><p className="text-purple font-bold underline">Resilience</p></span>
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-green font-bold">9/10</h1><p className="text-purple font-bold underline">Adaptability</p></span>
+              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">{score1}/10</h1><p className="text-purple font-bold underline">{title1}</p></span>
+              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-green font-bold">{score2}/10</h1><p className="text-purple font-bold underline">{title2}</p></span>
             </div>
             <div className="">
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-orange font-bold">7/10</h1><p className="text-purple font-bold underline">Teamwork</p></span>
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">5/10</h1><p className="text-purple font-bold underline">Initiative</p></span>
+              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-orange font-bold">{score3}/10</h1><p className="text-purple font-bold underline">{title3}</p></span>
+              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">{score4}/10</h1><p className="text-purple font-bold underline">{title4}</p></span>
             </div>
           </div>
-        </div>
-
-        <div className="mx-8 my-8 rounded-3xl py-6 bg-green">
-          <div className="flex mb-8 justify-around items-center">
-            <div>
-              <h1 className="text-xl font-bold text-purple">Technical Knowledge</h1>
-            </div>
-            <div className="rounded-full bg-white w-48 p-4">            
-              <div class="relative pt-1"> 
-                <div class="flex mb-2 items-center justify-start">
-                  <div class="w-full bg-gray-300 rounded-full">
-                    <div style={{width: "50%"}} class=" text-center text-xs text-white bg-rose-500 rounded-full">&nbsp;</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-around">
-            <div className="">
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">2/10</h1><p className="text-purple font-bold underline">Technical Skills</p></span>
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-green font-bold">9/10</h1><p className="text-purple font-bold underline">Leadership Skills</p></span>
-            </div>
-            <div className="">
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-orange font-bold">7/10</h1><p className="text-purple font-bold underline">Communication Skills</p></span>
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">5/10</h1><p className="text-purple font-bold underline">Initiative</p></span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-8 my-8 rounded-3xl py-6 bg-orange">
-          <div className="flex mb-8 justify-around items-center">
-            <div>
-              <h1 className="text-xl font-bold text-purple">Practical Thinking</h1>
-            </div>
-            <div className="rounded-full bg-white w-48 p-4">
-              <div class="relative pt-1"> 
-                <div class="flex mb-2 items-center justify-start">
-                  <div class="w-full bg-gray-300 rounded-full">
-                    <div style={{width: "50%"}} class=" text-center text-xs text-white bg-rose-500 rounded-full">&nbsp;</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-around">
-            <div className="">
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">2/10</h1><p className="text-purple font-bold underline">Problem Solving</p></span>
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-green font-bold">9/10</h1><p className="text-purple font-bold underline">Initiative</p></span>
-            </div>
-            <div className="">
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-orange font-bold">7/10</h1><p className="text-purple font-bold underline">Decision Making</p></span>
-              <span className="flex items-center gap-2 p-2"><h1 className="text-xl text-red font-bold">5/10</h1><p className="text-purple font-bold underline">Project Management</p></span>
-            </div>
-          </div>
-        </div>
+        </div> */}
+        {interview_score_by_category.data.map((category, index) => (
+          <SkillCategory
+            key={index}
+            title={category.main_title}
+            bgcolor={componentColors[index % componentColors.length]}
+            overallScore={interview_score_by_category.data[index].secured_marks}
+            scores={[
+              { title: category.sub_segements[0].title, value: category.sub_segements[0].secured_marks, color: 'text-red' },
+              { title: category.sub_segements[1].title, value: category.sub_segements[1].secured_marks, color: 'text-green' },
+              { title: category.sub_segements[2].title, value: category.sub_segements[2].secured_marks, color: 'text-orange' },
+              { title: category.sub_segements[3].title, value: category.sub_segements[3].secured_marks, color: 'text-red' },
+              // Add more scores as needed
+            ]}
+          />
+        ))}
       </div>
     </>
   );

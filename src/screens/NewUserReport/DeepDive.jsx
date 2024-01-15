@@ -4,7 +4,7 @@ import { FaRegThumbsDown } from "react-icons/fa";
 
 const DeepDive = (props) => {
 
-  const { head, bgcolor } = props;
+  const { head, bgcolor, ques, candidateAns, sampleAns } = props;
 
   return (
 
@@ -14,28 +14,16 @@ const DeepDive = (props) => {
         <h1 className={`text-4xl font-semibold text-purple p-8`}>{head} Questions Deep Dive</h1>
       </div>
       <div className={`mb-8 ${bgcolor}`}>
-        <h1 className="text-xl font-semibold text-purple p-5">Explain the Concepts of ROI</h1>
+        <h1 className="text-xl font-semibold text-purple p-5">{ques}</h1>
       </div>
       <div className="lg:columns-2 sm:columns-1">
         <div className="p-6">
-          <h3 className="text-lg font-semibold italic text-purple">Arpitha's Answer:</h3>
-          <p className="text-purple">Stop in budgeting basically return on investment is nothing but the
-              returns which we got after a particular investment for suppose if we
-              invest 1 lakh on land or property for setting up the business before
-              going to through the process if we calculate the Returns on how much
-              money we get after testing one it is called as the concept of
-              budgeting</p>
+          <h3 className="text-lg font-semibold italic text-purple">Candidate's Answer:</h3>
+          <p className="text-purple">{candidateAns}</p>
         </div>
-        <div className="p-6">
+        <div className="p-6 flex flex-col">
           <h3 className="text-lg font-semibold italic text-purple">Sample Answer for reference</h3>
-          <p className="text-purple">"At my previous job, we faced a situation where a critical HR
-              transformation project was at risk due to unexpected budget cuts.
-              Instead of giving up, I took the initiative to reassess our
-              resources and recalibrate our project plan. We streamlined our
-              activities, prioritized tasks more effectively, and managed to
-              complete the project successfully under budget. This experience has
-              honed my resilience and ability to adapt to challenging
-              circumstances."</p>
+          <p className="text-purple">{sampleAns}</p>
         </div>
       </div>
       <div insights className="p-6">
