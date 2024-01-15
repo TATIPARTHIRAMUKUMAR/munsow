@@ -6,6 +6,8 @@ import { loadDetailedCourse } from '../../../redux/action';
 import CourseOverview from '../CourseOverview';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import StopIcon from '@mui/icons-material/Stop';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
 const StudentCourseView = () => {
     const { id } = useParams();
@@ -100,13 +102,13 @@ const StudentCourseView = () => {
                 <div className="w-2/6">
                     <div className="flex items-center justify-end mb-4">
                         {!isSpeaking ? (
-                            <PlayCircleOutlineIcon
-                                style={{ cursor: 'pointer', fontSize: '4rem',color:"blue" }}
+                            <VolumeOffIcon
+                                style={{ cursor: 'pointer', fontSize: '3rem',color:"#886cc0" }}
                                 onClick={() => handleSpeak(selectedSubtopic?.content)}
                             />
                         ) : (
-                            <StopIcon
-                                style={{ cursor: 'pointer', fontSize: '4rem',color:"blue" }}
+                            <VolumeUpIcon
+                                style={{ cursor: 'pointer', fontSize: '3rem',color:"#886cc0" }}
                                 onClick={handleStop}
                             />
                         )}
