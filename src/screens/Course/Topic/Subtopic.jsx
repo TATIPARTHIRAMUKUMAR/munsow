@@ -74,7 +74,7 @@ function Subtopic({ setTopics, topicIndex, subtopic, setShowModal,subIndex }) {
                       type="text"
                       className='w-[50%] p-2 border border-gray-300 rounded-md'
                       required
-                      placeholder='Choose a name for your audience'
+                      placeholder='Enter the name of the sub topic'
                       onChange={(e) => setSubTopic(e.target.value)}
                     />
                   </div>
