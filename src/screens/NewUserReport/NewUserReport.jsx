@@ -157,7 +157,7 @@ const NewUserReport = () => {
           </div>
 
           <div>
-            {userReport?.interview_score_by_category.data[2].interview_questions.map((category, index) => (
+            {userReport?.interview_score_by_category?.data[2]?.interview_questions?.map((category, index) => (
               <DeepDive
               key={index} 
               // head={category.title}
