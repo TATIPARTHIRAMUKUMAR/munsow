@@ -28,12 +28,11 @@ const UserReport = () => {
 
   const navigate = useNavigate();
 
-
-
-
   useEffect(() => {
     setReportData(userReport);
   }, [userReport])
+
+  console.log(userReport, 'userReport')
 
   const handleGeneratePdf = async () => {
     setLoading(true);
