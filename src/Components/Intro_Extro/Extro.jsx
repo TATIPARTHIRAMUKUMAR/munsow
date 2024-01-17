@@ -1,5 +1,5 @@
 import React from "react";
-import mailIcon from "./../../assets/Images/mailicon.jpg";
+// import mailIcon from "./../../assets/Images/mailicon.jpg";
 // import globe from "./../../assets/Images/globe.png";
 
 const Extro = () => {
