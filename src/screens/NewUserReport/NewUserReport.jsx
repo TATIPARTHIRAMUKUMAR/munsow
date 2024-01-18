@@ -17,6 +17,8 @@ import Extro from "./Extro";
 import CompanyAndRoleSummary from "./CompanyAndRoleSummary";
 import Presentation from "./Presentation";
 import SummarySnapshot from "./SummarySnapshot";
+import UserReportPartOne from "./Presentation";
+import UserReportPartSix from "../UserReport/UserReportPartSix";
 
 
 const NewUserReport = () => {
@@ -35,7 +37,7 @@ const NewUserReport = () => {
   console.log(userReport, 'userreport') // use this data to show in reports
   // console.log(userReport?.interview_score_by_category.data)
 
-  
+
   // const handleGeneratePdf = async () => {
   //   setLoading(true);
   //   const pdfContainer = reportTemplateRef.current;
@@ -65,28 +67,28 @@ const NewUserReport = () => {
     setLoading(true);
     const pdfContainer = reportTemplateRef.current;
     const components = pdfContainer.children;
-  
+
     const pdf = new jsPDF({
       unit: "mm",
       format: "a4",
       orientation: "portrait",
       compress: true, // Enable compression
     });
-  
+
     for (let i = 0; i < components.length; i++) {
       if (i > 0) {
         pdf.addPage();
       }
-  
-      const canvas = await html2canvas(components[i],{
+
+      const canvas = await html2canvas(components[i], {
         scale: 2, // Adjust the scale as needed
         logging: false, // Disable logging for cleaner output
       });
       const imageData = canvas.toDataURL("image/png");
-  
+
       pdf.addImage(imageData, "PNG", 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
     }
-  
+
     pdf.save("UserReports.pdf");
     setLoading(false);
   };
@@ -96,18 +98,19 @@ const NewUserReport = () => {
     <div className="body flex-grow-1 overflow-y-scroll">
       <div className="container mx-auto">
         {/* Back button */}
-        <button         
-         className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
-         onClick={() => navigate(-1)}>
+        <button
+          className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
+          onClick={() => navigate(-1)}>
           ← View All Reports
         </button>
         <div ref={reportTemplateRef} className="bg-white">
-          
+
           <div>
             <Intro
               position="HR Transformation Consultant"
               company="Deloitte"
               user={userReport?.user_name}
+              userData={userReport}
             />
           </div>
 
@@ -116,10 +119,11 @@ const NewUserReport = () => {
               title={userReport?.interview_score_by_category.data[0].main_title}
               interview_score_by_category={userReport?.interview_score_by_category}
             />
-          </div> 
-    
+          </div>
+
           <div>
-            <Presentation              
+            <UserReportPartOne userData={userReport?.behavioral_presentation_and_grooming} overallScore="8/10" />
+            {/* <Presentation              
               overallScore="8/10"
               eyeContact={userReport?.behavioral_presentation_and_grooming.data[0].secured_marks}
               posture={userReport?.behavioral_presentation_and_grooming.data[1].secured_marks}
@@ -129,53 +133,102 @@ const NewUserReport = () => {
               bgAndLight={userReport?.behavioral_presentation_and_grooming.data[5].secured_marks}
               audioQlty={userReport?.behavioral_presentation_and_grooming.data[6].secured_marks}
               devicePos={userReport?.behavioral_presentation_and_grooming.data[7].secured_marks}
-            />
+            /> */}
           </div>
-         
+
           <div>
             {userReport?.interview_score_by_category.data.map((category, index) => (
               <ReportOverview
-              key={index} // Ensure each component has a unique key
-              head={category.main_title}
-              overallScore={category.secured_marks}
-              bgcolor={componentColors[index % componentColors.length]}
-              scoreclr={`text-${index % 2 === 0 ? "green" : "red"}`} 
-              title1={category.sub_segements[0].title}
-              score1={category.sub_segements[0].secured_marks}
-              desc1={category.sub_segements[0].notes}
-              title2={category.sub_segements[1].title}
-              score2={category.sub_segements[1].secured_marks}
-              desc2={category.sub_segements[1].notes}
-              title3={category.sub_segements[2].title}
-              score3={category.sub_segements[2].secured_marks}
-              desc3={category.sub_segements[2].notes}
-              title4={category.sub_segements[3].title}
-              score4={category.sub_segements[3].secured_marks}
-              desc4={category.sub_segements[3].notes}
+                key={index} // Ensure each component has a unique key
+                head={category.main_title}
+                overallScore={category.secured_marks}
+                bgcolor={componentColors[index % componentColors.length]}
+                scoreclr={`text-${index % 2 === 0 ? "green" : "red"}`}
+                title1={category.sub_segements[0].title}
+                score1={category.sub_segements[0].secured_marks}
+                desc1={category.sub_segements[0].notes}
+                title2={category.sub_segements[1].title}
+                score2={category.sub_segements[1].secured_marks}
+                desc2={category.sub_segements[1].notes}
+                title3={category.sub_segements[2].title}
+                score3={category.sub_segements[2].secured_marks}
+                desc3={category.sub_segements[2].notes}
+                title4={category.sub_segements[3].title}
+                score4={category.sub_segements[3].secured_marks}
+                desc4={category.sub_segements[3].notes}
               />
             ))}
           </div>
 
           <div>
-            {userReport?.interview_score_by_category?.data[2]?.interview_questions?.map((category, index) => (
+
+            <div className="my-6">
+              {/* <div className={`mb-8 ${componentColors[index % componentColors.length]}`}> */}
+              <h1 className={`text-4xl font-semibold text-purple p-8`}> Questions Deep Dive</h1>
+              {/* </div> */}
+            </div>
+
+            {userReport?.interview_score_by_category?.data?.map((o, index) => {
+              return (
+                <>
+                  {/* <div> */}
+                  {/* <Divider className="pt-5" /> */}
+                  <DeepDive userData={o} user={userReport}
+                    key={index}
+                    bgcolor={componentColors[index % componentColors.length]}
+                    data={o}
+                  />
+                  {/* <Divider className="pt-5" /> */}
+                  {/* </div> */}
+                </>)
+            })}
+
+
+            {userReport?.report_type == "role based report" && (
+              <div>
+                {/* <Divider className="pt-5" /> */}
+                <UserReportPartSix userData={userReport} />
+                {/* <Divider className="pt-5" /> */}
+              </div>
+            )}
+            {userReport?.report_type == "skill based report" && (
+              <div>
+                {/* <Divider className="pt-5" /> */}
+                <SkillSuggestions data={userReport?.skill_based_suggestions ? userReport?.skill_based_suggestions : {}} />
+                {/* <Divider className="pt-5" /> */}
+              </div>
+            )}
+            {userReport?.report_type == "skill based report" && (
+              <div>
+                {/* <Divider className="pt-5" /> */}
+                <SkillsDisplay skills={userReport?.hard_and_soft_skill_dic ? userReport?.hard_and_soft_skill_dic : {}} />
+                {/* <Divider className="pt-5" /> */}
+              </div>
+            )}
+
+
+            {/* {userReport?.interview_score_by_category?.data?.map((o, index) => (
+
+            // {userReport?.interview_score_by_category?.data[2]?.interview_questions?.map((category, index) => (
               <DeepDive
               key={index} 
               // head={category.title}
               // overallScore={category.secured_marks}
               bgcolor={componentColors[index % componentColors.length]} 
-              ques={category.question}
-              candidateAns={category.answer}
-              sampleAns={category.suggested_answer}
+              // ques={category.question}
+              // candidateAns={category.answer}
+              // sampleAns={category.suggested_answer}
+              data={o}
               />
-            ))}
+            ))} */}
           </div>
 
-          <div>
-            <CompanyAndRoleSummary/> 
-          </div>
+          {/* <div>
+            <CompanyAndRoleSummary />
+          </div> */}
 
           <div>
-            <Extro/>
+            <Extro />
           </div>
           {/* {reportData?.interview_score_by_category?.data?.map((o, index) => {
             return (

@@ -41,13 +41,13 @@
 }
 .report1-footer {
   padding: 8px;
-  background: #dd66af;
+  background: #0EE1D2;
   border-radius: 20px;
   margin-left: 120px;
   width: 70%;
 }
 .report1-footer-txt {
-  color: #fff;
+  color: #000;
   /* font-family: 'Poppins'; */
 }
 
