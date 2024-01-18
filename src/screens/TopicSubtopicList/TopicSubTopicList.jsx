@@ -1,10 +1,10 @@
-import './TopicSubTopicList.css';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faPlusCircle, faPencil, faEyeSlash, faTrashCan, faEye, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import React, {useState, useEffect, useRef} from 'react';
+import './TopicSubTopicList.css';
 
-
-function App() {
+function TopicSubTopicList() {
   let data = [{
     'id' : 1,
     'topic' : "Topic 1 - Heading",
@@ -14,6 +14,7 @@ function App() {
         'id' : 1,
         'subtopic' : 'Topic 1.1',
         'isHiddenSub' : false,
+        'isDescHidden' : false,
         'desc' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       }
     ]
@@ -29,6 +30,8 @@ const [isSubModalOpen, setSubModalOpen] = useState(false);
 const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 const [isSubDeleteModalOpen, setSubDeleteModalOpen] = useState(false);
 
+const [isSubEditModalOpen, setSubEditModalOpen] = useState(false);
+
 const [newTopic, setNewTopic] = useState({ topic: '' });
 const [newSubTopic, setNewSubTopic] = useState({ subtopic: '' , desc : ''});
 let [Topicdata, setData] = useState(data);
@@ -37,7 +40,11 @@ const [isButtonDisabled, setButtonDisabled] = useState(true);
 const [inputClassName, setInputClassName] = useState('valid');
 const [descClassName, setDescClassName] = useState('validDesc')
 
+const [validationMessage, setValidationMessage] = useState('');
+const [validationDescMessage, setValidationDescMessage] = useState('')
+
 const openModal = () => {
+  setValidationMessage('')
   setInputClassName('valid')
   setNewTopic({topic:''})
   setModalOpen(true);
@@ -59,9 +66,26 @@ const openSubDeleteModal = (subTopicId, TopicIndex) => {
   setSubDeleteModalOpen(true);
 };
 
+const topicEditIndex = useRef(null);
+const subEditIndex = useRef(null);
+const [editSubTopic, setEditSubTopic] = useState({ subtopic: '' , desc : ''});
+
+const openSubEditModal = (topicIndex, subTopicIndex, editSubtopic) => {
+  setValidationDescMessage('')
+  setValidationMessage('')
+  setDescClassName('validDesc') 
+  setInputClassName('valid')
+  topicEditIndex.current = topicIndex
+  subEditIndex.current = subTopicIndex
+  setEditSubTopic(editSubtopic)
+  setSubEditModalOpen(true);
+}
+
 const iRef = useRef(0);
 
 const openSubModal = (index) => {
+  setValidationDescMessage('')
+  setValidationMessage('')
   setDescClassName('validDesc') 
   setInputClassName('valid')
   iRef.current = index;
@@ -80,6 +104,10 @@ const closeSubDeleteModal = () => {
   setSubDeleteModalOpen(false);
 };
 
+const closeSubEditModal = () => {
+  setSubEditModalOpen(false);
+};
+
 const closeSubModal = () => {
   setSubModalOpen(false);
 };
@@ -92,6 +120,7 @@ const handleSubTopicInputChange = (e) => {
     if(value.length > 0)
     {
       setInputClassName('valid');
+      setValidationMessage('')
       setNewSubTopic((prevSubTopic) => ({
         ...prevSubTopic,
         [name]: value,
@@ -100,6 +129,11 @@ const handleSubTopicInputChange = (e) => {
     }
     else
     {
+      setValidationMessage('Please enter a valid Sub-Topic name')
+      setNewSubTopic((prevSubTopic) => ({
+        ...prevSubTopic,
+        [name]: '',
+      }));
       setInputClassName('invalid');
     }
   }
@@ -108,6 +142,7 @@ const handleSubTopicInputChange = (e) => {
     if(value.length > 0)
     {
       setDescClassName('validDesc');
+      setValidationDescMessage('')
       setNewSubTopic((prevSubTopic) => ({
         ...prevSubTopic,
         [name]: value,
@@ -116,6 +151,60 @@ const handleSubTopicInputChange = (e) => {
     }
     else
     {
+      setValidationDescMessage('Please enter valid Description')
+      setNewSubTopic((prevSubTopic) => ({
+        ...prevSubTopic,
+        [name]: '',
+      }));
+      setDescClassName('invalidDesc');
+    }
+  }
+};
+
+const handleSubTopicEditInputChange = (e) => {
+
+  const { name, value } = e.target;
+  if(name === 'subtopic')
+  {
+    if(value.length > 0)
+    {
+      setInputClassName('valid');
+      setValidationMessage('')
+      setEditSubTopic((prevSubTopic) => ({
+        ...prevSubTopic,
+        [name]: value,
+      }));
+      setButtonDisabled(!value.trim());
+    }
+    else
+    {
+      setValidationMessage('Please enter a valid Sub-Topic name')
+      setEditSubTopic((prevSubTopic) => ({
+        ...prevSubTopic,
+        [name]: '',
+      }));
+      setInputClassName('invalid');
+    }
+  }
+  else
+  {
+    if(value.length > 0)
+    {
+      setDescClassName('validDesc');
+      setValidationDescMessage('')
+      setEditSubTopic((prevSubTopic) => ({
+        ...prevSubTopic,
+        [name]: value,
+      }));
+      setButtonDisabled(!value.trim());
+    }
+    else
+    {
+      setValidationDescMessage('Please enter valid Description')
+      setEditSubTopic((prevSubTopic) => ({
+        ...prevSubTopic,
+        [name]: '',
+      }));
       setDescClassName('invalidDesc');
     }
   }
@@ -126,6 +215,7 @@ const handleInputChange = (e) => {
   if(value.length > 0)
   {
     setInputClassName('valid')
+    setValidationMessage('')
     setNewTopic((prevTopic) => ({
       ...prevTopic,
       [name]: value,
@@ -134,6 +224,11 @@ const handleInputChange = (e) => {
   }
   else
   {
+    setValidationMessage('Please enter a valid Topic name')
+    setNewTopic((prevTopic) => ({
+      ...prevTopic,
+      [name]: '',
+    }));
     setInputClassName('invalid')
   }
 };
@@ -142,10 +237,12 @@ const handleSave = () => {
     if(newTopic.topic === '')
     {
       setInputClassName('invalid')
+      setValidationMessage('Please enter a valid Topic name')
     }
     else
     {
       setInputClassName('valid')
+      setValidationMessage('')
       setData((prevData) => [...prevData, {id : prevData.length + 1, topic : newTopic.topic, isHidden : false}]);
       closeModal();
     }
@@ -164,21 +261,27 @@ const handleSubTopicSave = () => {
     {
       setInputClassName('invalid')
       setDescClassName('invalidDesc')
+      setValidationMessage('Please enter a valid Sub-Topic name')
+      setValidationDescMessage('Please enter valid Description')
     }
 
     else if(newSubTopic.subtopic === '')
     {
+      setValidationMessage('Please enter a valid Sub-Topic name')
       setInputClassName('invalid')
     }
     else if(newSubTopic.desc === '')
     {
+      setValidationDescMessage('Please enter valid Description')
       setDescClassName('invalidDesc')
     }
     else
     {
       setInputClassName('valid')
       setDescClassName('validDesc')
-      const newSubtopicItem = { id: currentTopic.subtopics.length + 1, isHiddenSub : false, ...newSubTopic };
+      setValidationDescMessage('')
+      setValidationDescMessage('')
+      const newSubtopicItem = { id: currentTopic.subtopics.length + 1, isHiddenSub : false, isDescHidden : false, ...newSubTopic };
       currentTopic.subtopics.push(newSubtopicItem);
 
       setData([...Topicdata]);
@@ -212,6 +315,8 @@ const handleSubDelete = () => {
   closeSubDeleteModal();
 }
 
+
+
 // ------------------------------------------------------ Modal to Create Topic ----------------------------------------------------------
 
 useEffect(() => {
@@ -244,28 +349,35 @@ const saveEditing = (index) => {
 };
 
 // Update SubTopic
-const [editedSubTopic, setEditedSubTopic] = useState('');
-const [editingSubIndex, setEditingSubIndex] = useState(null);
 
-const startEditingSubTopic = ( subTopicIndex, subTopic) => {
-  setEditingSubIndex(subTopicIndex);
-  setEditedSubTopic(subTopic);
-};
+const handleEdit = () => {
+  if(editSubTopic.subtopic === '' && editSubTopic.desc === '')
+    {
+      setInputClassName('invalid')
+      setDescClassName('invalidDesc')
+      setValidationMessage('Please enter a valid Sub-Topic name')
+      setValidationDescMessage('Please enter valid Description')
+    }
 
-const cancelEditingSubTopic = () => {
-  setEditingSubIndex(null);
-  setEditedSubTopic('');
-};
+    else if(editSubTopic.subtopic === '')
+    {
+      setValidationMessage('Please enter a valid Sub-Topic name')
+      setInputClassName('invalid')
+    }
+    else if(editSubTopic.desc === '')
+    {
+      setValidationDescMessage('Please enter valid Description')
+      setDescClassName('invalidDesc')
+    }
+    else
+    {
+      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].subtopic = editSubTopic.subtopic;
+      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].desc = editSubTopic.desc;
 
-const saveEditingSubTopic = (topicIndex, subTopicIndex) => {
-  Topicdata[topicIndex].subtopics[subTopicIndex].subtopic = editedSubTopic;
-
-  setEditingSubIndex(null);
-  setEditedSubTopic('');
-
-  setData(Topicdata);
-};
-
+      setData(Topicdata);
+      closeSubEditModal();
+    }
+}
 
 
 
@@ -412,28 +524,13 @@ const handleDrop = (e, destinationIndex, subIndex, isSubDrop) => {
 
 // ---------------------------------------------------------- Subtopic Description ----------------------------------------------------------------
 
-// const [activeAccordions, setActiveAccordions] = useState([]);
-
-// const toggleAccordion = (index, subIndex) => {
-//   const newActiveAccordions = Array(Topicdata[index].subtopics.length).fill(false);  // Here is the problem!!
-//   console.log('///', newActiveAccordions)
-//   newActiveAccordions[subIndex] = !newActiveAccordions[subIndex];
-//   console.log('//', newActiveAccordions)
-//   setActiveAccordions(newActiveAccordions);
-// };
-
-const [activeAccordions, setActiveAccordions] = useState(() => {
-  return Topicdata.map(() => Array(Topicdata[0].subtopics.length).fill(false));
-});
 
 const toggleAccordion = (index, subIndex) => {
-  console.log('Function Called...')
-  setActiveAccordions((prevAccordions) => {
-    const newAccordions = [...prevAccordions];
-    newAccordions[index][subIndex] = !newAccordions[index][subIndex];
-    return newAccordions;
-  });
+  const updatedTopicData = [...Topicdata]
+  updatedTopicData[index].subtopics[subIndex].isDescHidden = !Topicdata[index].subtopics[subIndex].isDescHidden;
+  setData(updatedTopicData);
 };
+
 
 // ---------------------------------------------------------- Display List -------------------------------------------------------------
 
@@ -496,7 +593,7 @@ const topicNames = Topicdata.map((topic, index) =>
                 <FontAwesomeIcon style={{backgroundColor:'white', marginRight:'15px', color:'gray'}} icon={faBars} />
                 {topic.topic}
               </td>
-              <td style={{backgroundColor: 'white', width:'15%'}}>
+              <td style={{backgroundColor: 'white', width:'15%', borderRadius:'20px'}}>
                 <button className='functionButton' onClick={() => openSubModal(index)}>
                   <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px'}} icon={faPlusCircle}/>
                 </button>
@@ -509,7 +606,7 @@ const topicNames = Topicdata.map((topic, index) =>
                   <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px'}} icon={faEyeSlash}/>
                 </button>
                 
-                <button onClick={() => openDeleteModal(topic.id)} className='functionButton' style={{}}>
+                <button onClick={() => openDeleteModal(topic.id)} className='functionButton'>
                   <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', color:'red', fontSize:'20px'}} icon={faTrashCan}/>
                 </button>
               </td>
@@ -533,25 +630,7 @@ const topicNames = Topicdata.map((topic, index) =>
       onDragEnd={onDragEnd}
       onDrop={(e) => handleDrop(e,index, subIndex, true)}
       onDragLeave={(e) => onDragLeave(e)}>
-        {editingSubIndex === subIndex ? (
-        <>
-          <tr>
-            <td style={{backgroundColor: 'white', width:'1100px'}}>
-              <FontAwesomeIcon style={{backgroundColor:'white', marginRight:'15px', color:'gray'}} icon={faBars} />
-              <input
-                type="text"
-                value={editedSubTopic}
-                onChange={(e) => setEditedSubTopic(e.target.value)}
-                className='editText'
-              />
-            </td>
-            <td style={{backgroundColor: 'white', width:'20%'}}>
-            <button onClick={cancelEditingSubTopic} className='cancelEditButton'>Cancel</button>
-              <button onClick={() => saveEditingSubTopic(index, subIndex)} className='saveEditButton'>Save</button>
-            </td>
-          </tr>
-        </>
-      ) : (
+        {(
         <>
         {Topicdata[index].subtopics[subIndex].isHiddenSub ? (
           <div className='hidden'>
@@ -574,23 +653,26 @@ const topicNames = Topicdata.map((topic, index) =>
           </div>
       ) : (
         <tr>
-          <button className={`accordion ${activeAccordions[index][subIndex] ? 'active' : ''}`} 
+          <button className={`accordion ${Topicdata[index].subtopics[subIndex].isDescHidden ? 'active' : ''}`} 
           onClick={() => toggleAccordion(index, subIndex)}>
-            <td style={{backgroundColor: 'white', width:'1200px', border:'none'}}>
-              <FontAwesomeIcon style={{backgroundColor:'white', marginRight:'15px', color:'gray'}} icon={faBars} />
+            <td style={{backgroundColor: 'white', width:'1200px'}}>
+              <FontAwesomeIcon style={{backgroundColor:'white', marginRight:'15px', color:'gray', marginLeft:'7px'}} icon={faBars} />
               {subtopic.subtopic}
-              <FontAwesomeIcon className={`downButton ${activeAccordions[index][subIndex] ? 'rotateDownButton' : ''}`} icon={faChevronDown} />
+            </td>
+            
+            <td style={{backgroundColor: 'white'}}>
+              <FontAwesomeIcon className={`downButton ${Topicdata[index].subtopics[subIndex].isDescHidden ? 'rotateDownButton' : ''}`} icon={faChevronDown} />
             </td>
           </button>
-          <div className={`panel ${activeAccordions[index][subIndex] ? 'active' : ''}`}>
+          <div className={`panel ${Topicdata[index].subtopics[subIndex].isDescHidden ? 'active' : ''}`}>
             <p className='subTopicDesc'>{subtopic.desc}</p>
           </div>
 
 
-          <td style={{backgroundColor: 'white', width:'19.5%'}}>
+          <td style={{backgroundColor: 'white', width:'15%', borderRadius:'20px'}}>
 
-            <button onClick={() => startEditingSubTopic(subIndex, subtopic.subtopic)} className='functionButton'>
-              <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px'}} icon={faPencil}/>
+            <button onClick={() => openSubEditModal(index, subIndex, {'subtopic' : subtopic.subtopic, 'desc' : subtopic.desc})} className='functionButton'>
+              <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px', marginTop:'-5px'}} icon={faPencil}/>
             </button>
 
             <button onClick={() => toggleVisibilitySubTopic(index, subIndex)} className='functionButton'>
@@ -614,11 +696,11 @@ const topicNames = Topicdata.map((topic, index) =>
 // -------------------------------------------------- Design -------------------------------------------------------------
 
 return (
-  <div className="App">
+  <div className="Main">
 
     <div className='header'>
       <h1 className='topHeading'>Topic & SubTopic Creation</h1>
-      <button type='button' className='createButton' onClick={openModal}>
+      <button type='button' className='createButton' onClick={openModal} style={{backgroundColor:'#10e4d4'}}>
         Create Topic
         <FontAwesomeIcon style={{backgroundColor:'transparent', marginLeft:'20px'}} icon={faPlusCircle}/>
       </button>
@@ -642,7 +724,12 @@ return (
             value={newTopic.name}
             onChange={handleInputChange}
             placeholder='e.g., Topic 3 - Heading'
-          /> <br/>
+          /> 
+          {validationMessage && (
+            <p className='invalidMessage'>
+              {validationMessage}
+            </p>
+          )}<br/>
           <button onClick={cancelEditing} className='cancelEditButton' style={{marginLeft:'290px'}}>Cancel</button>
           <button onClick={handleSave} disabled={isButtonDisabled} className='saveEditButton'>Confirm</button>
         </div>
@@ -666,7 +753,12 @@ return (
             onChange={handleSubTopicInputChange}
             placeholder='e.g., Topic 3.1 - Heading'
             className={inputClassName}
-          /> <br/>
+          /> 
+          {validationMessage && (
+            <p className='invalidMessage'>
+              {validationMessage}
+            </p>
+          )}<br/>
 
           <label htmlFor="topicName">Sub-Topic Description</label><br/>
           {/* <p style={{backgroundColor:'white', float:'right', marginTop:'0px'}}>{`${newSubTopic.desc.length}/300`}</p></label><br/> */}
@@ -680,6 +772,11 @@ return (
             cols={50}
             className={descClassName}
           />
+          {validationDescMessage && (
+            <p className='invalidMessage'>
+              {validationDescMessage}
+            </p>
+          )}
           <br/><br/>
 
           <button onClick={cancelEditing} className='cancelEditButton' style={{marginLeft:'290px'}}>Cancel</button>
@@ -718,6 +815,55 @@ return (
     </div>
   )}
 
+  {/* Edit Sub-Topic */}
+  {isSubEditModalOpen && (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={closeSubEditModal}>
+            &times;
+          </span>
+          <h1 className='modalCreateHead'>Edit Sub-Topic Details</h1>
+          <label htmlFor="topicName">Sub-Topic Name</label><br/>
+          <input
+            type="text"
+            id="topicName"
+            name="subtopic"
+            value={editSubTopic.subtopic}
+            onChange={handleSubTopicEditInputChange}
+            placeholder='e.g., Topic 3.1 - Heading'
+            className={inputClassName}
+          /> 
+          {validationMessage && (
+            <p className='invalidMessage'>
+              {validationMessage}
+            </p>
+          )}<br/>
+
+          <label htmlFor="topicName">Sub-Topic Description</label><br/>
+          {/* <p style={{backgroundColor:'white', float:'right', marginTop:'0px'}}>{`${newSubTopic.desc.length}/300`}</p></label><br/> */}
+          <textarea
+            id="topicName"
+            name="desc"
+            value={editSubTopic.desc}
+            onChange={handleSubTopicEditInputChange}
+            placeholder='Elaborate on the sub-topic with a brief description...'
+            rows={5}
+            cols={50}
+            className={descClassName}
+          />
+          {validationDescMessage && (
+            <p className='invalidMessage'>
+              {validationDescMessage}
+            </p>
+          )}
+          <br/><br/>
+
+          <button onClick={cancelEditing} className='cancelEditButton' style={{marginLeft:'290px'}}>Cancel</button>
+          <button onClick={handleEdit} disabled={isButtonDisabled} className='saveEditButton'>Confirm</button>
+        </div>
+      </div>
+    )}
+
 
     <ul className='topicList'>
       {topicNames}
@@ -727,4 +873,4 @@ return (
 );
 }
 
-export default App;
+export default TopicSubTopicList;

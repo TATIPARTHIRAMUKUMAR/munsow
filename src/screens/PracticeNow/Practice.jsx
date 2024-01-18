@@ -139,7 +139,7 @@ console.log("selectedSoftskill",selectedSoftskill)
     }, [dispatch])
 
     return (
-        <div className="p-10">
+        <div className="p-5 lg:p-10">
             <div className="w-full mx-auto bg-white rounded-xl">
                 <p className="p-5 text-xl font-semibold">Practice</p>
                 <Divider />
@@ -173,15 +173,18 @@ console.log("selectedSoftskill",selectedSoftskill)
                     ))}
                 </Stepper>
                 <Divider style={{ marginTop: "1rem" }} />
-                <div className="flex mt-4 p-4 items-center justify-center">
+                <div className="flex mt-4 p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
                     {currentStep === 0 && (
                         <>
-                            {/* <div > */}
-                            <div className={`bg-${selectedCategory === 'skills' ? 'gray-100' : ''} p-7 rounded-xl`} onClick={() => {
-                                setSelectedCategory('skills'); setSelectedRole(null)
-                                setSelectedCompany(null)
-                            }}>
-                                <div className="flex ">
+                            <div
+                            className={`bg-${selectedCategory === 'skills' ? 'gray-100' : ''}  p-7 rounded-xl relative overflow-auto max-w-full h-auto`}
+                            onClick={() => {
+                                setSelectedCategory('skills');
+                                setSelectedRole(null);
+                                setSelectedCompany(null);
+                            }}
+                            >
+                                <div className="flex relative overflow-auto">
                                     {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
 
                                     <input
@@ -190,13 +193,13 @@ console.log("selectedSoftskill",selectedSoftskill)
                                         value="skills"
                                         checked={selectedCategory === 'skills'}
                                         onChange={() => setSelectedCategory('skills')}
-                                        className="p-1 m-2 text-[#886cc0]"
+                                        className="p-1 m-2 text-[#886cc0] relative overflow-auto"
                                     />
-                                    <h2 className="text-xl font-semibold mb-2 text-[#886cc0]">Skill Specific</h2>
+                                    <h2 className="text-xl font-semibold mb-2 text-[#886cc0] relative overflow-auto">Skill Specific</h2>
 
                                 </div>
-                                <div className={selectedCategory !== 'skills' ? 'opacity-50 pointer-events-none' : ''}>
-                                    <label className="flex items-center space-x-2 my-3">
+                                <div className={selectedCategory !== 'skills' ? 'opacity-50 pointer-events-none  relative overflow-auto max-w-full h-auto' : ' relative overflow-auto max-w-full h-auto'}>
+                                    <label className="flex items-center space-x-2 my-3 relative overflow-auto">
                                         {/* <input
                                             type="checkbox"
                                             name="hardSkills"
@@ -204,7 +207,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                                             className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                                             onChange={() => setHardSkills(!hardSkills)}
                                         /> */}
-                                        <span className="font-bold pr-2">Hard Skills</span>
+                                        <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
                                     </label>
                                     <MutiSelect
                                         options={hardSkillsList?.map((o) => {
@@ -245,7 +248,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                             </div>
                             <div className="p-10"></div>
 
-                            <div className={`bg-${selectedCategory === 'role' ? 'gray-100' : ''} p-7 rounded-xl`} onClick={() => {
+                            <div className={`bg-${selectedCategory === 'role' ? 'gray-100' : ''} p-7 rounded-xl relative overflow-auto max-w-full h-auto`} onClick={() => {
                                 setSelectedCategory('role'); setSelectedSoftskill(null)
                                 setSelectedHardskill(null)
                             }}>
@@ -319,9 +322,9 @@ console.log("selectedSoftskill",selectedSoftskill)
                     )}
 
                     {currentStep === 1 && (
-                        <div>
-                            <h2 className="text-center text-xl font-semibold mb-2 text-purple-600">Level</h2>
-                            <div className="m-3 w-[35rem] border-4 rounded-2xl py-8 px-7 border-purple-300">
+                        <div className="relative overflow-auto max-w-full h-auto">
+                            <h2 className="text-center text-xl font-semibold mb-2 text-purple-600 relative overflow-auto max-w-full h-auto">Level</h2>
+                            <div className="m-3 w-[14rem] lg:w-[35rem] md:w-[27rem] border-4 rounded-2xl py-8 px-7 border-purple-300 relative overflow-auto sm:w-[20rem] h-auto">
                                 <input
                                     type="range"
                                     min="0"
@@ -332,22 +335,22 @@ console.log("selectedSoftskill",selectedSoftskill)
                                     style={{ background: "#f3f0f9" }}
                                 />
 
-                                <div className="flex justify-evenly text-md">
+                                <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
                                     <button
                                         onClick={() => { setLevel(0); setExperienceLevel("low") }}
-                                        className="bg-green-500 hover:bg-green-700 text-white  py-1 px-3 rounded-md"
+                                        className="bg-green-500 hover:bg-green-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
                                     >
                                         Beginner
                                     </button>
                                     <button
                                         onClick={() => { setLevel(50); setExperienceLevel("medium") }}
-                                        className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 rounded-md"
+                                        className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
                                     >
                                         Intermediate
                                     </button>
                                     <button
                                         onClick={() => { setLevel(100); setExperienceLevel("high") }}
-                                        className="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded-md"
+                                        className="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
                                     >
                                         Advaned
                                     </button>
@@ -398,7 +401,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                         </div>
                     )}
                     {currentStep == 2 && (
-                        <div className="grid grid-cols-2 gap-6 items-center justify-center " >
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center justify-center " >
                             <div className="grid justify-center ">
                                 <div className="text-center font-semibold text-gray-500 mb-4">
                                     <ComputerRoundedIcon sx={{ fontSize: "5rem" }} />
@@ -439,7 +442,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                     {currentStep < steps.length - 1 && (
                         <button
                             onClick={handleNext}
-                            disabled={handleSelection()} // Use the isRoleSelected state variable here
+                            // disabled={handleSelection()} // Use the isRoleSelected state variable here
                             className={`bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md ${handleSelection() ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             Next

@@ -14,6 +14,7 @@ export default function MutiSelect(props) {
     <Autocomplete
     size="small"
       multiple
+      className="max-w-full h-auto"
       id="checkboxes-tags-demo"
       options={options?options:[]}
       disableCloseOnSelect
