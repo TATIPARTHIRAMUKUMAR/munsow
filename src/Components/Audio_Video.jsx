@@ -144,9 +144,9 @@ export default function Audio_Video({audioValidated, setAudioValidated, videoVal
                     <MicNoneIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={stopRecording} />
                 }
             </div>
-            <div className="text-center mt-4">
-                <p>Please read the following text out loud:</p>
-                <blockquote className="text-gray-700 italic">{sampleText}</blockquote>
+            <div className="text-center mt-4 max-w-screen-md mx-auto overflow-auto">
+                <p className="text-sm sm:text-md lg:text-base">Please read the following text out loud:</p>
+                <blockquote className="text-gray-700 italic text-sm sm:text-md lg:text-base">{sampleText}</blockquote>
             </div>
             {audioValidated && <p>Audio sample validated successfully!</p>}
             {videoValidated && <p>Video sample validated successfully!</p>}
