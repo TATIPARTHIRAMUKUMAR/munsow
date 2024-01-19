@@ -15,22 +15,21 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUserReport } from "../../redux/action";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import SkillSuggestions from "./SkillSuggestions";
 import SkillsDisplay from "./SkillsDisplay";
-
 
 const UserReport = () => {
   const reportTemplateRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState({});
-  const { userReport } = useSelector(state => state?.data)
+  const { userReport } = useSelector((state) => state?.data);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setReportData(userReport);
-  }, [userReport])
+  }, [userReport]);
 
   console.log(userReport, 'userReport')
 
@@ -74,7 +73,9 @@ const UserReport = () => {
             <UserReportTitle userData={reportData} />
           </div>
           <div>
-            <UserReportPartOne userData={reportData?.behavioral_presentation_and_grooming} />
+            <UserReportPartOne
+              userData={reportData?.behavioral_presentation_and_grooming}
+            />
           </div>
 
           {reportData?.interview_score_by_category?.data?.map((o, index) => {
@@ -85,7 +86,8 @@ const UserReport = () => {
                   <UserReportPartTwo userData={o} user={reportData} />
                   <Divider className="pt-5" />
                 </div>
-              </>)
+              </>
+            );
           })}
 
           {/* <div>
@@ -116,14 +118,26 @@ const UserReport = () => {
           {reportData?.report_type == "skill based report" && (
             <div>
               <Divider className="pt-5" />
-              <SkillSuggestions data={reportData?.skill_based_suggestions ? reportData?.skill_based_suggestions : {}} />
+              <SkillSuggestions
+                data={
+                  reportData?.skill_based_suggestions
+                    ? reportData?.skill_based_suggestions
+                    : {}
+                }
+              />
               <Divider className="pt-5" />
             </div>
           )}
           {reportData?.report_type == "skill based report" && (
             <div>
               <Divider className="pt-5" />
-              <SkillsDisplay skills={reportData?.hard_and_soft_skill_dic ? reportData?.hard_and_soft_skill_dic : {}} />
+              <SkillsDisplay
+                skills={
+                  reportData?.hard_and_soft_skill_dic
+                    ? reportData?.hard_and_soft_skill_dic
+                    : {}
+                }
+              />
               <Divider className="pt-5" />
             </div>
           )}
@@ -141,7 +155,9 @@ const UserReport = () => {
             >
               DOWNLOAD AS PDF{" "}
               {loading && (
-                <CircularProgress style={{ color: "#fff", marginLeft: "10px" }} />
+                <CircularProgress
+                  style={{ color: "#fff", marginLeft: "10px" }}
+                />
               )}
             </button>
           </div>
