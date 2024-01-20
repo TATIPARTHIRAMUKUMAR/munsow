@@ -1,61 +1,50 @@
-
+  
 
 const ReportOverview = (props) => {
 
-    const { head, overallScore, bgcolor, scoreclr, title1, score1, desc1, title2, score2, desc2, title3, score3, desc3, title4, score4, desc4, } = props;
+    const { head, overallScore, bgcolor, notes, scores } = props;
+
+    const getScoreColor = (x) => {
+        if (x >= 0 && x <= 4) {
+          return 'text-red'; // Apply red color
+        } else if (x >= 5 && x <= 7) {
+          return 'text-orange'; // Apply yellow color
+        } else if (x >= 8 && x <= 10) {
+          return 'text-green'; // Apply green color
+        } else {
+          return 'text-gray'; // Default color or handle other cases
+        }
+    };
+
 
     return (
         <>
         <div className="mx-6 my-6">
-        <div className={`flex justify-around items-center pb-8 ${bgcolor}`}>
-            <h1 className="text-4xl font-semibold text-purple">{head} Overview</h1>
-            <div className="flex flex-col bg-white p-8 rounded-b-3xl">
-                <span className={`flex text-4xl font-bold justify-center ${scoreclr}`}>{overallScore}/10</span>
-                <span className="flex justify-center text-lg font-semibold text-purple">Overall Score</span>
+        <div className={`flex justify-around items-center pb-4 lg:pb-8 ${bgcolor}`}>
+            <h1 className="mx-2 px-8 text-2xl lg:text-4xl font-semibold text-purple">{head} Overview</h1>
+            <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
+                <h1 className={`text-3xl lg:text-4xl font-bold ${getScoreColor(overallScore)}`}>{overallScore}/10</h1>
+                <p className=" text-lg font-semibold text-purple">Overall Score</p>
             </div>
         </div>
 
         <div className="p-8">
-            <p className="text-purple font-semibold">Arpitha exhibited a growth mindset and a positive attitude throughout the interview. However, she sometiomes sounded defensive when asked about past failures, instead of embracing them as learning opportunities.</p>
+            <p className="text-purple font-semibold">{notes}</p>
         </div> 
 
         <div className={`mx-4 rounded-t-3xl ${bgcolor}`}>
-        <div className="p-8 flex">
-            <div className="mr-4">
-                <span className="text-2xl font-bold text-red">{score1}/10</span>
+        {scores.map((score, index) => (
+            <div className="p-8 flex" key={index}>
+                <div className="mr-4">
+                    <span className={`text-2xl font-bold ${getScoreColor(score.score)}`}>{score.score}/10</span>
+                </div>
+                <div>
+                    <h1 className="text-purple font-semibold underline py-1">{score.title}</h1>
+                    <p className="text-purple">{score.desc}</p>
+                </div>
             </div>
-            <div>
-                <h1 className="text-purple font-semibold underline py-1">{title1}</h1>
-                <p className="text-purple">{desc1}</p>
-            </div>
-        </div>   
-        <div className="p-8 flex">
-            <div className="mr-4">
-                <span className="text-2xl font-bold text-orange">{score2}/10</span>
-            </div>
-            <div>
-                <h1 className="text-purple font-semibold underline py-1">{title2}</h1>
-                <p className="text-purple">{desc2}</p>
-            </div>
-        </div>
-        <div className="p-8 flex">
-            <div className="mr-4">
-                <span className="text-2xl font-bold text-green">{score3}/10</span>
-            </div>
-            <div>
-                <h1 className="text-purple font-semibold underline py-1">{title3}</h1>
-                <p className="text-purple">{desc3}</p>
-            </div>
-        </div>
-        <div className="p-8 flex">
-            <div className="mr-4">
-                <span className="text-2xl font-bold text-red">{score4}/10</span>
-            </div>
-            <div>
-                <h1 className="text-purple font-semibold underline py-1">{title4}</h1>
-                <p className="text-purple">{desc4}</p>
-            </div>
-        </div>
+        ))}
+
         </div>
         </div>
         </>

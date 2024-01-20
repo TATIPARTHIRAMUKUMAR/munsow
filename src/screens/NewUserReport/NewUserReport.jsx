@@ -14,7 +14,7 @@ import ReportOverview from "./ReportOverview";
 import DeepDive from "./DeepDive";
 import Intro from "./Intro";
 import Extro from "./Extro";
-import CompanyAndRoleSummary from "./CompanyAndRoleSummary";
+import CuratedSummary from "./CuratedSummary";
 import Presentation from "./Presentation";
 import SummarySnapshot from "./SummarySnapshot";
 
@@ -33,9 +33,8 @@ const NewUserReport = () => {
   }, [userReport])
 
   console.log(userReport, 'userreport') // use this data to show in reports
-  // console.log(userReport?.interview_score_by_category.data)
 
-  
+  //FIRST
   // const handleGeneratePdf = async () => {
   //   setLoading(true);
   //   const pdfContainer = reportTemplateRef.current;
@@ -61,10 +60,42 @@ const NewUserReport = () => {
   //   setLoading(false);
   // };
 
+  //SECOND
+  // const handleGeneratePdf = async () => {
+  //   setLoading(true);
+  //   const pdfContainer = reportTemplateRef.current;
+  //   const components = pdfContainer.children;
+  
+  //   const pdf = new jsPDF({
+  //     unit: "mm",
+  //     format: "a4",
+  //     orientation: "portrait",
+  //     compress: true, // Enable compression
+  //   });
+  
+  //   for (let i = 0; i < components.length; i++) {
+  //     if (i > 0) {
+  //       pdf.addPage();
+  //     }
+  
+  //     const canvas = await html2canvas(components[i],{
+  //       scale: 2, // Adjust the scale as needed
+  //       logging: false, // Disable logging for cleaner output
+  //     });
+  //     const imageData = canvas.toDataURL("image/png");
+  
+  //     pdf.addImage(imageData, "PNG", 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+  //   }
+  
+  //   pdf.save("UserReports.pdf");
+  //   setLoading(false);
+  // };
+
+  //THIRD
   const handleGeneratePdf = async () => {
+    // try{
     setLoading(true);
     const pdfContainer = reportTemplateRef.current;
-    const components = pdfContainer.children;
   
     const pdf = new jsPDF({
       unit: "mm",
@@ -73,24 +104,98 @@ const NewUserReport = () => {
       compress: true, // Enable compression
     });
   
+    // Iterate through each component
+    const components = pdfContainer.children;
     for (let i = 0; i < components.length; i++) {
       if (i > 0) {
         pdf.addPage();
       }
   
-      const canvas = await html2canvas(components[i],{
+      const component = components[i];
+      const canvas = await html2canvas(component, {
         scale: 2, // Adjust the scale as needed
         logging: false, // Disable logging for cleaner output
       });
       const imageData = canvas.toDataURL("image/png");
   
-      pdf.addImage(imageData, "PNG", 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+      pdf.addImage(
+        imageData,
+        "PNG",
+        0,
+        0,
+        pdf.internal.pageSize.getWidth(),
+        pdf.internal.pageSize.getHeight()
+      );
+  
+      // Handle dynamic data for ReportOverview component
+      if (component.classList.contains("report-overview-component")) {
+        const reportOverviewData = getDynamicDataForReportOverview(i);
+        renderDynamicDataForReportOverview(pdf, reportOverviewData);
+      }
+  
+      // Handle dynamic data for DeepDive component
+      if (component.classList.contains("deep-dive-component")) {
+        const deepDiveData = getDynamicDataForDeepDive(i);
+        renderDynamicDataForDeepDive(pdf, deepDiveData);
+      }
     }
   
     pdf.save("UserReports.pdf");
     setLoading(false);
+  // }catch (error) {
+  //   console.error("Error during PDF generation:", error);
+  //   setLoading(false);
+  // }
+  };
+  
+  //Example functions for handling dynamic data for ReportOverview component
+  const getDynamicDataForReportOverview = (index) => {
+    const category = userReport?.interview_score_by_category.data[index];
+    return {
+      head: category.main_title,
+      overallScore: category.secured_marks,
+      notes: category.notes,
+      bgcolor: componentColors[index % componentColors.length],
+      scores: category.sub_segements.map((segment, sIndex) => ({
+        title: segment.title,
+        score: segment.secured_marks,
+        desc: segment.notes,
+      })),
+    };
+  };
+  
+  const renderDynamicDataForReportOverview = (pdf, data) => {
+    // Replace with your logic to render dynamic data for the ReportOverview component in the PDF
+    // This might involve adding text, tables, or images based on the provided data
+    pdf.text(data.head, 10, 10);
+    // Render other data as needed
+  };
+  
+  // Example functions for handling dynamic data for DeepDive component
+    const getDynamicDataForDeepDive = (index) => {
+    const category = userReport?.interview_score_by_category.data[index];
+
+    const question = category.interview_questions[index];
+    return {
+      head: category.main_title,
+      bgcolor: componentColors[index % componentColors.length],
+      ques: question.question,
+      candidateAns: question.answer,
+      sampleAns: question.suggested_answer,
+      gotRight: question.Insights.what_you_got_right,
+      gotWrong: question.Insights.what_you_got_wrong,
+      feedback: question.Insights["feedback_for_the candidate"],
+    };
+  };
+  
+  const renderDynamicDataForDeepDive = (pdf, data) => {
+    // Replace with your logic to render dynamic data for the DeepDive component in the PDF
+    // This might involve adding text, tables, or images based on the provided data
+    pdf.text(data.head, 10, 10); // Example: Render head text at coordinates (10, 10)
+    // Render other data as needed
   };
 
+  
 
   return (
     <div className="body flex-grow-1 overflow-y-scroll">
@@ -105,9 +210,10 @@ const NewUserReport = () => {
           
           <div>
             <Intro
-              position="HR Transformation Consultant"
-              company="Deloitte"
               user={userReport?.user_name}
+              unqualified_hard_skills={userReport?.unqualified_hard_skills}
+              unqualified_soft_skills={userReport?.unqualified_soft_skills}
+              report_type={userReport?.report_type}
             />
           </div>
 
@@ -115,125 +221,90 @@ const NewUserReport = () => {
             <SummarySnapshot
               title={userReport?.interview_score_by_category.data[0].main_title}
               interview_score_by_category={userReport?.interview_score_by_category}
+              behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
             />
           </div> 
     
           <div>
             <Presentation              
-              overallScore="8/10"
-              eyeContact={userReport?.behavioral_presentation_and_grooming.data[0].secured_marks}
-              posture={userReport?.behavioral_presentation_and_grooming.data[1].secured_marks}
-              grooming={userReport?.behavioral_presentation_and_grooming.data[2].secured_marks}
-              handGest={userReport?.behavioral_presentation_and_grooming.data[3].secured_marks}
-              facialExpr={userReport?.behavioral_presentation_and_grooming.data[4].secured_marks}
-              bgAndLight={userReport?.behavioral_presentation_and_grooming.data[5].secured_marks}
-              audioQlty={userReport?.behavioral_presentation_and_grooming.data[6].secured_marks}
-              devicePos={userReport?.behavioral_presentation_and_grooming.data[7].secured_marks}
+              behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
             />
           </div>
-         
-          <div>
-            {userReport?.interview_score_by_category.data.map((category, index) => (
+        
+          
+            {/* {userReport?.interview_score_by_category.data.map((category, index) => (
               <ReportOverview
-              key={index} // Ensure each component has a unique key
+              key={index} 
               head={category.main_title}
               overallScore={category.secured_marks}
-              bgcolor={componentColors[index % componentColors.length]}
-              scoreclr={`text-${index % 2 === 0 ? "green" : "red"}`} 
-              title1={category.sub_segements[0].title}
-              score1={category.sub_segements[0].secured_marks}
-              desc1={category.sub_segements[0].notes}
-              title2={category.sub_segements[1].title}
-              score2={category.sub_segements[1].secured_marks}
-              desc2={category.sub_segements[1].notes}
-              title3={category.sub_segements[2].title}
-              score3={category.sub_segements[2].secured_marks}
-              desc3={category.sub_segements[2].notes}
-              title4={category.sub_segements[3].title}
-              score4={category.sub_segements[3].secured_marks}
-              desc4={category.sub_segements[3].notes}
-              />
-            ))}
-          </div>
-
-          <div>
-            {userReport?.interview_score_by_category.data[2].interview_questions.map((category, index) => (
-              <DeepDive
-              key={index} 
-              // head={category.title}
-              // overallScore={category.secured_marks}
+              notes={category.notes}
               bgcolor={componentColors[index % componentColors.length]} 
-              ques={category.question}
-              candidateAns={category.answer}
-              sampleAns={category.suggested_answer}
+              scores={category.sub_segements.map((segment, sIndex) => ({
+                title: segment.title,
+                score: segment.secured_marks,
+                desc: segment.notes,
+              }))}
+              />
+            ))} */}
+          
+
+
+        
+          {/* {userReport?.interview_score_by_category.data.map((category, index) => (
+          <div key={index}>
+          {category.interview_questions.map((question, qIndex) => (
+            <DeepDive
+              key={qIndex}
+              head={category.main_title}
+              bgcolor={componentColors[index % componentColors.length]}
+              ques={question.question}
+              candidateAns={question.answer}
+              sampleAns={question.suggested_answer}
+              gotRight={question.Insights.what_you_got_right}
+              gotWrong={question.Insights.what_you_got_wrong}
+              feedback={question.Insights["feedback_for_the candidate"]}
+            />
+          ))}
+          </div>
+          ))} */}
+        
+
+          
+            {userReport?.interview_score_by_category.data.map((category, index) => (
+              <ReportOverview
+                key={index}
+                className="report-overview-component"  // Add a class name to identify the component
+                {...getDynamicDataForReportOverview(index)}
               />
             ))}
-          </div>
+          
 
-          <div>
-            <CompanyAndRoleSummary/> 
-          </div>
+          
+            {userReport?.interview_score_by_category.data.map((category, index) => (
+              <div key={index}> 
+                {category.interview_questions.map((question, qIndex) => (
+                  <DeepDive
+                    key={qIndex}
+                    className="deep-dive-component"
+                    {...getDynamicDataForDeepDive(index)}
+                  />
+                ))}
+              </div>
+            ))}
+         
 
-          <div>
-            <Extro/>
-          </div>
-          {/* {reportData?.interview_score_by_category?.data?.map((o, index) => {
-            return (
-              <>
-                <div>
-                  <Divider className="pt-5" />
-                  <UserReportPartTwo userData={o} user={reportData} />
-                  <Divider className="pt-5" />
-                </div>
-              </>)
-          })} */}
-
-          {/* <div>
-            <Divider className="pt-5" />
-            <UserReportPartThree userData={reportData?.interview_score_by_category} user={reportData} />
-            <Divider className="pt-5" />
-          </div> */}
-          {/* {
-            reportData?.interview_score_by_category?.data.find(o => o.main_title === "Equipped Mastery")?.length > 0 && ( */}
-          {/* <div>
-            <Divider className="pt-5" />
-            <UserReportPartFour userData={reportData?.interview_score_by_category} user={reportData} />
-            <Divider className="pt-5" />
-          </div> */}
-
-          {/* <div>
-            <Divider className="pt-5" />
-            <UserReportPartFive userData={reportData?.where_you_stand} />
-            <Divider className="pt-5" />
-          </div> */}
-
-          {/* {reportData?.report_type == "role based report" && (
-            <div>
-              <Divider className="pt-5" />
-              <UserReportPartSix userData={reportData} />
-              <Divider className="pt-5" />
-            </div>
-          )}
-          {reportData?.report_type == "skill based report" && (
-            <div>
-              <Divider className="pt-5" />
-              <SkillSuggestions data={reportData?.skill_based_suggestions ? reportData?.skill_based_suggestions : {}} />
-              <Divider className="pt-5" />
-            </div>
-          )}
-          {reportData?.report_type == "skill based report" && (
-            <div>
-              <Divider className="pt-5" />
-              <SkillsDisplay skills={reportData?.hard_and_soft_skill_dic ? reportData?.hard_and_soft_skill_dic : {}} />
-              <Divider className="pt-5" />
-            </div>
-          )}
-
-          <div>
-            <UserReportPartSeven userData={reportData} />
-          </div> */}
-
+        <div>
+          <CuratedSummary
+            report_type={userReport?.report_type}
+            skillSuggestions={userReport?.skill_based_suggestions}
+          /> 
         </div>
+
+        <div>
+          <Extro/>
+        </div>
+
+      </div>
 
         <div className="mt-5">
           <div className="flex justify-center items-center mt-4 mb-5">

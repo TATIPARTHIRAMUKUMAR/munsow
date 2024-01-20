@@ -477,7 +477,15 @@
 .munsow-dark-text{
   color: #212E3E;
 }
-
+.bar-red-bg{
+  background-color: #FF555B;
+}
+.bar-orange-bg{
+  background-color: #FE9663;  
+}
+.bar-green-bg{
+  background-color: #00BF6F;  
+}
 .bg-grey{
   background-color: #F1F4F5;
 }
