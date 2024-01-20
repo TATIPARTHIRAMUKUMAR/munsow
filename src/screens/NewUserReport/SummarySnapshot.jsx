@@ -47,16 +47,16 @@ const SummarySnapshot = (props) => {
 
   return (
     <>
-      <div className="py-10 mx-6 my-6 bg-grey">
+      <div className="py-10 mx-3 my-3 md:mx-6 md:my-6 bg-grey">
         <h1 className="mx-8 font-bold text-2xl">Summary Snapshot</h1>
-        <div className="mx-8 my-12 rounded-3xl py-6 bg-white flex justify-around ">
+        <div className="mx-4 my-8 md:mx-6 md:my-12 rounded-3xl py-6 bg-white flex justify-around ">
           <div className="text-center">
-            <h1 className={`text-4xl font-bold ${getScoreColor(overallReadinessScore)} mb-4`}>{overallReadinessScore}/10</h1>
-            <h3 className="font-bold text-purple">Overall Readiness Score</h3>
+            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(overallReadinessScore)} mb-4`}>{overallReadinessScore}/10</h1>
+            <h3 className="max-[375px]:text-base text-xl font-bold text-purple">Overall Readiness Score</h3>
           </div>
           <div className="text-center">
-            <h1 className={`text-4xl font-bold ${getScoreColor(overallPresentationScore)} mb-4`}>{overallPresentationScore}/10</h1>
-            <h3 className="font-bold text-purple">Presentation and Grooming</h3>
+            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(overallPresentationScore)} mb-4`}>{overallPresentationScore}/10</h1>
+            <h3 className="max-[375px]:text-base text-xl font-bold text-purple">Presentation and Grooming</h3>
           </div>
         </div>
         <div className="munsow-dark-bg text-white py-1">
@@ -64,7 +64,7 @@ const SummarySnapshot = (props) => {
         </div>
 
         {interview_score_by_category.data.map((category, index) => (
-          <div key={index} className={`mx-8 my-8 rounded-3xl py-6 ${componentColors[index % componentColors.length]}`}>
+          <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${componentColors[index % componentColors.length]}`}>
             <div className="flex flex-col lg:flex-row mb-8 lg:justify-around items-center">
               <div>
                 <h1 className="text-xl font-bold text-purple p-3 text-center">{category.main_title}</h1>

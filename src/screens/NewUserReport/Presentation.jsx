@@ -35,12 +35,12 @@ const Presentation = (props) => {
   return (
     
     <>
-      <div className="mx-6 my-6">
+      <div className="mx-3 my-3 md:mx-6 md:my-6">
         <div className="flex justify-around items-center pb-4 lg:pb-8 munsow-dark-bg">
-          <h1 className="mx-4 text-2xl lg:text-4xl font-semibold text-white">Presentation and Grooming</h1>
+          <h1 className="mx-4 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-white">Presentation and Grooming</h1>
           <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
-            <h1 className={`text-3xl lg:text-4xl font-bold ${getScoreColor(overallPresentationScore)}`}>{overallPresentationScore}/10</h1>
-            <p className="text-lg font-semibold text-purple">Overall Score</p>
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(overallPresentationScore)}`}>{overallPresentationScore}/10</h1>
+            <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
           </div>
         </div>
 

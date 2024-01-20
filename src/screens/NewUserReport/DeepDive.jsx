@@ -15,9 +15,9 @@ const DeepDive = (props) => {
   return (
 
     <>
-    <div className="mx-6 my-6">
+    <div className="mx-3 my-3 md:mx-6 md:my-6">
       <div className={`mb-8 ${bgcolor}`}>
-        <h1 className={`text-2xl lg:text-4xl font-semibold text-purple p-8`}>{head} Deep Dive</h1>
+        <h1 className={`text-2xl lg:text-4xl font-semibold text-purple p-6 md:p-8`}>{head} Deep Dive</h1>
       </div>
       <div className={`mb-8 ${bgcolor}`}>
         <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>

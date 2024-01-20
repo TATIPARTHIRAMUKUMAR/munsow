@@ -175,6 +175,30 @@ const NewUserReport = () => {
     const getDynamicDataForDeepDive = (index) => {
     const category = userReport?.interview_score_by_category.data[index];
 
+    // Check if category and interview_questions are defined
+    // if (category && category.interview_questions) {
+    // const question = category.interview_questions[index];
+
+    //Check if question is defined
+  //   if (question) {
+  //     return {
+  //       head: category.main_title,
+  //       bgcolor: componentColors[index % componentColors.length],
+  //       ques: question.question,
+  //       candidateAns: question.answer,
+  //       sampleAns: question.suggested_answer,
+  //       gotRight: question.Insights.what_you_got_right,
+  //       gotWrong: question.Insights.what_you_got_wrong,
+  //       feedback: question.Insights["feedback_for_the candidate"],
+  //     };
+  //   } else {
+  //     console.error("Question is undefined at index:", index);
+  //   }
+  // } else {
+  //   console.error("Category or interview_questions is undefined at index:", index);
+  // }
+
+
     const question = category.interview_questions[index];
     return {
       head: category.main_title,
@@ -194,7 +218,54 @@ const NewUserReport = () => {
     pdf.text(data.head, 10, 10); // Example: Render head text at coordinates (10, 10)
     // Render other data as needed
   };
-
+  
+  //FOUR
+  // const handleGeneratePdf = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const pdfContainer = reportTemplateRef.current;
+  //     const pdfWidth = 210;
+  //     const pdfHeight =
+  //       (pdfContainer.clientHeight * pdfWidth) / pdfContainer.clientWidth;
+  
+  //     const pdf = new jsPDF({
+  //       format: [pdfWidth, pdfHeight],
+  //       orientation: "portrait",
+  //     });
+  
+  //     const components = pdfContainer.children;
+  
+  //     for (let i = 0; i < components.length; i++) {
+  //       const component = components[i];
+  
+  //       const canvas = await html2canvas(component, {
+  //         scale: 2,
+  //         logging: false,
+  //       });
+  //       const imageData = canvas.toDataURL("image/png");
+  
+  //       pdf.addImage(
+  //         imageData,
+  //         "PNG",
+  //         0,
+  //         0,
+  //         pdf.internal.pageSize.getWidth(),
+  //         pdf.internal.pageSize.getHeight()
+  //       );
+  
+  //       // Add a page break after each set of components
+  //       if (i < components.length - 1) {
+  //         pdf.addPage();
+  //       }
+  //     }
+  
+  //     pdf.save("UserReports.pdf");
+  //   } catch (error) {
+  //     console.error("Error during PDF generation:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   
 
   return (

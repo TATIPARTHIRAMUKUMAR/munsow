@@ -23,7 +23,7 @@ export const ReportType = (props) => {
 
       {reportType === "skill based report" && (
         <div className="mt-40 mb-48">
-        <div className="flex justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
+        <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
           <h1>{reportType}</h1>
         </div>
         <div className="flex justify-center items-center mb-5">
@@ -56,9 +56,9 @@ const Intro = (props) => {
             <div className="w-6 h-11 mb-1 munsow-light-bg"></div>
             <div className="w-6 h-11 mb-1 munsow-dark-bg"></div>
           </div>
-          <div className="ml-7">
-            <h1 className="text-2xl font-bold mb-4 text-sky">MUNSOW</h1>
-            <h1 className="text-3xl font-extrabold mb-4">Candidate Interview<br></br> Assessment Report</h1>
+          <div className="ml-4 md:ml-7">
+            <h1 className="text-xl md:text-2xl font-bold mb-4 text-sky">MUNSOW</h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold mb-4">Candidate Interview<br></br> Assessment Report</h1>
           </div>
         </div>
 
