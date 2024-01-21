@@ -72,6 +72,11 @@ const StepperComponent = () => {
         }
     }
 
+    useEffect(()=>{
+        setSelectedRole(null)
+console.log("selectedCompany",selectedCompany)
+    },[selectedCompany])
+
     const [audioValidated, setAudioValidated] = useState(false);
     const [videoValidated, setVideoValidated] = useState(false);
 
@@ -281,6 +286,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                                             return {
                                                 label: o.name,
                                                 id: o.id,
+                                                role_ids:o.role_ids
                                             }
                                         })}
                                         selectedItems={selectedCompany}
@@ -301,7 +307,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                                         <span className="font-bold pr-2 ">Choose Role <span className="font-bold text-red-500 text-2xl">*</span></span>
                                     </label>
                                     <CheckboxesTags
-                                        options={interviewRolesList?.map((o) => {
+                                        options={selectedCompany?.role_ids?.map((o) => {
                                             return {
                                                 label: o.name,
                                                 id: o.id,

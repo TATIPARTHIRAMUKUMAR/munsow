@@ -40,10 +40,10 @@ export default function ReportIndex() {
         };
 
         return (
-            <div className="max-h-[320px] transition-transform duration-300 hover:scale-105">
-                <div className="flex flex-col h-full  p-4 border border-[#886cc050] rounded-lg shadow-lg">
+            <div className="max-h-[320px] transition-transform duration-300 hover:scale-105 shadow-lg rounded-lg">
+                <div className="flex flex-col h-full p-4 bg-white">
                     <div className="flex-grow p-2 flex flex-col gap-y-2">
-                        {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}                         
+                        {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}
                         </div> : <div className="text-xl font-semibold">Skill based report
                             <div className="text-base text-[#886cc0]">
                                 Skills : {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
@@ -58,7 +58,7 @@ export default function ReportIndex() {
                                 ))}
                             </div>
                         </div>}
-                        {skill_type == "role based report" ? <div className="font-medium"><span className="font-bold">Company:</span> {company}</div>  :<></>}
+                        {skill_type == "role based report" ? <div className="font-medium"><span className="font-bold">Company:</span> {company}</div> : <></>}
                         <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>
                         <div className="font-medium"><span className="font-bold">Generated On:</span> {moment(generated)?.format('MMMM DD, YYYY HH:mm:ss')}</div>
 
@@ -67,13 +67,14 @@ export default function ReportIndex() {
                     <div className="py-2 w-full">
                         {report_ready === "true" ? (
                             <>
-                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] hover:text-white" endIcon={<ArrowForwardIcon />} onClick={() => { viewReport(report_data) }} style={{ color: "#886cc0" }} > View Report</Button>
+                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] " endIcon={<ArrowForwardIcon />} onClick={() => { viewReport(report_data) }} > View Report</Button>
                             </>
                         ) : (
                             <div className="flex items-center justify-center text-orange-300">
                                 <HttpsOutlinedIcon className="mr-2 animate-spin" />
                                 Your report is being generated
                             </div>
+
                         )}
                     </div>
                 </div>

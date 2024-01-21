@@ -623,6 +623,26 @@ export const uploadUser = (data) => {
   };
 };
 
+export const uploadConfigurations = (data) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    // let toastId = toast("file upload", { autoClose: false });
+
+    axios.post(`${GLOBAL_CONSTANTS?.backend_url}/institution/upload_configurations`, data, { headers })
+      .then((resp) => {
+        console.log(resp)
+        toast.success(resp?.data?.message);
+
+        // toast.update(toastId, { render: resp?.data?.message, type: "error", autoClose: true })
+
+        // dispatch(getTeachersList(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
 
 export const getCourseList = (data) => ({
   type: types.COURSE_LIST,
