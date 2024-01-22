@@ -45,6 +45,22 @@ const SummarySnapshot = (props) => {
     }
   };
 
+  const getBackgroundColor = (head) => {
+    const firstWord = head.split(' ')[0];
+  
+    if (firstWord === 'Behavioural') {
+      return 'bg-purple'; // Apply purple color
+    } else if (firstWord === 'Practical') {
+      return 'bg-orange'; // Apply orange color
+    } else if (head.startsWith('Domain Knowledge')) {
+      return 'bg-green'; // Apply green color
+    } else {
+      return 'bg-gray'; // Default color or handle other cases
+    }
+  };
+
+  // const bgColor = getBackgroundColor(head);
+
   return (
     <>
       <div className="py-10 mx-3 my-3 md:mx-6 md:my-6 bg-grey">
@@ -64,7 +80,7 @@ const SummarySnapshot = (props) => {
         </div>
 
         {interview_score_by_category.data.map((category, index) => (
-          <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${componentColors[index % componentColors.length]}`}>
+          <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category.main_title)}`}>
             <div className="flex flex-col lg:flex-row mb-8 lg:justify-around items-center">
               <div>
                 <h1 className="text-xl font-bold text-purple p-3 text-center">{category.main_title}</h1>

@@ -24,7 +24,6 @@ const NewUserReport = () => {
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState({});
   const { userReport } = useSelector(state => state?.data)
-  const componentColors = ["bg-purple", "bg-green", "bg-orange"];
 
   const navigate = useNavigate();
 
@@ -155,7 +154,6 @@ const NewUserReport = () => {
       head: category.main_title,
       overallScore: category.secured_marks,
       notes: category.notes,
-      bgcolor: componentColors[index % componentColors.length],
       scores: category.sub_segements.map((segment, sIndex) => ({
         title: segment.title,
         score: segment.secured_marks,
@@ -202,7 +200,6 @@ const NewUserReport = () => {
     const question = category.interview_questions[index];
     return {
       head: category.main_title,
-      bgcolor: componentColors[index % componentColors.length],
       ques: question.question,
       candidateAns: question.answer,
       sampleAns: question.suggested_answer,
@@ -309,7 +306,7 @@ const NewUserReport = () => {
               head={category.main_title}
               overallScore={category.secured_marks}
               notes={category.notes}
-              bgcolor={componentColors[index % componentColors.length]} 
+             
               scores={category.sub_segements.map((segment, sIndex) => ({
                 title: segment.title,
                 score: segment.secured_marks,
@@ -327,7 +324,7 @@ const NewUserReport = () => {
             <DeepDive
               key={qIndex}
               head={category.main_title}
-              bgcolor={componentColors[index % componentColors.length]}
+              
               ques={question.question}
               candidateAns={question.answer}
               sampleAns={question.suggested_answer}

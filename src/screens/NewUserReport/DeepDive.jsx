@@ -5,21 +5,37 @@ import { FaRegThumbsDown } from "react-icons/fa";
 
 const DeepDive = (props) => {
 
-  const { head, bgcolor, ques, candidateAns, sampleAns, gotRight, gotWrong, feedback } = props;
+  const { head, ques, candidateAns, sampleAns, gotRight, gotWrong, feedback } = props;
 
   const feedbackData = feedback;
 
   // Parse the feedbackData string into an object
   const feedbackObject = JSON.parse(feedbackData);
 
+  const getBackgroundColor = (head) => {
+    const firstWord = head.split(' ')[0];
+  
+    if (firstWord === 'Behavioural') {
+      return 'bg-purple'; // Apply purple color
+    } else if (firstWord === 'Practical') {
+      return 'bg-orange'; // Apply orange color
+    } else if (head.startsWith('Domain Knowledge')) {
+      return 'bg-green'; // Apply green color
+    } else {
+      return 'bg-gray'; // Default color or handle other cases
+    }
+  };
+
+  const bgColor = getBackgroundColor(head);
+
   return (
 
     <>
     <div className="mx-3 my-3 md:mx-6 md:my-6">
-      <div className={`mb-8 ${bgcolor}`}>
+      <div className={`mb-8 ${bgColor}`}>
         <h1 className={`text-2xl lg:text-4xl font-semibold text-purple p-6 md:p-8`}>{head} Deep Dive</h1>
       </div>
-      <div className={`mb-8 ${bgcolor}`}>
+      <div className={`mb-8 ${bgColor}`}>
         <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
       </div>
       <div className="p-4 grid max-w-xl grid-cols-1 gap-x-8 gap-y-6 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
