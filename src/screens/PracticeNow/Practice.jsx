@@ -119,6 +119,7 @@ const StepperComponent = () => {
     interviewRolesList,
     companiesList,
     questionsList,
+    colorTheme
   } = useSelector((state) => state?.data);
 
   const handleNext = () => {
@@ -159,17 +160,17 @@ const StepperComponent = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const { isDarkMode, colorTheme } = useDarkMode();
-  const { colorTheme: reduxColorTheme } = useDarkMode();
+  const { isDarkMode} = useDarkMode();
+//   const { colorTheme: reduxColorTheme } = useDarkMode();
   console.log(colorTheme, "colorTheme");
 
   const linearGradientBackground = isDarkMode
-    ? reduxColorTheme.dark.selectBackground
-    : reduxColorTheme.light.selectBackground;
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
   //button
   const textColors = isDarkMode
-    ? reduxColorTheme.dark.textColor2
-    : reduxColorTheme.light.textColor2;
+    ? colorTheme.dark.textColor2
+    : colorTheme.light.textColor2;
 
   useEffect(() => {
     console.log("selectedSoftskill", selectedSoftskill);
@@ -207,11 +208,11 @@ const StepperComponent = () => {
               <StepLabel
                 completed={index < currentStep}
                 style={{
-                  color: index < currentStep ? "#886CC0" : "inherit",
+                  color: index < currentStep ? "#666" : "inherit",
                 }}
                 StepIconProps={{
                   style: {
-                    color: index <= currentStep ? "#886CC0" : "",
+                    color: index <= currentStep ? "red" : "",
                     fontSize: "2.5rem",
                   },
                 }}
