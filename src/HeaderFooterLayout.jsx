@@ -21,6 +21,8 @@ import PropTypes from "prop-types";
 import GLOBAL_CONSTANTS from "../GlobalConstants";
 import { Collapse } from "@mui/material";
 import AppHeader from "./screens/Admin/AppHeader";
+import { IoMdSettings } from "react-icons/io";
+import { RiDashboardFill } from "react-icons/ri";
 
 import {
   FaThLarge,
@@ -34,32 +36,31 @@ import {
   FaFileAlt,
   FaUserGraduate,
   FaChalkboardTeacher,
-} from 'react-icons/fa';
+  FaCode,
+  FaUserSecret,
+} from "react-icons/fa";
 
-import {
-  FaHeartPulse,
-} from 'react-icons/fa6';
+import { FaHeartPulse, FaSection } from "react-icons/fa6";
 
-import {
-  BiSolidReport
-} from 'react-icons/bi';
+import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
+import { color } from "@chakra-ui/system";
 
 const drawerWidth = 270;
 
-const openedMixin = (theme, role1) => ({
+const openedMixin = (theme, role1, color) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
-  background: role1 === 1 ? "white" : "white",
+  background: role1 === 1 ? "white" : color,
   color: "#FFFFFF",
 });
 
-const closedMixin = (theme, role1) => ({
+const closedMixin = (theme, role1, color) => ({
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -69,7 +70,7 @@ const closedMixin = (theme, role1) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  background: role1 === 1 ? "white" : "white",
+  background: role1 === 1 ? "white" : color,
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -93,18 +94,18 @@ const DrawerFooter = styled("div")(({ theme }) => ({
 
 const CustomDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open, role1 }) => ({
+})(({ theme, open, role1, color }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
   ...(open && {
-    ...openedMixin(theme, role1),
-    "& .MuiDrawer-paper": openedMixin(theme, role1),
+    ...openedMixin(theme, role1, color),
+    "& .MuiDrawer-paper": openedMixin(theme, role1, color),
   }),
   ...(!open && {
-    ...closedMixin(theme, role1),
-    "& .MuiDrawer-paper": closedMixin(theme, role1),
+    ...closedMixin(theme, role1, color),
+    "& .MuiDrawer-paper": closedMixin(theme, role1, color),
   }),
 }));
 
@@ -120,16 +121,34 @@ export default function HeaderFooterLayout({ Component }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedSubItem, setSelectedSubItem] = useState(null);
 
+  const { isDarkMode, toggleDarkMode, color, colorTheme } = useDarkMode();
 
-  const { isDarkMode } = useDarkMode();
-  const backgroundColorClass = isDarkMode ? "bg-dark-primary" : "bg-primary";
+  const backgroundColorClass = isDarkMode
+    ? colorTheme.dark.background
+    : colorTheme.light.background;
+
+  const borderSelectedColor = isDarkMode
+    ? colorTheme.dark.selectBorder
+    : colorTheme.light.selectBorder;
+
+  const selectedBackgroundColor = isDarkMode
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
+
+  const selectedIcon = isDarkMode
+    ? colorTheme.dark.selectIcon
+    : colorTheme.light.selectIcon;
+
+  const textColor = isDarkMode
+    ? colorTheme.dark.textColor
+    : colorTheme.light.textColor;
 
   useEffect(() => {
     if (GLOBAL_CONSTANTS?.user_cred?.role_id === 1) {
       setMenuData([
         {
           label: "Home",
-          icon: <FaThLarge size={20} className="" />,
+          icon: <RiDashboardFill size={20} className="" />,
           route: "/adminDashboard",
           subItems: [],
         },
@@ -188,14 +207,20 @@ export default function HeaderFooterLayout({ Component }) {
           ],
         },
         {
+          label: "Configurations",
+          icon: <FaCode size={20} className="" />,
+          route: "/configurations",
+          subItems: [],
+        },
+        {
           label: "Help & Support",
-          icon: <FaThLarge size={20} className="" />,
+          icon: <FaQuestionCircle size={20} className="" />,
           route: "/adminHelp",
           subItems: [],
         },
         {
           label: "Settings",
-          icon: <FaThLarge size={20} className="" />,
+          icon: <IoMdSettings size={20} className="" />,
           route: "/adminSettings",
           subItems: [],
         },
@@ -252,11 +277,13 @@ export default function HeaderFooterLayout({ Component }) {
     if (menuData?.length > 0) {
       let route = location.pathname;
 
-      let meunItem = menuData?.find((m) => m?.route == route || m?.subItems?.find((s) => s.route == route));
+      let meunItem = menuData?.find(
+        (m) => m?.route == route || m?.subItems?.find((s) => s.route == route)
+      );
       let index = menuData?.findIndex((m) => m?.route == meunItem?.route);
       setSelectedItem(index);
     }
-  }, [menuData])
+  }, [menuData]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -267,12 +294,17 @@ export default function HeaderFooterLayout({ Component }) {
   };
 
   const handleListItemClick = (index, route) => {
-    if(route=="/adminDashboard" || route=="/behaviourAnalysis" || route=="/ksanalysis" || route=="/practicalThinking" || route=="/emotionSensing"){
+    if (
+      route == "/adminDashboard" ||
+      route == "/behaviourAnalysis" ||
+      route == "/ksanalysis" ||
+      route == "/practicalThinking" ||
+      route == "/emotionSensing"
+    ) {
       localStorage.setItem("branch", "All Branches");
       localStorage.setItem("course", "All Courses");
       localStorage.setItem("department", "All Departments");
       localStorage.setItem("user", "All Users");
-
     }
     setSelectedItem(index);
     navigate(route);
@@ -280,36 +312,60 @@ export default function HeaderFooterLayout({ Component }) {
   };
 
   return (
-    <Box sx={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden" }}>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
       <CssBaseline />
-      <CustomDrawer variant="permanent" open={open} role1={GLOBAL_CONSTANTS?.user_cred?.role_id ? GLOBAL_CONSTANTS?.user_cred?.role_id : 1}>
-        <DrawerHeader style={{ background: `${backgroundColorClass}` }}>
-          <div className="font-bold  text-[#4e3f6b] text-2xl pr-10">MUNSOW</div>
+      <CustomDrawer
+        variant="permanent"
+        open={open}
+        role1={
+          GLOBAL_CONSTANTS?.user_cred?.role_id
+            ? GLOBAL_CONSTANTS?.user_cred?.role_id
+            : 1
+        }
+        color={color.background}
+      >
+        <DrawerHeader style={{ background: backgroundColorClass }}>
+          <div
+            className="font-bold text-2xl pr-10"
+            style={{ color: textColor }}
+          >
+            MUNSOW
+          </div>
           {!open ? (
             <IconButton onClick={handleDrawerOpen}>
               {theme.direction === "rtl" ? (
-                <ChevronLeftIcon style={{ color: "black" }} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               ) : (
-                <ChevronRightIcon style={{ color: "black" }} />
+                <ChevronRightIcon style={{ color: textColor }} />
               )}
             </IconButton>
           ) : (
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
-                <ChevronRightIcon style={{ color: "black" }} />
+                <ChevronRightIcon style={{ color: textColor }} />
               ) : (
-                <ChevronLeftIcon style={{ color: "black" }} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               )}
             </IconButton>
           )}
         </DrawerHeader>
         <Divider style={{ opacity: "0.2" }} />
-        <List>
+        <List style={{ background: backgroundColorClass }}>
           {menuData.map((mainItem, mainIndex) => (
             <div
               key={mainIndex}
               className={classNames(
-                GLOBAL_CONSTANTS?.user_cred?.role_id !== 1 && (mainIndex == 3 || mainIndex == 5) ? "mb-16" : "mb-2",
+                GLOBAL_CONSTANTS?.user_cred?.role_id !== 1 &&
+                  (mainIndex == 3 || mainIndex == 5)
+                  ? "mb-16"
+                  : "mb-2",
                 ""
               )}
             >
@@ -317,7 +373,9 @@ export default function HeaderFooterLayout({ Component }) {
                 disablePadding
                 onClick={() => {
                   if (mainItem.subItems.length > 0) {
-                    setOpenSubMenu(openSubMenu === mainIndex ? null : mainIndex);
+                    setOpenSubMenu(
+                      openSubMenu === mainIndex ? null : mainIndex
+                    );
                   } else {
                     handleListItemClick(mainIndex, mainItem.route);
                   }
@@ -329,16 +387,25 @@ export default function HeaderFooterLayout({ Component }) {
                   },
                 }}
               >
-
                 <ListItemButton
                   sx={{
                     minHeight: 50,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
-                    backgroundColor: selectedItem === mainIndex ? "#f3f0f9" : "transparent",
-                    borderLeft: selectedItem === mainIndex ? "5px solid purple" : "5px solid transparent",
-                    borderBottomRightRadius: open && "40px",
-                    // color:selectedItem === mainIndex ? "purple" : "transparent",
+                    backgroundColor: selectedItem === mainIndex ? color : 0,
+                    borderLeft:
+                      selectedItem === mainIndex
+                        ? `5px solid ${borderSelectedColor}`
+                        : "5px solid transparent",
+                    borderRadius: open && "5px",
+                    margin: "0px 10px",
+                    "&:hover": {
+                      backgroundColor: selectedBackgroundColor,
+                    },
+                    background:
+                      selectedItem === mainIndex
+                        ? selectedBackgroundColor
+                        : "transparent",
                   }}
                 >
                   <ListItemIcon
@@ -346,21 +413,28 @@ export default function HeaderFooterLayout({ Component }) {
                       minWidth: 0,
                       mr: open ? 2 : "auto",
                       justifyContent: "center",
-                      color: selectedItem === mainIndex ? "#a590cf" : "rgb(107 114 128)",
+                      color:
+                        selectedItem === mainIndex
+                          ? `${selectedIcon}`
+                          : "rgb(107 114 128)",
                     }}
-                  // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
+                    // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                   >
                     {mainItem.icon}
                   </ListItemIcon>
                   <ListItemText
                     disableTypography
+                    style={{ fontSize: "15px" }}
                     // style={{ color: selectedItem === mainIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }}
                     className={classNames(
-                      selectedItem === mainIndex ? "text-[#a590cf] font-bold" : "text-gray-500 font-medium",
+                      selectedItem === mainIndex
+                        ? "font-bold "
+                        : "  text-gray-500 font-medium",
                       "text-base"
                     )}
                     primary={mainItem.label}
-                    sx={{ opacity: open ? 1 : 0 }} />
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
                   {mainItem.subItems.length > 0 && (
                     <ListItemIcon
                       sx={{
@@ -377,7 +451,11 @@ export default function HeaderFooterLayout({ Component }) {
                   )}
                 </ListItemButton>
               </ListItem>
-              <Collapse in={openSubMenu === mainIndex} timeout="auto" unmountOnExit>
+              <Collapse
+                in={openSubMenu === mainIndex}
+                timeout="auto"
+                unmountOnExit
+              >
                 <List component="div" disablePadding>
                   {mainItem.subItems.map((subItem, subIndex) => (
                     <ListItem
@@ -385,8 +463,12 @@ export default function HeaderFooterLayout({ Component }) {
                       disablePadding
                       sx={{ display: "block", pl: open ? 3 : 0 }}
                       onClick={() => {
-                        let meunItem = menuData?.find((m) => m?.subItems?.find((s) => s.route == subItem.route));
-                        let index = menuData?.findIndex((m) => m?.route == meunItem?.route);
+                        let meunItem = menuData?.find((m) =>
+                          m?.subItems?.find((s) => s.route == subItem.route)
+                        );
+                        let index = menuData?.findIndex(
+                          (m) => m?.route == meunItem?.route
+                        );
                         handleListItemClick(index, subItem.route);
                         setSelectedSubItem(subIndex);
                       }}
@@ -399,7 +481,6 @@ export default function HeaderFooterLayout({ Component }) {
                           px: 2.5,
                           // backgroundColor: selectedItem === mainIndex ? "#f3f0f9" : "transparent",
                           // borderBottomRightRadius:"40px"
-
                         }}
                       >
                         <ListItemIcon
@@ -407,20 +488,28 @@ export default function HeaderFooterLayout({ Component }) {
                             minWidth: 0,
                             mr: open ? 2 : "auto",
                             justifyContent: "center",
-                            color: selectedSubItem === subIndex ? "#a590cf" : "rgb(107 114 128)",
+                            color:
+                              selectedSubItem === subIndex
+                                ? "#a590cf"
+                                : "rgb(107 114 128) ",
                           }}
-                        // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
+
+                          // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                         >
                           {subItem.icon}
                         </ListItemIcon>
                         <ListItemText
                           disableTypography
-                          // style={{ color: selectedSubItem === subIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }} 
+                          // style={{ color: selectedSubItem === subIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }}
                           className={classNames(
-                            selectedSubItem === subIndex ? "text-[#a590cf] font-semibold" : "text-gray-500 font-medium",
+                            selectedSubItem === subIndex
+                              ? "text-[#a590cf] font-semibold"
+                              : "text-gray-500 font-medium",
                             "text-base"
                           )}
-                          primary={subItem.label} sx={{ opacity: open ? 1 : 0 }} />
+                          primary={subItem.label}
+                          sx={{ opacity: open ? 1 : 0 }}
+                        />
                       </ListItemButton>
                     </ListItem>
                   ))}
@@ -429,10 +518,17 @@ export default function HeaderFooterLayout({ Component }) {
             </div>
           ))}
         </List>
-        <DrawerFooter>
+        <DrawerFooter
+          style={{
+            background: backgroundColorClass,
+            width: "inherit",
+          }}
+        >
           <ListItem
             disablePadding
-            sx={{ display: "block" }}
+            sx={{
+              display: "block",
+            }}
             onClick={() => {
               localStorage.clear();
               sessionStorage.clear();
@@ -445,6 +541,11 @@ export default function HeaderFooterLayout({ Component }) {
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
+                borderRadius: open && "5px",
+                margin: "0px 10px",
+                "&:hover": {
+                  backgroundColor: selectedBackgroundColor,
+                },
               }}
             >
               <ListItemIcon
@@ -454,19 +555,30 @@ export default function HeaderFooterLayout({ Component }) {
                   justifyContent: "center",
                 }}
               >
-                <LogoutOutlinedIcon style={{ color: "black" }} />
+                <LogoutOutlinedIcon style={{ color: "#eb4034" }} />
               </ListItemIcon>
-              <ListItemText style={{ color: "black" }} primary={"Logout"} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText
+                className="font-bold hover:text-bold"
+                style={{ color: "#eb4034" }}
+                primary={"Logout"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
             </ListItemButton>
           </ListItem>
         </DrawerFooter>
       </CustomDrawer>
 
-      <AppHeader open={open} role1={GLOBAL_CONSTANTS?.user_cred ? GLOBAL_CONSTANTS?.user_cred : {}} />
+      <AppHeader
+        open={open}
+        role1={GLOBAL_CONSTANTS?.user_cred ? GLOBAL_CONSTANTS?.user_cred : {}}
+      />
 
-      <div className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`} style={{ flexGrow: 1 }}>
-      {Component}
-    </div>
+      <div
+        className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`}
+        style={{ flexGrow: 1 }}
+      >
+        {Component}
+      </div>
     </Box>
   );
 }
