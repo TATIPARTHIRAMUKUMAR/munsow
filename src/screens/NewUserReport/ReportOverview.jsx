@@ -35,7 +35,7 @@ const ReportOverview = (props) => {
 
     return (
         <>
-        <div className="mx-3 my-3 md:mx-6 md:my-6">
+        <div className="mx-3 my-3 md:mx-6 md:my-6 report-overview-component">
         <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 ${bgColor}`}>
             <h1 className="mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple">{head} Overview</h1>
             <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">

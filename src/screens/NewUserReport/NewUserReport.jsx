@@ -95,10 +95,11 @@ const NewUserReport = () => {
     // try{
     setLoading(true);
     const pdfContainer = reportTemplateRef.current;
+    console.log("><><><><>... ", pdfContainer)
   
     const pdf = new jsPDF({
       unit: "mm",
-      format: "a4",
+      format: 'a4',
       orientation: "portrait",
       compress: true, // Enable compression
     });
@@ -109,10 +110,10 @@ const NewUserReport = () => {
       if (i > 0) {
         pdf.addPage();
       }
-  
+      console.log(">>>>>>>>>", components[i].classList)
       const component = components[i];
       const canvas = await html2canvas(component, {
-        scale: 2, // Adjust the scale as needed
+        scale: 3, // Adjust the scale as needed
         logging: false, // Disable logging for cleaner output
       });
       const imageData = canvas.toDataURL("image/png");
@@ -127,20 +128,24 @@ const NewUserReport = () => {
       );
   
       // Handle dynamic data for ReportOverview component
-      if (component.classList.contains("report-overview-component")) {
-        const reportOverviewData = getDynamicDataForReportOverview(i);
-        renderDynamicDataForReportOverview(pdf, reportOverviewData);
-      }
+      // if (component.classList.contains("report-overview-component")) {
+      //   console.log("Innn.....")
+      //   const reportOverviewData = getDynamicDataForReportOverview(i);
+      //   renderDynamicDataForReportOverview(pdf, reportOverviewData);
+      // }
   
       // Handle dynamic data for DeepDive component
-      if (component.classList.contains("deep-dive-component")) {
-        const deepDiveData = getDynamicDataForDeepDive(i);
-        renderDynamicDataForDeepDive(pdf, deepDiveData);
-      }
+      // if (component.classList.contains("deep-dive-component")) {
+      //   console.log("INSIDE.....", i)
+      //   const deepDiveData = getDynamicDataForDeepDive(i);
+      //   console.log('HERE...')
+      //   renderDynamicDataForDeepDive(pdf, deepDiveData);
+      // }
     }
   
     pdf.save("UserReports.pdf");
     setLoading(false);
+    console.log("Downloaded.......27")
   // }catch (error) {
   //   console.error("Error during PDF generation:", error);
   //   setLoading(false);
@@ -172,6 +177,7 @@ const NewUserReport = () => {
   // Example functions for handling dynamic data for DeepDive component
     const getDynamicDataForDeepDive = (index) => {
     const category = userReport?.interview_score_by_category.data[index];
+    console.log('category>>>', category)
 
     // Check if category and interview_questions are defined
     // if (category && category.interview_questions) {
@@ -341,23 +347,22 @@ const NewUserReport = () => {
             {userReport?.interview_score_by_category.data.map((category, index) => (
               <ReportOverview
                 key={index}
-                className="report-overview-component"  // Add a class name to identify the component
                 {...getDynamicDataForReportOverview(index)}
               />
             ))}
           
 
-          
             {userReport?.interview_score_by_category.data.map((category, index) => (
-              <div key={index}> 
+              <>
                 {category.interview_questions.map((question, qIndex) => (
-                  <DeepDive
-                    key={qIndex}
-                    className="deep-dive-component"
-                    {...getDynamicDataForDeepDive(index)}
-                  />
+                  <div key={index} className="deep-dive-component"> 
+                    <DeepDive
+                      key={qIndex}
+                      {...getDynamicDataForDeepDive(index)}
+                    />
+                  </div>
                 ))}
-              </div>
+              </>
             ))}
          
 
