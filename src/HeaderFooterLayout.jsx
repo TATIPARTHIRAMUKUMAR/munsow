@@ -341,17 +341,17 @@ export default function HeaderFooterLayout({ Component }) {
           {!open ? (
             <IconButton onClick={handleDrawerOpen}>
               {theme.direction === "rtl" ? (
-                <ChevronLeftIcon style={{ color: "black" }} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               ) : (
-                <ChevronRightIcon style={{ color: "black" }} />
+                <ChevronRightIcon style={{ color: textColor }} />
               )}
             </IconButton>
           ) : (
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
-                <ChevronRightIcon style={{ color: "black" }} />
+                <ChevronRightIcon style={{ color: textColor }} />
               ) : (
-                <ChevronLeftIcon style={{ color: "black" }} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               )}
             </IconButton>
           )}
@@ -555,10 +555,11 @@ export default function HeaderFooterLayout({ Component }) {
                   justifyContent: "center",
                 }}
               >
-                <LogoutOutlinedIcon style={{ color: "gray" }} />
+                <LogoutOutlinedIcon style={{ color: "#eb4034" }} />
               </ListItemIcon>
               <ListItemText
-                style={{ color: "gray" }}
+                className="font-bold hover:text-bold"
+                style={{ color: "#eb4034" }}
                 primary={"Logout"}
                 sx={{ opacity: open ? 1 : 0 }}
               />
