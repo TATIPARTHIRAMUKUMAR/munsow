@@ -119,7 +119,7 @@ const StepperComponent = () => {
     interviewRolesList,
     companiesList,
     questionsList,
-    colorTheme
+    colorTheme,
   } = useSelector((state) => state?.data);
 
   const handleNext = () => {
@@ -160,8 +160,8 @@ const StepperComponent = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const { isDarkMode} = useDarkMode();
-//   const { colorTheme: reduxColorTheme } = useDarkMode();
+  const { isDarkMode } = useDarkMode();
+  //   const { colorTheme: reduxColorTheme } = useDarkMode();
   console.log(colorTheme, "colorTheme");
 
   const linearGradientBackground = isDarkMode
@@ -208,11 +208,12 @@ const StepperComponent = () => {
               <StepLabel
                 completed={index < currentStep}
                 style={{
-                  color: index < currentStep ? "#666" : "inherit",
+                  backgroundColor: index <= currentStep ? "white" : "",
+                  color: index <= currentStep ? textColors : "inherit",
                 }}
                 StepIconProps={{
                   style: {
-                    color: index <= currentStep ? "red" : "",
+                    color: index <= currentStep ? linearGradientBackground : "",
                     fontSize: "2.5rem",
                   },
                 }}
@@ -248,7 +249,7 @@ const StepperComponent = () => {
                     onChange={() => setSelectedCategory("skills")}
                     className="p-1 m-2"
                     style={{
-                      backgroundColor: linearGradientBackground,
+                      // backgroundColor: linearGradientBackground,
                       color: textColors,
                     }}
                   />
@@ -338,7 +339,7 @@ const StepperComponent = () => {
                     onChange={() => setSelectedCategory("role")}
                     className="p-1 m-2 "
                     style={{
-                      backgroundColor: linearGradientBackground,
+                      // backgroundColor: linearGradientBackground,
                       color: textColors,
                     }}
                   />
@@ -439,10 +440,26 @@ const StepperComponent = () => {
 
           {currentStep === 1 && (
             <div>
-              <h2 className="text-center text-xl font-semibold mb-2 text-purple-600">
+              <h2
+                style={{
+                  textAlign: "center",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  marginBottom: "2px",
+                  color: textColors,
+                }}
+              >
                 Level
               </h2>
-              <div className="m-3 w-[35rem] border-4 rounded-2xl py-8 px-7 border-purple-300">
+              <div
+                style={{
+                  margin: "1.5rem",
+                  width: "35rem",
+                  border: "4px solid #0fe1d2",
+                  borderRadius: "20px",
+                  padding: "2rem 2.5rem",
+                }}
+              >
                 <input
                   type="range"
                   min="0"
@@ -540,8 +557,16 @@ const StepperComponent = () => {
                 <div className="text-center font-semibold text-gray-500 mb-4">
                   <ComputerRoundedIcon sx={{ fontSize: "5rem" }} />
                 </div>
-                <h2 className="text-center text-2xl font-semibold mb-3 text-purple-600">
-                  System Checks
+                <h2
+                  style={{
+                    textAlign: "center",
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    marginBottom: "2px",
+                    color: textColors,
+                  }}
+                >
+                  Level
                 </h2>
                 <div className="text-sm max-w-xs text-center font-semibold text-gray-500 mb-4">
                   Please complete this quick walk through to confirm your
@@ -552,8 +577,16 @@ const StepperComponent = () => {
                     type="checkbox"
                     name="chosenCompany"
                     checked={chosenCompany}
-                    className="mt-0.5 h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
+                    className="mt-0.5 h-5 w-5 "
                     onChange={() => setChosenCompany(!chosenCompany)}
+                    style={{
+                      border: chosenCompany
+                        ? "2px solid #0fe1d2"
+                        : "2px solid transparent",
+                      backgroundColor: chosenCompany
+                        ? "#0fe1d2"
+                        : "transparent",
+                    }}
                   />
 
                   <span className="ml-3 text-sm">
@@ -598,7 +631,7 @@ const StepperComponent = () => {
               className="bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md"
               style={{
                 backgroundColor: linearGradientBackground,
-                color: textColors,
+                color: "white",
                 padding: "0.5rem 1rem",
                 borderRadius: "0.375rem",
                 cursor: "pointer",
