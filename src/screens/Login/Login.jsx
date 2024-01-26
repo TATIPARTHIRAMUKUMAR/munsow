@@ -101,12 +101,12 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-white">
 
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/6 p-5 md:p-20">
           <div className="bg-white rounded-lg p-6">
-
+            
             <FormControl component="fieldset">
               {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
               <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
@@ -193,7 +193,7 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
-        <div className="hidden md:inline w-3/6">
+        <div className="hidden md:inline w-3/6 bg-white" style={{cursor:'default'}}>
           <img
             src={interview}
             className="w-full p-5 md:p-20"

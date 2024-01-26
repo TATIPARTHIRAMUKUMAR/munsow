@@ -14,14 +14,15 @@ function TopicSubTopicList() {
         'id' : 1,
         'subtopic' : 'Topic 1.1',
         'isHiddenSub' : false,
-        'isDescHidden' : false,
+        // 'isDescHidden' : false,
         'desc' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       }
     ]
   },
   {
     'id' : 2,
-    'topic' : "Topic 2 - Heading"
+    'topic' : "Topic 2 - Heading",
+    'isHidden' : false,
   }
 ]
 
@@ -35,7 +36,6 @@ const [isSubEditModalOpen, setSubEditModalOpen] = useState(false);
 const [newTopic, setNewTopic] = useState({ topic: '' });
 const [newSubTopic, setNewSubTopic] = useState({ subtopic: '' , desc : ''});
 let [Topicdata, setData] = useState(data);
-const [isButtonDisabled, setButtonDisabled] = useState(true);
 
 const [inputClassName, setInputClassName] = useState('valid');
 const [descClassName, setDescClassName] = useState('validDesc')
@@ -125,7 +125,6 @@ const handleSubTopicInputChange = (e) => {
         ...prevSubTopic,
         [name]: value,
       }));
-      setButtonDisabled(!value.trim());
     }
     else
     {
@@ -147,7 +146,6 @@ const handleSubTopicInputChange = (e) => {
         ...prevSubTopic,
         [name]: value,
       }));
-      setButtonDisabled(!value.trim());
     }
     else
     {
@@ -174,7 +172,6 @@ const handleSubTopicEditInputChange = (e) => {
         ...prevSubTopic,
         [name]: value,
       }));
-      setButtonDisabled(!value.trim());
     }
     else
     {
@@ -196,7 +193,6 @@ const handleSubTopicEditInputChange = (e) => {
         ...prevSubTopic,
         [name]: value,
       }));
-      setButtonDisabled(!value.trim());
     }
     else
     {
@@ -220,7 +216,6 @@ const handleInputChange = (e) => {
       ...prevTopic,
       [name]: value,
     }));
-    setButtonDisabled(false);
   }
   else
   {
@@ -420,7 +415,7 @@ const toggleVisibility = (index) => {
       subtopic.isHiddenSub = true;
     });
   }
-
+  console.log('???????', updatedTopicData)
   setData(updatedTopicData);
 
 };
@@ -567,18 +562,17 @@ const topicNames = Topicdata.map((topic, index) =>
       ) : (
         <>
           {Topicdata[index].isHidden ? (
-          <div className='hidden'>
-            <tr className='hidden'>
-              
-              <td className='hidden'>
-                <FontAwesomeIcon className='hidden' style={{ marginRight:'15px'}} icon={faBars}/>
+          <div>
+            <tr>
+              <td>
+                <FontAwesomeIcon style={{ marginRight:'15px'}} icon={faBars}/>
               </td>
 
-              <td className='hidden' style={{width:'1200px'}}>
-                <span className='hidden'>{topic.topic}</span>
+              <td style={{width:'1200px'}}>
+                <span>{topic.topic}</span>
               </td>
 
-              <td className='hidden' style={{width:'15%', paddingLeft:'95px'}}>
+              <td style={{width:'15%', paddingLeft:'95px'}}>
                 <button className='functionButton' onClick={() => visible(index)}>
                   <FontAwesomeIcon style={{backgroundColor:'#d9d9d9', fontSize:'20px'}} icon={faEye}/>
                 </button>
@@ -731,7 +725,7 @@ return (
             </p>
           )}<br/>
           <button onClick={cancelEditing} className='cancelEditButton' style={{marginLeft:'290px'}}>Cancel</button>
-          <button onClick={handleSave} disabled={isButtonDisabled} className='saveEditButton'>Confirm</button>
+          <button onClick={handleSave} className='saveEditButton'>Confirm</button>
         </div>
       </div>
     )}
@@ -758,7 +752,8 @@ return (
             <p className='invalidMessage'>
               {validationMessage}
             </p>
-          )}<br/>
+          )}
+          <br/><br/>
 
           <label htmlFor="topicName">Sub-Topic Description</label><br/>
           {/* <p style={{backgroundColor:'white', float:'right', marginTop:'0px'}}>{`${newSubTopic.desc.length}/300`}</p></label><br/> */}
@@ -777,10 +772,11 @@ return (
               {validationDescMessage}
             </p>
           )}
-          <br/><br/>
+
+          <br/><br/><br/>
 
           <button onClick={cancelEditing} className='cancelEditButton' style={{marginLeft:'290px'}}>Cancel</button>
-          <button onClick={handleSubTopicSave} disabled={isButtonDisabled} className='saveEditButton'>Confirm</button>
+          <button onClick={handleSubTopicSave} className='saveEditButton'>Confirm</button>
         </div>
       </div>
     )}
@@ -859,7 +855,7 @@ return (
           <br/><br/>
 
           <button onClick={cancelEditing} className='cancelEditButton' style={{marginLeft:'290px'}}>Cancel</button>
-          <button onClick={handleEdit} disabled={isButtonDisabled} className='saveEditButton'>Confirm</button>
+          <button onClick={handleEdit} className='saveEditButton'>Confirm</button>
         </div>
       </div>
     )}

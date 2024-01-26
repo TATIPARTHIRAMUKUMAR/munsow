@@ -41,6 +41,9 @@
 {
   width: 500px;
   background-color: white;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .functionButton
@@ -317,12 +320,6 @@
   cursor: pointer;
 }
 
-.saveEditButton:disabled
-{
-  background-color: grey;
-  color: lightgray;
-  cursor: not-allowed;
-}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------- */
 
