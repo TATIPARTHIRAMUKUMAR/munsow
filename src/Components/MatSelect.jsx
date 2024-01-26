@@ -14,6 +14,7 @@ export default function CheckboxesTags(props) {
     <Autocomplete
     size="small"
       // multiple
+      className="max-w-full h-auto"
       id="checkboxes-tags-demo"
       options={options}
       disableCloseOnSelect

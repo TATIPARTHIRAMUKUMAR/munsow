@@ -41,6 +41,26 @@ const initialState = {
   courses:[],
   assignedUsers:[],
   unAssignedUsers:[],
+  colorTheme: {
+    light: {
+      background: " #242D36 ",
+      foreground: "#000000",
+      selectBackground: "#2BE2D0",
+      selectBorder: "#212e3e",
+      selectIcon: "#21263e",
+      textColor: "#eceef0",
+      textColor2: "#0fe1d2",
+    },
+    dark: {
+      background: "#242D36",
+      foreground: "#FFFFFF",
+      selectBackground: "#0fe1d2",
+      selectBorder: "#212e3e",
+      selectIcon: "#21263e",
+      textColor: "#ABB2BA",
+      textColor2: "#0fe1d2",
+    },
+  },
 
   loading: false
 };

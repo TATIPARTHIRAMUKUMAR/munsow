@@ -10,14 +10,14 @@ function SkillSuggestions({ data }) {
                             Skill Suggestions
                         </span>
                     </div>
-                    {/* <div className="md:mt-5 md:me-4 md:mb-4 report3-btn-container">
+                    <div className="md:mt-5 md:me-4 md:mb-4 report3-btn-container">
                         <span className="md:text-2xl md:font-normal report3-btn">Part Two</span>
-                    </div> */}
+                    </div>
                 </div>
                 {Object.entries(data).map(([skill, suggestions]) => (
                     <>
                         <div className="md:flex">
-                            <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#212e3e]">
+                            <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#7a5fa7]">
                                 <div className="">
                                     <span className="md:text-lg font-semibold text-white">
                                         {skill}
@@ -29,7 +29,7 @@ function SkillSuggestions({ data }) {
 
                                     <div key={skill} className="mb-4">
                                         {/* <h3 className="text-lg font-semibold">{skill}</h3> */}
-                                        <ul className="list-decimal list-inside text-lg font-medium text-[#212e3e] list-none">
+                                        <ul className="list-decimal list-inside text-lg font-medium text-purple-800 list-none">
                                             {suggestions.map((suggestion, index) => (
                                                 <li className="before:content-[''] list-none" key={index}>{suggestion}</li>
                                             ))}
