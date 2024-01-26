@@ -95,7 +95,6 @@ const NewUserReport = () => {
     // try{
     setLoading(true);
     const pdfContainer = reportTemplateRef.current;
-    console.log("><><><><>... ", pdfContainer)
   
     const pdf = new jsPDF({
       unit: "mm",
@@ -114,9 +113,13 @@ const NewUserReport = () => {
       const component = components[i];
       const canvas = await html2canvas(component, {
         scale: 3, // Adjust the scale as needed
-        logging: false, // Disable logging for cleaner output
+        logging: true, // Disable logging for cleaner output
+        useCORS: true,
       });
       const imageData = canvas.toDataURL("image/png");
+      // console.log("Canvas Dimensions:", canvas.width, canvas.height);
+      // console.log("PDF Page Dimensions:", pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+
   
       pdf.addImage(
         imageData,
@@ -145,7 +148,7 @@ const NewUserReport = () => {
   
     pdf.save("UserReports.pdf");
     setLoading(false);
-    console.log("Downloaded.......27")
+    console.log("Downloaded.......35")
   // }catch (error) {
   //   console.error("Error during PDF generation:", error);
   //   setLoading(false);
@@ -177,7 +180,6 @@ const NewUserReport = () => {
   // Example functions for handling dynamic data for DeepDive component
     const getDynamicDataForDeepDive = (index) => {
     const category = userReport?.interview_score_by_category.data[index];
-    console.log('category>>>', category)
 
     // Check if category and interview_questions are defined
     // if (category && category.interview_questions) {
