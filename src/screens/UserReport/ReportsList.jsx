@@ -40,7 +40,7 @@ export default function ReportIndex() {
         };
 
         return (
-            <div className="max-h-[320px] transition-transform duration-300 hover:scale-105 shadow-lg rounded-lg">
+            <div className="transition-transform duration-300 hover:scale-105 shadow-lg rounded-lg">
                 <div className="flex flex-col h-full p-4 bg-white">
                     <div className="flex-grow p-2 flex flex-col gap-y-2">
                         {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}
