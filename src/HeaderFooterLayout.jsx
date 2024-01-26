@@ -23,7 +23,6 @@ import { Collapse } from "@mui/material";
 import AppHeader from "./screens/Admin/AppHeader";
 import { IoMdSettings } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
-
 import {
   FaThLarge,
   FaClone,
@@ -39,14 +38,8 @@ import {
   FaCode,
   FaUserSecret,
 } from 'react-icons/fa';
-
-import {
-  FaHeartPulse, FaSection,
-} from 'react-icons/fa6';
-
-import {
-  BiSolidReport
-} from 'react-icons/bi';
+import { FaHeartPulse, FaSection } from 'react-icons/fa6';
+import { BiSolidReport } from 'react-icons/bi';
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
 
@@ -215,7 +208,7 @@ export default function HeaderFooterLayout({ Component }) {
         {
           label: "Dashboard",
           icon: <FaThLarge size={20} className="" />,
-          route: "/adminDashboard",
+          route: "/teacherDashboard",
           subItems: [],
         },
         {
@@ -227,7 +220,7 @@ export default function HeaderFooterLayout({ Component }) {
         {
           label: "Question Bank",
           icon: <FaChartLine size={20} className="" />,
-          route: "/questionBank",
+          route: "/questionBankList",
           subItems: [],
         },
         {

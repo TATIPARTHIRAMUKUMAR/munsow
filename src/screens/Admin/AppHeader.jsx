@@ -38,7 +38,7 @@ const AppHeader = ({ open, role1 }) => {
           {role1?.role_id === 1 ? `${role1?.institution_name}` : ""}
         </Typography>
         <div className="flex-grow" />
-        {/* <Tooltip title={`Toggle ${isDarkMode ? "Light" : "Dark"} Mode`}>
+        <Tooltip title={`Toggle ${isDarkMode ? "Light" : "Dark"} Mode`}>
           <IconButton
             color="inherit"
             onClick={toggleDarkMode}
@@ -46,7 +46,7 @@ const AppHeader = ({ open, role1 }) => {
           >
             {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
-        </Tooltip> */}
+        </Tooltip>
        </Toolbar> 
       <Divider style={{ color: "gray", opacity: "0.4" }} />
     </AppBar>

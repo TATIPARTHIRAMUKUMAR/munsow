@@ -42,6 +42,8 @@ import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseL
 import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
 import NewUserReport from "./screens/NewUserReport/NewUserReport";
+import TeacherDashboard from "./screens/Admin/Dashboard/TeacherDashboard";
+import QuestionBankList from "./screens/Course/QuestionBankList";
 
 
 function Url_Routes() {
@@ -86,17 +88,21 @@ function Url_Routes() {
           </>
         }
         <Route exact path="/adminDashboard" element={<HeaderFooterLayout Component={<AdminDashboard />} />} />
+        <Route exact path="/teacherDashboard" element={<HeaderFooterLayout Component={<TeacherDashboard  />} />} />
+
         <Route exact path="/" element={<Login />} />
         <Route exact path="/studentLogin" element={<StudentLogin />} />
         <Route exact path="/studentRegister" element={<StudentRegister />} />
         <Route exact path="/registration" element={<Register />} />
         <Route path="*" element={<Navigate to="/" />} />
-        <Route exact path="/questionBank" element={<HeaderFooterLayout Component={<QuestionBankForm />} />} />
+        <Route exact path="/questionBankList/createQuestionBank" element={<HeaderFooterLayout Component={<QuestionBankForm />} />} />
         <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} />
         <Route exact path="/courseList/create" element={<HeaderFooterLayout Component={<CustomStepperComponent />} />} />
         <Route exact path="/teacherLogin" element={<TeacherLogin />} />
         <Route exact path="/comingSoon"  element={<HeaderFooterLayout Component={<ComingSoonPage />} />} />
         <Route exact path="/courseList"  element={<HeaderFooterLayout Component={<CourseList />} />} />
+        <Route exact path="/questionBankList"  element={<HeaderFooterLayout Component={<QuestionBankList />} />} />
+
         <Route exact path="/courseList/view/:id" element={<HeaderFooterLayout Component={<CourseView />} />} />
 
         <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />

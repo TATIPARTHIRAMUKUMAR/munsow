@@ -552,6 +552,25 @@ export const loadInstitutionStats = (params) => {
   };
 };
 
+const getTeacherStats = (data) => ({
+  type: types.TEACHER_STATS,
+  payload: data,
+});
+
+export const loadTeacherStats = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/user/statistics`, { headers, params })
+      .then((resp) => {
+        dispatch(getTeacherStats(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 
 const getStudentList = (data) => ({
   type: types.STUDENTS_LIST,
@@ -1152,6 +1171,25 @@ export const loadcourses = () => {
     axios.get(`${GLOBAL_CONSTANTS?.backend_url}course/list`, {  headers })
       .then((resp) => {
         dispatch(getCourses(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+const getQuestionBanks = (data) => ({
+  type: types.QUESTION_BANKS,
+  payload: data,
+});
+
+export const loadQuestionBanks = () => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}question_bank/list`, {  headers })
+      .then((resp) => {
+        dispatch(getQuestionBanks(resp?.data));
       })
       .catch((error) => console.log(error));
   };

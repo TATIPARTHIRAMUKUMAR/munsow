@@ -79,7 +79,7 @@ const TeacherLogin = () => {
       role:"teacher"
     }
     dispatch(user_login(payload, () => {
-      window.location.href = "./adminDashboard";
+      window.location.href = "./teacherDashboard";
     }))
   };
 

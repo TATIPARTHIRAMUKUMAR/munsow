@@ -41,7 +41,8 @@ const initialState = {
   courses:[],
   assignedUsers:[],
   unAssignedUsers:[],
-
+  teacherStats:{},
+  questionBanks:[],
   loading: false
 };
 
@@ -228,6 +229,16 @@ const DataReducers = (state = initialState, action) => {
     case types.COURSES: return{
       ...state,
       courses: action.payload.courses,
+      loading:false
+    }
+    case types.QUESTION_BANKS: return{
+      ...state,
+      questionBanks: action.payload.data,
+      loading:false
+    }
+    case types.TEACHER_STATS: return{
+      ...state,
+      teacherStats: action.payload.data,
       loading:false
     }
     case types.SET_REDUX_STATE : { 
