@@ -122,7 +122,7 @@ const UserReportPartTwo = ({ userData, user }) => {
                           Insights
                         </span>
                         <p className="md:text-lg md:font-medium text-break text" style={{ lineHeight: 1.8, fontStyle: "italic" }}>
-                          {o.Insights}                       </p>
+                          {o?.Insights?.what_you_got_right}                       </p>
                       </div>
                     </div>
                     <div className="md:w-6/12 p-4">

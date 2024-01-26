@@ -4,16 +4,28 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import './Carousel.css'; // Import your custom CSS for styling
 import { Divider } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(null);
 
-  const objects = [
-    { title: 'Keep your calm 1', description: 'We noticed some signs of anxiety during your last mock interview. Remember, deep breaths can help.' },
-    { title: 'Keep your calm 2', description: 'We noticed some signs of anxiety during your last mock interview. Remember, deep breaths can help.' },
-    { title: 'Keep your calm 3', description: 'We noticed some signs of anxiety during your last mock interview. Remember, deep breaths can help.' },
-  ];
+  // const objects = [
+  //   { title: 'Keep your calm 1', description: 'We noticed some signs of anxiety during your last mock interview. Remember, deep breaths can help.' },
+  //   { title: 'Keep your calm 2', description: 'We noticed some signs of anxiety during your last mock interview. Remember, deep breaths can help.' },
+  //   { title: 'Keep your calm 3', description: 'We noticed some signs of anxiety during your last mock interview. Remember, deep breaths can help.' },
+  // ];
+  const { userStats } = useSelector((state) => state.data);
+
+
+  const objects = userStats?.suggestions?.map((tip, index) => {
+    const [title, description] = tip.split(':');
+    return {
+      title: title.trim(),
+      description: description.trim()
+    };
+  });
+
 
   const goToPrevious = () => {
     setSlideDirection('left');
@@ -43,8 +55,8 @@ const Carousel = () => {
         </IconButton>
         <div className={`carousel-item p-2 transform transition-transform ${slideDirection === 'left' ? '-translate-x-full' : slideDirection === 'right' ? 'translate-x-full' : ''}`}>
           <div className="text-center"> {/* Center content */}
-            <h3 className="text-xl font-semibold text-[#886cc0]">{objects[currentIndex].title}</h3>
-            <p className="mt-2 text-sm">{objects[currentIndex].description}</p>
+            <h3 className="text-xl font-semibold text-[#886cc0]">{objects && objects[currentIndex]?.title}</h3>
+            <p className="mt-2 text-sm">{objects && objects[currentIndex]?.description}</p>
           </div>
         </div>
         <IconButton onClick={goToNext}>

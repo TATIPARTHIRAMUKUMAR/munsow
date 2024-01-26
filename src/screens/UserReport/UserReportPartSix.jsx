@@ -13,7 +13,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
         </div>
         <div className="md:flex">
-          <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#7a5fa7]">
+          <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#212e3e]">
             <div className="">
               <span className="md:text-lg font-semibold text-white">
                 About The Company
@@ -22,7 +22,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
-              <ul className="list-disc list-inside text-lg font-medium text-purple-800">
+              <ul className="list-disc list-inside text-lg font-medium text-[#212e3e]">
                 {userData?.about_company?.map((o, index) => {
                   return (
                     <>
@@ -39,7 +39,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
         </div>
         <div className="md:flex">
-          <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#7a5fa7]">
+          <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#212e3e]">
             <div>
               <span className="md:text-lg font-semibold text-white">
                 Company-related recent news
@@ -48,7 +48,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
-              <ul className="list-disc list-inside text-lg font-medium text-purple-800">
+              <ul className="list-disc list-inside text-lg font-medium text-[#212e3e]">
               {userData?.lastest_company_news?.map((o, index) => {
                   return (
                     <>

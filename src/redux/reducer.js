@@ -37,6 +37,11 @@ const initialState = {
   ksFilters: [],
   userListByDepartment:[],
   summaryData:{},
+  detailedCourse:{},
+  courses:[],
+  assignedUsers:[],
+  unAssignedUsers:[],
+
   loading: false
 };
 
@@ -120,6 +125,11 @@ const DataReducers = (state = initialState, action) => {
     case types.TEACHERS_LIST: return{
       ...state,
       teachersList:action.payload,
+      loading:false
+    }
+    case types.DETAILED_COURSES: return{
+      ...state,
+      detailedCourse:action.payload.data,
       loading:false
     }
     case types.COURSE_LIST: return{
@@ -207,6 +217,17 @@ const DataReducers = (state = initialState, action) => {
     case types.USERS_LIST_BY_DEPARTMENT: return{
       ...state,
       userListByDepartment: action.payload.data,
+      loading:false
+    }
+    case types.ASSIGNED_USERS: return{
+      ...state,
+      assignedUsers: action.payload?.data?.assined_users,
+      unAssignedUsers:action.payload?.data?.unassined_users,
+      loading:false
+    }
+    case types.COURSES: return{
+      ...state,
+      courses: action.payload.courses,
       loading:false
     }
     case types.SET_REDUX_STATE : { 
