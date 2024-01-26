@@ -565,7 +565,7 @@ const topicNames = Topicdata.map((topic, index) =>
           <div>
             <tr>
               <td>
-                <FontAwesomeIcon style={{ marginRight:'15px'}} icon={faBars}/>
+                <FontAwesomeIcon style={{ marginRight:'15px', color:'black'}} icon={faBars}/>
               </td>
 
               <td style={{width:'1200px'}}>
