@@ -132,12 +132,7 @@ export default function Profile() {
       </div>
       <div className="bg-white max-[525px]:px-6 px-12 md:px-24 py-12">
         <h3 className="mb-3 text-gray-500 font-semibold">Profile Info</h3>
-        {/* <div>
-          <p className="mb-1 text-gray-400 text-sm">Avatar</p>
-          <Avatar sx={{ bgcolor: "#e3e6fa", color: "#5E7AFC", height: "6rem", width: "6rem",  border: "2px solid white",  boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)", fontSize: "3rem"}} variant="square">
-            H
-          </Avatar>
-        </div> */}
+  
         <div>
         <AvatarContainer>
         <p className="mb-1 text-gray-400 text-sm">Avatar</p>
@@ -227,20 +222,19 @@ export default function Profile() {
           <div className="">
             <p className="mb-1 text-gray-400 text-sm">Password</p>
               <TextField 
-              className="w-full "
+              className="w-full bg-grey"
               id="standard-basic" 
-              // defaultValue="xyz@123"
+              defaultValue="xyz@12345"
               type="password"
-              // disabled="true"
-              value={loginData?.password} 
-              onChange={(event) =>
-                onLogingChange("password", event.target.value)
-              }
+              disabled="true"
+              // value={loginData?.password} 
+              // onChange={(event) =>
+              //   onLogingChange("password", event.target.value)
+              // }
               />
             </div>
             <div className="flex justify-end my-8">
-              <button onClick={() => { onUpdate() }} className="border rounded-lg max-[425px]:p-2 p-3 text-black-300">Reset Password</button>
-              {/* <Button >Open modal</Button> */}
+              <button onClick={handleOpen} className="border rounded-lg max-[425px]:p-2 p-3 text-black-300">Reset Password</button>
               <Modal
                 open={open}
                 onClose={handleClose}
@@ -260,7 +254,7 @@ export default function Profile() {
                   id="standard-basic"  
                   type="password"
                   placeholder="Enter Current Password"
-                  value={loginData?.password} 
+                  // value={loginData?.password} 
                   // onChange={(event) =>
                   //   onLogingChange("password", event.target.value)
                   // }
@@ -273,7 +267,7 @@ export default function Profile() {
                   id="standard-basic" 
                   type="password"
                   placeholder="Enter New Password"
-                  value={loginData?.password} 
+                  // value={loginData?.password} 
                   // onChange={(event) =>
                   //   onLogingChange("password", event.target.value)
                   // }
@@ -287,7 +281,7 @@ export default function Profile() {
                   id="standard-basic" 
                   type="password"
                   placeholder="Re enter New Password"
-                  value={loginData?.password} 
+                  // value={loginData?.password} 
                   // onChange={(event) =>
                   //   onLogingChange("password", event.target.value)
                   // }
@@ -298,7 +292,7 @@ export default function Profile() {
               <hr></hr>
               <div className="flex justify-end my-8">
                 <button onClick={handleClose} className="border rounded-lg max-[425px]:p-2 p-3 mr-5 text-blue-400">Cancel</button>
-                <button className="border rounded-lg max-[425px]:p-2 p-3 text-white bg-blue-400">Change Password</button>
+                <button onClick={() => { onUpdate() }} className="border rounded-lg max-[425px]:p-2 p-3 text-white bg-blue-400">Change Password</button>
               </div>
               </Box>
               </Modal>
@@ -306,95 +300,6 @@ export default function Profile() {
         </div>
       </div>
     </div>
-    {/* <div
-      // style={{ background: "linear-gradient(1deg,#1c85ce 30%, #5271ff)" }}
-      className="text-lg flex items-center justify-center gap-10 h-full w-full " >
-      <div
-        className="rounded-xl overflow-hidden py-6 px-5 shadow-xl grid items-center justify-center"
-        style={{ background: "rgba(255,255,255,0.5)", transform: "rotateZ(5deg)", backdropfilter: "blur(90px)", border: "2px solid #886cc040" }}
-      >
-        <div
-          className="flex flex-col items-center justify-center gap-10 m-2 p-4 rounded-lg"
-          style={{ background: "rgba(255,255,255,0.3)", backdropFilter: "blur(80px)", transform: "rotateZ(-5deg)", border: "2px solid #886cc040" }}
-        >
-          <div className="text-5xl font-semibold "  >Account Details...</div>
-          <div className="grid gap-4 w-[40vw]">
-            <TextField
-              value={loginData?.user_name}
-              id="standard-basic"
-              label="User Name"
-              // variant="standard"
-              style={{ width: "100%" }}
-              onChange={(event) =>
-                onLogingChange("user_name", event.target.value)
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountCircleOutlinedIcon color="#886cc0" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            <TextField
-              value={loginData?.email}
-              id="standard-basic"
-              label="Email"
-              // variant="standard"
-              style={{ width: "100%" }}
-              onChange={(event) =>
-                onLogingChange("email", event.target.value)
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AlternateEmailOutlinedIcon color="#886cc0" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            <TextField
-              value={loginData?.password}
-              id="standard-basic"
-              label="Password"
-              // variant="standard"
-              style={{ width: "100%" }}
-              onChange={(event) =>
-                onLogingChange("password", event.target.value)
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PasswordIcon color="secondary" />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="start">
-                    {
-                      showPassword ? <VisibilityOffOutlinedIcon color="secondary" style={{ cursor: "pointer" }} onClick={() => { setShowPassword(() => false) }} /> : <RemoveRedEyeOutlinedIcon color="secondary" style={{ cursor: "pointer" }} onClick={() => setShowPassword(true)} />
-                    }
-                  </InputAdornment>
-                ),
-              }}
-              type={showPassword ? "text" : "password"}
-            />
-
-            <div className='flex justify-end gap-x-4'>
-              <Button
-                size="small"
-                style={{ backgroundColor: '#886cc0', cursor: "pointer", padding: "5px 10px", color: "white" }}
-                onClick={() => { onUpdate() }}
-              >
-                Update
-              </Button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div> */}
     </>
   )
 }
