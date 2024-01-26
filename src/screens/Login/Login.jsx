@@ -112,7 +112,7 @@ const LoginPage = () => {
               <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
                 <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
                 <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
-                {/* <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" /> */}
+                <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" />
               </StyledRadioGroup>
             </FormControl>
 

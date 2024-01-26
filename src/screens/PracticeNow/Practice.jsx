@@ -72,6 +72,11 @@ const StepperComponent = () => {
         }
     }
 
+    useEffect(() => {
+        setSelectedRole(null)
+        console.log("selectedCompany", selectedCompany)
+    }, [selectedCompany])
+
     const [audioValidated, setAudioValidated] = useState(false);
     const [videoValidated, setVideoValidated] = useState(false);
 
@@ -126,9 +131,9 @@ const StepperComponent = () => {
         setCurrentStep(currentStep - 1);
     };
 
-  useEffect(()=>{
-console.log("selectedSoftskill",selectedSoftskill)
-  },[selectedSoftskill])
+    useEffect(() => {
+        console.log("selectedSoftskill", selectedSoftskill)
+    }, [selectedSoftskill])
 
 
     useEffect(() => {
@@ -274,13 +279,14 @@ console.log("selectedSoftskill",selectedSoftskill)
                                             onChange={() => setChosenCompany(!chosenCompany)}
                                         /> */}
 
-                                        <span className="font-bold pr-2">Choose Company <span className="font-bold text-red-500 text-2xl">*</span></span>
+                                        <span className="font-bold pr-2">Choose Company <span className="font-bold text-red-500 text-2xl"> {selectedCategory=="role"?"*":""}</span></span>
                                     </label>
                                     <CheckboxesTags
                                         options={companiesList?.map((o) => {
                                             return {
                                                 label: o.name,
                                                 id: o.id,
+                                                role_ids: o.role_ids
                                             }
                                         })}
                                         selectedItems={selectedCompany}
@@ -288,9 +294,10 @@ console.log("selectedSoftskill",selectedSoftskill)
                                         label="Companies" />
                                 </div>
 
-                                <div className={selectedCategory !== 'role' ? 'opacity-50 pointer-events-none' : ''}>
-                                    <label className="flex items-center space-x-2 my-3">
-                                        {/* <input
+                                {selectedCompany != null && (
+                                    <div className={selectedCategory !== 'role' ? 'opacity-50 pointer-events-none' : ''}>
+                                        <label className="flex items-center space-x-2 my-3">
+                                            {/* <input
                                             type="checkbox"
                                             name="chosenRole"
                                             checked={chosenRole}
@@ -298,19 +305,21 @@ console.log("selectedSoftskill",selectedSoftskill)
                                             onChange={() => setChosenRole(!chosenRole)}
                                         /> */}
 
-                                        <span className="font-bold pr-2 ">Choose Role <span className="font-bold text-red-500 text-2xl">*</span></span>
-                                    </label>
-                                    <CheckboxesTags
-                                        options={interviewRolesList?.map((o) => {
-                                            return {
-                                                label: o.name,
-                                                id: o.id,
-                                            }
-                                        })}
-                                        selectedItems={selectedRole}
-                                        onSelectionChange={setSelectedRole}
-                                        label="Interview Roles" />
-                                </div>
+                                            <span className="font-bold pr-2 ">Choose Role <span className="font-bold text-red-500 text-2xl">{selectedCategory=="role"?"*":""}</span></span>
+                                        </label>
+                                        <CheckboxesTags
+                                            options={selectedCompany?.role_ids?.map((o) => {
+                                                return {
+                                                    label: o.name,
+                                                    id: o.id,
+                                                }
+                                            })}
+                                            selectedItems={selectedRole}
+                                            onSelectionChange={setSelectedRole}
+                                            label="Interview Roles" />
+                                    </div>
+
+                                )}
 
                             </div>
 
@@ -419,7 +428,7 @@ console.log("selectedSoftskill",selectedSoftskill)
                             </div>
 
                             <div className="bg-gray-200 rounded w-full" >
-                                <Audio_Video audioValidated={audioValidated} setAudioValidated={setAudioValidated} videoValidated={videoValidated} setVideoValidated={setVideoValidated}/>
+                                <Audio_Video audioValidated={audioValidated} setAudioValidated={setAudioValidated} videoValidated={videoValidated} setVideoValidated={setVideoValidated} />
                             </div>
 
 

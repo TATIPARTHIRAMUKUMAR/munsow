@@ -75,7 +75,9 @@ const StudentLogin = () => {
   const handleSubmit = async () => {
     const payload = {
       email: universityId,
-      password: password
+      password: password,
+      role:"student"
+
     }
     dispatch(user_login(payload, () => {
       window.location.href = "./studentDashboard";
@@ -104,7 +106,7 @@ const StudentLogin = () => {
               <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
                 <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
                 <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
-                {/* <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" /> */}
+                <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" />
               </StyledRadioGroup>
             </FormControl>
 
