@@ -1,6 +1,6 @@
 const ReportOverview = (props) => {
 
-    const { head, overallScore, bgcolor, title1, score1, desc1, title2, score2, desc2, title3, score3, desc3, title4, score4, desc4, } = props;
+    const { head, overallScore, bgcolor, title1, score1, desc1, title2, score2, desc2, title3, score3, desc3, title4, score4, desc4,backHead } = props;
 
     const getScoreColor = (scorePercentage) => {
         if (scorePercentage <= 3) return 'text-red-600';
@@ -20,7 +20,7 @@ const ReportOverview = (props) => {
             </div>
 
             <div className="p-8">
-                <p className="text-purple font-semibold">Arpitha exhibited a growth mindset and a positive attitude throughout the interview. However, she sometimes sounded defensive when asked about past failures, instead of embracing them as learning opportunities.</p>
+                <p className="text-purple font-semibold">{backHead}</p>
             </div> 
 
             <div className={`mx-4 rounded-t-3xl ${bgcolor}`}>

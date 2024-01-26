@@ -156,6 +156,7 @@ const NewUserReport = () => {
                 title4={category.sub_segements[3].title}
                 score4={category.sub_segements[3].secured_marks}
                 desc4={category.sub_segements[3].notes}
+                backHead={category?.notes}
               />
             ))}
           </div>
