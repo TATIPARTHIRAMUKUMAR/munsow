@@ -113,7 +113,7 @@ const NewUserReport = () => {
       const component = components[i];
       const canvas = await html2canvas(component, {
         scale: 3, // Adjust the scale as needed
-        logging: true, // Disable logging for cleaner output
+        logging: false, // Disable logging for cleaner output
         useCORS: true,
       });
       const imageData = canvas.toDataURL("image/png");
@@ -148,7 +148,7 @@ const NewUserReport = () => {
   
     pdf.save("UserReports.pdf");
     setLoading(false);
-    console.log("Downloaded.......35")
+    console.log("Downloaded.......36")
   // }catch (error) {
   //   console.error("Error during PDF generation:", error);
   //   setLoading(false);
@@ -356,14 +356,14 @@ const NewUserReport = () => {
 
             {userReport?.interview_score_by_category.data.map((category, index) => (
               <>
-                {category.interview_questions.map((question, qIndex) => (
+                {/* {category.interview_questions.map((question, qIndex) => ( */}
                   <div key={index} className="deep-dive-component"> 
                     <DeepDive
-                      key={qIndex}
                       {...getDynamicDataForDeepDive(index)}
                     />
                   </div>
-                ))}
+                ))
+                {/* } */}
               </>
             ))}
          
