@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import html2pdf from "html2pdf.js";
 
 import "./UserReport.css";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -19,6 +20,7 @@ import Presentation from "./Presentation";
 import SummarySnapshot from "./SummarySnapshot";
 
 
+
 const NewUserReport = () => {
   const reportTemplateRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -33,119 +35,148 @@ const NewUserReport = () => {
 
   console.log(userReport, 'userreport') // use this data to show in reports
 
-  //FIRST
-  // const handleGeneratePdf = async () => {
-  //   setLoading(true);
-  //   const pdfContainer = reportTemplateRef.current;
-  //   const pdfWidth = 210; // A4 width in points (about 8.27 inches)
-  //   const pdfHeight =
-  //     (pdfContainer.clientHeight * pdfWidth) / pdfContainer.clientWidth; // Maintain aspect ratio
+//   const handleGeneratePdf = async () => {
+//     // try{
+//       console.log('In')
+//     setLoading(true);
+//     const pdfContainer = reportTemplateRef.current;
+  
+//     const pdf = new jsPDF({
+//       unit: "mm",
+//       format: "a4",
+//       orientation: "portrait",
+//       compress: true, // Enable compression
+//     });
+  
+//     // Iterate through each component
+//     const components = pdfContainer.children;
+//     for (let i = 0; i < components.length; i++) {
+//       if (i > 0) {
+//         pdf.addPage();
+//       }
 
-  //   // Create a canvas from your HTML content
-  //   const canvas = await html2canvas(pdfContainer);
+//       const pdfContent = document.querySelector("#pdf-content");
 
-  //   // Convert the canvas to a data URL
-  //   const imgData = canvas.toDataURL("image/png");
+//       if (pdfContent) {
+//         const pdfOptions = {
+//           margin: 10,
+//           filename: "UserReports.pdf",
+//           image: { type: "jpeg", quality: 0.98 }, 
+//           html2canvas: { scale: 2 },
+//           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+//         };
 
-  //   // Create a jsPDF instance
-  //   const doc = new jsPDF({
-  //     format: [pdfWidth, pdfHeight],
-  //     orientation: "portrait", // You can also use 'landscape' for landscape mode
-  //   });
+//           html2pdf().from(pdfContent).set(pdfOptions).save();
+//         }
+//     //   const component = components[i];
+//     //   // const isMobile = window.innerWidth <= 700;
+//     //   const canvas = await html2canvas(component, {
+//     //     scale: 3, // Adjust the scale as needed
+//     //     logging: false, // Disable logging for cleaner output
+//     //     // width: pdf.internal.pageSize.getWidth() * 3,
+//     //     // height: component.offsetHeight
+//     //   });
+//     //   // canvas.width = component.offsetWidth * 3.9; // Adjust the scale as needed
+//     //   // canvas.height = component.offsetHeight * 4; // Adjust the scale as needed
 
-  //   // Insert the image into the PDF
-  //   doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, "", "FAST");
-  //   doc.save("UserReports.pdf");
-  //   setLoading(false);
-  // };
+//     //   const imageData = canvas.toDataURL("image/png");
+  
+//     //   pdf.addImage(
+//     //     imageData,
+//     //     "PNG",
+//     //     0,
+//     //     0,
+//     //     pdf.internal.pageSize.getWidth(),
+//     //     pdf.internal.pageSize.getHeight(),
+//     //     "",
+//     //     "FAST"
+//     //   );
+//     // }
+  
+//     // pdf.save("UserReports.pdf");
+//     setLoading(false);
 
-  //SECOND
-  // const handleGeneratePdf = async () => {
-  //   setLoading(true);
-  //   const pdfContainer = reportTemplateRef.current;
-  //   const components = pdfContainer.children;
-  
-  //   const pdf = new jsPDF({
-  //     unit: "mm",
-  //     format: "a4",
-  //     orientation: "portrait",
-  //     compress: true, // Enable compression
-  //   });
-  
-  //   for (let i = 0; i < components.length; i++) {
-  //     if (i > 0) {
-  //       pdf.addPage();
-  //     }
-  
-  //     const canvas = await html2canvas(components[i],{
-  //       scale: 2, // Adjust the scale as needed
-  //       logging: false, // Disable logging for cleaner output
-  //     });
-  //     const imageData = canvas.toDataURL("image/png");
-  
-  //     pdf.addImage(imageData, "PNG", 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-  //   }
-  
-  //   pdf.save("UserReports.pdf");
-  //   setLoading(false);
-  // };
+//   // }catch (error) {
+//   //   console.error("Error during PDF generation:", error);
+//   //   setLoading(false);
+//   // }
+//   }
+// }
 
-  //THIRD
-  const handleGeneratePdf = async () => {
-    // try{
-    setLoading(true);
-    const pdfContainer = reportTemplateRef.current;
-  
-    const pdf = new jsPDF({
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait",
-      compress: true, // Enable compression
-    });
-  
-    // Iterate through each component
-    const components = pdfContainer.children;
-    for (let i = 0; i < components.length; i++) {
-      if (i > 0) {
-        pdf.addPage();
-      }
-  
-      const component = components[i];
-      const canvas = await html2canvas(component, {
-        scale: 2, // Adjust the scale as needed
-        logging: false, // Disable logging for cleaner output
-      });
-      const imageData = canvas.toDataURL("image/png");
-  
-      pdf.addImage(
-        imageData,
-        "PNG",
-        0,
-        0,
-        pdf.internal.pageSize.getWidth(),
-        pdf.internal.pageSize.getHeight()
-      );
-  
-      // Handle dynamic data for ReportOverview component
-      if (component.classList.contains("report-overview-component")) {
-        const reportOverviewData = getDynamicDataForReportOverview(i);
-        renderDynamicDataForReportOverview(pdf, reportOverviewData);
-      }
-  
-      // Handle dynamic data for DeepDive component
-      if (component.classList.contains("deep-dive-component")) {
-        const deepDiveData = getDynamicDataForDeepDive(i);
-        renderDynamicDataForDeepDive(pdf, deepDiveData);
-      }
+// const handleGeneratePdf = async () => {
+//   try {
+//     setLoading(true);
+
+//     const pdfContainer = reportTemplateRef.current;
+//     const pdf = new jsPDF({
+//       unit: "mm",
+//       format: "a4",
+//       orientation: "portrait",
+//       compress: true,
+//     });
+
+//     // Iterate through each component
+//     const components = pdfContainer.children;
+//     for (let i = 0; i < components.length; i++) {
+//       if (i > 0) {
+//         pdf.addPage();
+//       }
+
+//       const pdfContent = components[i];
+//       console.log("//////////", pdfContent)
+
+//       await pdf.html(pdfContent, {
+//         x: 10,
+//         y: 19,
+//         width: pdf.internal.pageSize.getWidth(),
+//         height:  pdf.internal.pageSize.getHeight(),
+//       });
+//     }
+
+//     // Save the final PDF
+//     pdf.save("UserReports.pdf");
+//     setLoading(false);
+//   } catch (error) {
+//     console.error("Error during PDF generation:", error);
+//     setLoading(false);
+//   }
+// };
+
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  const handleGeneratePdf = () => {
+    console.log('inside')
+    setLoading(true)
+    const pdfContent = document.querySelector("#pdf-content");
+
+    if (pdfContent) {
+      const pdfOptions = {
+        filename: "UserReports.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait"},
+      };
+
+      // code to try giving dynamic height but is returning empty file & warning 
+      // const contentHeight = (pdfContent.clientHeight)/96 * 25.4;
+      // console.log('////// ', contentHeight)
+      // pdfOptions.jsPDF.format = [210, contentHeight + 20];
+
+      // code to give static width & height
+      // pdfOptions.jsPDF.format = [210, 400];
+      // html2pdf().from(pdfContent).set(pdfOptions).save();
+
+      // Code to fix cut off data
+      html2pdf().from(pdfContent).set({ ...pdfOptions, 
+        pagebreak: { 
+        before: ['#SummarySnapshot', '#Presentation', '#ReportOverview', '#DeepDive', '#CuratedSummary', '#Extro'],
+        mode: ['avoid-all'] } }
+        ).save();
     }
-  
-    pdf.save("UserReports.pdf");
-    setLoading(false);
-  // }catch (error) {
-  //   console.error("Error during PDF generation:", error);
-  //   setLoading(false);
-  // }
+    setLoading(false)
   };
+
   
   //Example functions for handling dynamic data for ReportOverview component
   const getDynamicDataForReportOverview = (index) => {
@@ -162,42 +193,12 @@ const NewUserReport = () => {
     };
   };
   
-  const renderDynamicDataForReportOverview = (pdf, data) => {
-    // Replace with your logic to render dynamic data for the ReportOverview component in the PDF
-    // This might involve adding text, tables, or images based on the provided data
-    pdf.text(data.head, 10, 10);
-    // Render other data as needed
-  };
   
   // Example functions for handling dynamic data for DeepDive component
-    const getDynamicDataForDeepDive = (index) => {
+    const getDynamicDataForDeepDive = (index, qIndex) => {
     const category = userReport?.interview_score_by_category.data[index];
 
-    // Check if category and interview_questions are defined
-    // if (category && category.interview_questions) {
-    // const question = category.interview_questions[index];
-
-    //Check if question is defined
-  //   if (question) {
-  //     return {
-  //       head: category.main_title,
-  //       bgcolor: componentColors[index % componentColors.length],
-  //       ques: question.question,
-  //       candidateAns: question.answer,
-  //       sampleAns: question.suggested_answer,
-  //       gotRight: question.Insights.what_you_got_right,
-  //       gotWrong: question.Insights.what_you_got_wrong,
-  //       feedback: question.Insights["feedback_for_the candidate"],
-  //     };
-  //   } else {
-  //     console.error("Question is undefined at index:", index);
-  //   }
-  // } else {
-  //   console.error("Category or interview_questions is undefined at index:", index);
-  // }
-
-
-    const question = category.interview_questions[index];
+    const question = category.interview_questions[qIndex];
     return {
       head: category.main_title,
       ques: question.question,
@@ -209,74 +210,31 @@ const NewUserReport = () => {
     };
   };
   
-  const renderDynamicDataForDeepDive = (pdf, data) => {
-    // Replace with your logic to render dynamic data for the DeepDive component in the PDF
-    // This might involve adding text, tables, or images based on the provided data
-    pdf.text(data.head, 10, 10); // Example: Render head text at coordinates (10, 10)
-    // Render other data as needed
-  };
-  
-  //FOUR
-  // const handleGeneratePdf = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const pdfContainer = reportTemplateRef.current;
-  //     const pdfWidth = 210;
-  //     const pdfHeight =
-  //       (pdfContainer.clientHeight * pdfWidth) / pdfContainer.clientWidth;
-  
-  //     const pdf = new jsPDF({
-  //       format: [pdfWidth, pdfHeight],
-  //       orientation: "portrait",
-  //     });
-  
-  //     const components = pdfContainer.children;
-  
-  //     for (let i = 0; i < components.length; i++) {
-  //       const component = components[i];
-  
-  //       const canvas = await html2canvas(component, {
-  //         scale: 2,
-  //         logging: false,
-  //       });
-  //       const imageData = canvas.toDataURL("image/png");
-  
-  //       pdf.addImage(
-  //         imageData,
-  //         "PNG",
-  //         0,
-  //         0,
-  //         pdf.internal.pageSize.getWidth(),
-  //         pdf.internal.pageSize.getHeight()
-  //       );
-  
-  //       // Add a page break after each set of components
-  //       if (i < components.length - 1) {
-  //         pdf.addPage();
-  //       }
-  //     }
-  
-  //     pdf.save("UserReports.pdf");
-  //   } catch (error) {
-  //     console.error("Error during PDF generation:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  
 
   return (
     <div className="body flex-grow-1 overflow-y-scroll">
       <div className="container mx-auto">
         {/* Back button */}
-        <button         
-         className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
-         onClick={() => navigate(-1)}>
-          ← View All Reports
-        </button>
-        <div ref={reportTemplateRef} className="bg-white">
+        <div className="flex flex-col sm:flex-row relative overflow-auto max-w-full h-auto">
+          <button         
+          className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-4 transition-all duration-300"
+          onClick={() => navigate(-1)}>
+            ← View All Reports
+          </button>
+          <button
+                type="button"
+                className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 w-[300px] sm:w-[200px] mx-4 sm:self-start"
+                onClick={() => handleGeneratePdf()}
+              >
+                DOWNLOAD AS PDF{" "}
+                {loading && (
+                  <CircularProgress style={{ color: "#fff", marginLeft: "10px" }} />
+                )}
+          </button>
+        </div>
+        <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
           
-          <div>
+          <div id="Intro">
             <Intro
               user={userReport?.user_name}
               unqualified_hard_skills={userReport?.unqualified_hard_skills}
@@ -285,7 +243,7 @@ const NewUserReport = () => {
             />
           </div>
 
-          <div>
+          <div id="SummarySnapshot">
             <SummarySnapshot
               title={userReport?.interview_score_by_category.data[0].main_title}
               interview_score_by_category={userReport?.interview_score_by_category}
@@ -293,102 +251,51 @@ const NewUserReport = () => {
             />
           </div> 
     
-          <div>
+          <div id="Presentation">
             <Presentation              
               behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
             />
           </div>
-        
-          
-            {/* {userReport?.interview_score_by_category.data.map((category, index) => (
-              <ReportOverview
-              key={index} 
-              head={category.main_title}
-              overallScore={category.secured_marks}
-              notes={category.notes}
-             
-              scores={category.sub_segements.map((segment, sIndex) => ({
-                title: segment.title,
-                score: segment.secured_marks,
-                desc: segment.notes,
-              }))}
-              />
-            ))} */}
-          
 
-
-        
-          {/* {userReport?.interview_score_by_category.data.map((category, index) => (
-          <div key={index}>
-          {category.interview_questions.map((question, qIndex) => (
-            <DeepDive
-              key={qIndex}
-              head={category.main_title}
-              
-              ques={question.question}
-              candidateAns={question.answer}
-              sampleAns={question.suggested_answer}
-              gotRight={question.Insights.what_you_got_right}
-              gotWrong={question.Insights.what_you_got_wrong}
-              feedback={question.Insights["feedback_for_the candidate"]}
-            />
-          ))}
-          </div>
-          ))} */}
-        
-
-          
+                
             {userReport?.interview_score_by_category.data.map((category, index) => (
-              <ReportOverview
-                key={index}
-                className="report-overview-component"  // Add a class name to identify the component
-                {...getDynamicDataForReportOverview(index)}
-              />
+              <div key='' id="ReportOverview">
+                <ReportOverview
+                  key={index}
+                  className="report-overview-component overflow-ellipsis"  // Add a class name to identify the component
+                  {...getDynamicDataForReportOverview(index)}
+                />
+              </div>
             ))}
           
-
           
             {userReport?.interview_score_by_category.data.map((category, index) => (
               <>
                 {category.interview_questions.map((question, qIndex) => (
-                  <div key={index}> 
+                  <div key={index} id="DeepDive"> 
                   <DeepDive
-                    className="deep-dive-component"
-                    {...getDynamicDataForDeepDive(index)}
+                    className="deep-dive-component overflow-ellipsis"
+                    {...getDynamicDataForDeepDive(index, qIndex)}
                   />
                   </div>
-                ))}
+                ))
+                }
               </>
             ))}
          
 
-        <div>
+        <div id="CuratedSummary">
           <CuratedSummary
             report_type={userReport?.report_type}
             skillSuggestions={userReport?.skill_based_suggestions}
           /> 
         </div>
 
-        <div>
+        <div id="Extro">
           <Extro/>
         </div>
 
       </div>
-
-        <div className="mt-5">
-          <div className="flex justify-center items-center mt-4 mb-5">
-            <button
-              type="button"
-              className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full flex justify-center items-center"
-              onClick={() => handleGeneratePdf()}
-            >
-              DOWNLOAD AS PDF{" "}
-              {loading && (
-                <CircularProgress style={{ color: "#fff", marginLeft: "10px" }} />
-              )}
-            </button>
-          </div>
-        </div>
 
       </div>
     </div>

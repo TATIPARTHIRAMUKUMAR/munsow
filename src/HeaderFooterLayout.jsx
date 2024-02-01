@@ -55,7 +55,7 @@ const openedMixin = (theme, role1, color) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
-  background: role1 === 1 ? "white" : color,
+  background: role1 === 1 ? "rgb(36, 45, 54)" : "rgb(36, 45, 54)",
   color: "#FFFFFF",
 });
 
@@ -69,7 +69,7 @@ const closedMixin = (theme, role1, color) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  background: role1 === 1 ? "white" : color,
+  background: role1 === 1 ? "rgb(36, 45, 54)" : "rgb(36, 45, 54)",
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -384,7 +384,7 @@ export default function HeaderFooterLayout({ Component }) {
         overflow: "hidden",
       }}
     >
-      <CssBaseline />
+      <CssBaseline/>
       <CustomDrawer
         variant="permanent"
         open={open}
@@ -394,6 +394,7 @@ export default function HeaderFooterLayout({ Component }) {
             : 1
         }
         color={color.background}
+        background={backgroundColorClass}
       >
         <DrawerHeader style={{ background: backgroundColorClass }}>
           <div
@@ -420,7 +421,7 @@ export default function HeaderFooterLayout({ Component }) {
             </IconButton>
           )}
         </DrawerHeader>
-        <Divider style={{ opacity: "0.2" }} />
+        <Divider style={{ opacity: "0.2", background: backgroundColorClass }} />
         <List style={{ background: backgroundColorClass }}>
           {menuData.map((mainItem, mainIndex) => (
             <div
@@ -432,6 +433,7 @@ export default function HeaderFooterLayout({ Component }) {
                   : "mb-2",
                 ""
               )}
+              style={{ background: backgroundColorClass }}
             >
               <ListItem
                 disablePadding
