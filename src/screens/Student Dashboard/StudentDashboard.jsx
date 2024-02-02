@@ -19,7 +19,7 @@ export default function StudentDashboard() {
   const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
   const linearGradientBackground = `linear-gradient(180.43deg, ${
     isDarkMode
-      ? colorTheme.reduxColorTheme.dark.background
+      ? reduxColorTheme.dark.background
       : reduxColorTheme.light.background
   } 19.43%, ${
     isDarkMode
