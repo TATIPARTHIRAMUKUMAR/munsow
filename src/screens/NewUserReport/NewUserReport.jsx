@@ -123,7 +123,7 @@ const NewUserReport = () => {
           </div>
 
           <div>
-            <UserReportPartOne userData={userReport?.behavioral_presentation_and_grooming} overallScore="8/10" />
+            <UserReportPartOne userData={userReport?.behavioral_presentation_and_grooming} overallScore={userReport?.presentation_and_grooming_score} />
             {/* <Presentation              
               overallScore="8/10"
               eyeContact={userReport?.behavioral_presentation_and_grooming.data[0].secured_marks}
