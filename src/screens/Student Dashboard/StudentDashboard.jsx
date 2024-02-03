@@ -17,36 +17,54 @@ export default function StudentDashboard() {
   const { isDarkMode, colorTheme } = useDarkMode();
 
   const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
-  const linearGradientBackground = `linear-gradient(180.43deg, ${
-    isDarkMode
-      ? colorTheme.reduxColorTheme.dark.background
-      : reduxColorTheme.light.background
-  } 19.43%, ${
-    isDarkMode
-      ? reduxColorTheme.dark.selectBackground
-      : reduxColorTheme.light.selectBackground
-  } 87.63%)`;
-  const buttonTextColor = isDarkMode
-    ? reduxColorTheme.dark.textColor2
-    : reduxColorTheme.light.textColor2;
+  const linearGradientBackground = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
+
+  const backgroundColor = isDarkMode
+    ? reduxColorTheme.dark.foreground
+    : reduxColorTheme.light.foreground;
+  const headerBgColor = isDarkMode
+    ? reduxColorTheme.dark.background
+    : reduxColorTheme.light.background;
+
+  const headerTextColor = isDarkMode
+    ? reduxColorTheme.dark.textColor
+    : reduxColorTheme.light.textColor;
+
+  const textColor = isDarkMode
+    ? reduxColorTheme.dark.textColor3
+    : reduxColorTheme.light.textColor3;
 
   useEffect(() => {
     dispatch(loadUserStats());
   }, []);
 
   return (
-    <div>
-      <div
-        className="grid grid-cols-1 sm:grid-cols-3 gap-7 px-6 py-6 relative overflow-auto max-w-full h-auto"
+    <div style={{ background: backgroundColor, marginTop: "15px" }}>
+      {/* <div
+        className="flex justify-between text-3xl font-bold px-8 py-8 relative overflow-auto max-w-full h-auto"
+        style={{ background: headerBgColor, color: headerTextColor }}
       >
+        <div>Dashboard</div>{" "}
+        <div>
+          <span className="text-2xl font-semibold ">
+            {/* {userData?.user_name} }Apritha
+          </span>
+        </div>
+      </div> */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-7 px-6 py-6 relative overflow-auto max-w-full h-auto">
         <div className="col-span-2 relative overflow-auto max-w-full h-auto">
           <div
             style={{
-              background: linearGradientBackground
+              background: linearGradientBackground,
             }}
             className="relative overflow-auto max-w-full h-auto p-10 flex justify-between rounded-lg"
           >
-            <div className="text-white relative overflow-auto max-w-full h-auto">
+            <div
+              className=" relative overflow-auto max-w-full h-auto"
+              style={{ color: textColor }}
+            >
               <div className="text-3xl font-bold color- relative overflow-auto max-w-full h-auto">
                 Hello {GLOBAL_CONSTANTS?.user_cred?.first_name}{" "}
                 {GLOBAL_CONSTANTS?.user_cred?.last_name} !!!
@@ -61,7 +79,7 @@ export default function StudentDashboard() {
                   style={{
                     background: "white",
                     hover: "gray-100",
-                    color: buttonTextColor,
+                    color: textColor,
                     fontWeight: "bold",
                     padding: "8px 16px",
                     border: "1px solid gray-300",
@@ -75,7 +93,8 @@ export default function StudentDashboard() {
                   Practice Now
                 </button>
                 <button
-                  className=" text-white font-semibold py-2 px-4 border rounded-lg shadow"
+                  className="  font-semibold py-2 px-2 border-2 rounded-lg shadow"
+                  style={{ color: textColor, borderColor: textColor }}
                   onClick={() => {
                     navigate("/report");
                   }}
@@ -84,12 +103,12 @@ export default function StudentDashboard() {
                 </button>
               </div>
             </div>
-            <div className="overflow-auto">
+            {/* <div className="overflow-auto">
               <img
                 className="h-40 w-40 bg-transparent max-w-full h-auto"
                 src={image2}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="col-span-1 relative overflow-auto max-w-full h-auto">

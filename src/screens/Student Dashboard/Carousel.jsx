@@ -14,6 +14,11 @@ const Carousel = () => {
   const textColor = isDarkMode
     ? reduxColorTheme.dark.textColor2
     : reduxColorTheme.light.textColor2;
+
+  const textColor2 = isDarkMode
+    ? reduxColorTheme.dark.textColor3
+    : reduxColorTheme.light.textColor3;
+
   const backgroundColor = isDarkMode
     ? reduxColorTheme.dark.selectBackground
     : reduxColorTheme.light.selectBackground;
@@ -69,7 +74,7 @@ const Carousel = () => {
         <IconButton onClick={goToPrevious}>
           <ArrowBackIosIcon
             style={{
-              background: backgroundColor,
+              background: textColor2,
               borderRadius: "50%",
               color: "white",
               padding: "4px",
@@ -88,7 +93,10 @@ const Carousel = () => {
           <div className="text-center">
             {" "}
             {/* Center content */}
-            <h3 className="text-xl font-semibold " style={{ color: textColor }}>
+            <h3
+              className="text-xl font-semibold "
+              style={{ color: textColor2 }}
+            >
               {objects[currentIndex].title}
             </h3>
             <p className="mt-2 text-sm">{objects[currentIndex].description}</p>
@@ -97,7 +105,7 @@ const Carousel = () => {
         <IconButton onClick={goToNext}>
           <ArrowForwardIosIcon
             style={{
-              background: backgroundColor,
+              background: textColor2,
               borderRadius: "50%",
               color: "white",
               padding: "4px",

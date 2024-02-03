@@ -11,7 +11,7 @@ export const DarkModeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
-  
+
   const { colorTheme } = useSelector((state) => state?.data);
   const [color, setColor] = useState(
     isDarkMode ? colorTheme.dark : colorTheme.light
@@ -21,30 +21,13 @@ export const DarkModeProvider = ({ children }) => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setIsDarkMode(savedDarkMode);
     setColor(savedDarkMode ? colorTheme.dark : colorTheme.light);
-
-    // if (savedDarkMode) {
-    //   document.documentElement.classList.add("dark");
-    //   setColor("  #0fe1d2 ");
-    // } else {
-    //   document.documentElement.classList.remove("dark");
-    //   setColor(" #212e3e ");
-    // }
   }, []);
-
 
   const toggleDarkMode = () => {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
     localStorage.setItem("darkMode", newDarkMode);
     setColor(newDarkMode ? colorTheme.dark : colorTheme.light);
-
-    // if (newDarkMode) {
-    //   document.documentElement.classList.add("dark");
-    //   setColor("  #0fe1d2  ");
-    // } else {
-    //   document.documentElement.classList.remove("dark");
-    //   setColor(" #212e3e");
-    // }
   };
 
   return (

@@ -1,6 +1,8 @@
 import { Divider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useDarkMode } from "./../../Dark";
+
 import {
   LineChart,
   Line,
@@ -20,31 +22,31 @@ const interviewData = [
     "Knowledge/Skills": 18,
     "Mindset/Attitude": 15,
     "Practical Thinking": 10,
-    "name": "1",
+    name: "1",
   },
   {
     "Knowledge/Skills": 10,
     "Mindset/Attitude": 30,
     "Practical Thinking": 15,
-    "name": "2",
+    name: "2",
   },
   {
     "Knowledge/Skills": 24,
     "Mindset/Attitude": 30,
     "Practical Thinking": 26,
-    "name": "3",
+    name: "3",
   },
   {
     "Knowledge/Skills": 44,
     "Mindset/Attitude": 40,
     "Practical Thinking": 16,
-    "name": "4",
+    name: "4",
   },
   {
     "Knowledge/Skills": 54,
     "Mindset/Attitude": 40,
     "Practical Thinking": 16,
-    "name": "5",
+    name: "5",
   },
   // Add more interview data as needed
 ];
@@ -98,10 +100,20 @@ const LineChartComponent = () => {
     setData(slicedData);
   };
 
+  const { isDarkMode, colorTheme } = useDarkMode();
+
+  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+
+  const textColor = isDarkMode
+    ? reduxColorTheme.dark.textColor2
+    : reduxColorTheme.light.textColor2;
+
   return (
     <div>
       <div className="flex justify-between filter-sort p-3">
-        <div className="text-lg font-semibold">My Interview Score Trend</div>
+        <div className="text-lg font-semibold" style={{ color: textColor }}>
+          My Interview Score Trend
+        </div>
         <div className="flex">
           {/* <div className='pr-3'>
             <label className='text-gray-600 text-lg font-semibold text-opacity-80'>Sort by: </label>
@@ -194,16 +206,17 @@ const LineChartComponent = () => {
             <Legend />
             <Line
               type="monotone"
-              dataKey="Knowledge/Skills"
-              name="Knowledge/Skills"
-              stroke="#e573eb"
+              dataKey="Mindset/Attitude"
+              name="Mindset/Attitude"
+              stroke="   #D387D5"
             />
             <Line
               type="monotone"
-              dataKey="Mindset/Attitude"
-              name="Mindset/Attitude"
-              stroke="#58cf36"
+              dataKey="Knowledge/Skills"
+              name="Knowledge/Skills"
+              stroke=" #89C376"
             />
+
             <Line
               type="monotone"
               dataKey="Practical Thinking"

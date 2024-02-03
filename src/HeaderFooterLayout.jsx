@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
@@ -16,7 +16,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import PropTypes from "prop-types";
 import GLOBAL_CONSTANTS from "../GlobalConstants";
 import { Collapse } from "@mui/material";
@@ -56,7 +56,6 @@ const openedMixin = (theme, role1, color) => ({
   }),
   overflowX: "hidden",
   background: role1 === 1 ? "white" : color,
-  color: "#FFFFFF",
 });
 
 const closedMixin = (theme, role1, color) => ({
@@ -87,7 +86,6 @@ const DrawerFooter = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 1),
   position: "fixed",
   bottom: 0,
-  color: "#FFFFFF",
   ...theme.mixins.toolbar,
 }));
 
@@ -108,7 +106,7 @@ const CustomDrawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function HeaderFooterLayout({ Component }) {
+export default function HeaderFooterLayout({ Component, userData }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(true);
@@ -118,6 +116,7 @@ export default function HeaderFooterLayout({ Component }) {
   const [openSubMenu, setOpenSubMenu] = useState(null);
 
   const [selectedItem, setSelectedItem] = useState(null);
+
   const [selectedSubItem, setSelectedSubItem] = useState(null);
 
   const { isDarkMode, toggleDarkMode, color, colorTheme } = useDarkMode();
@@ -141,6 +140,10 @@ export default function HeaderFooterLayout({ Component }) {
   const textColor = isDarkMode
     ? colorTheme.dark.textColor
     : colorTheme.light.textColor;
+
+  const selectTextColor = isDarkMode
+    ? colorTheme.dark.selectTextColor
+    : colorTheme.light.selectTextColor;
 
   useEffect(() => {
     if (GLOBAL_CONSTANTS?.user_cred?.role_id === 1) {
@@ -224,7 +227,7 @@ export default function HeaderFooterLayout({ Component }) {
           subItems: [],
         },
       ]);
-    } else if(GLOBAL_CONSTANTS?.user_cred?.role_id===2){
+    } else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 2) {
       setMenuData([
         {
           label: "Dashboard",
@@ -263,8 +266,7 @@ export default function HeaderFooterLayout({ Component }) {
         //   subItems: [],
         // },
       ]);
-    }
-    else{
+    } else {
       setMenuData([
         {
           label: "Dashboard",
@@ -322,10 +324,10 @@ export default function HeaderFooterLayout({ Component }) {
     if (menuData?.length > 0) {
       let route = location.pathname;
 
-      let meunItem = menuData?.find(
+      let menuItem = menuData?.find(
         (m) => m?.route == route || m?.subItems?.find((s) => s.route == route)
       );
-      let index = menuData?.findIndex((m) => m?.route == meunItem?.route);
+      let index = menuData?.findIndex((m) => m?.route == menuItem?.route);
       setSelectedItem(index);
     }
   }, [menuData]);
@@ -374,7 +376,6 @@ export default function HeaderFooterLayout({ Component }) {
     };
   }, []);
 
-
   return (
     <Box
       sx={{
@@ -396,10 +397,13 @@ export default function HeaderFooterLayout({ Component }) {
         color={color.background}
       >
         <DrawerHeader style={{ background: backgroundColorClass }}>
-          <div
-            className="font-bold text-2xl pr-10"
-            style={{ color: textColor }}
-          >
+          <img
+            src="src/assets/MunsowLogo.png"
+            alt="Logo"
+            style={{ height: "85px", width: "65px", marginRight: "10px" }}
+          />
+
+          <div className="font-bold text-2xl pr-8" style={{ color: textColor }}>
             MUNSOW
           </div>
           {!open ? (
@@ -415,7 +419,7 @@ export default function HeaderFooterLayout({ Component }) {
               {theme.direction === "rtl" ? (
                 <ChevronRightIcon style={{ color: textColor }} />
               ) : (
-                <ChevronLeftIcon style={{ color: textColor}} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               )}
             </IconButton>
           )}
@@ -429,7 +433,7 @@ export default function HeaderFooterLayout({ Component }) {
                 GLOBAL_CONSTANTS?.user_cred?.role_id !== 1 &&
                   (mainIndex == 3 || mainIndex == 5)
                   ? "mb-16"
-                  : "mb-2",
+                  : "mb-1",
                 ""
               )}
             >
@@ -466,6 +470,7 @@ export default function HeaderFooterLayout({ Component }) {
                     "&:hover": {
                       backgroundColor: selectedBackgroundColor,
                     },
+
                     background:
                       selectedItem === mainIndex
                         ? selectedBackgroundColor
@@ -480,24 +485,30 @@ export default function HeaderFooterLayout({ Component }) {
                       color:
                         selectedItem === mainIndex
                           ? `${selectedIcon}`
-                          : "rgb(107 114 128)",
+                          : "white",
                     }}
-                    // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                   >
                     {mainItem.icon}
                   </ListItemIcon>
                   <ListItemText
                     disableTypography
-                    style={{ fontSize: "15px" }}
-                    // style={{ color: selectedItem === mainIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }}
-                    className={classNames(
-                      selectedItem === mainIndex
-                        ? "font-bold "
-                        : "  text-gray-500 font-medium",
-                      "text-base"
-                    )}
+                    style={{
+                      fontSize: "15px",
+                      color:
+                        selectedItem === mainIndex
+                          ? selectTextColor
+                          : "#FFFFFF",
+                    }}
                     primary={mainItem.label}
-                    sx={{ opacity: open ? 1 : 0 }}
+                    sx={{
+                      opacity: open ? 1 : 0,
+                    }}
+                    // onMouseOver={(e) => {
+                    //   e.currentTarget.style.color = textColor;
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   e.currentTarget.style.color = "initial";
+                    // }}
                   />
                   {mainItem.subItems.length > 0 && (
                     <ListItemIcon
@@ -554,21 +565,19 @@ export default function HeaderFooterLayout({ Component }) {
                             justifyContent: "center",
                             color:
                               selectedSubItem === subIndex
-                                ? "#a590cf"
+                                ? `${selectedIcon}`
                                 : "rgb(107 114 128) ",
                           }}
-
-                          // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                         >
                           {subItem.icon}
                         </ListItemIcon>
                         <ListItemText
                           disableTypography
-                          // style={{ color: selectedSubItem === subIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }}
+                          style={{ color: selectTextColor }}
                           className={classNames(
                             selectedSubItem === subIndex
-                              ? "text-[#a590cf] font-semibold"
-                              : "text-gray-500 font-medium",
+                              ? "font-semibold"
+                              : `text-${textColor}-500 font-medium`,
                             "text-base"
                           )}
                           primary={subItem.label}
@@ -582,6 +591,7 @@ export default function HeaderFooterLayout({ Component }) {
             </div>
           ))}
         </List>
+
         <DrawerFooter
           style={{
             background: backgroundColorClass,
@@ -608,7 +618,7 @@ export default function HeaderFooterLayout({ Component }) {
                 borderRadius: open && "5px",
                 margin: "0px 10px",
                 "&:hover": {
-                  backgroundColor: selectedBackgroundColor,
+                  backgroundColor: "#fad7d4",
                 },
               }}
             >
@@ -622,7 +632,7 @@ export default function HeaderFooterLayout({ Component }) {
                 <LogoutOutlinedIcon style={{ color: "#eb4034" }} />
               </ListItemIcon>
               <ListItemText
-                style={{ color: '#eb4034' }}
+                style={{ color: "#eb4034" }}
                 primary={"Logout"}
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -634,6 +644,7 @@ export default function HeaderFooterLayout({ Component }) {
       <AppHeader
         open={open}
         role1={GLOBAL_CONSTANTS?.user_cred ? GLOBAL_CONSTANTS?.user_cred : {}}
+        userData={userData}
       />
 
       <div
