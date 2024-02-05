@@ -1,5 +1,6 @@
+
 const SummarySnapshot = (props) => {
-  const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score, head } = props;
+  const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score  } = props;
 
   const presentationScore = Math.round(presentation_and_grooming_score);
   const readinessScore = Math.round(readiness_score);
