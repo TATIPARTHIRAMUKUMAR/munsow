@@ -28,6 +28,8 @@ import { classNames, legendFormatter } from "../../../utils/generalUtils";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 
+import { SentimentDissatisfied } from '@mui/icons-material';
+
 import {
 
   Dialog,
@@ -106,6 +108,7 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
   const { institutionStats, institutionFilters, branchList, departmentList, courseList } = useSelector((state) => state?.data)
 
+
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   useEffect(() => {
@@ -121,7 +124,7 @@ const AdminDashboard = () => {
       setCardsList(() => institutionStats?.cards?.map(o => ({
         cardContent: o?.name,
         cardValue: o?.value,
-        icon: <PersonIcon style={{ color: "white", fontSize: 40 }} />,
+        icon: <PersonIcon style={{ color: "#252525", fontSize: 40 }} />,
         subValues: o?.sub_values
       })))
     }
@@ -166,6 +169,7 @@ const AdminDashboard = () => {
 
   }, [institutionStats])
 
+
   const onDateSelect = (value) => {
     console.log("api calls", value)
     const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
@@ -188,7 +192,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll ">
+    <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll bg-[#E7EFEE] ">
       <div className="container ">
         {/* Card section */}
         <div className="">
@@ -219,9 +223,9 @@ const AdminDashboard = () => {
           <div className="lg:w-4/12 pr-4">
             {/* Department wise Participation */}
             <div className={classNames(
-              "p-4 mb-4"
+              "p-4 mb-4 bg-[#ffffff] rounded-lg shadow-md"
             )}>
-              <div className="mb-6  flex justify-between">
+              <div className="mb-6  flex justify-between ">
                 <span className="text-lg font-normal">
                   Department wise Participation
                 </span>
@@ -237,8 +241,7 @@ const AdminDashboard = () => {
                 </span>
               </div>
               <div className="h-80">
-
-
+              {barPlot.length > 0 && !barPlot.every(entry => entry['Not yet Participated'] === 0 && entry['Participated'] === 0) ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barPlot.slice(0, 1)} width={"200px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
@@ -297,6 +300,14 @@ const AdminDashboard = () => {
 
                   </BarChart>
                 </ResponsiveContainer>
+              ) : (
+                <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+                  <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+                  <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+                    There's no data to show here yet.
+                  </div>
+                </div>
+              )}
 
               </div>
             </div>
@@ -305,7 +316,7 @@ const AdminDashboard = () => {
             {/* Department wise Improvement Rate */}
             <div className={classNames(
               // "bg-white shadow-md",
-              "p-4 mb-4"
+              "p-4 mb-4 bg-[#ffffff] rounded-lg shadow-md"
             )}>
               <div className="mb-6">
                 <span className="text-lg font-normal">
@@ -396,7 +407,7 @@ const AdminDashboard = () => {
             {/* Critical Improvement Areas */}
             <div className={classNames(
               // "bg-white shadow-md",
-              "p-4 mb-4"
+              "p-4 mb-4 bg-[#ffffff] rounded-lg shadow-md"
             )}>
               <div className="mb-6 flex justify-between">
                 <span className="text-lg font-normal ">
@@ -414,6 +425,7 @@ const AdminDashboard = () => {
                 </span>
               </div>
               <div className="h-80">
+              {pie.length > 0 && !pie.every(entry => entry['value'] === 0) ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     {/* Place the legend horizontally at the bottom */}
@@ -445,9 +457,14 @@ const AdminDashboard = () => {
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
-
-
-
+              ):(
+                <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+                  <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+                  <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+                    There's no data to show here yet.
+                  </div>
+                </div>
+              )}
               </div>
             </div>
           </div>
@@ -538,9 +555,11 @@ const AdminDashboard = () => {
         className="p-5"
       >
         <DialogTitle>Critical Improvement Areas</DialogTitle>
+
         <DialogContent>
           <div className="h-screen">
             <ResponsiveContainer width="100%" height="85%">
+            {pie.length > 0 && !pie.every(entry => entry['value'] === 0) ? (
               <PieChart>
                 <Legend
                   formatter={(value, entry) =>
@@ -569,6 +588,14 @@ const AdminDashboard = () => {
                   ))}
                 </Pie>
               </PieChart>
+            ) : (
+              <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+                  <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+                  <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+                    There's no data to show here yet.
+                  </div>
+              </div>
+            )}
             </ResponsiveContainer>
           </div>
         </DialogContent>
