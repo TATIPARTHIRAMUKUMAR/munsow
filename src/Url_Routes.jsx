@@ -14,7 +14,7 @@ import Teachers from "./screens/Admin/Teachers/Teachers";
 import AdminDashboard from "./screens/Admin/Dashboard/Dashboard";
 import AddStudents from "./screens/Admin/AddStudents/AddStudents";
 import AddTeachers from "./screens/Admin/AddTeachers/AddTeachers";
-import UserReport from "./screens/UserReport/UserReport";
+// import UserReport from "./screens/UserReport/UserReport";
 import StudentDashboard from "./screens/Student Dashboard/StudentDashboard";
 import EmotionSensing from "../src/screens/Admin/Analysis/EmotionSensing/EmotionSensing";
 import StepperComponent from "./screens/PracticeNow/Practice";
@@ -27,7 +27,7 @@ import BehaviourAnalysis from "./screens/Admin/Analysis/BehaviourAnalysis";
 import PracticalThinking from "./screens/Admin/Analysis/PracticalThinking";
 import HelpSupportAdmin from "./screens/Help/AdminHelp";
 import SettingsPageAdmin from "./screens/AdminSettings/Settings";
-import ReportIndex from "./screens/UserReport/ReportsList";
+// import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 import Configurations from "./screens/Admin/Configurations/Configurations";
 import QuestionBankForm from "./screens/Teacher/CreateQuestionBank/CreateQuestionBank";
@@ -43,6 +43,7 @@ import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
 import NewUserReport from "./screens/NewUserReport/NewUserReport";
 import TopicSubTopicList from "./screens/TopicSubtopicList/TopicSubTopicList";
+import ReportIndex from "./screens/NewUserReport/ReportsList";
 
 
 function Url_Routes() {

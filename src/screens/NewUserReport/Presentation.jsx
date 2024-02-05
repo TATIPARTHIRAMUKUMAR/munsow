@@ -2,23 +2,9 @@ import React from "react";
 
 const Presentation = (props) => {
 
-  const { behavioral_presentation_and_grooming } = props;
+  const { behavioral_presentation_and_grooming, presentation_and_grooming_score } = props;
 
-  // Function to calculate the overall score
-  const calculateScore = (scores) => {
-    const totalScore = scores.reduce((sum, score) => sum + score, 0);
-    const averageScore = totalScore / scores.length;
-
-    const roundedScore = Math.round(averageScore);
-    return roundedScore;
-
-  };
-
-  // Extract scores from the secured_marks key
-  const presentationScores = behavioral_presentation_and_grooming.data.map(item => item.secured_marks);
-
-  // Calculate the overall score based on the scores
-  const overallPresentationScore = calculateScore(presentationScores);
+  const roundedScore = Math.round(presentation_and_grooming_score);
 
   const getScoreColor = (x) => {
     if (x >= 0 && x <= 4) {
@@ -30,7 +16,7 @@ const Presentation = (props) => {
     } else {
       return 'text-gray'; // Default color or handle other cases
     }
-};
+  };
 
   return (
     
@@ -39,7 +25,7 @@ const Presentation = (props) => {
         <div className="flex justify-around items-center pb-4 lg:pb-8 munsow-dark-bg">
           <h1 className="mx-4 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-white">Presentation and Grooming</h1>
           <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
-            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(overallPresentationScore)}`}>{overallPresentationScore}/10</h1>
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(roundedScore)}`}>{roundedScore}/10</h1>
             <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
           </div>
         </div>

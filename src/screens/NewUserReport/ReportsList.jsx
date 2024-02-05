@@ -3,19 +3,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, CircularProgress, Divider } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { loadReportsList, loadUserReport } from "../../redux/action";
 import NoDataPage from "./NoData";
 import { prototype } from "postcss/lib/previous-map";
 import moment from "moment";
 
+import { useDarkMode } from "./../../Dark";
+
 export default function ReportIndex() {
     const dispatch = useDispatch();
     const { userReportList } = useSelector((state) => state.data);
     const [lessonsList, setLessonsList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { isDarkMode, colorTheme } = useDarkMode();
 
+    const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+    const textColor = isDarkMode
+        ? reduxColorTheme.dark.background
+        : reduxColorTheme.light.background;
+    const backgroundColor = isDarkMode
+        ? reduxColorTheme.dark.selectBackground
+        : reduxColorTheme.light.selectBackground;
 
     useEffect(() => {
         dispatch(loadReportsList())
@@ -28,15 +38,26 @@ export default function ReportIndex() {
 
     const navigate = useNavigate();
 
+    // navigation.navigate('reportView', {
+    //     report_data: loadReportsList,      
+    //   });
+      
+
 
     const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company }) => {
 
         const viewReport = (data) => {
-            console.log("d", data)
-            //    useEffect(()=>{
-            dispatch(loadUserReport(data));
-            navigate("/reportView")
-            //   },[])
+            
+            // useEffect(()=>{
+            // dispatch(loadUserReport(data));
+            // navigate("/reportView")
+            // },[])
+
+
+            localStorage.setItem('reportData', JSON.stringify(data));
+    
+            navigate('/reportView');
+            console.log("ee", data);
         };
 
         return (
@@ -45,8 +66,9 @@ export default function ReportIndex() {
                     <div className="flex-grow p-2 flex flex-col gap-y-2">
                         {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}
                         </div> : <div className="text-xl font-semibold">Skill based report
-                            <div className="text-base text-[#886cc0]">
-                                Skills : {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
+                            <div className="text-base">
+                                <span className="font-semibold"> Skills : </span>
+                                {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
                                     <>
                                         {skill} <span className="px-2">|</span>
                                     </>
@@ -67,7 +89,7 @@ export default function ReportIndex() {
                     <div className="py-2 w-full">
                         {report_ready === "true" ? (
                             <>
-                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] " endIcon={<ArrowForwardIcon />} onClick={() => { viewReport({...report_data, ...result_data}) }} > View Report</Button>
+                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] " endIcon={<ArrowForwardIcon />} onClick={() => { viewReport({...report_data, ...result_data}) }} style={{ color: textColor, background: backgroundColor, fontWeight: "600",}}> View Report</Button>
                             </>
                         ) : (
                             <div className="flex items-center justify-center text-orange-300">

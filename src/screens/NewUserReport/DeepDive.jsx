@@ -39,43 +39,61 @@ const DeepDive = (props) => {
         <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
       </div>
       <div className="p-4 grid max-w-xl grid-cols-1 gap-x-8 gap-y-6 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-        <div className="">
-          <h3 className="text-lg font-semibold italic text-purple mb-4">Candidate's Answer:</h3>
-          <p className="text-purple">{candidateAns}</p>
-        </div>
-        <div className="">
-          <h3 className="text-lg font-semibold italic text-purple mb-4">Sample Answer for reference</h3>
-          <p className="text-purple">{sampleAns}</p>
-        </div>
+        
+        {candidateAns && (
+          <div className="">
+            <h3 className="text-lg font-semibold italic text-purple mb-4">Candidate's Answer:</h3>
+            <p className="text-purple">{candidateAns}</p>
+          </div>
+        )}
+        
+        {sampleAns && (
+          <div className="">
+            <h3 className="text-lg font-semibold italic text-purple mb-4">Sample Answer for reference</h3>
+            <p className="text-purple">{sampleAns}</p>
+          </div>
+        )}
+
       </div>
-      <div className="p-4">
+
+      { gotRight && gotWrong && (
+        <div className="p-4">
         <div className="mb-4">
           <h3 className="text-lg font-semibold italic text-purple">Insights</h3>
         </div>
         <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-6 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-        <div className="">
-          <h3 className="text-sm font-semibold italic text-darkgreen bg-lightgreen p-1 inline-flex mb-4"><AiOutlineLike color="green" className="m-0.5" />What you got right</h3>
-          <p className="bg-lightgreen text-purple rounded-3xl p-4">{gotRight}</p>
-        </div>
-        <div className="">
-          <h3 className="text-sm font-semibold italic text-darkred bg-lightred p-1 inline-flex mb-4"><FaRegThumbsDown color="brown" className="m-1" />What you got wrong</h3>
-          <p className="bg-lightred text-purple rounded-3xl p-4">{gotWrong}</p>
-        </div>
+          { gotRight && (
+            <div className="">
+              <h3 className="text-sm font-semibold italic text-darkgreen bg-lightgreen p-3 rounded-2xl inline-flex mb-4"><AiOutlineLike color="green" className="m-0.5" />What you got right</h3>
+              <p className="bg-lightgreen text-purple rounded-3xl p-4">{gotRight}</p>
+            </div>
+          )}
+          {gotWrong &&(
+            <div className="">
+              <h3 className="text-sm font-semibold italic text-darkred bg-lightred p-3 rounded-2xl inline-flex mb-4"><FaRegThumbsDown color="brown" className="m-1" />What you got wrong</h3>
+              <p className="bg-lightred text-purple rounded-3xl p-4">{gotWrong}</p>
+            </div>
+          )}
+        
         </div>
       </div>
+      )}
 
-      <div className="p-4">
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold italic text-purple">Feedback for the Candidate:</h3>
-      </div>
-      <ol className="pl-4 text-purple">
-        {Object.keys(feedbackObject).map((key) => (
-          <li className="mb-1" key={key}>
-            {key.includes('.') ? key.split('.')[1] : key}.{feedbackObject[key]}
-          </li>
-        ))}
-      </ol>
-      </div>
+      {feedback && (
+        <div className="p-4">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold italic text-purple">Feedback for the Candidate:</h3>
+        </div>
+        <ol className="pl-4 text-purple">
+          {Object.keys(feedbackObject).map((key) => (
+            <li className="mb-1" key={key}>
+              {key.includes('.') ? key.split('.')[1] : key}.{feedbackObject[key]}
+            </li>
+          ))}
+        </ol>
+        </div>
+      )}
+      
 
 
     </div>

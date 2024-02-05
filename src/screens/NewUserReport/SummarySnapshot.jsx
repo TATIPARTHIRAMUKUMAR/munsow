@@ -1,26 +1,9 @@
 
-const componentColors = ["bg-purple", "bg-green", "bg-orange"];
-
 const SummarySnapshot = (props) => {
-  const { interview_score_by_category, behavioral_presentation_and_grooming } = props;
+  const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score  } = props;
 
-  // Function to calculate the overall score
-  const calculateScore = (scores) => {
-    const totalScore = scores.reduce((sum, score) => sum + score, 0);
-    const averageScore = totalScore / scores.length;
-
-    const roundedScore = Math.round(averageScore);
-    return roundedScore;
-
-  };
-
-  // Extract scores from the secured_marks key
-  const overviewScores = interview_score_by_category.data.map(item => item.secured_marks);
-  const presentationScores = behavioral_presentation_and_grooming.data.map(item => item.secured_marks);
-
-  // Calculate the overall score based on the scores
-  const overallReadinessScore = calculateScore(overviewScores);
-  const overallPresentationScore = calculateScore(presentationScores);
+  const presentationScore = Math.round(presentation_and_grooming_score);
+  const readinessScore = Math.round(readiness_score);
 
   const getScoreColor = (x) => {
     if (x >= 0 && x <= 4) {
@@ -67,11 +50,11 @@ const SummarySnapshot = (props) => {
         <h1 className="mx-8 font-bold text-2xl">Summary Snapshot</h1>
         <div className="mx-4 my-8 md:mx-6 md:my-12 rounded-3xl py-6 bg-white flex justify-around ">
           <div className="text-center">
-            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(overallReadinessScore)} mb-4`}>{overallReadinessScore}/10</h1>
+            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(readinessScore)} mb-4`}>{readinessScore}/10</h1>
             <h3 className="max-[375px]:text-base text-xl font-bold text-purple">Overall Readiness Score</h3>
           </div>
           <div className="text-center">
-            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(overallPresentationScore)} mb-4`}>{overallPresentationScore}/10</h1>
+            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(presentationScore)} mb-4`}>{presentationScore}/10</h1>
             <h3 className="max-[375px]:text-base text-xl font-bold text-purple">Presentation and Grooming</h3>
           </div>
         </div>
