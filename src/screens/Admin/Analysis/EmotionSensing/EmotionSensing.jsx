@@ -126,7 +126,7 @@ const EmotionSensing = () => {
   };
   return (
     <div>
-      <div className="bg-white p-10">
+      <div className="bg-white py-10 pl-10 pr-2">
         <div
           className="pb-5"
           style={{ display: "flex", justifyContent: "space-between" }}

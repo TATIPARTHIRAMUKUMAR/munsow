@@ -43,7 +43,7 @@ const PracticalThinking = () => {
       name: "Marketing",
     },
     {
-      "Not Solved": 10,
+      "Not Solved": 5,
       Solved: 20,
       name: "Operations",
     },
