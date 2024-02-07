@@ -56,7 +56,6 @@ const openedMixin = (theme, role1, color) => ({
   }),
   overflowX: "hidden",
   background: role1 === 1 ? "rgb(36, 45, 54)" : "rgb(36, 45, 54)",
-  color: "#FFFFFF",
 });
 
 const closedMixin = (theme, role1, color) => ({
@@ -87,7 +86,6 @@ const DrawerFooter = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 1),
   position: "fixed",
   bottom: 0,
-  color: "#FFFFFF",
   ...theme.mixins.toolbar,
 }));
 
@@ -141,6 +139,10 @@ export default function HeaderFooterLayout({ Component }) {
   const textColor = isDarkMode
     ? colorTheme.dark.textColor
     : colorTheme.light.textColor;
+
+  const selectTextColor = isDarkMode
+    ? colorTheme.dark.selectTextColor
+    : colorTheme.light.selectTextColor;
 
   useEffect(() => {
     if (GLOBAL_CONSTANTS?.user_cred?.role_id === 1) {
@@ -224,7 +226,7 @@ export default function HeaderFooterLayout({ Component }) {
           subItems: [],
         },
       ]);
-    } else if(GLOBAL_CONSTANTS?.user_cred?.role_id===2){
+    } else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 2) {
       setMenuData([
         {
           label: "Dashboard",
@@ -263,8 +265,7 @@ export default function HeaderFooterLayout({ Component }) {
         //   subItems: [],
         // },
       ]);
-    }
-    else{
+    } else {
       setMenuData([
         {
           label: "Dashboard",
@@ -352,6 +353,7 @@ export default function HeaderFooterLayout({ Component }) {
       localStorage.setItem("user", "All Users");
     }
     setSelectedItem(index);
+    setSelectedSubItem(null);
     navigate(route);
     // handleDrawerOpen();
   };
@@ -374,7 +376,6 @@ export default function HeaderFooterLayout({ Component }) {
     };
   }, []);
 
-
   return (
     <Box
       sx={{
@@ -384,7 +385,7 @@ export default function HeaderFooterLayout({ Component }) {
         overflow: "hidden",
       }}
     >
-      <CssBaseline/>
+      <CssBaseline />
       <CustomDrawer
         variant="permanent"
         open={open}
@@ -397,10 +398,12 @@ export default function HeaderFooterLayout({ Component }) {
         background={backgroundColorClass}
       >
         <DrawerHeader style={{ background: backgroundColorClass }}>
-          <div
-            className="font-bold text-2xl pr-10"
-            style={{ color: textColor }}
-          >
+          <img
+            src="src/assets/MunsowLogo.png"
+            alt="Logo"
+            style={{ height: "85px", width: "65px", marginRight: "10px" }}
+          />
+          <div className="font-bold text-2xl pr-8" style={{ color: textColor }}>
             MUNSOW
           </div>
           {!open ? (
@@ -416,7 +419,7 @@ export default function HeaderFooterLayout({ Component }) {
               {theme.direction === "rtl" ? (
                 <ChevronRightIcon style={{ color: textColor }} />
               ) : (
-                <ChevronLeftIcon style={{ color: textColor}} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               )}
             </IconButton>
           )}
@@ -458,7 +461,7 @@ export default function HeaderFooterLayout({ Component }) {
                     minHeight: 50,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
-                    backgroundColor: selectedItem === mainIndex ? color : 0,
+                    // backgroundColor: selectedItem === mainIndex ? color : 0,
                     borderLeft:
                       selectedItem === mainIndex
                         ? `5px solid ${borderSelectedColor}`
@@ -482,7 +485,7 @@ export default function HeaderFooterLayout({ Component }) {
                       color:
                         selectedItem === mainIndex
                           ? `${selectedIcon}`
-                          : "rgb(107 114 128)",
+                          : "white",
                     }}
                     // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                   >
@@ -490,12 +493,16 @@ export default function HeaderFooterLayout({ Component }) {
                   </ListItemIcon>
                   <ListItemText
                     disableTypography
-                    style={{ fontSize: "15px" }}
-                    // style={{ color: selectedItem === mainIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }}
+                    style={{
+                      color:
+                        selectedItem === mainIndex
+                          ? selectTextColor
+                          : "#FFFFFF",
+                    }}
                     className={classNames(
                       selectedItem === mainIndex
-                        ? "font-bold "
-                        : "  text-gray-500 font-medium",
+                        ? "font-semibold"
+                        : `text-500 font-medium`,
                       "text-base"
                     )}
                     primary={mainItem.label}
@@ -509,9 +516,23 @@ export default function HeaderFooterLayout({ Component }) {
                       }}
                     >
                       {openSubMenu === mainIndex ? (
-                        <ExpandLessIcon />
+                        <ExpandLessIcon
+                          style={{
+                            color:
+                              selectedItem === mainIndex
+                                ? "#21263e"
+                                : "#fafcfc",
+                          }}
+                        />
                       ) : (
-                        <ExpandMoreIcon />
+                        <ExpandMoreIcon
+                          style={{
+                            color:
+                              selectedItem === mainIndex
+                                ? "#21263e"
+                                : "#fafcfc",
+                          }}
+                        />
                       )}
                     </ListItemIcon>
                   )}
@@ -545,8 +566,15 @@ export default function HeaderFooterLayout({ Component }) {
                           minHeight: 48,
                           justifyContent: open ? "initial" : "center",
                           px: 2.5,
-                          // backgroundColor: selectedItem === mainIndex ? "#f3f0f9" : "transparent",
-                          // borderBottomRightRadius:"40px"
+                          backgroundColor:
+                            selectedSubItem === subIndex
+                              ? "#2BE2D0"
+                              : "transparent",
+                          borderRadius: "5px",
+                          margin: "4px 10px",
+                          "&:hover": {
+                            backgroundColor: "#2BE2D0",
+                          },
                         }}
                       >
                         <ListItemIcon
@@ -556,8 +584,8 @@ export default function HeaderFooterLayout({ Component }) {
                             justifyContent: "center",
                             color:
                               selectedSubItem === subIndex
-                                ? "#a590cf"
-                                : "rgb(107 114 128) ",
+                                ? "#21263e"
+                                : "white ",
                           }}
 
                           // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
@@ -566,11 +594,17 @@ export default function HeaderFooterLayout({ Component }) {
                         </ListItemIcon>
                         <ListItemText
                           disableTypography
-                          // style={{ color: selectedSubItem === subIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }}
+                          style={{
+                            color:
+                              selectedSubItem === subIndex
+                                ? "#21263e"
+                                : "white",
+                            fontSize: "15px",
+                          }}
                           className={classNames(
                             selectedSubItem === subIndex
-                              ? "text-[#a590cf] font-semibold"
-                              : "text-gray-500 font-medium",
+                              ? "font-semibold"
+                              : `text-500 font-medium`,
                             "text-base"
                           )}
                           primary={subItem.label}
@@ -610,7 +644,7 @@ export default function HeaderFooterLayout({ Component }) {
                 borderRadius: open && "5px",
                 margin: "0px 10px",
                 "&:hover": {
-                  backgroundColor: selectedBackgroundColor,
+                  backgroundColor: "#fad7d4",
                 },
               }}
             >
@@ -624,7 +658,7 @@ export default function HeaderFooterLayout({ Component }) {
                 <LogoutOutlinedIcon style={{ color: "#eb4034" }} />
               </ListItemIcon>
               <ListItemText
-                style={{ color: '#eb4034' }}
+                style={{ color: "#eb4034" }}
                 primary={"Logout"}
                 sx={{ opacity: open ? 1 : 0 }}
               />
