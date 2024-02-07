@@ -19,6 +19,9 @@ import CuratedSummary from "./CuratedSummary";
 import Presentation from "./Presentation";
 import SummarySnapshot from "./SummarySnapshot";
 
+import { PDFViewer, Document, Page, Text } from '@react-pdf/renderer';
+import ReactDOM from 'react-dom';
+
 
 
 const NewUserReport = () => {
@@ -34,6 +37,84 @@ const NewUserReport = () => {
   }, [userReport])
 
   console.log(userReport, 'userreport') // use this data to show in reports
+
+  const UserReportDocument = (userReport) => (
+      <Document>
+        <Page size="A4">
+          <Text>
+            <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
+                
+                <div id="Intro">
+                  <Intro
+                    user={userReport.userReport?.user_name}
+                    unqualified_hard_skills={userReport.userReport?.unqualified_hard_skills}
+                    unqualified_soft_skills={userReport.userReport?.unqualified_soft_skills}
+                    report_type={userReport.userReport?.report_type}
+                  />
+                </div>
+
+                <div id="SummarySnapshot">
+                  <SummarySnapshot
+                    title={userReport.userReport?.interview_score_by_category.data[0].main_title}
+                    interview_score_by_category={userReport.userReport?.interview_score_by_category}
+                    behavioral_presentation_and_grooming={userReport.userReport?.behavioral_presentation_and_grooming}
+                  />
+                </div> 
+          
+                <div id="Presentation">
+                  <Presentation              
+                    behavioral_presentation_and_grooming={userReport.userReport?.behavioral_presentation_and_grooming}
+                  />
+                </div>
+
+                      
+                  {userReport.userReport?.interview_score_by_category.data.map((category, index) => (
+                    <div key='' id="ReportOverview">
+                      <ReportOverview
+                        key={index}
+                        className="report-overview-component overflow-ellipsis"  // Add a class name to identify the component
+                        {...getDynamicDataForReportOverview(index)}
+                      />
+                    </div>
+                  ))}
+                
+                
+                  {userReport.userReport?.interview_score_by_category.data.map((category, index) => (
+                    <>
+                      {category.interview_questions.map((question, qIndex) => (
+                        <div key={index} id="DeepDive"> 
+                        <DeepDive
+                          className="deep-dive-component overflow-ellipsis"
+                          {...getDynamicDataForDeepDive(index, qIndex)}
+                        />
+                        </div>
+                      ))
+                      }
+                    </>
+                  ))}
+              
+
+              <div id="CuratedSummary">
+                <CuratedSummary
+                  report_type={userReport.userReport?.report_type}
+                  skillSuggestions={userReport.userReport?.skill_based_suggestions}
+                /> 
+              </div>
+
+              <div id="Extro">
+                <Extro/>
+              </div>
+
+            </div>
+          </Text>
+        </Page>
+      </Document>
+  );
+
+  const handleGeneratePdf = (userReport) => {
+    ReactDOM.render(<UserReportDocument userReport={userReport} />, document.getElementById('root'));
+  };
+  
 
 //   const handleGeneratePdf = async () => {
 //     // try{
@@ -145,39 +226,39 @@ const NewUserReport = () => {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  const handleGeneratePdf = () => {
-    console.log('inside')
-    setLoading(true)
-    const pdfContent = document.querySelector("#pdf-content");
+  // const handleGeneratePdf = () => {
+  //   console.log('inside')
+  //   setLoading(true)
+  //   const pdfContent = document.querySelector("#pdf-content");
 
-    if (pdfContent) {
-      const pdfOptions = {
-        filename: "UserReports.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait"},
-      };
+  //   if (pdfContent) {
+  //     const pdfOptions = {
+  //       filename: "UserReports.pdf",
+  //       image: { type: "jpeg", quality: 0.98 },
+  //       html2canvas: { scale: 2 },
+  //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait"},
+  //     };
 
-      // code to try giving dynamic height but is returning empty file & warning 
-      // const contentHeight = (pdfContent.clientHeight)/96 * 25.4;
-      // console.log('////// ', contentHeight)
-      // pdfOptions.jsPDF.format = [210, contentHeight + 20];
+  //     // code to try giving dynamic height but is returning empty file & warning 
+  //     // const contentHeight = (pdfContent.clientHeight)/96 * 25.4;
+  //     // console.log('////// ', contentHeight)
+  //     // pdfOptions.jsPDF.format = [210, contentHeight + 20];
 
-      // code to give static width & height
-      // pdfOptions.jsPDF.format = [210, 400];
-      // html2pdf().from(pdfContent).set(pdfOptions).save();
+  //     // code to give static width & height
+  //     // pdfOptions.jsPDF.format = [210, 400];
+  //     // html2pdf().from(pdfContent).set(pdfOptions).save();
 
-      // Code to fix cut off data
-      html2pdf().from(pdfContent).set({ ...pdfOptions, 
-        pagebreak: { 
-        before: ['#SummarySnapshot', '#Presentation', '#ReportOverview', '#DeepDive', '#CuratedSummary', '#Extro'],
-        mode: ['avoid-all'] } }
-        ).save();
-    }
-    setLoading(false)
-  };
+  //     // Code to fix cut off data
+  //     html2pdf().from(pdfContent).set({ ...pdfOptions, 
+  //       pagebreak: { 
+  //       before: ['#SummarySnapshot', '#Presentation', '#ReportOverview', '#DeepDive', '#CuratedSummary', '#Extro'],
+  //       mode: ['avoid-all'] } }
+  //       ).save();
+  //   }
+  //   setLoading(false)
+  // };
 
-  
+
   //Example functions for handling dynamic data for ReportOverview component
   const getDynamicDataForReportOverview = (index) => {
     const category = userReport?.interview_score_by_category.data[index];
@@ -224,7 +305,7 @@ const NewUserReport = () => {
           <button
                 type="button"
                 className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 w-[300px] sm:w-[200px] mx-4 sm:self-start"
-                onClick={() => handleGeneratePdf()}
+                onClick={() => handleGeneratePdf(userReport)}
               >
                 DOWNLOAD AS PDF{" "}
                 {loading && (
