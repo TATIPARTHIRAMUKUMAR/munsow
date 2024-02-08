@@ -17,6 +17,7 @@ import {
   loadUsersList
 } from "../../../redux/action";
 import DateRangePicker from "../../../Components/DateRange.jsx";
+import { SentimentDissatisfied } from '@mui/icons-material';
 
 const KSAnalysis = () => {
   window.onbeforeunload = () => {
@@ -115,6 +116,8 @@ const KSAnalysis = () => {
 
 
   const { departmentList, ksAnalysis, ksFilters, courseList, branchList, userListByDepartment } = useSelector((state) => state?.data);
+  console.log('ksAnalysis : ', ksAnalysis)
+
   const open = Boolean(anchorEl);
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -250,7 +253,7 @@ const KSAnalysis = () => {
                 <span className="text-2xl font-normal text-gray-900">
                   Hard skills
                 </span>
-                {hardSkillData?.length > 0 && (
+                {hardSkillData?.length > 0 ? (
                   <ResponsiveHeatMap
                     data={hardSkillData}
                     margin={{ top: 70, right: 90, bottom: 60, left: 90 }}
@@ -296,13 +299,20 @@ const KSAnalysis = () => {
                       },
                     ]}
                   />
+                ):(
+                  <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+                    <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+                    <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+                      There's no data to show here yet.
+                    </div>
+                  </div>
                 )}
               </div>
               <div className="mt-5 pt-3" style={{ height: 500 }}>
                 <span className="text-2xl font-normal text-gray-900">
                   Soft skills
                 </span>
-                {softSkillData?.length > 0 && (
+                {softSkillData?.length > 0 ? (
                   <ResponsiveHeatMap
                     data={softSkillData}
                     margin={{ top: 90, right: 90, bottom: 60, left: 90 }}
@@ -348,6 +358,13 @@ const KSAnalysis = () => {
                       },
                     ]}
                   />
+                ) :(
+                  <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+                    <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+                    <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+                      There's no data to show here yet.
+                    </div>
+                  </div>
                 )}
               </div>
             </div>

@@ -14,6 +14,7 @@ import _mockChartData from "./EmotionSensing/_mockChartData.json";
 import FilterCommon from "../../../Components/FilterCommon";
 import { branchesList } from "./mockbranchesdata";
 import {
+  loadPracticalThinkingAnalysis,
   loadBrachList,
   getCourseList,
   getDepartmentList
@@ -66,7 +67,7 @@ const PracticalThinking = () => {
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
-    // dispatch(loadPracticalThinking());
+    dispatch(loadPracticalThinkingAnalysis());
     dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
   }, [dispatch]);
 

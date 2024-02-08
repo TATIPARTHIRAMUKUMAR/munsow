@@ -28,7 +28,7 @@ const EmotionSensing = () => {
   const [endDate, setEndDate] = useState("");
 
   const { emotionStats, emotionFilters, branchList, courseList, departmentList, userListByDepartment } = useSelector((state) => state.data);
-
+  console.log('emotionStats : ', emotionStats)
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());

@@ -43,7 +43,7 @@ const PositiveEmotionsChart = (props) => {
       >
         {name}
       </div>
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
       <ResponsiveContainer width="100%" height={250}>
         <LineChart
           data={data}
