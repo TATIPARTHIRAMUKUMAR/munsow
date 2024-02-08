@@ -458,7 +458,7 @@ export default function HeaderFooterLayout({ Component }) {
               >
                 <ListItemButton
                   sx={{
-                    minHeight: 50,
+                    minHeight: 47,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
                     // backgroundColor: selectedItem === mainIndex ? color : 0,
