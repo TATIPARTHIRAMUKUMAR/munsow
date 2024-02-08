@@ -19,8 +19,9 @@ import CuratedSummary from "./CuratedSummary";
 import Presentation from "./Presentation";
 import SummarySnapshot from "./SummarySnapshot";
 
-import { PDFViewer, Document, Page, Text } from '@react-pdf/renderer';
+import { Document, Page, Text, pdf } from '@react-pdf/renderer';
 import ReactDOM from 'react-dom';
+import { saveAs } from 'file-saver';
 
 
 
@@ -38,81 +39,125 @@ const NewUserReport = () => {
 
   console.log(userReport, 'userreport') // use this data to show in reports
 
-  const UserReportDocument = (userReport) => (
-      <Document>
-        <Page size="A4">
-          <Text>
-            <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
-                
-                <div id="Intro">
-                  <Intro
-                    user={userReport.userReport?.user_name}
-                    unqualified_hard_skills={userReport.userReport?.unqualified_hard_skills}
-                    unqualified_soft_skills={userReport.userReport?.unqualified_soft_skills}
-                    report_type={userReport.userReport?.report_type}
-                  />
-                </div>
+   //Example functions for handling dynamic data for ReportOverview component
+   const getDynamicDataForReportOverview = (index) => {
+    const category = userReport?.interview_score_by_category.data[index];
+    return {
+      head: category.main_title,
+      overallScore: category.secured_marks,
+      notes: category.notes,
+      scores: category.sub_segements.map((segment, sIndex) => ({
+        title: segment.title,
+        score: segment.secured_marks,
+        desc: segment.notes,
+      })),
+    };
+  };
+  
+  
+  // Example functions for handling dynamic data for DeepDive component
+    const getDynamicDataForDeepDive = (index, qIndex) => {
+    const category = userReport?.interview_score_by_category.data[index];
 
-                <div id="SummarySnapshot">
-                  <SummarySnapshot
-                    title={userReport.userReport?.interview_score_by_category.data[0].main_title}
-                    interview_score_by_category={userReport.userReport?.interview_score_by_category}
-                    behavioral_presentation_and_grooming={userReport.userReport?.behavioral_presentation_and_grooming}
-                  />
-                </div> 
-          
-                <div id="Presentation">
-                  <Presentation              
-                    behavioral_presentation_and_grooming={userReport.userReport?.behavioral_presentation_and_grooming}
-                  />
-                </div>
+    const question = category.interview_questions[qIndex];
+    return {
+      head: category.main_title,
+      ques: question.question,
+      candidateAns: question.answer,
+      sampleAns: question.suggested_answer,
+      gotRight: question.Insights.what_you_got_right,
+      gotWrong: question.Insights.what_you_got_wrong,
+      feedback: question.Insights["feedback_for_the candidate"],
+    };
+  };
+  
 
-                      
-                  {userReport.userReport?.interview_score_by_category.data.map((category, index) => (
-                    <div key='' id="ReportOverview">
-                      <ReportOverview
-                        key={index}
-                        className="report-overview-component overflow-ellipsis"  // Add a class name to identify the component
-                        {...getDynamicDataForReportOverview(index)}
-                      />
-                    </div>
-                  ))}
-                
-                
-                  {userReport.userReport?.interview_score_by_category.data.map((category, index) => (
-                    <>
-                      {category.interview_questions.map((question, qIndex) => (
-                        <div key={index} id="DeepDive"> 
-                        <DeepDive
-                          className="deep-dive-component overflow-ellipsis"
-                          {...getDynamicDataForDeepDive(index, qIndex)}
-                        />
-                        </div>
-                      ))
-                      }
-                    </>
-                  ))}
+  const UserReportDocument =  (
+    <Document>
+      <Page size="A4">
+        <Text>
+          {console.log('////??? : ', userReport)}
+          <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
               
-
-              <div id="CuratedSummary">
-                <CuratedSummary
-                  report_type={userReport.userReport?.report_type}
-                  skillSuggestions={userReport.userReport?.skill_based_suggestions}
-                /> 
+              <div id="Intro">
+                <Intro
+                  user={userReport?.user_name}
+                  unqualified_hard_skills={userReport?.unqualified_hard_skills}
+                  unqualified_soft_skills={userReport?.unqualified_soft_skills}
+                  report_type={userReport?.report_type}
+                />
               </div>
-
-              <div id="Extro">
-                <Extro/>
+  
+              <div id="SummarySnapshot">
+                <SummarySnapshot
+                  title={userReport?.interview_score_by_category.data[0].main_title}
+                  interview_score_by_category={userReport?.interview_score_by_category}
+                  behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
+                />
+              </div> 
+        
+              <div id="Presentation">
+                <Presentation              
+                  behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
+                />
               </div>
-
+  
+                    
+                {userReport?.interview_score_by_category.data.map((category, index) => (
+                  <div key='' id="ReportOverview">
+                    <ReportOverview
+                      key={index}
+                      className="report-overview-component overflow-ellipsis"  // Add a class name to identify the component
+                      {...getDynamicDataForReportOverview(index)}
+                    />
+                  </div>
+                ))}
+              
+              
+                {userReport?.interview_score_by_category.data.map((category, index) => (
+                  <>
+                    {category.interview_questions.map((question, qIndex) => (
+                      <div key={index} id="DeepDive"> 
+                      <DeepDive
+                        className="deep-dive-component overflow-ellipsis"
+                        {...getDynamicDataForDeepDive(index, qIndex)}
+                      />
+                      </div>
+                    ))
+                    }
+                  </>
+                ))}
+            
+  
+            <div id="CuratedSummary">
+              <CuratedSummary
+                report_type={userReport?.report_type}
+                skillSuggestions={userReport?.skill_based_suggestions}
+              /> 
             </div>
-          </Text>
-        </Page>
-      </Document>
+  
+            <div id="Extro">
+              <Extro/>
+            </div>
+  
+          </div>
+        </Text>
+      </Page>
+    </Document>
   );
 
-  const handleGeneratePdf = (userReport) => {
-    ReactDOM.render(<UserReportDocument userReport={userReport} />, document.getElementById('root'));
+  const handleGeneratePdf = () => {
+    try {
+      setLoading(true);
+      const pdfBlob = pdf(UserReportDocument).toBlob();
+      console.log('<><><> : ', pdfBlob)
+      saveAs(pdfBlob, 'UserReport.pdf');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    } finally {
+      setLoading(false);
+    }
+    // ReactDOM.render(<UserReportDocument userReport={userReport} />, document.getElementById('root'));
   };
   
 
@@ -259,38 +304,7 @@ const NewUserReport = () => {
   // };
 
 
-  //Example functions for handling dynamic data for ReportOverview component
-  const getDynamicDataForReportOverview = (index) => {
-    const category = userReport?.interview_score_by_category.data[index];
-    return {
-      head: category.main_title,
-      overallScore: category.secured_marks,
-      notes: category.notes,
-      scores: category.sub_segements.map((segment, sIndex) => ({
-        title: segment.title,
-        score: segment.secured_marks,
-        desc: segment.notes,
-      })),
-    };
-  };
-  
-  
-  // Example functions for handling dynamic data for DeepDive component
-    const getDynamicDataForDeepDive = (index, qIndex) => {
-    const category = userReport?.interview_score_by_category.data[index];
-
-    const question = category.interview_questions[qIndex];
-    return {
-      head: category.main_title,
-      ques: question.question,
-      candidateAns: question.answer,
-      sampleAns: question.suggested_answer,
-      gotRight: question.Insights.what_you_got_right,
-      gotWrong: question.Insights.what_you_got_wrong,
-      feedback: question.Insights["feedback_for_the candidate"],
-    };
-  };
-  
+ 
 
   return (
     <div className="body flex-grow-1 overflow-y-scroll">
@@ -305,7 +319,7 @@ const NewUserReport = () => {
           <button
                 type="button"
                 className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 w-[300px] sm:w-[200px] mx-4 sm:self-start"
-                onClick={() => handleGeneratePdf(userReport)}
+                onClick={() => handleGeneratePdf()}
               >
                 DOWNLOAD AS PDF{" "}
                 {loading && (

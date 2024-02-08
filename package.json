@@ -35,6 +35,7 @@
     "antd": "^5.9.2",
     "axios": "^1.5.0",
     "date-fns": "^2.30.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^10.17.9",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",
