@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const SettingsPageAdmin = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
     twoFactorAuth: false,
     emailNotifications: false,
     smsNotifications: false,
   });
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('user_data'));
+    const userData = JSON.parse(localStorage.getItem("user_data"));
 
     if (userData) {
       setFormData({
-        name: userData?.data?.contact_name || '',
-        email: userData?.data?.email || '',
-        password: '', 
-        twoFactorAuth: false, 
-        emailNotifications: false, 
+        name: userData?.data?.contact_name || "",
+        email: userData?.data?.email || "",
+        password: "",
+        twoFactorAuth: false,
+        emailNotifications: false,
         smsNotifications: false,
       });
     }
@@ -91,14 +91,21 @@ const SettingsPageAdmin = () => {
               checked={formData.twoFactorAuth}
               onChange={handleCheckChange}
               className="rounded"
+              style={{
+                color: "#2BE2D0",
+                outlineColor: "#22b3a4",
+              }}
             />
+
             <span>Enable Two-Factor Authentication</span>
           </label>
         </section>
 
         {/* Notification Preferences */}
         <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Notification Preferences</h2>
+          <h2 className="text-2xl font-medium mb-4">
+            Notification Preferences
+          </h2>
           <label className="flex items-center space-x-3 mb-3">
             <input
               type="checkbox"
@@ -106,6 +113,10 @@ const SettingsPageAdmin = () => {
               checked={formData.emailNotifications}
               onChange={handleCheckChange}
               className="rounded"
+              style={{
+                color: "#2BE2D0",
+                outlineColor: "#22b3a4",
+              }}
             />
             <span>Email Notifications</span>
           </label>
@@ -116,13 +127,21 @@ const SettingsPageAdmin = () => {
               checked={formData.smsNotifications}
               onChange={handleCheckChange}
               className="rounded"
+              style={{
+                color: "#2BE2D0",
+                outlineColor: "#22b3a4",
+              }}
             />
             <span>SMS Notifications</span>
           </label>
         </section>
 
         {/* Submit Button */}
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button
+          type="submit"
+          className="bg-[#2BE2D0] text-[#252525] py-2 px-4 rounded"
+        >
+          {" "}
           Save Changes
         </button>
       </form>
