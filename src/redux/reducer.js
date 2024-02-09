@@ -43,6 +43,14 @@ const initialState = {
   unAssignedUsers: [],
   colorTheme: {
     light: {
+      // primaryBg-black
+      // secondarybg-green
+      // selecttextcolor-primarybg
+      // selectIcon-primarybg
+      //primarytextcolor-textcolor-white-E7EFEE
+      //textcolor2 is not a part of theme
+      //secondarytextcolor-textcolor3
+
       background: " #242D36 ",
       foreground: "#E7EFEE",
       selectBackground: "#2BE2D0",

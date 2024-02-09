@@ -41,7 +41,7 @@ export default function StudentDashboard() {
   }, []);
 
   return (
-    <div style={{ background: backgroundColor, marginTop: "15px" }}>
+    <div style={{ background: backgroundColor }}>
       {/* <div
         className="flex justify-between text-3xl font-bold px-8 py-8 relative overflow-auto max-w-full h-auto"
         style={{ background: headerBgColor, color: headerTextColor }}

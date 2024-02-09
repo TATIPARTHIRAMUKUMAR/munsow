@@ -442,6 +442,9 @@ export default function HeaderFooterLayout({ Component }) {
                 disablePadding
                 onClick={() => {
                   if (mainItem.subItems.length > 0) {
+                    if (selectedItem !== mainIndex) {
+                      setSelectedSubItem(null);
+                    }
                     setOpenSubMenu(
                       openSubMenu === mainIndex ? null : mainIndex
                     );

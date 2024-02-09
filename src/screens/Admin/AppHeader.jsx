@@ -27,7 +27,18 @@ const AppHeader = ({ open, role1 }) => {
     { label: "Reports View", url: "/reportView" },
   ];
 
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode, toggleDarkMode, color, colorTheme } = useDarkMode();
+
+  const backgroundColor = isDarkMode
+    ? colorTheme.dark.background
+    : colorTheme.light.background;
+  const textColor = isDarkMode
+    ? colorTheme.dark.textColor
+    : colorTheme.light.textColor;
+
+  const roleBackgroundColor =
+    role1?.role_id === 1 ? "#242D36" : backgroundColor;
+  const roleTextColor = role1?.role_id === 1 ? "#eceef0" : textColor;
 
   return (
     <AppBar
@@ -35,8 +46,9 @@ const AppHeader = ({ open, role1 }) => {
       sx={{
         width: `calc(100%)`,
         boxShadow: "unset",
-        backgroundColor: isDarkMode ? " #242D36" : " #242D36",
-        color: isDarkMode ? "#eceef0" : "#eceef0",
+
+        backgroundColor: roleBackgroundColor,
+        color: roleTextColor,
         height: "60px",
       }}
     >
