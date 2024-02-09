@@ -35,6 +35,8 @@ const initialState = {
   behaviourAnalysis:[],
   ksAnalysis: [],
   ksFilters: [],
+  practicalThinkingAnalysis: [],
+  practicalThinkingFilters: [],
   userListByDepartment:[],
   summaryData:{},
   detailedCourse:{},
@@ -212,6 +214,12 @@ const DataReducers = (state = initialState, action) => {
       ...state,
       ksAnalysis: action.payload.data,
       ksFilters:action.payload.filters,
+      loading:false
+    }
+    case types.PRACTICAL_THINKING_ANALYSIS: return{
+      ...state,
+      practicalThinkingAnalysis: action.payload.data,
+      practicalThinkingFilters:action.payload.filters,
       loading:false
     }
     case types.USERS_LIST_BY_DEPARTMENT: return{

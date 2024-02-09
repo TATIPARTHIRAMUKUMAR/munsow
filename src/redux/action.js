@@ -1122,7 +1122,7 @@ export const loadPracticalThinkingAnalysis = (params) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/practical_thinking_analysis`, { params, headers })
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/practical_thinking_analysis`, { headers, params })
       .then((resp) => {
         dispatch(getPracticalThinkingAnalysis(resp?.data));
       })

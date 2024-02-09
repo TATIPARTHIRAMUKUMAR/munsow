@@ -17,12 +17,17 @@ import {
   loadPracticalThinkingAnalysis,
   loadBrachList,
   getCourseList,
-  getDepartmentList
+  getDepartmentList, 
+  loadCourseList, 
+  loadDepartmentList, 
+  loadUsersList
 } from "../../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
+import { SentimentDissatisfied } from '@mui/icons-material';
+import format from 'date-fns/format';
 
 const PracticalThinking = () => {
   window.onbeforeunload = ()=>{
@@ -32,44 +37,45 @@ const PracticalThinking = () => {
     localStorage.setItem("user", "All Users");
 
   }
-  const barPlotData = [
-    {
-      "Not Solved": 24,
-      Solved: 40,
-      name: "Finance",
-    },
-    {
-      "Not Solved": 30,
-      Solved: 30,
-      name: "Marketing",
-    },
-    {
-      "Not Solved": 5,
-      Solved: 20,
-      name: "Operations",
-    },
-    {
-      "Not Solved": 20,
-      Solved: 10,
-      name: "Hr",
-    },
-  ];
+  // const barPlotData = [
+  //   {
+  //     "Not Solved": 24,
+  //     Solved: 40,
+  //     name: "Finance",
+  //   },
+  //   {
+  //     "Not Solved": 30,
+  //     Solved: 30,
+  //     name: "Marketing",
+  //   },
+  //   {
+  //     "Not Solved": 5,
+  //     Solved: 20,
+  //     name: "Operations",
+  //   },
+  //   {
+  //     "Not Solved": 20,
+  //     Solved: 10,
+  //     name: "Hr",
+  //   },
+  // ];
   const dispatch = useDispatch();
-  const [barPlot, setBarPlot] = useState(barPlotData);
+  // const [barPlot, setBarPlot] = useState(barPlotData);
   const [branchesData, setBranchesData] = useState(branchesList);
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  const {practicalThinkingAnalysis, practicalThinkingFilters, branchList, departmentList, courseList} = useSelector((state)=>state?.data);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   
+  console.log(practicalThinkingAnalysis, 'practicalThinkingAnalysis')
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
     dispatch(loadPracticalThinkingAnalysis());
     dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
-  }, [dispatch]);
+  }, []);
 
   const legendFormatter = (value, entry) => {
     return (
@@ -82,13 +88,14 @@ const PracticalThinking = () => {
       </div>
     );
   };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (value) => {
     if (value == "All Branches") {
-      setBarPlot(barPlotData);
+      dispatch(loadPracticalThinkingAnalysis());
     } else {
       // use api to filter the data using id
       const problemSolvingRate = ["Solved", "Not Solved"];
@@ -105,9 +112,49 @@ const PracticalThinking = () => {
     handleClose();
   };
 
+  useEffect(()=>{
+    if (practicalThinkingFilters?.branch != undefined && practicalThinkingFilters?.branch != null) {
+      localStorage.setItem("branch", practicalThinkingFilters?.branch);
+      localStorage.setItem("course", practicalThinkingFilters?.course);
+      localStorage.setItem("department", practicalThinkingFilters?.department);
+      localStorage.setItem("user", practicalThinkingFilters?.user_name);
+
+      setEndDate(practicalThinkingFilters?.end_date)
+      setStartDate(practicalThinkingFilters?.start_date)
+
+      dispatch(loadCourseList(`branch_id=${practicalThinkingFilters?.branch_id}`));
+      dispatch(loadDepartmentList(`course_id=${practicalThinkingFilters?.course_id}`));
+      dispatch(loadUsersList(`department_id=${practicalThinkingFilters?.department_id}`));
+
+    }
+
+  },[practicalThinkingAnalysis])
+
+  const onDateSelect = (value) => {
+    console.log("api calls",value)
+    // const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
+    // const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    let params = {
+      branch: localStorage.getItem("branch"),
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+      // start_date: formattedStartDate,
+      // end_date: formattedEndDate
+    };
+    if (startDate && endDate) {
+
+
+      // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      dispatch(loadPracticalThinkingAnalysis(params))
+      // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+    }
+  }
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
@@ -123,26 +170,27 @@ const PracticalThinking = () => {
                 </span> */}
                 <div>
                 <div className="flex justify-end mr-10 mb-3">
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Branches" dependencyList={branchList}/>
+                  <div className="" onClick={onDateSelect}>
+                    <PopUpFilter route="PracticalThinking" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
                   </div>
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Courses" dependencyList={courseList}/>
+                  <div className="" onClick={onDateSelect}>
+                    <PopUpFilter route="PracticalThinking" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
                   </div>
-                  <div className="">
+                  <div className="" onClick={onDateSelect}>
                     <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
                   </div>
-                  {startDate != "" && (
+                  {/* {startDate != "" && (
                   <div className="">
-                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
+                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect}/>
                     </div>
-                  )}
+                  )} */}
                 </div>
                 </div>
               </div>
               <div className="mt-5 pt-3">
+              {practicalThinkingAnalysis?.length > 0 ? (
                 <ResponsiveContainer width="100%" height={480}>
-                  <BarChart data={barPlot} width={"1000px"}>
+                  <BarChart data={practicalThinkingAnalysis} width={"1000px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
                     <XAxis
                       dataKey="name"
@@ -191,6 +239,14 @@ const PracticalThinking = () => {
                     />
                   </BarChart>
                 </ResponsiveContainer>
+              ) : (
+                <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+                    <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+                    <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+                      There's no data to show here yet.
+                    </div>
+                  </div>
+              )}
                 {/* <ResponsiveContainer width="100%" height={480}>
                                     <BarChart
                                         data={_mockChartData}

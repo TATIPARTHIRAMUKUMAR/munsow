@@ -95,7 +95,6 @@ const EmotionSensing = () => {
       dispatch(loadDepartmentList(`course_id=${emotionFilters?.course_id}`));
       dispatch(loadUsersList(`department_id=${emotionFilters?.department_id}`));
 
-
     }
 
   },[emotionStats])
