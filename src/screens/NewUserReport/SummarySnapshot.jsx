@@ -38,7 +38,7 @@ const SkillCategory = ({ title, scores, bgcolor, overallScore }) => {
 const SummarySnapshot = (props) => {
   // const completionPercentage = 50;
 
-  const { interview_score_by_category } = props;
+  const { interview_score_by_category,wholeData } = props;
   
   return (
 
@@ -47,11 +47,11 @@ const SummarySnapshot = (props) => {
         <h1 className="mx-8 font-bold text-2xl">Summary Snapshot</h1>
         <div className="mx-8 my-12 rounded-3xl py-6 bg-white flex justify-around ">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-red mb-4">2/10</h1>
+            <h1 className="text-4xl font-bold text-green mb-4">{wholeData?.readiness_score}</h1>
             <h3 className="font-bold text-purple">Overall Readiness Score</h3>
           </div>
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-green mb-4">9/10</h1>
+            <h1 className="text-4xl font-bold text-green mb-4">{wholeData?.presentation_and_grooming_score}</h1>
             <h3 className="font-bold text-purple">Presentation and Grooming</h3>
           </div>
         </div>
