@@ -24,6 +24,8 @@ import ReactDOM from 'react-dom';
 import { saveAs } from 'file-saver';
 
 
+import generatePDF from "react-to-pdf";
+
 
 const NewUserReport = () => {
   const reportTemplateRef = useRef(null);
@@ -32,6 +34,29 @@ const NewUserReport = () => {
   const { userReport } = useSelector(state => state?.data)
 
   const navigate = useNavigate();
+
+  const options = {
+    filename: "user-report.pdf",
+    page: {
+      margin: 20,
+    },
+    // Define page breaks based on element IDs
+    pagebreak: {
+      before: ["#SummarySnapshot", "#Presentation", "#ReportOverview", "#DeepDive", "#CuratedSummary", "#Extro"],
+    },
+  };
+
+  const handleGeneratePdf = async () => {
+    try {
+      setLoading(true);
+      await generatePDF(() => reportTemplateRef.current, options);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
     setReportData(userReport);
@@ -146,19 +171,20 @@ const NewUserReport = () => {
     </Document>
   );
 
-  const handleGeneratePdf = () => {
-    try {
-      setLoading(true);
-      const pdfBlob = pdf(UserReportDocument).toBlob();
-      console.log('<><><> : ', pdfBlob)
-      saveAs(pdfBlob, 'UserReport.pdf');
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-    } finally {
-      setLoading(false);
-    }
-    // ReactDOM.render(<UserReportDocument userReport={userReport} />, document.getElementById('root'));
-  };
+
+  // const handleGeneratePdf = () => {
+  //   try {
+  //     setLoading(true);
+  //     const pdfBlob = pdf(UserReportDocument).toBlob();
+  //     console.log('<><><> : ', pdfBlob)
+  //     saveAs(pdfBlob, 'UserReport.pdf');
+  //   } catch (error) {
+  //     console.error('Error generating PDF:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  //   // ReactDOM.render(<UserReportDocument userReport={userReport} />, document.getElementById('root'));
+  // };
   
 
 //   const handleGeneratePdf = async () => {
@@ -304,8 +330,6 @@ const NewUserReport = () => {
   // };
 
 
- 
-
   return (
     <div className="body flex-grow-1 overflow-y-scroll">
       <div className="container mx-auto">
@@ -319,7 +343,7 @@ const NewUserReport = () => {
           <button
                 type="button"
                 className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 w-[300px] sm:w-[200px] mx-4 sm:self-start"
-                onClick={() => handleGeneratePdf()}
+                onClick={handleGeneratePdf}
               >
                 DOWNLOAD AS PDF{" "}
                 {loading && (
@@ -327,6 +351,7 @@ const NewUserReport = () => {
                 )}
           </button>
         </div>
+        
         <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
           
           <div id="Intro">
@@ -377,7 +402,7 @@ const NewUserReport = () => {
                 }
               </>
             ))}
-         
+        
 
         <div id="CuratedSummary">
           <CuratedSummary
@@ -390,7 +415,7 @@ const NewUserReport = () => {
           <Extro/>
         </div>
 
-      </div>
+        </div>
 
       </div>
     </div>
