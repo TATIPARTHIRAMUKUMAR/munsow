@@ -10,25 +10,31 @@ import TextField from "@mui/material/TextField";
 import { user_login } from "../../redux/action";
 import { useDispatch } from "react-redux";
 import ForgotPassword from "./ForgotPassword";
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledRadioGroup = styled(RadioGroup)({
-  flexDirection: 'row',
-  justifyContent: 'center',
-  marginBottom: '30px',
+  flexDirection: "row",
+  justifyContent: "center",
+  marginBottom: "30px",
 });
 
 const StyledFormControlLabel = styled(FormControlLabel)({
   fontSize: "50px",
-  '& .MuiSvgIcon-root': {
-    color: '#4A90E2',
+  "& .MuiSvgIcon-root": {
+    color: "#4A90E2",
   },
-  '& .MuiTypography-root': {
-    color: '#333',
+  "& .MuiTypography-root": {
+    color: "#333",
     fontSize: "20px",
-    paddingRight:"30px"
-  }
+    paddingRight: "30px",
+  },
 });
 
 const style = {
@@ -45,9 +51,8 @@ const style = {
 };
 
 const StudentLogin = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [loginType, setLoginType] = useState("student");
-
 
   const [universityId, setUniversityId] = useState("");
   const [password, setPassword] = useState("");
@@ -71,25 +76,26 @@ const StudentLogin = () => {
     setOpen(false);
   };
 
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = {
       email: universityId,
       password: password,
-      role:"student"
-
-    }
-    dispatch(user_login(payload, () => {
-      window.location.href = "./studentDashboard";
-    }))
+      role: "student",
+    };
+    dispatch(
+      user_login(payload, () => {
+        window.location.href = "./studentDashboard";
+      })
+    );
   };
 
   const handleRadioChange = (event) => {
     const selectedType = event.target.value;
     setLoginType(selectedType);
-    if (selectedType === 'institution') {
+    if (selectedType === "institution") {
       navigate("/");
-    } else if (selectedType === 'teacher') {
+    } else if (selectedType === "teacher") {
       navigate("/teacherLogin");
     }
     // Add more conditions for other types if necessary
@@ -100,59 +106,80 @@ const StudentLogin = () => {
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/6 p-5 md:p-20">
           <div className="bg-white   rounded-lg p-6">
-
-          <FormControl component="fieldset">
+            <FormControl component="fieldset">
               {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
-              <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
-                <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
-                <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
-                <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" />
+              <StyledRadioGroup
+                row
+                value={loginType}
+                onChange={handleRadioChange}
+              >
+                <StyledFormControlLabel
+                  value="institution"
+                  control={<Radio />}
+                  label="Institution"
+                />
+                <StyledFormControlLabel
+                  value="student"
+                  control={<Radio />}
+                  label="Student"
+                />
+                <StyledFormControlLabel
+                  value="teacher"
+                  control={<Radio />}
+                  label="Teacher"
+                />
               </StyledRadioGroup>
             </FormControl>
-
-            <h2 className="text-2xl font-semibold mb-4">Student Login</h2>
-            {/* <p className="text-base text-gray-600 mb-4">
+            <form onSubmit={handleSubmit}>
+              <h2 className="text-2xl font-semibold mb-4">Student Login</h2>
+              {/* <p className="text-base text-gray-600 mb-4">
               Get personalized insights on your interview skills, strengths, and areas for improvement.
             </p> */}
-            <div className="space-y-4">
-              <div className="mb-2">
-                <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
-                  Email ID
-                </label>
-                <input
-                  type="text"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                  id="universityId"
-                  name="universityId"
-                  placeholder=""
-                  value={universityId}
-                  onChange={loginInputHandler}
-                />
+              <div className="space-y-4">
+                <div className="mb-2">
+                  <label
+                    htmlFor="universityId"
+                    className="text-sm font-medium text-gray-600"
+                  >
+                    Email ID
+                  </label>
+                  <input
+                    type="text"
+                    className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                    id="universityId"
+                    name="universityId"
+                    placeholder=""
+                    value={universityId}
+                    onChange={loginInputHandler}
+                  />
+                </div>
+                <div className="mb-2">
+                  <label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-600"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                    id="password"
+                    name="password"
+                    placeholder=""
+                    value={password}
+                    onChange={loginInputHandler}
+                  />
+                </div>
               </div>
-              <div className="mb-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-600">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                  id="password"
-                  name="password"
-                  placeholder=""
-                  value={password}
-                  onChange={loginInputHandler}
-                />
+              <div className="mt-4">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                >
+                  Login
+                </button>
               </div>
-            </div>
-            <div className="mt-4">
-              <button
-                type="button"
-                className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-                onClick={handleSubmit}
-              >
-                Login
-              </button>
-            </div>
+            </form>
             {/* <div className="mt-3 text-center">
               <span className="text-blue-600 hover:underline cursor-pointer" onClick={handleClickOpen}>
                 Forget Password?
@@ -201,9 +228,14 @@ const StudentLogin = () => {
 
             <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
               <div className="flex items-center justify-center">
-                <h2 className="text-lg font-semibold text-gray-700 mr-4">New to Munsow? {" "}</h2>
-                <Link to={"/studentRegister"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
-                Sign Up
+                <h2 className="text-lg font-semibold text-gray-700 mr-4">
+                  New to Munsow?{" "}
+                </h2>
+                <Link
+                  to={"/studentRegister"}
+                  className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl"
+                >
+                  Sign Up
                 </Link>
               </div>
             </div>
@@ -227,25 +259,32 @@ const StudentLogin = () => {
               </span>
             </div> */}
             <div className="mt-10 text-center text-gray-600">
-              <span>
-                By continuing, you agree to our
-              </span>
-              <a href=" https://www.munsow.com/terms-and-conditions" target="_blank"><span className="font-semibold text-blue-500">  Terms of Service  </span></a>
+              <span>By continuing, you agree to our</span>
+              <a
+                href=" https://www.munsow.com/terms-and-conditions"
+                target="_blank"
+              >
+                <span className="font-semibold text-blue-500">
+                  {" "}
+                  Terms of Service{" "}
+                </span>
+              </a>
 
               {/* <span className="font-semibold"> Terms of Service </span> */}
               <span>and</span>
-              <a href=" https://www.munsow.com/privacy-policy" target="_blank"><span className="font-semibold text-blue-500">  Privacy Policy  </span></a>
+              <a href=" https://www.munsow.com/privacy-policy" target="_blank">
+                <span className="font-semibold text-blue-500">
+                  {" "}
+                  Privacy Policy{" "}
+                </span>
+              </a>
 
               {/* <span className="font-semibold"> Privacy Policy</span> */}
             </div>
           </div>
         </div>
         <div className="hidden md:inline w-3/6">
-          <img
-            src={interview}
-            className="w-full p-5 md:p-20"
-            alt="Login"
-          />
+          <img src={interview} className="w-full p-5 md:p-20" alt="Login" />
         </div>
       </div>
     </div>
