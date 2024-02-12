@@ -136,6 +136,8 @@ const PracticalThinking = () => {
     // const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
     let params = {
       branch: localStorage.getItem("branch"),
+      // branch:'All Branches',
+      // course
       course: localStorage.getItem("course"),
       department: localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
