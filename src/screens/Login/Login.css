@@ -69,3 +69,8 @@
 .footer-buttons {
   text-align: end;
 }
+
+input:focus{
+  box-shadow: none !important;
+  outline: 0 !important;
+}

@@ -21,6 +21,7 @@ import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import './Login.css'
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -185,6 +186,8 @@ const LoginPage = () => {
                   Password
                 </label>
                 <TextField
+                autocomplete="false" 
+                style={{boxShadow: 'none'}}
                   type={showPassword ? "text" : "password"}
                   className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="password"
