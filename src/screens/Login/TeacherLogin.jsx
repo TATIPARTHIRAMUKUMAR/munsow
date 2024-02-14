@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import interview from "../../assets/student.png";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, OutlinedInput } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -10,25 +10,36 @@ import TextField from "@mui/material/TextField";
 import { user_login } from "../../redux/action";
 import { useDispatch } from "react-redux";
 import ForgotPassword from "./ForgotPassword";
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import InputLabel from "@mui/material/InputLabel";
 
 const StyledRadioGroup = styled(RadioGroup)({
-  flexDirection: 'row',
-  justifyContent: 'center',
-  marginBottom: '30px',
+  flexDirection: "row",
+  justifyContent: "center",
+  marginBottom: "30px",
 });
 
 const StyledFormControlLabel = styled(FormControlLabel)({
   fontSize: "50px",
-  '& .MuiSvgIcon-root': {
-    color: '#4A90E2',
+  "& .MuiSvgIcon-root": {
+    color: "#4A90E2",
   },
-  '& .MuiTypography-root': {
-    color: '#333',
+  "& .MuiTypography-root": {
+    color: "#333",
     fontSize: "20px",
-    paddingRight:"30px"
-  }
+    paddingRight: "30px",
+  },
 });
 
 const style = {
@@ -45,9 +56,10 @@ const style = {
 };
 
 const TeacherLogin = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [loginType, setLoginType] = useState("teacher");
 
+  const [showPassword, setShowPassword] = useState(false);
 
   const [universityId, setUniversityId] = useState("");
   const [password, setPassword] = useState("");
@@ -71,24 +83,25 @@ const TeacherLogin = () => {
     setOpen(false);
   };
 
-
   const handleSubmit = async () => {
     const payload = {
       email: universityId,
       password: password,
-      role:"teacher"
-    }
-    dispatch(user_login(payload, () => {
-      window.location.href = "./adminDashboard";
-    }))
+      role: "teacher",
+    };
+    dispatch(
+      user_login(payload, () => {
+        window.location.href = "./adminDashboard";
+      })
+    );
   };
 
   const handleRadioChange = (event) => {
     const selectedType = event.target.value;
     setLoginType(selectedType);
-    if (selectedType === 'institution') {
+    if (selectedType === "institution") {
       navigate("/");
-    } else if (selectedType === 'student') {
+    } else if (selectedType === "student") {
       navigate("/studentLogin");
     }
     // Add more conditions for other types if necessary
@@ -99,13 +112,28 @@ const TeacherLogin = () => {
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/6 p-5 md:p-20">
           <div className="bg-white   rounded-lg p-6">
-
-          <FormControl component="fieldset">
+            <FormControl component="fieldset">
               {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
-              <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
-                <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
-                <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
-                <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" />
+              <StyledRadioGroup
+                row
+                value={loginType}
+                onChange={handleRadioChange}
+              >
+                <StyledFormControlLabel
+                  value="institution"
+                  control={<Radio />}
+                  label="Institution"
+                />
+                <StyledFormControlLabel
+                  value="student"
+                  control={<Radio />}
+                  label="Student"
+                />
+                <StyledFormControlLabel
+                  value="teacher"
+                  control={<Radio />}
+                  label="Teacher"
+                />
               </StyledRadioGroup>
             </FormControl>
 
@@ -115,7 +143,10 @@ const TeacherLogin = () => {
             </p> */}
             <div className="space-y-4">
               <div className="mb-2">
-                <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
+                <label
+                  htmlFor="universityId"
+                  className="text-sm font-medium text-gray-600"
+                >
                   Email ID
                 </label>
                 <input
@@ -128,20 +159,62 @@ const TeacherLogin = () => {
                   onChange={loginInputHandler}
                 />
               </div>
-              <div className="mb-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-600">
+              <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        // onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+              {/* <div className="mb-2">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-600"
+                >
                   Password
                 </label>
-                <input
-                  type="password"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                <TextField
+                  type={showPassword ? "text" : "password"}
+                  className="mt-2 w-full rounded-md "
+                  // border-none border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="password"
                   name="password"
                   placeholder=""
                   value={password}
                   onChange={loginInputHandler}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? (
+                            <VisibilityOffIcon />
+                          ) : (
+                            <VisibilityIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="mt-4">
               <button
@@ -207,27 +280,33 @@ const TeacherLogin = () => {
               </div>
             </div> */}
 
-            
             <div className="mt-10 text-center text-gray-600">
-              <span>
-                By continuing, you agree to our
-              </span>
-              <a href=" https://www.munsow.com/terms-and-conditions" target="_blank"><span className="font-semibold text-blue-500">  Terms of Service  </span></a>
+              <span>By continuing, you agree to our</span>
+              <a
+                href=" https://www.munsow.com/terms-and-conditions"
+                target="_blank"
+              >
+                <span className="font-semibold text-blue-500">
+                  {" "}
+                  Terms of Service{" "}
+                </span>
+              </a>
 
               {/* <span className="font-semibold"> Terms of Service </span> */}
               <span>and</span>
-              <a href=" https://www.munsow.com/privacy-policy" target="_blank"><span className="font-semibold text-blue-500">  Privacy Policy  </span></a>
+              <a href=" https://www.munsow.com/privacy-policy" target="_blank">
+                <span className="font-semibold text-blue-500">
+                  {" "}
+                  Privacy Policy{" "}
+                </span>
+              </a>
 
               {/* <span className="font-semibold"> Privacy Policy</span> */}
             </div>
           </div>
         </div>
         <div className="hidden md:inline w-3/6">
-          <img
-            src={interview}
-            className="w-full p-5 md:p-20"
-            alt="Login"
-          />
+          <img src={interview} className="w-full p-5 md:p-20" alt="Login" />
         </div>
       </div>
     </div>
