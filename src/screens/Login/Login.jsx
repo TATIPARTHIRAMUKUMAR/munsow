@@ -18,6 +18,13 @@ import {
   FormLabel,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+<<<<<<< HEAD
+=======
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import './Login.css'
+>>>>>>> a6b8c19a3fc6e022d27d388c0efeb55923a30f6d
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -172,8 +179,15 @@ const LoginPage = () => {
                 >
                   Password
                 </label>
+<<<<<<< HEAD
                 <input
                   type="password"
+=======
+                <TextField
+                autocomplete="false" 
+                style={{boxShadow: 'none'}}
+                  type={showPassword ? "text" : "password"}
+>>>>>>> a6b8c19a3fc6e022d27d388c0efeb55923a30f6d
                   className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="password"
                   name="password"
