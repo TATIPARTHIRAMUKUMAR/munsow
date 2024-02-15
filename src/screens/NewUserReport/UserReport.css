@@ -3,6 +3,23 @@
   /* height: 842pt; */
 }
 
+@media print {
+  #pdf-content {
+    width: 100%;
+    background-color: #00BF6F !important;
+  }
+}
+
+.before {
+  page-break-before: all;
+}
+.after {
+  page-break-after: always;
+}
+.avoid {
+  page-break-inside: avoid;
+}
+
 /** report1 start */
 .report1-main-container {
   background: #b49fd8;
