@@ -20,7 +20,7 @@ import {
   loadBehaviourAnalysis,
   setReduxState,
   getCourseList,
-  getDepartmentList
+  getDepartmentList,
 } from "../../../redux/action";
 import FilterCommon from "../../../Components/FilterCommon";
 import { branchesList } from "./mockbranchesdata";
@@ -29,16 +29,13 @@ import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 
 const BehaviourAnalysis = () => {
-  window.onbeforeunload = ()=>{
+  window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
     localStorage.setItem("user", "All Users");
-
-  }
-  const { behaviourAnalysis } = useSelector(
-    (state) => state?.data
-  );
+  };
+  const { behaviourAnalysis } = useSelector((state) => state?.data);
   const dispatch = useDispatch();
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -46,7 +43,8 @@ const BehaviourAnalysis = () => {
   const open = Boolean(anchorEl);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  const { institutionStats, branchList, departmentList, courseList } =
+    useSelector((state) => state?.data);
 
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -75,7 +73,15 @@ const BehaviourAnalysis = () => {
       dispatch(loadBehaviourAnalysis());
     } else {
       //  write filter code
-      const emotions = ["Anger", "Contempt", "Disgust", "Fear", "Happiness", "Sadness", "Surprise"];
+      const emotions = [
+        "Anger",
+        "Contempt",
+        "Disgust",
+        "Fear",
+        "Happiness",
+        "Sadness",
+        "Surprise",
+      ];
       const filteredBehaviourAnalysis = behaviourAnalysis.map((data) => {
         for (const emotion of emotions) {
           const randomValue = Math.floor(Math.random() * 100) + 1;
@@ -85,7 +91,12 @@ const BehaviourAnalysis = () => {
       });
 
       //here name is the name of the state which you want to set in reducer and value is the value which you want to set
-      dispatch(setReduxState({name: 'behaviourAnalysis', value: filteredBehaviourAnalysis}))
+      dispatch(
+        setReduxState({
+          name: "behaviourAnalysis",
+          value: filteredBehaviourAnalysis,
+        })
+      );
     }
     setActive(item);
     handleClose();
@@ -117,21 +128,38 @@ const BehaviourAnalysis = () => {
                 </span> */}
                 <span className="text-xs uppercase text-gray-600"></span>
                 <span>
-                <div className="flex justify-end mr-10 mb-3">
-                  <div className="">
-                    <PopUpFilter route="BehaviourAnanlysis" list="Branches" dependencyList={branchList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="BehaviourAnanlysis" list="Courses" dependencyList={courseList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="BehaviourAnanlysis" list="Departments" dependencyList={departmentList}/>
-                  </div>
-                  <div className="">
-                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
+                  <div className="flex justify-end mr-10 mb-3">
+                    <div className="">
+                      <PopUpFilter
+                        route="BehaviourAnanlysis"
+                        list="Branches"
+                        dependencyList={branchList}
+                      />
                     </div>
-                </div>
-                {/* <FilterCommon
+                    <div className="">
+                      <PopUpFilter
+                        route="BehaviourAnanlysis"
+                        list="Courses"
+                        dependencyList={courseList}
+                      />
+                    </div>
+                    <div className="">
+                      <PopUpFilter
+                        route="BehaviourAnanlysis"
+                        list="Departments"
+                        dependencyList={departmentList}
+                      />
+                    </div>
+                    <div className="">
+                      <CustomDateRangePicker
+                        startDate={startDate}
+                        endDate={endDate}
+                        setEndDate={setEndDate}
+                        setStartDate={setStartDate}
+                      />
+                    </div>
+                  </div>
+                  {/* <FilterCommon
                     handleClose={handleClose}
                     handleMenuItemClick={handleMenuItemClick}
                     handleClick={handleClick}

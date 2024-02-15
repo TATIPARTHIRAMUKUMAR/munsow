@@ -18,10 +18,6 @@ import {
   FormLabel,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -62,7 +58,6 @@ const StudentLogin = () => {
   const [password, setPassword] = useState("");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -164,31 +159,14 @@ const StudentLogin = () => {
                 >
                   Password
                 </label>
-                <TextField
-                  type={showPassword ? "text" : "password"}
-                  className="mt-2 w-full "
-                  // border-none border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                <input
+                  type="password"
+                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="password"
                   name="password"
                   placeholder=""
                   value={password}
                   onChange={loginInputHandler}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                        >
-                          {showPassword ? (
-                            <VisibilityOffIcon />
-                          ) : (
-                            <VisibilityIcon />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
                 />
               </div>
             </div>

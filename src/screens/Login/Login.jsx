@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import interview from "../../assets/admin_ui.png";
 import { useNavigate } from "react-router-dom";
-import { Box, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -18,9 +18,6 @@ import {
   FormLabel,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -59,7 +56,6 @@ const LoginPage = () => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const [loginType, setLoginType] = useState("institution");
-  const [showPassword, setShowPassword] = useState(false);
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -112,13 +108,6 @@ const LoginPage = () => {
     // Add more conditions for other types if necessary
   };
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   return (
     <div className="p-4">
       <div className="flex flex-col md:flex-row">
@@ -176,70 +165,24 @@ const LoginPage = () => {
                   onChange={loginInputHandler}
                 />
               </div>
-
-              <div className="mb-2 ">
+              <div className="mb-2">
                 <label
                   htmlFor="password"
                   className="text-sm font-medium text-gray-600"
                 >
                   Password
                 </label>
-                <TextField
-                  type={showPassword ? "text" : "password"}
+                <input
+                  type="password"
                   className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="password"
                   name="password"
                   placeholder=""
                   value={password}
                   onChange={loginInputHandler}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? (
-                            <VisibilityOffIcon />
-                          ) : (
-                            <VisibilityIcon />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                                      }}
-                  // variant="outlined"
                 />
               </div>
             </div>
-            <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? (
-                        <VisibilityOffIcon />
-                      ) : (
-                        <VisibilityIcon />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-            </FormControl>
-
             <div className="mt-4">
               <button
                 type="button"

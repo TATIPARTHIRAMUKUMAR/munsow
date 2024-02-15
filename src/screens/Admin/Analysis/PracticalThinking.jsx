@@ -16,7 +16,7 @@ import { branchesList } from "./mockbranchesdata";
 import {
   loadBrachList,
   getCourseList,
-  getDepartmentList
+  getDepartmentList,
 } from "../../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import PopUpFilter from "../../../Components/PopUpFilter";
@@ -24,13 +24,12 @@ import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 
 const PracticalThinking = () => {
-  window.onbeforeunload = ()=>{
+  window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
     localStorage.setItem("user", "All Users");
-
-  }
+  };
   const barPlotData = [
     {
       "Not Solved": 24,
@@ -59,10 +58,11 @@ const PracticalThinking = () => {
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  const { institutionStats, branchList, departmentList, courseList } =
+    useSelector((state) => state?.data);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  
+
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
@@ -121,22 +121,41 @@ const PracticalThinking = () => {
                   Practical Thinking
                 </span> */}
                 <div>
-                <div className="flex justify-end mr-10 mb-3">
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Branches" dependencyList={branchList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Courses" dependencyList={courseList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
-                  </div>
-                  {startDate != "" && (
-                  <div className="">
-                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
+                  <div className="flex justify-end mr-10 mb-3">
+                    <div className="">
+                      <PopUpFilter
+                        route="PracticalThinking"
+                        list="Branches"
+                        dependencyList={branchList}
+                      />
                     </div>
-                  )}
-                </div>
+                    <div className="">
+                      <PopUpFilter
+                        route="PracticalThinking"
+                        list="Courses"
+                        dependencyList={courseList}
+                      />
+                    </div>
+                    <div className="">
+                      <PopUpFilter
+                        route="PracticalThinking"
+                        list="Departments"
+                        dependencyList={departmentList}
+                        startDate={startDate}
+                        endDate={endDate}
+                      />
+                    </div>
+                    {startDate != "" && (
+                      <div className="">
+                        <CustomDateRangePicker
+                          startDate={startDate}
+                          endDate={endDate}
+                          setEndDate={setEndDate}
+                          setStartDate={setStartDate}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="mt-5 pt-3">

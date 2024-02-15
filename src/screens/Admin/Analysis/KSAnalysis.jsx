@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { branchesList } from "./mockbranchesdata";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
-import format from 'date-fns/format';
+import format from "date-fns/format";
 import {
   loadKSAnalysis,
   loadBrachList,
@@ -14,7 +14,7 @@ import {
   getDepartmentList,
   loadCourseList,
   loadDepartmentList,
-  loadUsersList
+  loadUsersList,
 } from "../../../redux/action";
 import DateRangePicker from "../../../Components/DateRange.jsx";
 
@@ -24,8 +24,7 @@ const KSAnalysis = () => {
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
     localStorage.setItem("user", "All Users");
-
-  }
+  };
   const hardSkills = [
     {
       id: "Programming Language (Python)",
@@ -113,8 +112,14 @@ const KSAnalysis = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-
-  const { departmentList, ksAnalysis, ksFilters, courseList, branchList, userListByDepartment } = useSelector((state) => state?.data);
+  const {
+    departmentList,
+    ksAnalysis,
+    ksFilters,
+    courseList,
+    branchList,
+    userListByDepartment,
+  } = useSelector((state) => state?.data);
   const open = Boolean(anchorEl);
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -128,27 +133,23 @@ const KSAnalysis = () => {
   };
 
   useEffect(() => {
-    setHardSkillsData(ksAnalysis?.graph_1?.data)
-    setSoftSkillsData(ksAnalysis?.graph_2?.date)
-    console.log("ksAnalysis", hardSkillData, softSkillData)
+    setHardSkillsData(ksAnalysis?.graph_1?.data);
+    setSoftSkillsData(ksAnalysis?.graph_2?.date);
+    console.log("ksAnalysis", hardSkillData, softSkillData);
     if (ksFilters?.branch != undefined && ksFilters?.branch != null) {
       localStorage.setItem("branch", ksFilters?.branch);
       localStorage.setItem("course", ksFilters?.course);
       localStorage.setItem("department", ksFilters?.department);
       localStorage.setItem("user", ksFilters?.user_name);
 
-
-      setEndDate(ksFilters?.end_date)
-      setStartDate(ksFilters?.start_date)
+      setEndDate(ksFilters?.end_date);
+      setStartDate(ksFilters?.start_date);
 
       dispatch(loadCourseList(`branch_id=${ksFilters?.branch_id}`));
       dispatch(loadDepartmentList(`course_id=${ksFilters?.course_id}`));
       dispatch(loadUsersList(`department_id=${ksFilters?.department_id}`));
-
-
     }
-
-  }, [ksAnalysis])
+  }, [ksAnalysis]);
 
   const handleMenuItemClick = (value) => {
     if (value == "All Branches") {
@@ -192,25 +193,23 @@ const KSAnalysis = () => {
   };
 
   const onDateSelect = (value) => {
-    console.log("api calls",value)
-    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
-    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    console.log("api calls", value);
+    const formattedStartDate = format(value.startDate, "yyyy-MM-dd");
+    const formattedEndDate = format(value.endDate, "yyyy-MM-dd");
     let params = {
       branch: localStorage.getItem("branch"),
       course: localStorage.getItem("course"),
       department: localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
       start_date: formattedStartDate,
-      end_date: formattedEndDate
+      end_date: formattedEndDate,
     };
     if (startDate && endDate) {
-
-
       // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
-      dispatch(loadKSAnalysis(params))
+      dispatch(loadKSAnalysis(params));
       // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
     }
-  }
+  };
 
   return (
     <div className="flex-grow p-5">
@@ -228,10 +227,22 @@ const KSAnalysis = () => {
                 <div>
                   <div className="flex justify-end mr-10 mb-3">
                     <div className="">
-                      <PopUpFilter route="KSAnalysis" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
+                      <PopUpFilter
+                        route="KSAnalysis"
+                        list="Branches"
+                        dependencyList={branchList}
+                        startDate={startDate}
+                        endDate={endDate}
+                      />
                     </div>
                     <div className="">
-                      <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
+                      <PopUpFilter
+                        route="KSAnalysis"
+                        list="Courses"
+                        dependencyList={courseList}
+                        startDate={startDate}
+                        endDate={endDate}
+                      />
                     </div>
                     {/* <div className="">
                       <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate} />

@@ -20,16 +20,22 @@ import {
 import "./Dashboard.css";
 import CardContainer from "./CardContainer";
 import PersonIcon from "@mui/icons-material/Person";
-import GroupsIcon from '@mui/icons-material/Groups';
-import NorthEastIcon from '@mui/icons-material/NorthEast';
+import GroupsIcon from "@mui/icons-material/Groups";
+import NorthEastIcon from "@mui/icons-material/NorthEast";
 import { useDispatch, useSelector } from "react-redux";
-import { loadDepartmentList, loadInstitutionStats, loadBrachList, loadCourseList, getCourseList, getDepartmentList } from "../../../redux/action";
+import {
+  loadDepartmentList,
+  loadInstitutionStats,
+  loadBrachList,
+  loadCourseList,
+  getCourseList,
+  getDepartmentList,
+} from "../../../redux/action";
 import { classNames, legendFormatter } from "../../../utils/generalUtils";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 
 import {
-
   Dialog,
   DialogTitle,
   DialogContent,
@@ -37,7 +43,7 @@ import {
   Button,
 } from "@mui/material";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
-import format from 'date-fns/format';
+import format from "date-fns/format";
 
 const AdminDashboard = () => {
   window.onbeforeunload = () => {
@@ -45,8 +51,7 @@ const AdminDashboard = () => {
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
     localStorage.setItem("user", "All Users");
-
-  }
+  };
 
   const [barChartFullScreen, setBarChartFullScreen] = useState(false);
   const [startDate, setStartDate] = useState("");
@@ -104,7 +109,13 @@ const AdminDashboard = () => {
   const [pie, setPie] = useState([]);
 
   const dispatch = useDispatch();
-  const { institutionStats, institutionFilters, branchList, departmentList, courseList } = useSelector((state) => state?.data)
+  const {
+    institutionStats,
+    institutionFilters,
+    branchList,
+    departmentList,
+    courseList,
+  } = useSelector((state) => state?.data);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -113,79 +124,79 @@ const AdminDashboard = () => {
     dispatch(getCourseList());
     dispatch(loadInstitutionStats());
     dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
-  }, [dispatch])
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log(institutionStats, "institutionStats")
+    console.log(institutionStats, "institutionStats");
     if (institutionStats?.cards?.length) {
-      setCardsList(() => institutionStats?.cards?.map(o => ({
-        cardContent: o?.name,
-        cardValue: o?.value,
-        icon: <PersonIcon style={{ color: "white", fontSize: 40 }} />,
-        subValues: o?.sub_values
-      })))
+      setCardsList(() =>
+        institutionStats?.cards?.map((o) => ({
+          cardContent: o?.name,
+          cardValue: o?.value,
+          icon: <PersonIcon style={{ color: "white", fontSize: 40 }} />,
+          subValues: o?.sub_values,
+        }))
+      );
     }
     if (institutionStats?.graphs) {
-
       institutionStats?.graphs?.map((o) => {
         switch (o?.name) {
           case "Departments wise participation": {
-            setbarPlot(() => o?.data)
-            break
+            setbarPlot(() => o?.data);
+            break;
           }
           case "Departments wise improvement rate": {
-            setplot(() => o?.data)
-            break
+            setplot(() => o?.data);
+            break;
           }
           case "Critical Improvement Areas": {
-            setPie(() => o?.data)
-            break
+            setPie(() => o?.data);
+            break;
           }
 
-          default: break
+          default:
+            break;
         }
-
-      })
-
+      });
     }
 
-    if (institutionFilters?.branch != undefined && institutionFilters?.branch != null) {
+    if (
+      institutionFilters?.branch != undefined &&
+      institutionFilters?.branch != null
+    ) {
       localStorage.setItem("branch", institutionFilters?.branch);
       localStorage.setItem("course", institutionFilters?.course);
       localStorage.setItem("department", institutionFilters?.department);
 
-      setEndDate(institutionFilters?.end_date)
-      setStartDate(institutionFilters?.start_date)
+      setEndDate(institutionFilters?.end_date);
+      setStartDate(institutionFilters?.start_date);
 
       dispatch(loadCourseList(`branch_id=${institutionFilters?.branch_id}`));
-      dispatch(loadDepartmentList(`course_id=${institutionFilters?.course_id}`));
+      dispatch(
+        loadDepartmentList(`course_id=${institutionFilters?.course_id}`)
+      );
       // dispatch(loadUsersList(`department_id=${institutionFilters?.department_id}`));
-
-
     }
-
-  }, [institutionStats])
+  }, [institutionStats]);
 
   const onDateSelect = (value) => {
-    console.log("api calls", value)
-    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
-    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    console.log("api calls", value);
+    const formattedStartDate = format(value.startDate, "yyyy-MM-dd");
+    const formattedEndDate = format(value.endDate, "yyyy-MM-dd");
     let params = {
       branch: localStorage.getItem("branch"),
       course: localStorage.getItem("course"),
       department: localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
       start_date: formattedStartDate,
-      end_date: formattedEndDate
+      end_date: formattedEndDate,
     };
     if (startDate && endDate) {
-
-
       // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
-      dispatch(loadInstitutionStats(params))
+      dispatch(loadInstitutionStats(params));
       // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
     }
-  }
+  };
 
   return (
     <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll ">
@@ -194,10 +205,22 @@ const AdminDashboard = () => {
         <div className="">
           <div className="flex justify-start mr-10 mb-3">
             <div className="">
-              <PopUpFilter route="AdminDashboard" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
+              <PopUpFilter
+                route="AdminDashboard"
+                list="Branches"
+                dependencyList={branchList}
+                startDate={startDate}
+                endDate={endDate}
+              />
             </div>
             <div className="">
-              <PopUpFilter route="AdminDashboard" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate} />
+              <PopUpFilter
+                route="AdminDashboard"
+                list="Courses"
+                dependencyList={courseList}
+                startDate={startDate}
+                endDate={endDate}
+              />
             </div>
             {/* <div className="">
               <PopUpFilter route="AdminDashboard" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
@@ -207,20 +230,16 @@ const AdminDashboard = () => {
               <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect} />
             </div>)} */}
           </div>
-          
+
           <div className=" grid grid-cols-3 gap-2 ">
-            {cardLists.length ? (
-              <CardContainer cardLists={cardLists} />
-            ) : null}
+            {cardLists.length ? <CardContainer cardLists={cardLists} /> : null}
           </div>
         </div>
         <div className="flex flex-wrap pt-5">
           {/* Chart section */}
           <div className="lg:w-4/12 pr-4">
             {/* Department wise Participation */}
-            <div className={classNames(
-              "p-4 mb-4"
-            )}>
+            <div className={classNames("p-4 mb-4")}>
               <div className="mb-6  flex justify-between">
                 <span className="text-lg font-normal">
                   Department wise Participation
@@ -237,8 +256,6 @@ const AdminDashboard = () => {
                 </span>
               </div>
               <div className="h-80">
-
-
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barPlot.slice(0, 1)} width={"200px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
@@ -278,7 +295,7 @@ const AdminDashboard = () => {
                       layout="horizontal"
                       iconSize={0}
                       wrapperStyle={{
-                        paddingTop: "1rem"
+                        paddingTop: "1rem",
                       }}
                     />
                     <Bar
@@ -294,27 +311,25 @@ const AdminDashboard = () => {
                       barSize={60}
                       radius={[15, 15, 0, 0]}
                     />
-
                   </BarChart>
                 </ResponsiveContainer>
-
               </div>
             </div>
           </div>
           <div className="lg:w-4/12 pr-4">
             {/* Department wise Improvement Rate */}
-            <div className={classNames(
-              // "bg-white shadow-md",
-              "p-4 mb-4"
-            )}>
+            <div
+              className={classNames(
+                // "bg-white shadow-md",
+                "p-4 mb-4"
+              )}
+            >
               <div className="mb-6">
                 <span className="text-lg font-normal">
                   Department wise Improvement Rate
                 </span>
               </div>
               <div className="h-80">
-
-
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={plot}>
                     <CartesianGrid
@@ -360,7 +375,7 @@ const AdminDashboard = () => {
                       layout="horizontal"
                       iconSize={0}
                       wrapperStyle={{
-                        paddingTop: "1rem"
+                        paddingTop: "1rem",
                       }}
                     />
                     <Line
@@ -394,10 +409,12 @@ const AdminDashboard = () => {
           </div>
           <div className="lg:w-4/12">
             {/* Critical Improvement Areas */}
-            <div className={classNames(
-              // "bg-white shadow-md",
-              "p-4 mb-4"
-            )}>
+            <div
+              className={classNames(
+                // "bg-white shadow-md",
+                "p-4 mb-4"
+              )}
+            >
               <div className="mb-6 flex justify-between">
                 <span className="text-lg font-normal ">
                   Critical Improvement Areas
@@ -424,7 +441,7 @@ const AdminDashboard = () => {
                       layout="horizontal"
                       iconSize={0}
                       wrapperStyle={{
-                        paddingTop: "1rem"
+                        paddingTop: "1rem",
                       }}
                     />
                     <Pie
@@ -445,9 +462,6 @@ const AdminDashboard = () => {
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
-
-
-
               </div>
             </div>
           </div>
@@ -502,7 +516,7 @@ const AdminDashboard = () => {
                   layout="horizontal"
                   iconSize={0}
                   wrapperStyle={{
-                    paddingTop: "1rem"
+                    paddingTop: "1rem",
                   }}
                 />
                 <Bar
@@ -518,7 +532,6 @@ const AdminDashboard = () => {
                   barSize={60}
                   radius={[15, 15, 0, 0]}
                 />
-
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -529,7 +542,6 @@ const AdminDashboard = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
 
       <Dialog
         fullScreen
@@ -549,7 +561,7 @@ const AdminDashboard = () => {
                   layout="horizontal"
                   iconSize={0}
                   wrapperStyle={{
-                    paddingTop: "1rem"
+                    paddingTop: "1rem",
                   }}
                 />
                 <Pie
@@ -578,7 +590,6 @@ const AdminDashboard = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 };
