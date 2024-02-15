@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import interview from "../../assets/admin_ui.png";
 import { useNavigate } from "react-router-dom";
-import { Box, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import { Box, InputAdornment } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -19,8 +19,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import "./Input.css";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -186,7 +187,8 @@ const LoginPage = () => {
                 </label>
                 <TextField
                   type={showPassword ? "text" : "password"}
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                  className="mt-2 w-full"
+                  //  border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="password"
                   name="password"
                   placeholder=""
@@ -200,45 +202,14 @@ const LoginPage = () => {
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
-                          {showPassword ? (
-                            <VisibilityOffIcon />
-                          ) : (
-                            <VisibilityIcon />
-                          )}
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     ),
-                                      }}
-                  // variant="outlined"
+                  }}
                 />
               </div>
             </div>
-            <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? (
-                        <VisibilityOffIcon />
-                      ) : (
-                        <VisibilityIcon />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-            </FormControl>
 
             <div className="mt-4">
               <button
