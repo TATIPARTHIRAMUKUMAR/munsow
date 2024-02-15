@@ -3,6 +3,13 @@
   /* height: 842pt; */
 }
 
+@media print {
+  #pdf-content {
+    width: 100%;
+    background-color: #00BF6F !important;
+  }
+}
+
 .before {
   page-break-before: all;
 }

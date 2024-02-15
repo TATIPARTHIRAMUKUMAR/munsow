@@ -25,6 +25,8 @@ import { saveAs } from 'file-saver';
 
 
 import generatePDF from "react-to-pdf";
+import ReactDOMServer from 'react-dom/server';
+import { PDFExport } from "@progress/kendo-react-pdf";
 
 
 const NewUserReport = () => {
@@ -46,16 +48,16 @@ const NewUserReport = () => {
     },
   };
 
-  const handleGeneratePdf = async () => {
-    try {
-      setLoading(true);
-      await generatePDF(() => reportTemplateRef.current, options);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleGeneratePdf = async () => {
+  //   try {
+  //     setLoading(true);
+  //     await generatePDF(() => reportTemplateRef.current, options);
+  //   } catch (error) {
+  //     console.error("Error generating PDF:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
 
   useEffect(() => {
@@ -97,80 +99,26 @@ const NewUserReport = () => {
   };
   
 
-  const UserReportDocument =  (
-    <Document>
-      <Page size="A4">
-        <Text>
-          {console.log('////??? : ', userReport)}
-          <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
-              
-              <div id="Intro">
-                <Intro
-                  user={userReport?.user_name}
-                  unqualified_hard_skills={userReport?.unqualified_hard_skills}
-                  unqualified_soft_skills={userReport?.unqualified_soft_skills}
-                  report_type={userReport?.report_type}
-                />
-              </div>
   
-              <div id="SummarySnapshot">
-                <SummarySnapshot
-                  title={userReport?.interview_score_by_category.data[0].main_title}
-                  interview_score_by_category={userReport?.interview_score_by_category}
-                  behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
-                />
-              </div> 
-        
-              <div id="Presentation">
-                <Presentation              
-                  behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
-                />
-              </div>
-  
-                    
-                {userReport?.interview_score_by_category.data.map((category, index) => (
-                  <div key='' id="ReportOverview">
-                    <ReportOverview
-                      key={index}
-                      className="report-overview-component overflow-ellipsis"  // Add a class name to identify the component
-                      {...getDynamicDataForReportOverview(index)}
-                    />
-                  </div>
-                ))}
-              
-              
-                {userReport?.interview_score_by_category.data.map((category, index) => (
-                  <>
-                    {category.interview_questions.map((question, qIndex) => (
-                      <div key={index} id="DeepDive"> 
-                      <DeepDive
-                        className="deep-dive-component overflow-ellipsis"
-                        {...getDynamicDataForDeepDive(index, qIndex)}
-                      />
-                      </div>
-                    ))
-                    }
-                  </>
-                ))}
-            
-  
-            <div id="CuratedSummary">
-              <CuratedSummary
-                report_type={userReport?.report_type}
-                skillSuggestions={userReport?.skill_based_suggestions}
-              /> 
-            </div>
-  
-            <div id="Extro">
-              <Extro/>
-            </div>
-  
-          </div>
-        </Text>
-      </Page>
-    </Document>
-  );
+  // const handleGeneratePdf = () => {
+  //   setLoading(true);
 
+  //   const doc = new jsPDF({
+  //     format: 'a4',
+  //     unit: 'px',
+  //     orientation: 'portrait',
+  //     compress: true
+  //   });
+  
+  //   const pdfContainer = reportTemplateRef.current;
+  
+  //   doc.html(pdfContainer, {
+  //     width: '595px',
+  //     html2canvas: {
+  //       scale: 2
+  //     },
+  //   },);
+  // };
 
   // const handleGeneratePdf = () => {
   //   try {
@@ -259,6 +207,67 @@ const NewUserReport = () => {
 //   try {
 //     setLoading(true);
 
+//     const pdfContainer = ReactDOMServer.renderToString(<UserReportDocument />);
+//     const pdf = new jsPDF({
+//       unit: "mm",
+//       format: "a4",
+//       orientation: "portrait",
+//       compress: true,
+//       putOnlyUsedFonts: true
+//     });
+
+//     pdf.html(pdfContainer, {
+//       margin: 10,
+//       html2canvas: {
+//         scale: 0.5,
+//       },
+//       callback: () => {
+//         pdf.save('UserReports.pdf');
+//       }
+//     });
+
+
+//     // const components = pdfContainer.children;
+//     // for (let i = components.length - 1; i >= 0; i--) {
+//     //   const pdfContent = components[i];
+//     //   pdf.addPage();
+
+//     //   console.log("Width : ",  pdfContent.offsetWidth);
+//     //   console.log("Height : ", pdfContent.offsetHeight);
+
+//     //   await pdf.html(pdfContent, {
+//     //     html2canvas: {
+//     //       scale: 0.3
+//     //     },
+//     //     // width: pdfContent.offsetWidth,
+//     //     // height: pdfContent.offsetHeight
+//     //   });
+//     // }
+
+//     // pdf.save("UserReports.pdf");
+//     setLoading(false);
+//   } catch (error) {
+//     console.error("Error during PDF generation:", error);
+//     setLoading(false);
+//   }
+// };
+
+
+const pdfExportComponent = useRef(null);
+
+const handleGeneratePdf = () => {
+  setLoading(true);
+  pdfExportComponent.current.save();
+  setLoading(false);
+};
+
+
+
+
+// const handleGeneratePdf = async () => {
+//   try {
+//     setLoading(true);
+
 //     const pdfContainer = reportTemplateRef.current;
 //     const pdf = new jsPDF({
 //       unit: "mm",
@@ -269,7 +278,7 @@ const NewUserReport = () => {
 
 //     // Iterate through each component
 //     const components = pdfContainer.children;
-//     for (let i = 0; i < components.length; i++) {
+//     for (let i = 0; i < components?.length; i++) {
 //       if (i > 0) {
 //         pdf.addPage();
 //       }
@@ -280,8 +289,8 @@ const NewUserReport = () => {
 //       await pdf.html(pdfContent, {
 //         x: 10,
 //         y: 19,
-//         width: pdf.internal.pageSize.getWidth(),
-//         height:  pdf.internal.pageSize.getHeight(),
+//         width: pdf.internal.pageSize.getWidth() - 20,
+//         height:  pdf.internal.pageSize.getHeight() - 38,
 //       });
 //     }
 
@@ -352,6 +361,14 @@ const NewUserReport = () => {
           </button>
         </div>
         
+        <PDFExport
+          ref={pdfExportComponent}
+          paperSize="A4"
+          scale={0.545}
+          margin="1cm"
+          fileName="UserReports.pdf"
+          forcePageBreak=".page-break"
+        >
         <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
           
           <div id="Intro">
@@ -363,7 +380,7 @@ const NewUserReport = () => {
             />
           </div>
 
-          <div id="SummarySnapshot">
+          <div id="SummarySnapshot" className="page-break">
             <SummarySnapshot
               title={userReport?.interview_score_by_category.data[0].main_title}
               interview_score_by_category={userReport?.interview_score_by_category}
@@ -371,7 +388,7 @@ const NewUserReport = () => {
             />
           </div> 
     
-          <div id="Presentation">
+          <div id="Presentation" className="page-break">
             <Presentation              
               behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
             />
@@ -379,7 +396,7 @@ const NewUserReport = () => {
 
                 
             {userReport?.interview_score_by_category.data.map((category, index) => (
-              <div key='' id="ReportOverview">
+              <div key='' id="ReportOverview" className="page-break">
                 <ReportOverview
                   key={index}
                   className="report-overview-component overflow-ellipsis"  // Add a class name to identify the component
@@ -392,7 +409,7 @@ const NewUserReport = () => {
             {userReport?.interview_score_by_category.data.map((category, index) => (
               <>
                 {category.interview_questions.map((question, qIndex) => (
-                  <div key={index} id="DeepDive"> 
+                  <div key={index} id="DeepDive" className="page-break"> 
                   <DeepDive
                     className="deep-dive-component overflow-ellipsis"
                     {...getDynamicDataForDeepDive(index, qIndex)}
@@ -404,19 +421,19 @@ const NewUserReport = () => {
             ))}
         
 
-        <div id="CuratedSummary">
+        <div id="CuratedSummary" className="page-break">
           <CuratedSummary
             report_type={userReport?.report_type}
             skillSuggestions={userReport?.skill_based_suggestions}
           /> 
         </div>
 
-        <div id="Extro">
+        <div id="Extro" className="page-break">
           <Extro/>
         </div>
 
         </div>
-
+        </PDFExport> 
       </div>
     </div>
   );
