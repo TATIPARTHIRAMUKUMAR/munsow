@@ -25,15 +25,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
 
-import { loadCourseList, loadInstitutionList, uploadUser, user_create } from "../../../redux/action";
-// import { useDispatch, useSelector } from "react-redux";
-import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
-import { Tab } from "@mui/material";
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import GLOBAL_CONSTANTS from "../../../../GlobalConstants";
-import { toast } from "react-toastify";
+import EditTeachersModal from "./EditTeachersModal";
 
 
 const style = {
@@ -41,7 +33,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  // width: 400,
+  // width: '70%',
+  borderRadius: 4,
   bgcolor: 'background.paper',
   // border: '2px solid #000',
   boxShadow: 24,
@@ -92,28 +85,21 @@ const Teachers = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  //update form
-  const { institutionList, courseList } = useSelector(state => state.data)
-  const [fileData, setFileData] = useState(null);
-  const [isFormValid, setIsFormValid] = useState(false);
-
   //Delete Modal
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const handleOpenDelete = () => setOpenDelete(true);
-  const handleCloseDelete = () => setOpenDelete(false);
+  // const [openDelete, setOpenDelete] = React.useState(false);
+  // const handleOpenDelete = () => setOpenDelete(true);
+  // const handleCloseDelete = () => setOpenDelete(false);
 
-  //Delete Modal
-  const [openEdit, setOpenEdit] = React.useState(false);
-  // const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-    setSelectedTeacher(null);
+  const [openDeleteIndex, setOpenDeleteIndex] = React.useState(null);
+  const handleOpenDelete = (index) => {
+    setOpenDeleteIndex(index);
+  };
+  
+  const handleCloseDelete = () => {
+    setOpenDeleteIndex(null);
+  };
+  
 
-  };
-  const handleOpenEdit = (teacher) => {
-    setSelectedTeacher(teacher);
-    setOpenEdit(true);
-  };
 
   const dispatch = useDispatch();
   const { teachersList, departmentList, branchList } = useSelector(state => state?.data)
@@ -168,6 +154,7 @@ const Teachers = () => {
   }, [dispatch, params])
 
   console.log(branchList,'branchList')
+  console.log(departmentList,'departementList')
   //count for number of data to count total rows
   const teacherCount = teachersList.data ? teachersList.data.length : 0;
   console.log(teacherCount,'teacherCount')
@@ -180,159 +167,7 @@ const Teachers = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  const [selectedTeacher, setSelectedTeacher] = useState(null);
   
-  //form************
-  const formData = new FormData();
-  formData.append("mode", "Teacher")
-  // ref
-  const input = useRef(null);
-
-  // utils
-  // const handleSelectFiles = (e) => {
-  //   formData.append('file', e.currentTarget.files[0]);
-  //   dispatch(uploadUser(formData))
-  // };
-
-
-  const [mainData, setMainData] = useState({});
-  const userFeilds =
-    [
-      {
-        label: "First Name",
-        key: "first_name",
-        value: mainData?.first_name ?? "",
-        type: "text",
-        required:true
-      },
-      {
-        label: "Last Name",
-        key: "last_name",
-        value: mainData?.last_name ?? "",
-        type: "text",
-        required:true
-      },
-      {
-        label: "Email",
-        key: "email",
-        value: mainData?.email ?? "",
-        type: "text",
-        required:true
-      },
-      {
-        key: "phone_number",
-        label: "Mobile Number",
-        value: mainData?.mobile_number ?? "",
-        type: "text",
-        required:true
-      },
-      {
-        label: "Address",
-        key: "address",
-        value: mainData?.address ?? "",
-        type: "text",
-        required:true
-      },
-      {
-        label: "Password",
-        key: "password",
-        value: mainData?.password ?? "",
-        type: "text",
-        required:true
-      },
-      {
-        label: "Branch",
-        key: "branch",
-        value: mainData?.branch ?? null,
-        options: branchList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
-        type: "select",
-        required:true
-      },
-      {
-        label: "Course",
-        key: "course",
-        value: mainData?.course ?? null,
-        type: "select",
-        options: courseList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
-        required:true
-      },
-      {
-        label: "Department",
-        key: "department",
-        value: mainData?.department ?? null,
-        options: departmentList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
-        type: "select",
-        required:true
-      },
-    ]
-
-
-  const handleInputChange = (key, value) => {
-    let temp = { ...mainData }
-    temp[key] = value;
-    if (key == "branch") {
-      dispatch(loadCourseList(`branch_id=${value?.value}`));
-    } else if (key == "course") {
-      dispatch(loadDepartmentList(`course_id=${value?.value}`));
-    }
-    setMainData(() => ({ ...temp }))
-  }
-
-  const handleSelectionError = (key, value) => {
-    if (key == "course" && !mainData.branch) {
-      toast.error(
-        "Branch not selected",
-        {
-          autoClose: 2000,
-        }
-      );
-    } else if (key == "department" && !mainData.course) {
-      toast.error(
-        "Course not selected",
-        {
-          autoClose: 2000,
-        }
-      );
-    }
-  }
-
-  useEffect(() => {
-    const requiredFields = userFeilds.filter((field) => field.required);
-    const isValid =
-      requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) 
-    setIsFormValid(isValid);
-  }, [mainData]);
-
-  useEffect(() => {
-    dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
-    // dispatch(loadBrachList());
-    // dispatch(loadInstitutionList());
-    // dispatch(loadDepartmentList())
-
-  }, [dispatch])
-
-
-  useEffect(() => {
-    console?.info(mainData, "--mainData")
-  }, [mainData])
-
-  const onHandleCreate = () => {
-    const payload = {
-      "first_name": mainData?.first_name,
-      "last_name": mainData?.last_name,
-      "email": mainData?.email,
-      "phone_number": mainData?.mobile_number,
-      "branch_id": mainData?.branch?.value,
-      "department_id": mainData?.department?.value,
-      "address": mainData?.address,
-      "course_id": mainData?.course?.value,
-      // "institution_id": mainData?.institution?.value,
-      "password": mainData?.password
-    }
-    dispatch(user_create(payload, { mode: "teacher" }, () => { setMainData({}) }))
-  }
-
   
   return (
     <Paper sx={{ width: '100%', mb: 2 }}>
@@ -359,9 +194,9 @@ const Teachers = () => {
             .map((row, index) => (
             <TableRow
                 hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.code}
+                // role="checkbox"
+                // tabIndex={-1}
+                // key={row.code}
                 style={{ borderBottom: '1px solid rgb(224 224 224)' }}
             >
                 <TableCell>{row.name}</TableCell>
@@ -369,91 +204,28 @@ const Teachers = () => {
                 <TableCell>{row.course_name}</TableCell>
                 <TableCell>{row.department_name}</TableCell>
                 <TableCell padding="none">
-                <Tooltip title="Edit">
+                {/* <Tooltip title="Edit">
                     <IconButton onClick={() => handleOpenEdit(row)}>
                         <EditIcon sx={{ color: '#006db5' }} />
+                        
                     </IconButton>
                 </Tooltip>
-                <Modal
-  open={openEdit}
-  onClose={handleCloseEdit}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description"
->
-  <Box sx={style}>
-    <Typography id="modal-modal-title" variant="h6" component="h2" style={{color:'#006db5',fontWeight:'bold'}}>
-      Edit 
-    </Typography>
-    <hr></hr>
-    <div className="grid grid-cols-2 gap-4 bg-white p-4" >
-      {
-        userFeilds?.map((o) => (
-          <>
-            {
-              o?.type === "select" ?
-                <>
-                  <Autocomplete
-                    size="small"
-                    fullWidth
-                    disablePortal
-                    value={o?.value}
-                    defaultValue={selectedTeacher ? selectedTeacher[o.key] : null} // Populate with selected teacher's data
-                    id="combo-box-demo"
-                    options={o?.options ?? []}
-                    renderInput={(params) => <TextField {...params} label={(
-                      <div>
-                        {o?.label}
-                        {o?.required && (
-                          <span style={{ color: 'red' }}>*</span>
-                        )}
-                      </div>
-                    )} />}
-                    onChange={(e, value) => { handleInputChange(o?.key, value) }}
-                    onClickCapture={(e, value) => {
-                      handleSelectionError(o?.key, value);
-                    }}
-                  />
-                </>
-                :
-                <TextField
-                  key={o?.key}
-                  type={o?.type}
-                  label={(
-                    <div>
-                      {o?.label}
-                      {o?.required && (
-                        <span style={{ color: 'red' }}>*</span>
-                      )}
-                    </div>
-                  )}
-                  value={selectedTeacher ? selectedTeacher[o.key] : o.value} // Populate with selected teacher's data
-                  size="small"
-                  onChange={(e) => { handleInputChange(o?.key, e.target.value) }}
-                />
-            }
-          </>
-        )
-        )
-      }
-    </div>
-    <Stack direction="row" spacing={2} sx={{ mt: 3 }} style={{justifyContent:'end'}}>
-      <Button onClick={handleCloseEdit} variant="outlined" style={{color:'#6c757d', border:'1px solid #6c757d'}}>
-        CANCEL
-      </Button>
-      <Button  variant="contained" color="primary" endIcon={<EditIcon />}>
-        UPDATE
-      </Button>
-    </Stack>
-  </Box>
-</Modal>
+                 */}
+                 <Stack direction="row" spacing={0}>
+                 <EditTeachersModal
+                 teacherId={index}
+                 teacherName={row.name}
+                 />
 
-                <Tooltip title="Delete">
-                    <IconButton onClick={handleOpenDelete}>
-                        <DeleteIcon sx={{ color: '#d11a2a' }} />
+                  <Tooltip title="Delete">
+                    <IconButton onClick={() => handleOpenDelete(index)}>
+                      <DeleteIcon sx={{ color: '#d11a2a' }} />
                     </IconButton>
-                </Tooltip>
+                  </Tooltip>
+                 </Stack>
+                 
                 <Modal
-                  open={openDelete}
+                  open={openDeleteIndex === index}
                   onClose={handleCloseDelete}
                   aria-labelledby="modal-modal-title"
                   aria-describedby="modal-modal-description"
@@ -463,7 +235,7 @@ const Teachers = () => {
                     Delete
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 0 }}>
-                    Are you sure you want to delete <span style={{fontWeight:'bold'}}>{row.name}</span>?
+                    Are you sure you want to delete <span style={{fontWeight:'bold'}}> {row.name}</span>?
                   </Typography>
                   <Stack direction="row" spacing={2} sx={{ mt: 3 }} style={{justifyContent:'end'}}>
                     <Button onClick={handleCloseDelete} variant="outlined" style={{color:'#6c757d', border:'1px solid #6c757d'}}>
