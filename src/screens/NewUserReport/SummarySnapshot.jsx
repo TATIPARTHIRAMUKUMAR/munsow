@@ -1,6 +1,6 @@
 
 const SummarySnapshot = (props) => {
-  const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score  } = props;
+  const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score, head } = props;
 
   const presentationScore = Math.round(presentation_and_grooming_score);
   const readinessScore = Math.round(readiness_score);
@@ -43,6 +43,22 @@ const SummarySnapshot = (props) => {
   };
 
   // const bgColor = getBackgroundColor(head);
+
+  //static sub-segment titles
+  const setTitle = (head, index) => {
+    const firstWord = head.split(' ')[0];
+    let title = "";
+  
+    if (firstWord === 'Behavioural') {
+      return ["Adaptability","Collaboration","Integrity","Resilience"][index];
+    } else if (firstWord === 'Practical') {
+      return ["Creativity","Logic","Decision Making","Analytical Skills"][index];
+    } else if (head.startsWith('Domain Knowledge')) {
+      return ["Expertise","Innovation","Learning Ability","Technical Skills"][index];
+    } else {
+      return ["hello1","hello2","hello3","hello4"][index];
+    }
+  };
 
   return (
     <>
@@ -90,7 +106,7 @@ const SummarySnapshot = (props) => {
                     <h1 className={`text-xl font-bold ${getScoreColor(segment.secured_marks)}`}>
                       {segment.secured_marks}/10
                     </h1>
-                    <p className="text-purple font-bold underline">{segment.title}</p>
+                    <p className="text-purple font-bold underline">{setTitle(category.main_title, sIndex)}</p>
                   </span>
                 </div>
               ))}

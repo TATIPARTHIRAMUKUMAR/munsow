@@ -32,6 +32,22 @@ const ReportOverview = (props) => {
 
     const bgColor = getBackgroundColor(head);
 
+    //static sub-segment titles
+    const setTitle = (head, index) => {
+      const firstWord = head.split(' ')[0];
+      let title = "";
+    
+      if (firstWord === 'Behavioural') {
+        return ["Adaptability","Collaboration","Integrity","Resilience"][index];
+      } else if (firstWord === 'Practical') {
+        return ["Creativity","Logic","Decision Making","Analytical Skills"][index];
+      } else if (head.startsWith('Domain Knowledge')) {
+        return ["Expertise","Innovation","Learning Ability","Technical Skills"][index];
+      } else {
+        return ["hello1","hello2","hello3","hello4"][index];
+      }
+    };
+
 
     return (
         <>
@@ -55,7 +71,7 @@ const ReportOverview = (props) => {
                     <span className={`text-2xl font-bold ${getScoreColor(score.score)}`}>{score.score}/10</span>
                 </div>
                 <div>
-                    <h1 className="text-purple font-semibold underline py-1">{score.title}</h1>
+                    <h1 className="text-purple font-semibold underline py-1">{setTitle(head, index)}</h1>
                     <p className="text-purple">{score.desc}</p>
                 </div>
             </div>
