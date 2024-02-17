@@ -20,9 +20,8 @@ import {
 import { styled } from "@mui/material/styles";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import InputLabel from "@mui/material/InputLabel";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -149,7 +148,7 @@ const TeacherLogin = () => {
                 >
                   Email ID
                 </label>
-                <input
+                <TextField
                   type="text"
                   className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="universityId"
@@ -159,29 +158,8 @@ const TeacherLogin = () => {
                   onChange={loginInputHandler}
                 />
               </div>
-              <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">
-                  Password
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={showPassword ? "text" : "password"}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => setShowPassword(!showPassword)}
-                        // onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
-                />
-              </FormControl>
-              {/* <div className="mb-2">
+
+              <div className="mb-2">
                 <label
                   htmlFor="password"
                   className="text-sm font-medium text-gray-600"
@@ -190,8 +168,8 @@ const TeacherLogin = () => {
                 </label>
                 <TextField
                   type={showPassword ? "text" : "password"}
-                  className="mt-2 w-full rounded-md "
-                  // border-none border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                  className="mt-2 w-full "
+                  // rounded-md border-none border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="password"
                   name="password"
                   placeholder=""
@@ -214,7 +192,7 @@ const TeacherLogin = () => {
                     ),
                   }}
                 />
-              </div> */}
+              </div>
             </div>
             <div className="mt-4">
               <button
