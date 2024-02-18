@@ -116,13 +116,15 @@ const NewUserReport = () => {
 
           <div>
             <SummarySnapshot
-              title={userReport?.interview_score_by_category.data[0].main_title}
               interview_score_by_category={userReport?.interview_score_by_category}
+              behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
+              presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
+              readiness_score={userReport?.readiness_score}
             />
-          </div>
+          </div> 
 
           <div>
-            <UserReportPartOne userData={userReport?.behavioral_presentation_and_grooming} overallScore="8/10" />
+            <UserReportPartOne userData={userReport?.behavioral_presentation_and_grooming} overallScore={userReport?.presentation_and_grooming_score} />
             {/* <Presentation              
               overallScore="8/10"
               eyeContact={userReport?.behavioral_presentation_and_grooming.data[0].secured_marks}
@@ -136,30 +138,21 @@ const NewUserReport = () => {
             /> */}
           </div>
 
-          <div>
-            {userReport?.interview_score_by_category.data.map((category, index) => (
+          {userReport?.interview_score_by_category.data.map((category, index) => (
               <ReportOverview
-                key={index} // Ensure each component has a unique key
-                head={category.main_title}
-                overallScore={category.secured_marks}
-                bgcolor={componentColors[index % componentColors.length]}
-                scoreclr={`text-${index % 2 === 0 ? "green" : "red"}`}
-                title1={category.sub_segements[0].title}
-                score1={category.sub_segements[0].secured_marks}
-                desc1={category.sub_segements[0].notes}
-                title2={category.sub_segements[1].title}
-                score2={category.sub_segements[1].secured_marks}
-                desc2={category.sub_segements[1].notes}
-                title3={category.sub_segements[2].title}
-                score3={category.sub_segements[2].secured_marks}
-                desc3={category.sub_segements[2].notes}
-                title4={category.sub_segements[3].title}
-                score4={category.sub_segements[3].secured_marks}
-                desc4={category.sub_segements[3].notes}
-                backHead={category?.notes}
+              key={index} 
+              head={category.main_title}
+              overallScore={category.secured_marks}
+              notes={category.notes}
+             
+              scores={category.sub_segements.map((segment, sIndex) => ({
+                title: segment.title,
+                score: segment.secured_marks,
+                desc: segment.notes,
+              }))}
               />
             ))}
-          </div>
+          
 
           <div>
 

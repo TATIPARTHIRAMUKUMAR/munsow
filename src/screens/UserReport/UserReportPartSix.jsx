@@ -8,9 +8,9 @@ const UserReportPartSix = ({ userData }) => {
               Interview Score by Category
             </span>
           </div>
-          <div className="md:mt-5 md:me-4 md:mb-4 report3-btn-container">
+          {/* <div className="md:mt-5 md:me-4 md:mb-4 report3-btn-container">
             <span className="md:text-2xl md:font-normal report3-btn">Part Two</span>
-          </div>
+          </div> */}
         </div>
         <div className="md:flex">
           <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#212e3e]">
@@ -65,7 +65,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
         </div>
         <div className="md:flex">
-          <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#7a5fa7]">
+          <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#212E3E]">
             <div>
               <span className="md:text-lg font-semibold text-white">
                 Role-specific Skills
@@ -74,7 +74,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
-              <ul className="list-disc list-inside text-lg font-medium text-purple-800">
+              <ul className="list-disc list-inside text-lg font-medium text-[#212E3E]">
               {userData?.role_specific_skills?.map((o, index) => {
                   return (
                     <>
@@ -91,7 +91,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
         </div>
         <div className="md:flex">
-          <div className="md:w-3/12 md:flex justify-center items-center md:mb-5 bg-[#7a5fa7]">
+          <div className="md:w-3/12 md:flex justify-center items-center md:mb-5 bg-[#212E3E]">
             <div>
               <span className="md:text-lg font-semibold text-white">
                 Industry Trends
@@ -100,7 +100,7 @@ const UserReportPartSix = ({ userData }) => {
           </div>
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
-              <ul className="list-disc list-inside text-lg font-medium text-purple-800">
+              <ul className="list-disc list-inside text-lg font-medium text-[#212E3E]">
               {userData?.industry_trends?.map((o, index) => {
                   return (
                     <>
