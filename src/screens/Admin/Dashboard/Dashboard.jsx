@@ -39,6 +39,26 @@ import {
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 import format from 'date-fns/format';
 
+
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+
+import {
+  Chart,
+  ChartSeries,
+  ChartSeriesItem,
+  ChartCategoryAxis,
+  ChartCategoryAxisItem,
+  ChartValueAxis,
+  ChartValueAxisItem,
+  ChartTooltip,
+  ChartLegend,
+  ChartArea,
+} from "@progress/kendo-react-charts";
+import { geometry } from "@progress/kendo-drawing";
+import '@progress/kendo-theme-default/dist/all.css';
+
+
 const AdminDashboard = () => {
   window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
@@ -187,6 +207,120 @@ const AdminDashboard = () => {
     }
   }
 
+  const BAR_SIZE = 0.6;
+
+  const handleVisualItem = e => {
+    var visual = e.createVisual();
+    visual.transform(
+      geometry.transform().scale(BAR_SIZE, 1, e.rect.center())
+    );
+    return visual;
+  };
+
+  console.log('????', pie)
+
+  useEffect(() => {
+    Highcharts.chart('departmentWiseParticipation', {
+      chart: {
+        type: 'column',
+        backgroundColor: 'transparent'
+      },
+      title: {
+        text: null
+      },
+      xAxis: {
+        categories: barPlot.map(item => item.name)
+      },
+      yAxis: {
+        title: {
+          text: 'Participation Rate'
+        }
+      },
+      series: [{
+        name: 'Participated',
+        data: barPlot.map(item => item.Participated),
+        color: '#6CE5E8' 
+      }, {
+        name: 'Not yet Participated',
+        data: barPlot.map(item => item['Not yet Participated']),
+        color: '#5271FF'
+      }]
+    });
+  }, [barPlot]);
+
+  useEffect(() => {
+    Highcharts.chart('departmentWiseImprovement', {
+      chart: {
+        type: 'line',
+        backgroundColor: 'transparent'
+      },
+      title: {
+        text: null // Remove title
+      },
+      xAxis: {
+        categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+        title: {
+          text: 'WEEK'
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'INTERVIEW SCORE'
+        }
+      },
+      series: [{
+        name: 'Finance',
+        data: [40, 30, 20, 10, 40]
+      }, {
+        name: 'Hr',
+        data: [10, 20, 30, 20, 20]
+      }, {
+        name: 'Marketing',
+        data: [24, 30, 10, 20, 30]
+      }, {
+        name: 'Operations',
+        data: [26, 40, 40, 30, 40]
+      }]
+    });
+  }, []);
+
+  useEffect(() => {
+    const chartOptions = {
+      chart: {
+        type: 'pie',
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        backgroundColor: 'transparent'
+      },
+      title: {
+        text: null, 
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          innerSize: '50%',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          },
+        },
+      },
+      series: [{
+        name: pie[0]?.name,
+        colorByPoint: true,
+        data: pie.map(item => ({ name: item.name, y: item.value })),
+      }],
+    };
+
+    Highcharts.chart('criticalImprovement', chartOptions);
+  }, [pie]);
+
+
+  // const categories = Object.keys(plot[0]).filter(key => key !== 'name');
+
+
   return (
     <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll ">
       <div className="container ">
@@ -238,8 +372,56 @@ const AdminDashboard = () => {
               </div>
               <div className="h-80">
 
+              <div id="departmentWiseParticipation" style={{ width: '400px', height: '400px' }}></div>
 
-                <ResponsiveContainer width="100%" height="100%">
+              <Chart>
+              <ChartArea background="transparent" />
+                <ChartCategoryAxis>
+                  <ChartCategoryAxisItem
+                    // categories={barPlot.slice(0, 1).map((item) => item.name)}
+                    categories={barPlot.map(item => item.name)}
+                  />
+                </ChartCategoryAxis>
+
+                <ChartValueAxis>
+                  <ChartValueAxisItem title={{ text: "PARTICIPATION RATE" }} />
+                </ChartValueAxis>
+
+                <ChartTooltip />
+                
+                <ChartLegend position="bottom" orientation="horizontal" />
+
+                <ChartSeries>
+                  <ChartSeriesItem
+                    // type="bar"
+                    // data={barPlot.slice(0, 1)}
+                    data={barPlot.map(item => item.Participated)}
+                    field="Participated"
+                    name="Participated"
+                    color="#6CE5E8"
+                    visual={handleVisualItem}
+                    stack={true}
+                    labels={{
+                      rotation: -45 
+                    }}
+                  />
+                  <ChartSeriesItem
+                    // type="bar"
+                    // data={barPlot.slice(0, 1)}
+                    data={barPlot.map(item => item['Not yet Participated'])}
+                    field="Not yet Participated"
+                    name="Not yet Participated"
+                    color="#5271FF"
+                    visual={handleVisualItem}
+                    labels={{
+                      rotation: -45
+                    }}
+                  />
+                </ChartSeries>
+              </Chart>
+
+
+                {/* <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barPlot.slice(0, 1)} width={"200px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
                     <XAxis
@@ -296,7 +478,7 @@ const AdminDashboard = () => {
                     />
 
                   </BarChart>
-                </ResponsiveContainer>
+                </ResponsiveContainer> */}
 
               </div>
             </div>
@@ -314,8 +496,51 @@ const AdminDashboard = () => {
               </div>
               <div className="h-80">
 
+              <div id="departmentWiseImprovement" style={{ width: '430px', height: '400px' }} />;
+                
+              <Chart style={{width:'450px', height:'400px'}}>
+                <ChartArea background="transparent" />
+                <ChartCategoryAxis>
+                  <ChartCategoryAxisItem
+                    title={{
+                      text: "WEEK",
+                    }}
+                    categories={['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5']}
+                  />
+                </ChartCategoryAxis>
+                <ChartValueAxis>
+                  <ChartValueAxisItem title={{ text: "INTERVIEW SCORE" }} />
+                </ChartValueAxis>
+                <ChartSeries>
+                  <ChartSeriesItem type="line" data={[40, 30, 20, 10, 40]} name="Finance" />
+                  <ChartSeriesItem type="line" data={[10, 20, 30, 20, 20]} name="Hr" />
+                  <ChartSeriesItem type="line" data={[24, 30, 10, 20, 30]} name="Marketing" />
+                  <ChartSeriesItem type="line" data={[26, 40, 40, 30, 40]} name="Operations" />
+                </ChartSeries>
+              </Chart>
 
-                <ResponsiveContainer width="100%" height="100%">
+              <Chart style={{width:'450px', height:'400px'}}>
+                <ChartArea background="transparent" />
+                <ChartCategoryAxis>
+                  <ChartCategoryAxisItem
+                    title={{
+                      text: "WEEK",
+                    }}
+                    categories={['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5']}
+                  />
+                </ChartCategoryAxis>
+                <ChartValueAxis>
+                  <ChartValueAxisItem title={{ text: "INTERVIEW SCORE" }} />
+                </ChartValueAxis>
+                <ChartSeries>
+                  <ChartSeriesItem type="line" style='smooth' markers={{ visible: false }} data={[40, 30, 20, 10, 40]} name="Finance" />
+                  <ChartSeriesItem type="line" style='smooth' markers={{ visible: false }} data={[10, 20, 30, 20, 20]} name="Hr" />
+                  <ChartSeriesItem type="line" style='smooth' markers={{ visible: false }} data={[24, 30, 10, 20, 30]} name="Marketing" />
+                  <ChartSeriesItem type="line" style='smooth' markers={{ visible: false }} data={[26, 40, 40, 30, 40]} name="Operations" />
+                </ChartSeries>
+              </Chart>
+
+                {/* <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={plot}>
                     <CartesianGrid
                       vertical={false}
@@ -388,7 +613,7 @@ const AdminDashboard = () => {
                       strokeWidth={4}
                     />
                   </LineChart>
-                </ResponsiveContainer>
+                </ResponsiveContainer> */}
               </div>
             </div>
           </div>
@@ -414,9 +639,32 @@ const AdminDashboard = () => {
                 </span>
               </div>
               <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
+
+              <div id="criticalImprovement" />
+
+              <Chart>
+                <ChartArea background="transparent" />
+                <ChartLegend position="bottom" />
+                <ChartSeries>
+                  <ChartSeriesItem
+                    type="donut"
+                    data={pie.slice(0, 1)}
+                    // data={pie.map(item => ({ name: item.name, y: item.value }))}
+                    field="value"
+                    categoryField="name"
+                    name={pie.slice(0, 1)[0]?.name}
+                    // name={pie[0]?.name}
+                    color='#72cee0'
+                    // labels={{
+                    //   visible: true,
+                    //   content: labelContent,
+                    // }}
+                  />
+                </ChartSeries>
+              </Chart>
+
+                {/* <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    {/* Place the legend horizontally at the bottom */}
                     <Legend
                       formatter={(value, entry) =>
                         legendFormatter(value, entry, "pie")
@@ -443,8 +691,8 @@ const AdminDashboard = () => {
                         />
                       ))}
                     </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
+                  {/* </PieChart> */}
+                {/* </ResponsiveContainer> */}
 
 
 
