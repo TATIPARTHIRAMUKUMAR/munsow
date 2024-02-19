@@ -22,7 +22,7 @@ const AppHeader = ({ open, role1 }) => {
       sx={{
         width: `calc(100%)`,
         boxShadow: "unset",
-        backgroundColor: isDarkMode ? "#071437" : "#f3f0f9",
+         backgroundColor: isDarkMode ? "#071437" : "#f3f0f9",
         color: isDarkMode ? "#f3f0f9" : "#071437",
         height: "60px",
       }}

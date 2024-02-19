@@ -34,7 +34,7 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      borderColor: "#886CC0",
+      borderColor: linearGradientBackground,
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
@@ -163,7 +163,19 @@ const StepperComponent = () => {
   //button
   const textColors = isDarkMode
     ? colorTheme.dark.textColor2
-    : colorTheme.light.textColor2;
+    : colorTheme.light.textColor2;   
+
+    const blackColors = isDarkMode
+    ? colorTheme.dark. blackColor4
+    : colorTheme.light.blackColor;  
+
+    const grayColors=isDarkMode 
+    ? colorTheme.dark.   grayColor3
+    : colorTheme.light.  grayColor;  
+
+    const previousButton=isDarkMode
+    ?colorTheme.dark.backgrounds 
+    :colorTheme.light.backgrounds;
 
   useEffect(() => {
     console.log("selectedSoftskill", selectedSoftskill);
@@ -177,8 +189,8 @@ const StepperComponent = () => {
   }, [dispatch]);
 
   return (
-    <div className="p-5 lg:p-10">
-      <div className="w-full mx-auto bg-white rounded-xl">
+    <div className="p-5 lg:p-10 ">
+      <div className="w-full mx-auto rounded-xl">
         <p className="p-5 text-xl font-semibold">Practice</p>
         <Divider />
         {/* <Stepper 
@@ -252,7 +264,7 @@ const StepperComponent = () => {
                       fontSize: "1.5rem",
                       fontWeight: "600",
                       marginBottom: "0.5rem",
-                      color: textColors, // Set the desired text color
+                      color:grayColors , // Set the desired text color
                     }}
                   >
                     Skill Specific
@@ -344,7 +356,7 @@ const StepperComponent = () => {
 
                       fontWeight: "600",
                       marginBottom: "0.5rem",
-                      color: textColors, // Set the desired text color
+                      color:  grayColors, // Set the desired text color
                     }}
                   >
                     Role Specific
@@ -367,7 +379,8 @@ const StepperComponent = () => {
                                             onChange={() => setChosenCompany(!chosenCompany)}
                                         /> */}
 
-                    <span className="font-bold pr-2">
+                    <span className="font-bold pr-2"  style={{color:grayColors}}
+                    >
                       Choose Company{" "}
                       <span className="font-bold text-red-500 text-2xl">
                         {" "}
@@ -473,9 +486,10 @@ const StepperComponent = () => {
                     className="text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
                     style={{
                       backgroundColor: linearGradientBackground,
-                      color: "white",
+                    
                       padding: "0.5rem 1rem",
                       borderRadius: "0.375rem",
+                      color:grayColors
                     }}
                   >
                     Beginner
@@ -486,7 +500,7 @@ const StepperComponent = () => {
                       setExperienceLevel("medium");
                     }}
                     className="text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                    style={{ backgroundColor: linearGradientBackground }}
+                    style={{ backgroundColor: linearGradientBackground,color:grayColors }}
                   >
                     Intermediate
                   </button>
@@ -496,7 +510,7 @@ const StepperComponent = () => {
                       setExperienceLevel("high");
                     }}
                     className="text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
-                    style={{ backgroundColor: linearGradientBackground }}
+                    style={{ backgroundColor: linearGradientBackground , color :grayColors }}
                   >
                     Advanced
                   </button>
@@ -608,9 +622,9 @@ const StepperComponent = () => {
               onClick={handlePrev}
               style={{
                 margin: "0 0.5rem",
-                backgroundColor: linearGradientBackground,
+                backgroundColor: previousButtons,
 
-                color: textColors,
+                color: grayColors,
                 padding: "0.5rem 1rem",
                 borderRadius: "0.375rem",
                 cursor: "pointer",
@@ -626,7 +640,7 @@ const StepperComponent = () => {
               className="bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md"
               style={{
                 backgroundColor: linearGradientBackground,
-                color: "white",
+                color: grayColors,
                 padding: "0.5rem 1rem",
                 borderRadius: "0.375rem",
                 cursor: "pointer",
@@ -650,7 +664,7 @@ const StepperComponent = () => {
                 <button
                   onClick={handleNext}
                   className=" mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-                  style={{ backgroundColor: linearGradientBackground }}
+                  style={{ backgroundColor: linearGradientBackground,color:grayColors }}
                 >
                   Submit
                 </button>
@@ -660,7 +674,7 @@ const StepperComponent = () => {
                     onClick={handleNext}
                     disabled={!chosenCompany}
                     className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md opacity-50 cursor-not-allowed"
-                    style={{ backgroundColor: linearGradientBackground }}
+                    style={{ backgroundColor: linearGradientBackground,color:grayColors }}
                   >
                     Submit
                   </button>

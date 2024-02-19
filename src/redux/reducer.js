@@ -43,22 +43,26 @@ const initialState = {
   unAssignedUsers:[],
   colorTheme: {
     light: {
-      background: " #242D36 ",
+      backgrounds: " #242D36 ",
       foreground: "#000000",
       selectBackground: "#2BE2D0",
       selectBorder: "#212e3e",
       selectIcon: "#21263e",
       textColor: "#eceef0",
       textColor2: "#0fe1d2",
+      grayColor:"#252525",
+      blackColor:"#8a8a8a"
     },
     dark: {
-      background: "#242D36",
+      backgrounds: "#242D36",
       foreground: "#FFFFFF",
       selectBackground: "#0fe1d2",
       selectBorder: "#212e3e",
       selectIcon: "#21263e",
       textColor: "#ABB2BA",
       textColor2: "#0fe1d2",
+      grayColor3:"#252525",
+      blackColor4:"#8a8a8a"
     },
   },
 

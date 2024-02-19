@@ -5,3 +5,51 @@
 .ant-picker-ok button span{
   color: white;
 }
+.shadow-effect {
+  box-shadow: 0 10px 20px rgba(156, 96, 96, 0.19), 0 6px 6px rgba(61, 114, 170, 0.23); /* Adjust the color and spread as needed */
+  border-radius: 20px; 
+ margin-left:225px;
+ margin-bottom:19px;
+}
+.munsowImg{
+  position:absolute;
+  top:6px;
+  left:0px;
+  objectFit:contain;
+}
+.journey{
+  text-align
+  
+  :center;
+  margin-top:5px;
+}
+.fe{
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #FFFFFF 50%, #AEECEF 50%)
+}
+.vd{
+  width: 50%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);margin:0 auto; border-radius: 20px;margin-top:20px;margin-bottom:10px
+}
+.sd{
+  display:flex;
+        justify-content :center;
+      
+        position: relative;
+        Height: 
+        100vh;
+        background: linear-gradient(to bottom right, #FFFFFF 50%, #AEECEF 10%),
+}
+.simg{
+  position:absolute;top:6px;left:0px;object-fit:contain
+}
+.sde{
+  border-radius: 15px;box-shadow: 0 0 13px 2px rgba(0, 0, 0, 0.5)
+}
+.fdes{
+  background-color: #2b2d30;color:white ;text-transform:capitalize
+}
+.fss{
+  color:black;
+  text-transform:capitalize;
+  background-color:#2BE2D0;
+}

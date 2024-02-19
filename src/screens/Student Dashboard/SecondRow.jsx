@@ -15,9 +15,19 @@ const SecondRow = () => {
   const { isDarkMode, colorTheme } = useDarkMode();
 
   const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const linearGradientBackground = isDarkMode
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
   const textColor = isDarkMode
     ? reduxColorTheme.dark.textColor2
     : reduxColorTheme.light.textColor2;
+    const grayColors=isDarkMode 
+    ? colorTheme.dark.   grayColor3
+    : colorTheme.light.  grayColor;  
+
+    const blackColors = isDarkMode
+    ? colorTheme.dark. blackColor4
+    : colorTheme.light.blackColor;  
 
   useEffect(() => {
     setData(userStats?.skill_trends ? userStats.skill_trends : {});
@@ -26,8 +36,8 @@ const SecondRow = () => {
   }, [userStats]);
 
   return (
-    <div className="col-span-1 bg-white rounded-lg">
-      <p className=" text-lg font-semibold p-2" style={{ color: textColor }}>
+    <div className="col-span-1 bg-white rounded-lg" style={{ color: grayColors,  backgroundColor:linearGradientBackground,}} >
+      <p className=" text-lg font-semibold p-2">
         Hard Skill vs Soft Skill Trend
       </p>
       <Divider style={{ opacity: "0.4" }} />
@@ -44,7 +54,7 @@ const SecondRow = () => {
             </div>
             <div>
               <Typography variant="h6">Hard Skills</Typography>
-              <p className="text-gray-600 text-opacity-50 text-sm font-semibold">
+              <p className="text-gray-600 text-opacity-50 text-sm font-semibold" style={{color:blackColors}}>
                 {data?.hard_skill > 0 ? "Increased by" : "Decreased by"}{" "}
                 {Math.abs(data?.hard_skill)}%
               </p>
@@ -55,7 +65,7 @@ const SecondRow = () => {
               <TrendingUpIcon fontSize="large" style={{ color: "green" }} />
             ) : (
               <TrendingDownIcon fontSize="large" style={{ color: "red" }} />
-            )}
+            )}\
           </div>
         </div>
         <Divider className="pt-4" />

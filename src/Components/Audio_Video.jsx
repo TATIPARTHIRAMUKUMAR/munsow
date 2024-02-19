@@ -134,14 +134,14 @@ export default function Audio_Video({audioValidated, setAudioValidated, videoVal
             <canvas id="audioVisualizer" width="300" height="100"></canvas>
             <div className="w-full flex justify-center gap-4">
                 {permission ?
-                    <VideocamIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={capOff} />
+                    <VideocamIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={capOff} style={{  color: "#42f5ef" }}/>
                     :
-                    <VideocamOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={camOn} />
+                    <VideocamOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={camOn} style={{  color: "#42f5ef" }} />
                 }
                 {!micPermission ?
-                    <MicOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={getMicrophonePermission} />
+                    <MicOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={getMicrophonePermission}  style={{  color: "#42f5ef" }} />
                     :
-                    <MicNoneIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={stopRecording} />
+                    <MicNoneIcon className=" bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={stopRecording} style={{  color: "#42f5ef" }} />
                 }
             </div>
             <div className="text-center mt-4 max-w-screen-md mx-auto overflow-auto">

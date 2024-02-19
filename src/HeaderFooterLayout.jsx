@@ -382,6 +382,7 @@ export default function HeaderFooterLayout({ Component }) {
         width: "100vw",
         height: "100vh",
         overflow: "hidden",
+        // backgroundColor:"green"
       }}
     >
       <CssBaseline />
