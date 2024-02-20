@@ -43,22 +43,34 @@ const initialState = {
   unAssignedUsers:[],
   colorTheme: {
     light: {
+      // primaryBg-black
+      // secondarybg-green
+      // selecttextcolor-primarybg
+      // selectIcon-primarybg
+      //primarytextcolor-textcolor-white-E7EFEE
+      //textcolor2 is not a part of theme
+      //secondarytextcolor-textcolor3
+
       background: " #242D36 ",
-      foreground: "#000000",
+      foreground: "#E7EFEE",
       selectBackground: "#2BE2D0",
+      selectTextColor: "#242D35",
       selectBorder: "#212e3e",
       selectIcon: "#21263e",
-      textColor: "#eceef0",
-      textColor2: "#0fe1d2",
+      textColor: "#fafcfc",
+      textColor2: "#8A8A8A",
+      textColor3: "#252525",
     },
     dark: {
       background: "#242D36",
-      foreground: "#FFFFFF",
+      foreground: "#E7EFEE",
       selectBackground: "#0fe1d2",
+      selectTextColor: "#242D36",
       selectBorder: "#212e3e",
       selectIcon: "#21263e",
       textColor: "#ABB2BA",
-      textColor2: "#0fe1d2",
+      textColor2: "#8A8A8A",
+      textColor3: "#252525",
     },
   },
   loading: false

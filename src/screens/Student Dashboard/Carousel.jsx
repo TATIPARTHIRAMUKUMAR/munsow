@@ -17,6 +17,9 @@ const Carousel = () => {
   const backgroundColor = isDarkMode
     ? reduxColorTheme.dark.selectBackground
     : reduxColorTheme.light.selectBackground;
+    const textColor2 = isDarkMode
+    ? reduxColorTheme.dark.textColor3
+    : reduxColorTheme.light.textColor3;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(null);
@@ -69,7 +72,7 @@ const Carousel = () => {
         <IconButton onClick={goToPrevious}>
           <ArrowBackIosIcon
             style={{
-              background: backgroundColor,
+              background: textColor2,
               borderRadius: "50%",
               color: "white",
               padding: "4px",
@@ -97,7 +100,7 @@ const Carousel = () => {
         <IconButton onClick={goToNext}>
           <ArrowForwardIosIcon
             style={{
-              background: backgroundColor,
+              background: textColor2,
               borderRadius: "50%",
               color: "white",
               padding: "4px",

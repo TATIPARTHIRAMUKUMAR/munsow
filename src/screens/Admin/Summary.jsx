@@ -35,7 +35,7 @@ const Summary = () => {
                                 <span className="font-bold">Students</span>
                             </div>
                             <div>
-                                <Link to="/studentList" className={buttonStyle}>
+                                <Link to="/studentList" className={buttonStyle} style={{background: '#2BE2D0', color: "#252525"}}>
                                     View All
                                 </Link>
                             </div>
@@ -71,6 +71,7 @@ const Summary = () => {
                                 <button
                                     type="button"
                                     className={buttonStyle}
+                                    style={{background: '#2BE2D0', color: "#252525"}}
                                     onClick={() => routeChange("/addStudent")}
                                 >
                                     Add Students
@@ -85,7 +86,7 @@ const Summary = () => {
                                 <span className="font-bold">Teachers</span>
                             </div>
                             <div>
-                                <Link to="/teachersList" className={buttonStyle}>
+                                <Link to="/teachersList" className={buttonStyle} style={{background: '#2BE2D0', color: "#252525"}}>
                                     View All
                                 </Link>
                             </div>
@@ -120,6 +121,7 @@ const Summary = () => {
                             <div className="flex justify-center mt-4">
                                 <button
                                     type="button"
+                                    style={{background: '#2BE2D0', color: "#252525"}}
                                     className={buttonStyle}
                                     onClick={() => routeChange("/addTeacher")}
                                 >

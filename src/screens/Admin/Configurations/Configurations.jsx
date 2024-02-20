@@ -70,6 +70,7 @@ const Configurations = () => {
             <span className="text-xl font-semibold">{option.label}</span>
             <a href={generateDownloadUrl(option.key)}>
               <Button
+              style={{background: '#2BE2D0', color: "#252525"}}
                 endIcon={<CloudDownloadOutlinedIcon />}
                 variant="outlined"
                 size="small"

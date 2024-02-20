@@ -17,25 +17,27 @@ export default function StudentDashboard() {
   const { isDarkMode, colorTheme } = useDarkMode();
 
   const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
-  const linearGradientBackground = `linear-gradient(180.43deg, ${
-    isDarkMode
-      ? reduxColorTheme.dark.background
-      : reduxColorTheme.light.background
-  } 19.43%, ${
-    isDarkMode
-      ? reduxColorTheme.dark.selectBackground
-      : reduxColorTheme.light.selectBackground
-  } 87.63%)`;
+  const linearGradientBackground = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
   const buttonTextColor = isDarkMode
     ? reduxColorTheme.dark.textColor2
     : reduxColorTheme.light.textColor2;
+
+    const backgroundColor = isDarkMode
+    ? reduxColorTheme.dark.foreground
+    : reduxColorTheme.light.foreground;
+
+    const textColor = isDarkMode
+    ? reduxColorTheme.dark.textColor3
+    : reduxColorTheme.light.textColor3;
 
   useEffect(() => {
     dispatch(loadUserStats());
   }, []);
 
   return (
-    <div>
+    <div  style={{ background: backgroundColor}}>
       <div
         className="grid grid-cols-1 sm:grid-cols-3 gap-7 px-6 py-6 relative overflow-auto max-w-full h-auto"
       >
@@ -47,12 +49,12 @@ export default function StudentDashboard() {
             className="relative overflow-auto max-w-full h-auto p-10 flex justify-between rounded-lg"
           >
             <div className="text-white relative overflow-auto max-w-full h-auto">
-              <div className="text-3xl font-bold color- relative overflow-auto max-w-full h-auto">
+              <div className="text-3xl font-bold color- relative overflow-auto max-w-full h-auto" style={{ color: textColor }}>
                 Hello {GLOBAL_CONSTANTS?.user_cred?.first_name}{" "}
                 {GLOBAL_CONSTANTS?.user_cred?.last_name} !!!
               </div>
               {/* <p className="text-3xl font-bold pt-1">Apritha!!!</p> */}
-              <p className="text-lg py-3 relative overflow-auto max-w-full h-auto">
+              <p className="text-lg py-3 relative overflow-auto max-w-full h-auto" style={{ color: textColor }}>
                 Are you ready for your next interview?
               </p>
               <div className="flex space-x-4 pt-5 overflow-auto flex flex-col sm:flex-row">
@@ -61,7 +63,7 @@ export default function StudentDashboard() {
                   style={{
                     background: "white",
                     hover: "gray-100",
-                    color: buttonTextColor,
+                    color: textColor,
                     fontWeight: "bold",
                     padding: "8px 16px",
                     border: "1px solid gray-300",
@@ -76,6 +78,7 @@ export default function StudentDashboard() {
                 </button>
                 <button
                   className=" text-white font-semibold py-2 px-4 border rounded-lg shadow"
+                  style={{ color: textColor, borderColor: textColor }}
                   onClick={() => {
                     navigate("/report");
                   }}
