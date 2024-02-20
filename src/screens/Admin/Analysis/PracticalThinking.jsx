@@ -144,13 +144,13 @@ const PracticalThinking = () => {
       // start_date: formattedStartDate,
       // end_date: formattedEndDate
     };
-    if (startDate && endDate) {
+    // if (startDate && endDate) {
 
 
       // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
       dispatch(loadPracticalThinkingAnalysis(params))
       // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
-    }
+    // }
   }
 
   const handleClose = () => {
