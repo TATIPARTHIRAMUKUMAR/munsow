@@ -54,6 +54,7 @@ import {
   ChartTooltip,
   ChartLegend,
   ChartArea,
+  ChartSeriesItemTooltip
 } from "@progress/kendo-react-charts";
 import { geometry } from "@progress/kendo-drawing";
 import '@progress/kendo-theme-default/dist/all.css';
@@ -236,6 +237,11 @@ const AdminDashboard = () => {
           text: 'Participation Rate'
         }
       },
+      plotOptions: {
+        column: {
+          borderRadius: 5,
+        },
+      },
       series: [{
         name: 'Participated',
         data: barPlot.map(item => item.Participated),
@@ -268,18 +274,32 @@ const AdminDashboard = () => {
           text: 'INTERVIEW SCORE'
         }
       },
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: true,
+            symbol: 'circle',
+            radius: 5
+          },
+          lineWidth: 3.5,
+        },
+      },
       series: [{
         name: 'Finance',
-        data: [40, 30, 20, 10, 40]
+        data: [40, 30, 20, 10, 40],
+        color:'#5271FF'
       }, {
         name: 'Hr',
-        data: [10, 20, 30, 20, 20]
+        data: [10, 20, 30, 20, 20],
+        color: 'purple'
       }, {
         name: 'Marketing',
-        data: [24, 30, 10, 20, 30]
+        data: [24, 30, 10, 20, 30],
+        color: '#6CE5E8'
       }, {
         name: 'Operations',
-        data: [26, 40, 40, 30, 40]
+        data: [26, 40, 40, 30, 40],
+        color: 'darkgreen'
       }]
     });
   }, []);
@@ -296,17 +316,28 @@ const AdminDashboard = () => {
       title: {
         text: null, 
       },
+      // plotOptions: {
+      //   pie: {
+      //     allowPointSelect: true,
+      //     cursor: 'pointer',
+      //     innerSize: '50%',
+      //     dataLabels: {
+      //       enabled: true,
+      //       format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+      //     },
+      //   },
+      // },
       plotOptions: {
         pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          innerSize: '50%',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          },
-        },
-      },
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true,
+            innerSize: '50%',
+        }
+    },
       series: [{
         name: pie[0]?.name,
         colorByPoint: true,
@@ -374,7 +405,7 @@ const AdminDashboard = () => {
 
               <div id="departmentWiseParticipation" style={{ width: '400px', height: '400px' }}></div>
 
-              <Chart>
+              <Chart style={{width:'400px', height:'400px'}} >
               <ChartArea background="transparent" />
                 <ChartCategoryAxis>
                   <ChartCategoryAxisItem
@@ -401,10 +432,9 @@ const AdminDashboard = () => {
                     color="#6CE5E8"
                     visual={handleVisualItem}
                     stack={true}
-                    labels={{
-                      rotation: -45 
-                    }}
-                  />
+                  >
+                    <ChartSeriesItemTooltip format="Participated: {0}" />
+                  </ChartSeriesItem>
                   <ChartSeriesItem
                     // type="bar"
                     // data={barPlot.slice(0, 1)}
@@ -416,7 +446,9 @@ const AdminDashboard = () => {
                     labels={{
                       rotation: -45
                     }}
-                  />
+                  >
+                    <ChartSeriesItemTooltip format="Not yet Participated: {0}" />
+                  </ChartSeriesItem>
                 </ChartSeries>
               </Chart>
 
@@ -498,7 +530,7 @@ const AdminDashboard = () => {
 
               <div id="departmentWiseImprovement" style={{ width: '430px', height: '400px' }} />;
                 
-              <Chart style={{width:'450px', height:'400px'}}>
+              <Chart style={{width:'450px', height:'400px'}} >
                 <ChartArea background="transparent" />
                 <ChartCategoryAxis>
                   <ChartCategoryAxisItem
@@ -511,11 +543,49 @@ const AdminDashboard = () => {
                 <ChartValueAxis>
                   <ChartValueAxisItem title={{ text: "INTERVIEW SCORE" }} />
                 </ChartValueAxis>
+                <ChartLegend position="bottom" orientation="horizontal" />
                 <ChartSeries>
-                  <ChartSeriesItem type="line" data={[40, 30, 20, 10, 40]} name="Finance" />
-                  <ChartSeriesItem type="line" data={[10, 20, 30, 20, 20]} name="Hr" />
-                  <ChartSeriesItem type="line" data={[24, 30, 10, 20, 30]} name="Marketing" />
-                  <ChartSeriesItem type="line" data={[26, 40, 40, 30, 40]} name="Operations" />
+                  <ChartSeriesItem 
+                    type="line" 
+                    data={[40, 30, 20, 10, 40]} 
+                    name="Finance" 
+                    width={3.5} 
+                    color={'#5271FF'} 
+                    markers={{ size: 10 }} 
+                    tooltip={{ format: "Finance: {0}" }}
+                  />
+
+                  <ChartSeriesItem 
+                    type="line" 
+                    data={[10, 20, 30, 20, 20]} 
+                    name="Hr" 
+                    width={3.5} 
+                    color={'purple'} 
+                    markers={{ size: 10 }} 
+                    tooltip={{ format: "Hr: {0}" }}
+                  />
+            
+
+                  <ChartSeriesItem 
+                    type="line" 
+                    data={[24, 30, 10, 20, 30]} 
+                    name="Marketing" 
+                    width={3.5} 
+                    color={'#6CE5E8'} 
+                    markers={{ size: 10 }} 
+                    tooltip={{ format: "Marketing: {0}" }}
+                  />
+
+                  <ChartSeriesItem 
+                    type="line" 
+                    data={[26, 40, 40, 30, 40]} 
+                    name="Operations" 
+                    width={3.5} 
+                    color={'darkgreen'} 
+                    markers={{ size: 10 }} 
+                    tooltip={{ format: "Operations: {0}" }}
+                  />
+
                 </ChartSeries>
               </Chart>
 
