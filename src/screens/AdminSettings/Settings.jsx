@@ -1,133 +1,130 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useDarkMode } from "./../../Dark";
 
-const SettingsPageAdmin = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    twoFactorAuth: false,
-    emailNotifications: false,
-    smsNotifications: false,
-  });
+const SettingsForm = () => {
+  const [reportAlertsEnabled, setReportAlertsEnabled] = useState(false);
+  const [munsowUpdatesAlertsEnabled, setMunsowUpdatesAlertsEnabled] =
+    useState(false);
 
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('user_data'));
+  const { isDarkMode, colorTheme } = useDarkMode();
 
-    if (userData) {
-      setFormData({
-        name: userData?.data?.contact_name || '',
-        email: userData?.data?.email || '',
-        password: '', 
-        twoFactorAuth: false, 
-        emailNotifications: false, 
-        smsNotifications: false,
-      });
+  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+
+  const headerTextColor = isDarkMode
+    ? reduxColorTheme.dark.textColor2
+    : reduxColorTheme.light.textColor2;
+
+  const textColor = isDarkMode
+    ? reduxColorTheme.dark.textColor3
+    : reduxColorTheme.light.textColor3;
+
+  const buttonColor = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
+
+  const handleToggle = (setting) => {
+    switch (setting) {
+      case "reportAlerts":
+        setReportAlertsEnabled(!reportAlertsEnabled);
+        break;
+      case "munsowUpdatesAlerts":
+        setMunsowUpdatesAlertsEnabled(!munsowUpdatesAlertsEnabled);
+        break;
+      default:
+        break;
     }
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleCheckChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData({ ...formData, [name]: checked });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
+    // Your form submission logic here
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-4 bg-white rounded-md shadow-md">
-      <h1 className="text-3xl font-semibold mb-8">Settings</h1>
-
-      <form onSubmit={handleSubmit}>
-        {/* Personal Information */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Personal Information</h2>
-          <div className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-md"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-md"
-            />
-          </div>
-        </section>
-
-        {/* Account Settings */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Account Settings</h2>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-2/3 p-3 border rounded-md"
-          />
-        </section>
-
-        {/* Security */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Security</h2>
-          <label className="flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="twoFactorAuth"
-              checked={formData.twoFactorAuth}
-              onChange={handleCheckChange}
-              className="rounded"
-            />
-            <span>Enable Two-Factor Authentication</span>
+    <div className="max-w-lg mx-auto mt-10 p-4 relative overflow-auto h-auto">
+      <h1
+        className="text-3xl text-700 font-semibold mb-6 relative overflow-auto max-w-full h-auto"
+        style={{ color: headerTextColor }}
+      >
+        Settings
+      </h1>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 relative overflow-auto max-w-full h-auto"
+      >
+        <div className="flex items-center justify-between">
+          <label
+            htmlFor="notifications"
+            className="block text-sm font-medium text-gray-600"
+          >
+            Notify me over email once my report is ready
           </label>
-        </section>
-
-        {/* Notification Preferences */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Notification Preferences</h2>
-          <label className="flex items-center space-x-3 mb-3">
-            <input
-              type="checkbox"
-              name="emailNotifications"
-              checked={formData.emailNotifications}
-              onChange={handleCheckChange}
-              className="rounded"
+          <button
+            type="button"
+            onClick={() => handleToggle("reportAlerts")}
+            className=" relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none"
+            style={{
+              background: reportAlertsEnabled ? buttonColor : "lightGray",
+            }}
+          >
+            <span
+              className=" inline-block w-5 h-5 transform translate-y-0.4 rounded-full transition-transform"
+              style={{
+                transform: reportAlertsEnabled
+                  ? "translateX(24px)"
+                  : "translateX(0px)",
+                background: reportAlertsEnabled ? "white" : headerTextColor,
+              }}
             />
-            <span>Email Notifications</span>
+          </button>
+        </div>
+        <div className="flex items-center justify-between">
+          <label
+            htmlFor="notifications"
+            className="w-[350px] text-sm font-medium text-gray-600"
+          >
+            Opt in for new updates on Munsow and get notified when more features
+            are added to the platform
           </label>
-          <label className="flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="smsNotifications"
-              checked={formData.smsNotifications}
-              onChange={handleCheckChange}
-              className="rounded"
+          <button
+            type="button"
+            onClick={() => handleToggle("munsowUpdatesAlerts")}
+            className=" relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none"
+            style={{
+              background: munsowUpdatesAlertsEnabled
+                ? buttonColor
+                : "lightGray",
+            }}
+          >
+            <span
+              className="inline-block w-5 h-5 transform translate-y-0.4 rounded-full transition-transform"
+              style={{
+                transform: munsowUpdatesAlertsEnabled
+                  ? "translateX(24px)"
+                  : "translateX(0px)",
+                background: munsowUpdatesAlertsEnabled
+                  ? "white"
+                  : headerTextColor,
+              }}
             />
-            <span>SMS Notifications</span>
-          </label>
-        </section>
-
-        {/* Submit Button */}
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
-          Save Changes
-        </button>
+          </button>
+        </div>
+        <div className="pt-5 relative overflow-auto max-w-full h-auto">
+          <button
+            type="submit"
+            className=" py-2 px-4 rounded"
+            style={{
+              background: buttonColor,
+              color: textColor,
+            }}
+          >
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
-export default SettingsPageAdmin;
+export default SettingsForm;
