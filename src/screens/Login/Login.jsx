@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import interview from "../../assets/admin_ui.png";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, InputAdornment } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -18,6 +18,10 @@ import {
   FormLabel,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import "./Input.css";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -56,6 +60,7 @@ const LoginPage = () => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const [loginType, setLoginType] = useState("institution");
+  const [showPassword, setShowPassword] = useState(false);
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -109,6 +114,13 @@ const LoginPage = () => {
     // Add more conditions for other types if necessary
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <div className="p-4">
       <div className="flex flex-col md:flex-row">
@@ -140,61 +152,75 @@ const LoginPage = () => {
             </FormControl>
 
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold  mb-4">
-                  Institution Login
-                </h2>
-                {/* <p className="text-base text-gray-600 mb-7">
+            <div className="mb-4">
+              <h2 className="text-2xl font-semibold  mb-4">
+                Institution Login
+              </h2>
+              {/* <p className="text-base text-gray-600 mb-7">
                 Get access to our expert insights about your students across departments, branches, and cities today!
               </p> */}
-              </div>
-              <div className="space-y-4">
-                <div className="mb-2">
-                  <label
-                    htmlFor="universityId"
-                    className="text-sm font-medium text-gray-600"
-                  >
-                    University ID
-                  </label>
-                  <input
-                    type="text"
-                    className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                    id="universityId"
-                    name="universityId"
-                    placeholder=""
-                    value={universityId}
-                    onChange={loginInputHandler}
-                  />
-                </div>
-                <div className="mb-2">
-                  <label
-                    htmlFor="password"
-                    className="text-sm font-medium text-gray-600"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                    id="password"
-                    name="password"
-                    placeholder=""
-                    value={password}
-                    onChange={loginInputHandler}
-                  />
-                </div>
-              </div>
+            </div>
 
-              <div className="mt-4">
-                <button
-                  type="submit"
-                  className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+            <div className="space-y-4">
+              <div className="mb-2">
+                <label
+                  htmlFor="universityId"
+                  className="text-sm font-medium text-gray-600"
                 >
-                  Login
-                </button>
+                  University ID
+                </label>
+                <TextField
+                  type="text"
+                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                  id="universityId"
+                  name="universityId"
+                  placeholder=""
+                  value={universityId}
+                  onChange={loginInputHandler}
+                />
               </div>
-            </form>
 
+              <div className="mb-2 ">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-600"
+                >
+                  Password
+                </label>
+                <TextField
+                  type={showPassword ? "text" : "password"}
+                  className="mt-2 w-full"
+                  id="password"
+                  name="password"
+                  placeholder=""
+                  value={password}
+                  onChange={loginInputHandler}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+              >
+                Login
+              </button>
+            </div>
+            </form>
             {/* <div className="mt-7 text-center">
               <span className="text-gray-600">
                 Not a member with us yet? {" "}

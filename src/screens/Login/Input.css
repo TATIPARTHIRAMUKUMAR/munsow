@@ -1,0 +1,12 @@
+input:focus {
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+  
+  .password-input:hover fieldset {
+    border-color: transparent !important;
+  }
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }

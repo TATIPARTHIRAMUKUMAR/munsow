@@ -18,6 +18,10 @@ import {
   FormLabel,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: "row",
@@ -58,6 +62,7 @@ const StudentLogin = () => {
   const [password, setPassword] = useState("");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -130,55 +135,72 @@ const StudentLogin = () => {
                 />
               </StyledRadioGroup>
             </FormControl>
+
             <form onSubmit={handleSubmit}>
-              <h2 className="text-2xl font-semibold mb-4">Student Login</h2>
-              {/* <p className="text-base text-gray-600 mb-4">
+            <h2 className="text-2xl font-semibold mb-4">Student Login</h2>
+            {/* <p className="text-base text-gray-600 mb-4">
               Get personalized insights on your interview skills, strengths, and areas for improvement.
             </p> */}
-              <div className="space-y-4">
-                <div className="mb-2">
-                  <label
-                    htmlFor="universityId"
-                    className="text-sm font-medium text-gray-600"
-                  >
-                    Email ID
-                  </label>
-                  <input
-                    type="text"
-                    className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                    id="universityId"
-                    name="universityId"
-                    placeholder=""
-                    value={universityId}
-                    onChange={loginInputHandler}
-                  />
-                </div>
-                <div className="mb-2">
-                  <label
-                    htmlFor="password"
-                    className="text-sm font-medium text-gray-600"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                    id="password"
-                    name="password"
-                    placeholder=""
-                    value={password}
-                    onChange={loginInputHandler}
-                  />
-                </div>
-              </div>
-              <div className="mt-4">
-                <button
-                  type="submit"
-                  className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+            <div className="space-y-4">
+              <div className="mb-2">
+                <label
+                  htmlFor="universityId"
+                  className="text-sm font-medium text-gray-600"
                 >
-                  Login
-                </button>
+                  Email ID
+                </label>
+                <TextField
+                  type="text"
+                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                  id="universityId"
+                  name="universityId"
+                  placeholder=""
+                  value={universityId}
+                  onChange={loginInputHandler}
+                />
               </div>
+              <div className="mb-2">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-600"
+                >
+                  Password
+                </label>
+                <TextField
+                  type={showPassword ? "text" : "password"}
+                  className="mt-2 w-full "
+                  id="password"
+                  name="password"
+                  placeholder=""
+                  value={password}
+                  onChange={loginInputHandler}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? (
+                            <VisibilityOffIcon />
+                          ) : (
+                            <VisibilityIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+            </div>
+            <div className="mt-4">
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+              >
+                Login
+              </button>
+            </div>
             </form>
             {/* <div className="mt-3 text-center">
               <span className="text-blue-600 hover:underline cursor-pointer" onClick={handleClickOpen}>
