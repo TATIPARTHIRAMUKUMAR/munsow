@@ -9,7 +9,7 @@ const sampleText = "Today is a beautiful day and I am happy";
 
 var localstream;
 
-export default function Audio_Video({audioValidated, setAudioValidated, videoValidated, setVideoValidated}) {
+export default function Audio_Video({audioValidated, setAudioValidated, videoValidated, setVideoValidated, linearGradientBackground}) {
     const [permission, setPermission] = useState(false);
     const [micPermission, setMicPermission] = useState(false);
     // const [audioValidated, setAudioValidated] = useState(false);
@@ -134,19 +134,19 @@ export default function Audio_Video({audioValidated, setAudioValidated, videoVal
             <canvas id="audioVisualizer" width="300" height="100"></canvas>
             <div className="w-full flex justify-center gap-4">
                 {permission ?
-                    <VideocamIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={capOff} />
+                    <VideocamIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={capOff} style={{  color: linearGradientBackground }}/>
                     :
-                    <VideocamOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={camOn} />
+                    <VideocamOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={camOn} style={{  color: linearGradientBackground}} />
                 }
                 {!micPermission ?
-                    <MicOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={getMicrophonePermission} />
+                    <MicOffIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={getMicrophonePermission}  style={{  color: linearGradientBackground }} />
                     :
-                    <MicNoneIcon className="text-purple-500 bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={stopRecording} />
+                    <MicNoneIcon className=" bg-white p-1 rounded-full cursor-pointer" fontSize="large" onClick={stopRecording} style={{  color: linearGradientBackground }} />
                 }
             </div>
-            <div className="text-center mt-4">
-                <p>Please read the following text out loud:</p>
-                <blockquote className="text-gray-700 italic">{sampleText}</blockquote>
+            <div className="text-center mt-4 max-w-screen-md mx-auto overflow-auto">
+                <p className="text-sm sm:text-md lg:text-base">Please read the following text out loud:</p>
+                <blockquote className="text-gray-700 italic text-sm sm:text-md lg:text-base">{sampleText}</blockquote>
             </div>
             {audioValidated && <p>Audio sample validated successfully!</p>}
             {videoValidated && <p>Video sample validated successfully!</p>}

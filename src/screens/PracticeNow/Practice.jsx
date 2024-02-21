@@ -26,7 +26,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MutiSelect from "../../Components/Multiselect";
 import { useDarkMode } from "./../../Dark";
 
-const QontoConnector = styled(StepConnector)(({ theme }) => ({
+const QontoConnector = styled(StepConnector)(({ theme , linearGradientBackground}) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 17,
     left: "calc(-50% + 1.5rem)",
@@ -34,12 +34,12 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      borderColor:"#886CC0",
+      borderColor: linearGradientBackground,
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      borderColor: "#886CC0",
+      borderColor: linearGradientBackground,
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
@@ -205,7 +205,7 @@ const StepperComponent = () => {
         <Stepper
           activeStep={currentStep}
           alternativeLabel
-          connector={<QontoConnector />}
+          connector={<QontoConnector  linearGradientBackground={linearGradientBackground}/>}
           style={{ marginTop: "1rem" }}
         >
           {steps.map((label, index) => (
@@ -254,8 +254,8 @@ const StepperComponent = () => {
                     onChange={() => setSelectedCategory("skills")}
                     className="p-1 m-2 relative overflow-auto"
                     style={{
-                      // backgroundColor: linearGradientBackground,
-                      color: textColors,
+                      color: linearGradientBackground,
+                      outlineColor: linearGradientBackground
                     }}
                   />
                   <h2
@@ -345,8 +345,8 @@ const StepperComponent = () => {
                     onChange={() => setSelectedCategory("role")}
                     className="p-1 m-2 "
                     style={{
-                      // backgroundColor: linearGradientBackground,
-                      color: textColors,
+                      color: linearGradientBackground,
+                      outlineColor: linearGradientBackground
                     }}
                   />
 
@@ -590,8 +590,9 @@ const StepperComponent = () => {
                     onChange={() => setChosenCompany(!chosenCompany)}
                     style={{
                       border: chosenCompany
-                        ? "2px solid #0fe1d2"
-                        : "2px solid transparent",
+                        ? `2px solid ${linearGradientBackground}`
+                        : "2px solid grey",
+                    outlineColor: chosenCompany ? linearGradientBackground : "none",
                       backgroundColor: chosenCompany
                         ? "#0fe1d2"
                         : "transparent",
@@ -611,6 +612,7 @@ const StepperComponent = () => {
                   setAudioValidated={setAudioValidated}
                   videoValidated={videoValidated}
                   setVideoValidated={setVideoValidated}
+                  linearGradientBackground={linearGradientBackground}
                 />
               </div>
             </div>
@@ -622,9 +624,9 @@ const StepperComponent = () => {
               onClick={handlePrev}
               style={{
                 margin: "0 0.5rem",
-                backgroundColor:"#000080",
+                backgroundColor: previousButton,
 
-                color: "white",
+                color: grayColors,
                 padding: "0.5rem 1rem",
                 borderRadius: "0.375rem",
                 cursor: "pointer",
