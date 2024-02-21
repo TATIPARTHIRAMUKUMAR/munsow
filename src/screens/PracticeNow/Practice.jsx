@@ -34,7 +34,7 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      borderColor: linearGradientBackground,
+      borderColor:"#886CC0",
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
@@ -622,9 +622,9 @@ const StepperComponent = () => {
               onClick={handlePrev}
               style={{
                 margin: "0 0.5rem",
-                backgroundColor: previousButtons,
+                backgroundColor:"#000080",
 
-                color: grayColors,
+                color: "white",
                 padding: "0.5rem 1rem",
                 borderRadius: "0.375rem",
                 cursor: "pointer",
