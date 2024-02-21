@@ -98,10 +98,12 @@ const DrawerFooter = styled("div")(({ theme }) => ({
 const CustomDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open, role1 }) => ({
+  
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
+
   ...(open && {
     ...openedMixin(theme, role1),
     "& .MuiDrawer-paper": openedMixin(theme, role1),
@@ -332,12 +334,31 @@ export default function HeaderFooterLayout({ Component }) {
     }
     setSelectedItem(index);
     navigate(route);
-    handleDrawerOpen();
+    // handleDrawerOpen();
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 700) {
+        setOpen(false);
+      } else {
+        setOpen(true);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+
   return (
-    <Box sx={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden" }}>
-      <CssBaseline />
+    <Box sx={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden", background:'green' }}>
+      <CssBaseline/>
       <CustomDrawer variant="permanent" open={open} role1={GLOBAL_CONSTANTS?.user_cred?.role_id ? GLOBAL_CONSTANTS?.user_cred?.role_id : 1}>
         <DrawerHeader style={{ background: `${backgroundColorClass}` }}>
           <div className="font-bold  text-[#4e3f6b] text-2xl pr-10">MUNSOW</div>
