@@ -42,6 +42,7 @@ import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseL
 import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
 import NewUserReport from "./screens/NewUserReport/NewUserReport";
+import TopicSubtopicList from "./screens/TopicSubtopicList/TopicSubtopicList"
 
 
 function Url_Routes() {
@@ -90,6 +91,9 @@ function Url_Routes() {
         <Route exact path="/studentLogin" element={<StudentLogin />} />
         <Route exact path="/studentRegister" element={<StudentRegister />} />
         <Route exact path="/registration" element={<Register />} />
+        
+        <Route exact path="/topicSubtopicList" element={<TopicSubtopicList/>} />
+
         <Route path="*" element={<Navigate to="/" />} />
         <Route exact path="/questionBank" element={<HeaderFooterLayout Component={<QuestionBankForm />} />} />
         <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} />
