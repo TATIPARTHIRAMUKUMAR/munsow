@@ -40,7 +40,7 @@ const SkillsDisplay = ({ skills }) => {
   }, []);
 
   return (
-    <div ref={skillsRef} className="bg-[#212E3E] h-screen flex flex-col justify-center items-center m-5">
+    <div ref={skillsRef} className="bg-[#7a5fa7] h-screen flex flex-col justify-center items-center">
       <h1 className="text-4xl text-white mb-8 font-semibold">Interview Skills in Decreasing Order of Performance</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-3/4">
         {skills.hard_skill && (

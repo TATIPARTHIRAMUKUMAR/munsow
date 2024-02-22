@@ -116,6 +116,8 @@ const NewUserReport = () => {
 
           <div>
             <SummarySnapshot
+              wholeData={userReport}
+              title={userReport?.interview_score_by_category.data[0].main_title}
               interview_score_by_category={userReport?.interview_score_by_category}
               behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
