@@ -42,7 +42,6 @@ import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseL
 import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
 import NewUserReport from "./screens/NewUserReport/NewUserReport";
-import TopicSubTopicList from "./screens/TopicSubtopicList/TopicSubTopicList";
 import ReportIndex from "./screens/NewUserReport/ReportsList";
 
 

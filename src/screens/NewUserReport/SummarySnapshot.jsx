@@ -1,3 +1,4 @@
+import './UserReport.css'
 
 const SummarySnapshot = (props) => {
   const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score, head } = props;
@@ -18,12 +19,18 @@ const SummarySnapshot = (props) => {
   };
   const progressBarColor = (x) => {
     if (x >= 0 && x <= 4) {
+      console.log("if")
       return 'bar-red-bg'; // Apply red color
     } else if (x >= 5 && x <= 7) {
+      console.log("else if 1")
       return 'bar-orange-bg'; // Apply yellow color
     } else if (x >= 8 && x <= 10) {
+      console.log("else if 2")
+
       return 'bar-green-bg'; // Apply green color
     } else {
+      console.log("else")
+
       return 'text-gray'; // Default color or handle other cases
     }
   };

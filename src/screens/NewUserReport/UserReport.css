@@ -490,3 +490,74 @@
   height: 150vh;
   
 }
+
+/* Report overview styles */
+.bg-purple{
+  background-color: #EBD8EC;
+}
+.bg-green{
+  background-color: #D5E6D0;
+}
+.bg-orange{
+  background-color: #FDE0BE;
+}
+.text-purple{
+  color: #462C4C;
+}
+.text-red{
+  color: #FF555B;
+}
+.text-orange{
+  color: #FE9663;
+}
+.text-green{
+  color: #00BF6F;
+}
+.text-darkgreen{
+  color: #1A7C39;
+}
+.text-darkred{
+  color: #AC241D;
+}
+.bg-lightgreen{
+  background-color: #EFFDF3;
+}
+.bg-lightred{
+  background-color: #FDF5F6;
+}
+.text-sky{
+  color: #2BBDD4;
+}
+.munsow-light-bg{
+  background-color: #0EE1D2;
+}
+.munsow-dark-bg{
+  background-color: #212E3E;
+}
+.munsow-light-text{
+  color: #0EE1D2;
+}
+.munsow-dark-text{
+  color: #212E3E;
+}
+.bar-red-bg{
+  background-color: #FF555B;
+}
+.bar-orange-bg{
+  background-color: #FE9663;  
+}
+.bar-green-bg{
+  background-color: #00BF6F;  
+}
+.bg-grey{
+  background-color: #F1F4F5;
+}
+.bg-img {
+  background-image: url("./../../assets/report-bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* width: 100%; */
+  height: 150vh;
+  
+}

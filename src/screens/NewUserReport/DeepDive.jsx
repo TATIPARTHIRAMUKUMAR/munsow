@@ -1,21 +1,35 @@
 
-import React from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegThumbsDown } from "react-icons/fa";
 
-const DeepDive = ({ data, bgcolor, head }) => {
 
-  const formatFeedback = (rawFeedback) => {
-    const lines = rawFeedback.split('\n');
-    return lines.map((line, index) => (
-        <React.Fragment key={index}>
-            {line.replace(/"/g, '')}
-            {index < lines.length - 1 && <br/>}
-        </React.Fragment>
-    ));
-};
+const DeepDive = (props) => {
+
+  const { head, ques, candidateAns, sampleAns, gotRight, gotWrong, feedback } = props;
+
+  const feedbackData = feedback;
+
+  // Parse the feedbackData string into an object
+  const feedbackObject = JSON.parse(feedbackData);
+
+  const getBackgroundColor = (head) => {
+    const firstWord = head.split(' ')[0];
+  
+    if (firstWord === 'Behavioural') {
+      return 'bg-purple'; // Apply purple color
+    } else if (firstWord === 'Practical') {
+      return 'bg-orange'; // Apply orange color
+    } else if (head.startsWith('Domain Knowledge')) {
+      return 'bg-green'; // Apply green color
+    } else {
+      return 'bg-gray'; // Default color or handle other cases
+    }
+  };
+
+  const bgColor = getBackgroundColor(head);
 
   return (
+
     <>
     <div className="mx-3 my-3 md:mx-6 md:my-6">
       <div className={`mb-8 ${bgColor}`}>
