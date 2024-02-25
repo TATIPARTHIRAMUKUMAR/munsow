@@ -1195,6 +1195,25 @@ export const loadAssignedUsers = (id) => {
   };
 };
 
+const getLinks = (data) => ({
+  type: types.SCREENING_USER_LINKS_LIST,
+  payload: data,
+});
+
+export const loadLinks = () => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}institution/screening_link_list`, {  headers })
+      .then((resp) => {
+        dispatch(getLinks(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 
 export const create_course = (data, callback) => {
   return function () {

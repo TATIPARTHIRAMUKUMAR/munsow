@@ -42,6 +42,8 @@ import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseL
 import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
 import NewUserReport from "./screens/NewUserReport/NewUserReport";
+import ScreeningUserRegister from "./screens/Login/ScreeningUserRegister";
+import LinksList from "./screens/Admin/ScreeningUsers/LinksList";
 
 
 function Url_Routes() {
@@ -86,11 +88,14 @@ function Url_Routes() {
           </>
         }
         <Route exact path="/adminDashboard" element={<HeaderFooterLayout Component={<AdminDashboard />} />} />
+        <Route exact path="/screeningUsers" element={<HeaderFooterLayout Component={<LinksList />} />} />
+
         <Route exact path="/" element={<Login />} />
         <Route exact path="/studentLogin" element={<StudentLogin />} />
         <Route exact path="/studentRegister" element={<StudentRegister />} />
+        <Route exact path="/studentRegistration/:id" element={<ScreeningUserRegister />} />
         <Route exact path="/registration" element={<Register />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        {/* <Route path="*" element={<Navigate to="/" />} /> */}
         <Route exact path="/questionBank" element={<HeaderFooterLayout Component={<QuestionBankForm />} />} />
         <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} />
         <Route exact path="/courseList/create" element={<HeaderFooterLayout Component={<CustomStepperComponent />} />} />

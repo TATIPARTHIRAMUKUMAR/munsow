@@ -41,6 +41,7 @@ const initialState = {
   courses:[],
   assignedUsers:[],
   unAssignedUsers:[],
+  linksList:[],
 
   loading: false
 };
@@ -228,6 +229,11 @@ const DataReducers = (state = initialState, action) => {
     case types.COURSES: return{
       ...state,
       courses: action.payload.courses,
+      loading:false
+    }
+    case types.SCREENING_USER_LINKS_LIST: return{
+      ...state,
+      linksList: action.payload.courses,
       loading:false
     }
     case types.SET_REDUX_STATE : { 
