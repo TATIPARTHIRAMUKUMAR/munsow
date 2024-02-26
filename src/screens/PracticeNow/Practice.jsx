@@ -15,6 +15,8 @@ import Audio_Video from "../../Components/Audio_Video";
 import { toast } from "react-toastify";
 import Tooltip from '@mui/material/Tooltip';
 import MutiSelect from "../../Components/Multiselect";
+import interview from "../../assets/interview.jpeg";
+
 
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -49,7 +51,9 @@ const StepperComponent = () => {
         { title: "Level" },
         { title: "Summary" },
     ]);
+    const [stepsModal] = useState(3);
     const [currentStep, setCurrentStep] = useState(0);
+    const [currentStepModal, setCurrentStepModal] = useState(0);
     const [hardSkills, setHardSkills] = useState(false);
     const [softSkills, setSoftSkills] = useState(false);
     const [chosenRole, setChosenRole] = useState(false);
@@ -62,6 +66,9 @@ const StepperComponent = () => {
     const [selectedHardskill, setSelectedHardskill] = useState(null);
     const [selectedRole, setSelectedRole] = useState(null);
     const [selectedCompany, setSelectedCompany] = useState(null);
+    const [showAcknowledgement, setShowAcknowledgement] = useState(false);
+
+
     const payload = {
         level: "",
         specifications: {
@@ -115,7 +122,25 @@ const StepperComponent = () => {
         if (currentStep == 1) {
             dispatch(loadQuestions(payload))
         }
-        if (currentStep == 2) {
+        else if (currentStep == 2) {
+            setShowAcknowledgement(true);
+            
+            // let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
+            // toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
+            // if (questionsList?.questions?.length > 0) {
+            //     setTimeout(() => {
+            //         navigate("/interview")
+            //     }, 3000);
+            // }
+        }
+        else if ((showAcknowledgement) && (currentStepModal === 0)) {
+            setCurrentStepModal(currentStepModal + 1);
+        }
+        else if (currentStepModal === 1) {
+            setCurrentStepModal(currentStepModal + 1);
+        } 
+        else if (currentStepModal === 2)
+        {
             let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
             toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
             if (questionsList?.questions?.length > 0) {
@@ -123,12 +148,16 @@ const StepperComponent = () => {
                     navigate("/interview")
                 }, 3000);
             }
-        }
+        } 
         setCurrentStep(currentStep + 1);
     };
 
     const handlePrev = () => {
         setCurrentStep(currentStep - 1);
+    };
+
+    const handlePrevModal = () => {
+        setCurrentStepModal(currentStepModal - 1);
     };
 
     useEffect(() => {
@@ -142,6 +171,18 @@ const StepperComponent = () => {
         dispatch(loadInterviewRolesList());
         dispatch(loadCompaniesList());
     }, [dispatch])
+
+    const handleStartInterview = () => {
+        // Start the interview when the user confirms readiness
+        setShowAcknowledgement(false); // Hide the acknowledgment pop-up
+        let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
+        toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
+        if (questionsList?.questions?.length > 0) {
+            setTimeout(() => {
+                navigate("/interview")
+            }, 3000);
+        }
+    };
 
     return (
         <div className="p-10">
@@ -406,6 +447,7 @@ const StepperComponent = () => {
                             </div> */}
                         </div>
                     )}
+
                     {currentStep == 2 && (
                         <div className="grid grid-cols-2 gap-6 items-center justify-center " >
                             <div className="grid justify-center ">
@@ -437,7 +479,7 @@ const StepperComponent = () => {
                     )}
                 </div>
                 <div className="mt-4 p-6 flex justify-end">
-                    {currentStep > 0 && (
+                    {(currentStep > 0 ) && (
                         <button
                             onClick={handlePrev}
                             className="bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md"
@@ -445,7 +487,7 @@ const StepperComponent = () => {
                             Previous
                         </button>
                     )}
-                    {currentStep < steps.length - 1 && (
+                    {(currentStep < steps.length - 1 ) && (
                         <button
                             onClick={handleNext}
                             disabled={handleSelection()} // Use the isRoleSelected state variable here
@@ -464,7 +506,7 @@ const StepperComponent = () => {
                             Next
                         </button>
                     )} */}
-                    {currentStep === steps.length - 1 && (
+                    {(currentStep === steps.length - 1) && (
                         <span>
                             {(chosenCompany && audioValidated && videoValidated) ? (
                                 <button
@@ -488,6 +530,129 @@ const StepperComponent = () => {
                     )}
                 </div>
             </div>
+            {showAcknowledgement && (
+  <div className="modal">
+    <div className="modal-content">
+      {currentStepModal === 0 && (
+        <>
+
+          <h1 className="text-2xl font-bold text-[#777b7e] mb-4">
+            Prepare for your interview!
+          </h1>
+          {/* <br /> */}
+
+          <div className="flex justify-center">
+            <img src={interview} alt="Interview" className="w-[200px] h-[200px] rounded-2xl" />
+          </div><br/> 
+
+          <p className="text-gray-500 font-semibold mb-4">
+            Before you start the interview, please review these tips:
+          </p>
+
+          <ul className="list-disc font-semibold pl-5 text-gray-500 mb-4">
+            <li className="mb-2">Find a quiet and well-lit place.</li>
+            <li className="mb-2">Ensure a stable internet connection.</li>
+            <li className="mb-2">Test your audio and video beforehand.</li>
+            <li className="mb-2">Have a notepad, pen, and water bottle ready (optional).</li>
+          </ul>
+          <br />
+
+          <div className="flex items-center justify-center">
+            <div className="flex space-x-2">
+              {[...Array(stepsModal)].map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${
+                    index === currentStepModal ? 'bg-blue-500' : 'bg-gray-300'
+                  }`}
+                ></div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {currentStepModal === 1 && (
+        <>
+          <p className="text-2xl font-bold text-[#777b7e] mb-4">
+            Feeling confident and ready? Let's begin!
+          </p>
+          <br />
+          <br />
+          <div className="flex items-center justify-center">
+            <div className="flex space-x-2">
+              {[...Array(stepsModal)].map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${
+                    index === currentStepModal ? 'bg-blue-500' : 'bg-gray-300'
+                  }`}
+                ></div>
+              ))}
+            </div>
+          </div>
+          <br />
+        </>
+      )}
+
+      {currentStepModal === 2 && (
+        <>
+          <p className="text-2xl font-bold text-[#777b7e] mb-4">Start your interview now!</p>
+          <br />
+
+          <p className="text-gray-500 mb-4">
+            Remember, make eye contact, smile, and speak clearly and confidently.
+          </p>
+          <br />
+          <div className="flex items-center justify-center">
+            <div className="flex space-x-2">
+              {[...Array(stepsModal)].map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${
+                    index === currentStepModal ? 'bg-blue-500' : 'bg-gray-300'
+                  }`}
+                ></div>
+              ))}
+            </div>
+          </div>
+          <br />
+        </>
+      )}
+
+      <div className="flex justify-end">
+        {(currentStepModal > 0) && (
+          <button
+            onClick={handlePrevModal}
+            className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white mx-2 py-2 px-4 rounded-md"
+            >
+            Previous
+          </button>
+        )}
+        {(currentStepModal < stepsModal - 1) && (
+          <button
+          onClick={handleNext}
+          className={`bg-blue-500 mx-2 text-white py-2 px-4 rounded-md 
+                      hover:bg-blue-700 `}
+        >
+          Next
+        </button>
+        )}
+        {(currentStepModal === stepsModal - 1) && (
+          <span>
+            <button
+              onClick={handleNext}
+              className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+            >
+              I am ready - start my interview now
+            </button>
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+            )}
+
         </div>
     );
 };
