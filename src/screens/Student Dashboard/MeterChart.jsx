@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import highchartsMore from "highcharts/highcharts-more";
+import "./MeterChart.css";
 
 highchartsMore(Highcharts);
 
@@ -15,7 +16,7 @@ const MeterChart = () => {
           plotBackgroundImage: null,
           plotBorderWidth: 0,
           plotShadow: false,
-          height: "100%",
+          height: "80%",
         },
         title: {
           text: title,
@@ -39,7 +40,7 @@ const MeterChart = () => {
           minorTickInterval: null,
           labels: {
             distance: 20,
-            format: "{value}/10",
+            format: "",
             style: {
               fontSize: "14px",
             },
@@ -48,21 +49,15 @@ const MeterChart = () => {
           plotBands: [
             {
               from: 0,
-              to: 10,
-              color: "#55BF3B", // green
-              thickness: 20,
+              to: data,
+              color: "#2BE2D0",
+              thickness: 50,
             },
             {
-              from: 5,
-              to: 8,
-              color: "#DDDF0D", // yellow
-              thickness: 20,
-            },
-            {
-              from: 8,
+              from: data,
               to: 10,
-              color: "#DF5353", // red
-              thickness: 20,
+              color: "#CCCCCC",
+              thickness: 50,
             },
           ],
         },
@@ -101,7 +96,9 @@ const MeterChart = () => {
       });
 
       setInterval(() => {
-        const chart = Highcharts.charts[Highcharts.charts.length - 1];
+        const chart = Highcharts.charts.find(
+          (chart) => chart.renderTo.id === containerId
+        );
         if (chart && !chart.renderer.forExport) {
           const point = chart.series[0].points[0];
           const inc = Math.round((Math.random() - 0.5) * 2);
@@ -116,25 +113,21 @@ const MeterChart = () => {
       }, 3000);
     };
 
-    if (
-      document.getElementById("mindsetContainer") &&
-      document.getElementById("domainContainer") &&
-      document.getElementById("practicalThinkingContainer")
-    ) {
-      initializeChart("mindsetContainer", "Mindset/Attitude", 9);
-      initializeChart("domainContainer", "Domain", 5);
-      initializeChart("practicalThinkingContainer", "Practical Thinking", 5);
-    }
+    initializeChart("mindsetContainer", "Mindset/Attitude", 9);
+    initializeChart("domainContainer", "Domain", 6);
+    initializeChart("practicalThinkingContainer", "Practical Thinking", 8);
 
     return () => clearInterval();
   }, []);
 
   return (
-    <div className="flex">
-      <div id="mindsetContainer"></div>
-      <div id="domainContainer"></div>
-      <div id="practicalThinkingContainer"></div>
+    // <figure class="highcharts-figure ">
+    <div className="meterchart" id="container">
+      <div id="mindsetContainer" className="meter"></div>
+      <div id="domainContainer" className="meter"></div>
+      <div id="practicalThinkingContainer" className="meter"></div>
     </div>
+    // </figure>
   );
 };
 
