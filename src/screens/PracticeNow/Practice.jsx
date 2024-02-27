@@ -129,9 +129,11 @@ const StepperComponent = () => {
         payload.specifications.soft_skill = selectedSoftskill ? selectedSoftskill.map(skill => skill.label) : [];
         console.log("currentStep", payload)
         if (currentStep == 1) {
+          console.log('currentStep == 1 : ', questionsList)
           dispatch(loadQuestions(payload))
       }
       else if (currentStep == 2) {
+          console.log('currentStep == 2 : ', questionsList)
           setShowAcknowledgement(true);
           
           // let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
@@ -143,13 +145,16 @@ const StepperComponent = () => {
           // }
       }
       else if ((showAcknowledgement) && (currentStepModal === 0)) {
+        console.log('currentStepModal == 0 : ', questionsList)
           setCurrentStepModal(currentStepModal + 1);
       }
       else if (currentStepModal === 1) {
+        console.log('currentStepModal == 1 : ', questionsList)
           setCurrentStepModal(currentStepModal + 1);
       } 
       else if (currentStepModal === 2)
       {
+          console.log('currentStepModal == 2 : ', questionsList)
           let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
           toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
           if (questionsList?.questions?.length > 0) {
@@ -164,7 +169,11 @@ const StepperComponent = () => {
         setCurrentStep(currentStep - 1);
     };
 
-  const { isDarkMode } = useDarkMode();
+    const handlePrevModal = () => {
+      setCurrentStepModal(currentStepModal - 1);
+  };
+
+    const { isDarkMode } = useDarkMode();
 
   const linearGradientBackground = isDarkMode
     ? colorTheme.dark.selectBackground
@@ -715,7 +724,7 @@ const StepperComponent = () => {
   <div className="modal">
     <div className="modal-content">
       {currentStepModal === 0 && (
-        <>
+        <div className="modalContent">
 
           <h1 className="text-2xl font-bold text-[#777b7e] mb-4">
             Prepare for your interview!
@@ -750,16 +759,31 @@ const StepperComponent = () => {
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
 
       {currentStepModal === 1 && (
-        <>
+        <div className="modalContent">
           <p className="text-2xl font-bold text-[#777b7e] mb-4">
             Feeling confident and ready? Let's begin!
           </p>
-          <br />
-          <br />
+
+          <div className="flex justify-center">
+            <img src={interview} alt="Interview" className="w-[200px] h-[200px] rounded-2xl" />
+          </div><br/>
+
+          <p className="text-gray-700 mb-6">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum lectus eget
+            justo pretium, vel fermentum orci ultricies. Integer eu tellus vitae massa posuere
+            mollis. Nulla aliquam massa ac eros malesuada posuere. 
+          </p>
+
+          <p className="text-gray-700 mb-9">
+            Fusce id orci ac libero
+            bibendum pharetra non nec ipsum. Sed ac justo quis libero feugiat sagittis nec eu
+            turpis. Phasellus sagittis eros nec augue tristique eleifend.
+          </p>
+
           <div className="flex items-center justify-center">
             <div className="flex space-x-2">
               {[...Array(stepsModal)].map((_, index) => (
@@ -772,19 +796,28 @@ const StepperComponent = () => {
               ))}
             </div>
           </div>
-          <br />
-        </>
+        </div>
       )}
 
       {currentStepModal === 2 && (
-        <>
+        <div className="modalContent">
           <p className="text-2xl font-bold text-[#777b7e] mb-4">Start your interview now!</p>
           <br />
 
-          <p className="text-gray-500 mb-4">
+          <p className="text-gray-500 mb-4 font-bold">
             Remember, make eye contact, smile, and speak clearly and confidently.
           </p>
-          <br />
+
+          <p className="text-gray-500 mb-4">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum lectus eget
+          justo pretium, vel fermentum orci ultricies. Integer eu tellus vitae massa posuere
+      mollis. Nulla aliquam massa ac eros malesuada posuere.
+          </p>
+
+          <div className="flex justify-center">
+            <img src={interview} alt="Interview" className="w-[200px] h-[200px] rounded-2xl" />
+          </div><br/> 
+
           <div className="flex items-center justify-center">
             <div className="flex space-x-2">
               {[...Array(stepsModal)].map((_, index) => (
@@ -798,7 +831,7 @@ const StepperComponent = () => {
             </div>
           </div>
           <br />
-        </>
+        </div>
       )}
 
       <div className="flex justify-end">

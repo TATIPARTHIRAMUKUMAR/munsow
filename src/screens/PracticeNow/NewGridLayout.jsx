@@ -310,6 +310,22 @@ export default function NewGridLayout({ questions }) {
                             >
                               Next Question
                             </button>
+                            <div 
+                              className="flex justify-end"
+                              style={{
+                                visibility:
+                                  questionIndex === questions?.length - 1
+                                    ? ""
+                                    : "hidden",
+                              }}   
+                            >
+                              <button
+                                className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
+                                onClick={handleFinishInterview}
+                              >
+                                Finish Interview
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>

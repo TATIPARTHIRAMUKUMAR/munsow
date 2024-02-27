@@ -17,6 +17,17 @@
   background-color: white;
   border-radius: 15px;
   padding: 30px;
+  width: 800px;
+  height: 570px;
+}
+
+.modalContent {
+  transition: opacity 0.3s ease-in-out; /* Add transition property */
+  opacity: 1; /* Initially set opacity to 1 */
+}
+
+.modalContent.hidden {
+  opacity: 0; /* Hide content by setting opacity to 0 */
 }
 
 .modalCreateHead
