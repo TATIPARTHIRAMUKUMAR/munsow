@@ -55,7 +55,7 @@ const DeepDive = ({ data, bgcolor, head }) => {
                   <h3 className="text-lg font-semibold italic text-purple">Feedback for the Candidate:</h3>
                 </div>
                 <div>
-                {formatFeedback(o?.Insights["feedback_for_the candidate"])?.slice(1, -1)}  
+                {formatFeedback(o?.Insights["feedback_for_the candidate"])?.slice(0, -1)}  
                </div>
               </div>
             </div>

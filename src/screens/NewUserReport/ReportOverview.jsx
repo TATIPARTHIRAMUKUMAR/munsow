@@ -1,69 +1,86 @@
+  
+
 const ReportOverview = (props) => {
 
-    const { head, overallScore, bgcolor, title1, score1, desc1, title2, score2, desc2, title3, score3, desc3, title4, score4, desc4,backHead } = props;
+    const { head, overallScore, notes, scores } = props;
 
-    const getScoreColor = (scorePercentage) => {
-        if (scorePercentage <= 3) return 'text-red-600';
-        if (scorePercentage <= 6) return 'text-orange-500';
-        return 'text-green-600';
-    }
+    const getScoreColor = (x) => {
+        if (x >= 0 && x <= 4) {
+          return 'text-red'; // Apply red color
+        } else if (x >= 5 && x <= 7) {
+          return 'text-orange'; // Apply yellow color
+        } else if (x >= 8 && x <= 10) {
+          return 'text-green'; // Apply green color
+        } else {
+          return 'text-gray'; // Default color or handle other cases
+        }
+    };
+
+    const getBackgroundColor = (head) => {
+      const firstWord = head.split(' ')[0];
+    
+      if (firstWord === 'Behavioural') {
+        return 'bg-purple'; // Apply purple color
+      } else if (firstWord === 'Practical') {
+        return 'bg-orange'; // Apply orange color
+      } else if (head.startsWith('Domain Knowledge')) {
+        return 'bg-green'; // Apply green color
+      } else {
+        return 'bg-gray'; // Default color or handle other cases
+      }
+    };
+
+    const bgColor = getBackgroundColor(head);
+
+    //static sub-segment titles
+    const setTitle = (head, index) => {
+      const firstWord = head.split(' ')[0];
+      let title = "";
+    
+      if (firstWord === 'Behavioural') {
+        return ["Adaptability","Collaboration","Integrity","Resilience"][index];
+      } else if (firstWord === 'Practical') {
+        return ["Creativity","Logic","Decision Making","Analytical Skills"][index];
+      } else if (head.startsWith('Domain Knowledge')) {
+        return ["Expertise","Innovation","Learning Ability","Technical Skills"][index];
+      } else {
+        return ["hello1","hello2","hello3","hello4"][index];
+      }
+    };
+
 
     return (
         <>
-        <div className="mx-6 my-6">
-            <div className={`flex justify-around items-center pb-8 ${bgcolor}`}>
-                <h1 className="text-4xl font-semibold text-purple">{head} Overview</h1>
-                <div className="flex flex-col bg-white p-8 rounded-b-3xl">
-                    <span className={`flex text-4xl font-bold justify-center ${getScoreColor(overallScore)}`}>{overallScore}/10</span>
-                    <span className={`flex justify-center text-lg font-semibold ${getScoreColor(overallScore)}`}>Overall Score</span>
+        <div className="mx-3 my-3 md:mx-6 md:my-6">
+        <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 ${bgColor}`}>
+            <h1 className="mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple">{head} Overview</h1>
+            <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
+                <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(overallScore)}`}>{overallScore}/10</h1>
+                <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
+            </div>
+        </div>
+
+        <div className="p-8">
+            <p className="text-purple font-semibold">{notes}</p>
+        </div> 
+
+        <div className={`mx-4 rounded-t-3xl ${bgColor}`}>
+        {scores.map((score, index) => (
+            <div className="p-4 md:p-8 flex" key={index}>
+                <div className="mr-2 md:mr-4">
+                    <span className={`text-2xl font-bold ${getScoreColor(score.score)}`}>{score.score}/10</span>
+                </div>
+                <div>
+                    <h1 className="text-purple font-semibold underline py-1">{setTitle(head, index)}</h1>
+                    <p className="text-purple">{score.desc}</p>
                 </div>
             </div>
+        ))}
 
-            <div className="p-8">
-                <p className="text-purple font-semibold">{backHead}</p>
-            </div> 
-
-            <div className={`mx-4 rounded-t-3xl ${bgcolor}`}>
-                <div className="p-8 flex">
-                    <div className="mr-4">
-                        <span className={`text-2xl font-bold ${getScoreColor(score1)}`}>{score1}/10</span>
-                    </div>
-                    <div>
-                        <h1 className="text-purple font-semibold underline py-1">{title1}</h1>
-                        <p className="text-purple">{desc1}</p>
-                    </div>
-                </div>   
-                <div className="p-8 flex">
-                    <div className="mr-4">
-                        <span className={`text-2xl font-bold ${getScoreColor(score2)}`}>{score2}/10</span>
-                    </div>
-                    <div>
-                        <h1 className="text-purple font-semibold underline py-1">{title2}</h1>
-                        <p className="text-purple">{desc2}</p>
-                    </div>
-                </div>
-                <div className="p-8 flex">
-                    <div className="mr-4">
-                        <span className={`text-2xl font-bold ${getScoreColor(score3)}`}>{score3}/10</span>
-                    </div>
-                    <div>
-                        <h1 className="text-purple font-semibold underline py-1">{title3}</h1>
-                        <p className="text-purple">{desc3}</p>
-                    </div>
-                </div>
-                <div className="p-8 flex">
-                    <div className="mr-4">
-                        <span className={`text-2xl font-bold ${getScoreColor(score4)}`}>{score4}/10</span>
-                    </div>
-                    <div>
-                        <h1 className="text-purple font-semibold underline py-1">{title4}</h1>
-                        <p className="text-purple">{desc4}</p>
-                    </div>
-                </div>
-            </div>
+        </div>
         </div>
         </>
     );
-};
-
+  };
+  
 export default ReportOverview;

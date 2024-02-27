@@ -234,7 +234,7 @@ const AddStudents = () => {
               <div className="flex justify-between items-center gap-2 text-lg font-semibold text-[#4e3f6e] cursor-pointer"><a href={`${GLOBAL_CONSTANTS?.backend_url}user/download`} >
                     <Button
                       endIcon={<CloudDownloadOutlinedIcon />}
-                      style={{ color: "gray", borderColor: "gray" }}
+                      style={{ background: '#2BE2D0', color: "#252525", borderColor: "gray" }}
                       variant="outlined"
                       size="small"
                       onClick={() => {    
@@ -374,7 +374,7 @@ const AddStudents = () => {
             <Button variant="outlined" color="error" onClick={() => { setMainData(() => ({ branch: null })) }} >
               Clear Data
             </Button>
-            <Button variant="contained" onClick={() => { onHandleCreate() }} disabled={!isFormValid}>
+            <Button variant="contained" style={!isFormValid ? {background: '#91c7c2', color: "#8c8c8c"}: { background: '#2BE2D0', color: "#252525"}} onClick={() => { onHandleCreate() }} disabled={!isFormValid}>
               Create Student
             </Button>
           </div>
