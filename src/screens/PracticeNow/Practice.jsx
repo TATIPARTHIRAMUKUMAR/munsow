@@ -27,6 +27,9 @@ import MutiSelect from "../../Components/Multiselect";
 import { useDarkMode } from "./../../Dark";
 import interview from "../../assets/interview.jpeg";
 
+
+let interviewStarted = false;
+
 const QontoConnector = styled(StepConnector)(({ theme , linearGradientBackground}) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 17,
@@ -158,6 +161,7 @@ const StepperComponent = () => {
           let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
           toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
           if (questionsList?.questions?.length > 0) {
+              interviewStarted = true;
               setTimeout(() => {
                   navigate("/interview")
               }, 3000);
@@ -165,6 +169,7 @@ const StepperComponent = () => {
       } 
       setCurrentStep(currentStep + 1);
   };
+  
     const handlePrev = () => {
         setCurrentStep(currentStep - 1);
     };
@@ -872,3 +877,4 @@ const StepperComponent = () => {
 };
 
 export default StepperComponent;
+export { interviewStarted };

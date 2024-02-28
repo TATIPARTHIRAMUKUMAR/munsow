@@ -12,6 +12,7 @@ import InterviewOver from "./InterviewOver";
 import { Step, StepLabel, Stepper } from '@mui/material';
 
 let mediaRecorder;
+let interviewEnded = false;
 
 function formatTime(seconds) {
   const hrs = Math.floor(seconds / 3600);
@@ -59,6 +60,7 @@ export default function NewGridLayout({ questions }) {
 
   const handleFinishInterview = () => {
     setShowConfirmationPopup(true);
+    interviewEnded = true;
   };
 
   const nextQuestion = () => {
@@ -74,6 +76,7 @@ export default function NewGridLayout({ questions }) {
   const confirmEndInterview = () => {
     setTotalTimeLeft(0);
     setShowConfirmationPopup(false);
+    interviewEnded = true;
   };
 
   function startStreamAndRecording() {
@@ -407,3 +410,5 @@ export default function NewGridLayout({ questions }) {
     </>
   );
 }
+
+export { interviewEnded };

@@ -45,6 +45,8 @@ import { FaHeartPulse, FaSection } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
+import { interviewStarted } from "./screens/PracticeNow/Practice";
+import { interviewEnded } from "./screens/PracticeNow/NewGridLayout";
 
 const drawerWidth = 270;
 
@@ -406,7 +408,7 @@ export default function HeaderFooterLayout({ Component }) {
           <div className="font-bold text-2xl pr-8" style={{ color: textColor }}>
             MUNSOW
           </div>
-          {!open ? (
+          {!open && !interviewStarted ? (
             <IconButton onClick={handleDrawerOpen}>
               {theme.direction === "rtl" ? (
                 <ChevronLeftIcon style={{ color: textColor }} />
@@ -415,13 +417,13 @@ export default function HeaderFooterLayout({ Component }) {
               )}
             </IconButton>
           ) : (
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon style={{ color: textColor }} />
-              ) : (
-                <ChevronLeftIcon style={{ color: textColor }} />
-              )}
-            </IconButton>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "rtl" ? (
+                  <ChevronRightIcon style={{ color: textColor }} />
+                ) : (
+                  <ChevronLeftIcon style={{ color: textColor }} />
+                )}
+              </IconButton>
           )}
         </DrawerHeader>
         <Divider style={{ opacity: "0.2", background: backgroundColorClass }} />
@@ -448,7 +450,7 @@ export default function HeaderFooterLayout({ Component }) {
                     setOpenSubMenu(
                       openSubMenu === mainIndex ? null : mainIndex
                     );
-                  } else {
+                  } else if (!interviewEnded) {
                     handleListItemClick(mainIndex, mainItem.route);
                   }
                 }}
@@ -457,6 +459,14 @@ export default function HeaderFooterLayout({ Component }) {
                   "&.Mui-selected": {
                     backgroundColor: "transparent",
                   },
+                ...(interviewStarted && {
+                  pointerEvents: "none",
+                  opacity: 0.5,
+                }),
+                ...(interviewEnded && {
+                  pointerEvents: "visible",
+                  opacity: 1,
+                }),
                 }}
               >
                 <ListItemButton

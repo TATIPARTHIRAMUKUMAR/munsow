@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import "./practiceNowstyles.css";
 
+
 const InterviewOver = () => {
     const navigate = useNavigate();
     const svgRef = useRef(null);
@@ -69,4 +70,3 @@ const InterviewOver = () => {
 }
 
 export default InterviewOver;
-
