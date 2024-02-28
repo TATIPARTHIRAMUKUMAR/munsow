@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import './Carousel.css'; // Import your custom CSS for styling
-import { Divider } from '@mui/material';
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import "./Carousel.css"; // Import your custom CSS for styling
+import { Divider } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,50 +17,83 @@ const Carousel = () => {
   // ];
   const { userStats } = useSelector((state) => state.data);
 
-
   const objects = userStats?.suggestions?.map((tip, index) => {
-    const [title, description] = tip.split(':');
+    const [title, description] = tip.split(":");
     return {
       title: title.trim(),
-      description: description.trim()
+      description: description.trim(),
     };
   });
 
-
   const goToPrevious = () => {
-    setSlideDirection('left');
+    setSlideDirection("left");
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex === 0 ? objects.length - 1 : prevIndex - 1));
+      setCurrentIndex((prevIndex) =>
+        prevIndex === 0 ? objects.length - 1 : prevIndex - 1
+      );
       setSlideDirection(null);
     }, 300); // Adjust the duration of the animation (in milliseconds)
   };
 
   const goToNext = () => {
-    setSlideDirection('right');
+    setSlideDirection("right");
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex === objects.length - 1 ? 0 : prevIndex + 1));
+      setCurrentIndex((prevIndex) =>
+        prevIndex === objects.length - 1 ? 0 : prevIndex + 1
+      );
       setSlideDirection(null);
     }, 300); // Adjust the duration of the animation (in milliseconds)
   };
 
   return (
-    <div>
-      <p className="text-[#886cc0] text-lg font-bold p-2">Insights</p>
-      <Divider style={{opacity:"0.4"}}/>
-      <div className="flex items-center justify-center carousel-container py-2 rounded-lg relative">
-
-
+    <div className="col-span-1 bg-white rounded-lg  py-2">
+      <p className="text-[#886cc0] text-lg font-bold p-2 text-center">
+        Insights
+      </p>
+      <Divider style={{ opacity: "0.4" }} />
+      <div
+        className="flex items-center justify-center carousel-container  rounded-lg relative"
+        style={{ height: "200px", overflow: "hidden" }}
+      >
         <IconButton onClick={goToPrevious}>
-          <ArrowBackIosIcon style={{ background: '#886cc0', borderRadius: "50%", color: 'white', padding: "4px" }} />
+          <ArrowBackIosIcon
+            style={{
+              background: "#886cc0",
+              borderRadius: "50%",
+              color: "white",
+              padding: "4px",
+            }}
+          />
         </IconButton>
-        <div className={`carousel-item p-2 transform transition-transform ${slideDirection === 'left' ? '-translate-x-full' : slideDirection === 'right' ? 'translate-x-full' : ''}`}>
-          <div className="text-center"> {/* Center content */}
-            <h3 className="text-xl font-semibold text-[#886cc0]">{objects && objects[currentIndex]?.title}</h3>
-            <p className="mt-2 text-sm">{objects && objects[currentIndex]?.description}</p>
+        <div
+          className={`carousel-item  transform transition-transform ${
+            slideDirection === "left"
+              ? "-translate-x-full"
+              : slideDirection === "right"
+              ? "translate-x-full"
+              : ""
+          }`}
+        >
+          <div className="text-left">
+            {" "}
+            {/* Center content */}
+            <h3 className="text-xl font-semibold text-[#886cc0]">
+              {objects && objects[currentIndex]?.title}
+            </h3>
+            <p className="mt-2 text-sm">
+              {objects && objects[currentIndex]?.description}
+            </p>
           </div>
         </div>
         <IconButton onClick={goToNext}>
-          <ArrowForwardIosIcon style={{ background: '#886cc0', borderRadius: "50%", color: 'white', padding: "4px" }} />
+          <ArrowForwardIosIcon
+            style={{
+              background: "#886cc0",
+              borderRadius: "50%",
+              color: "white",
+              padding: "4px",
+            }}
+          />
         </IconButton>
       </div>
     </div>
