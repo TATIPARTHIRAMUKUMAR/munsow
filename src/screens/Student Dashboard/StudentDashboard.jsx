@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import GLOBAL_CONSTANTS from "../../../GlobalConstants";
 import { loadUserStats } from "../../redux/action";
 import { useDispatch } from "react-redux";
+import DomainChart from "./DomainChart";
+import PracticalThinkingChart from "./PracticalThinkingChart";
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
@@ -21,8 +23,8 @@ export default function StudentDashboard() {
   return (
     <div>
       <div
-        className="grid grid-cols-2 gap-7 px-6 py-6"
-        style={{ "grid-template-columns": "64% 34%" }}
+        className="grid grid-cols-2 gap-5 px-6 py-6"
+        style={{ "grid-template-columns": "44% 28% 24%" }}
       >
         <div className="col-span-1 ">
           <div
@@ -60,19 +62,14 @@ export default function StudentDashboard() {
                 </button>
               </div>
             </div>
-            <div>
+            {/* <div>
               <img className="h-40 w-40 bg-transparent" src={image2} />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="col-span-1">
           <div>
             <SecondRow />
-          </div>
-        </div>
-        <div className="col-span-1">
-          <div className="bg-white rounded-lg">
-            <BarChartLines />
           </div>
         </div>
         <div className="col-span-1">
@@ -82,9 +79,27 @@ export default function StudentDashboard() {
           </div>
         </div>
       </div>
-      <div className="col-span-1">
-        <div className="bg-white rounded-lg">
-          <MeterChart />
+
+      <div className="col-span-1 p-10 ">
+        <div className="bg-white rounded-lg ">
+          <BarChartLines />
+        </div>
+      </div>
+      <div className="flex justify-between gap-3  px-6 py-6 ">
+        <div className="col-span-1 ">
+          <div className="bg-white rounded-lg ">
+            <MeterChart />
+          </div>
+        </div>
+        <div className="col-span-1">
+          <div className="bg-white rounded-lg  ">
+            <DomainChart />
+          </div>
+        </div>
+        <div className="col-span-1 ">
+          <div className="bg-white rounded-lg ">
+            <PracticalThinkingChart />
+          </div>
         </div>
       </div>
     </div>

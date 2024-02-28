@@ -3,14 +3,14 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import highchartsMore from "highcharts/highcharts-more";
 import "./MeterChart.css";
-import DomainChart from "./DomainChart";
 
 highchartsMore(Highcharts);
 
-const MeterChart = () => {
+const DomainChart = () => {
   useEffect(() => {
     const initializeChart = () => {
-      Highcharts.chart("container", {
+      Highcharts.chart("domainContainer", {
+        // Use a unique id for the container
         chart: {
           type: "gauge",
           plotBackgroundColor: null,
@@ -20,7 +20,7 @@ const MeterChart = () => {
           height: "80%",
         },
         title: {
-          text: "Mindset/Attitude",
+          text: "Domain",
         },
         pane: {
           startAngle: -90,
@@ -101,7 +101,9 @@ const MeterChart = () => {
 
     // Add some life
     setInterval(() => {
-      const chart = Highcharts.charts[0];
+      const chart = Highcharts.charts.find(
+        (chart) => chart.renderTo.id === "domainContainer"
+      );
       if (chart && !chart.renderer.forExport) {
         const point = chart.series[0].points[0];
         const inc = Math.round((Math.random() - 0.5) * 2);
@@ -121,10 +123,10 @@ const MeterChart = () => {
   return (
     <div className="meterchart">
       <figure className="highcharts-figure">
-        <div id="container"></div>
+        <div id="domainContainer"></div>
       </figure>
     </div>
   );
 };
 
-export default MeterChart;
+export default DomainChart;
