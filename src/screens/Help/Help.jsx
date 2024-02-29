@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDarkMode } from '../../Dark';
 
 const faqs = [
   {
@@ -29,6 +31,15 @@ const faqs = [
 
 const HelpAndSupportPage = () => {
   const [query, setQuery] = useState('');
+  const {
+    colorTheme,
+  } = useSelector((state) => state?.data);
+
+  const { isDarkMode } = useDarkMode();
+
+  const background = isDarkMode
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,7 +48,7 @@ const HelpAndSupportPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-4">
-      <h1 className="text-3xl text-[#886cc0] font-semibold mb-6">Help & Support</h1>
+      <h1 className="text-3xl font-semibold mb-6" style={{color: background}}>Help & Support</h1>
       
       <section className="mb-8">
         <h2 className="text-2xl font-medium mb-4">Frequently Asked Questions</h2>
@@ -59,7 +70,7 @@ const HelpAndSupportPage = () => {
             placeholder="Type your query here..."
             rows={4}
           />
-          <button type="submit" className="bg-[#886cc0] text-white py-2 px-4 rounded">
+          <button type="submit" style={{background: background}}className="text-white py-2 px-4 rounded">
             Submit
           </button>
         </form>

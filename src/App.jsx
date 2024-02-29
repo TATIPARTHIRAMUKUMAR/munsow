@@ -45,7 +45,6 @@ export default function App() {
     {isLoading && (
       <Loader />
     )}
-    <Provider store={store}>
       <Url_Routes />
       <ToastContainer
         transition={Slide}
@@ -60,7 +59,6 @@ export default function App() {
         pauseOnHover
         theme="light"
       />
-    </Provider>
   </>
   );
 }

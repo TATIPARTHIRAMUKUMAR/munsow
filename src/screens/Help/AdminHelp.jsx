@@ -59,7 +59,7 @@ const HelpAndSupportAdmin = () => {
             placeholder="Type your query here..."
             rows={4}
           />
-          <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+          <button type="submit" style={{background: '#2BE2D0', color: '#252525'}} className="bg-blue-500 text-white py-2 px-4 rounded">
             Submit
           </button>
         </form>

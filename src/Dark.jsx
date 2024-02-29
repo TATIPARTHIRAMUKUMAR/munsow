@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const DarkModeContext = createContext();
 
@@ -10,30 +11,30 @@ export const DarkModeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
+  
+  const { colorTheme } = useSelector((state) => state?.data);
+  const [color, setColor] = useState(
+    isDarkMode ? colorTheme.dark : colorTheme.light
+  );
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setIsDarkMode(savedDarkMode);
-    if (savedDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    setColor(savedDarkMode ? colorTheme.dark : colorTheme.light);
   }, []);
+
 
   const toggleDarkMode = () => {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
     localStorage.setItem("darkMode", newDarkMode);
-    if (newDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    setColor(newDarkMode ? colorTheme.dark : colorTheme.light);
   };
 
   return (
-    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <DarkModeContext.Provider
+      value={{ isDarkMode, toggleDarkMode, color, colorTheme }}
+    >
       {children}
     </DarkModeContext.Provider>
   );

@@ -4,14 +4,16 @@ import App from './App.jsx'
 import './index.css'
 import { DarkModeProvider } from './Dark.jsx'
 import CssBaseline from '@mui/material/CssBaseline';
+import store from './redux/store.js'
+import { Provider } from 'react-redux'
 
 const root = createRoot(document.getElementById('root'))
 
 root.render(
-  <React.StrictMode>
-     <CssBaseline />
+  <Provider store={store}>
+  <CssBaseline />
   <DarkModeProvider>
     <App />
   </DarkModeProvider>
-</React.StrictMode>
+</Provider>
 )

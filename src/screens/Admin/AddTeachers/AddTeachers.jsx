@@ -225,7 +225,7 @@ const AddTeachers = () => {
               <div className="flex justify-between items-center gap-2 text-lg font-semibold text-blue-500 cursor-pointer"><a href={`${GLOBAL_CONSTANTS?.backend_url}user/download`} >
                 <Button
                   endIcon={<CloudDownloadOutlinedIcon />}
-                  style={{ color: "gray", borderColor: "gray" }}
+                  style={{ color: "#252525", borderColor: "gray", background: '#2BE2D0' }}
                   variant="outlined"
                   size="small"
                   onClick={() => {
@@ -349,7 +349,7 @@ const AddTeachers = () => {
             <Button variant="outlined" color="error" onClick={() => { setMainData(() => ({ branch: null })) }} >
               Clear Data
             </Button>
-            <Button variant="contained" onClick={() => { onHandleCreate() }} disabled={!isFormValid}>
+            <Button variant="contained" style={!isFormValid ? {background: '#91c7c2', color: "#8c8c8c"}: { background: '#2BE2D0', color: "#252525"}} onClick={() => { onHandleCreate() }} disabled={!isFormValid}>
               Create Teacher
             </Button>
           </div>
