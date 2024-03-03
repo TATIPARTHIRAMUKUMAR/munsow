@@ -44,6 +44,7 @@ import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 import NewUserReport from "./screens/NewUserReport/NewUserReport";
 import ScreeningUserRegister from "./screens/Login/ScreeningUserRegister";
 import LinksList from "./screens/Admin/ScreeningUsers/LinksList";
+import CreateLink from "./screens/Admin/ScreeningUsers/CreateLink";
 
 
 function Url_Routes() {
@@ -89,6 +90,7 @@ function Url_Routes() {
         }
         <Route exact path="/adminDashboard" element={<HeaderFooterLayout Component={<AdminDashboard />} />} />
         <Route exact path="/screeningUsers" element={<HeaderFooterLayout Component={<LinksList />} />} />
+        <Route exact path="/screeningUsers/createLink" element={<HeaderFooterLayout Component={<CreateLink />} />} />
 
         <Route exact path="/" element={<Login />} />
         <Route exact path="/studentLogin" element={<StudentLogin />} />

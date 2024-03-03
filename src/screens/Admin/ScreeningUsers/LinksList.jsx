@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, IconButton } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, IconButton, Switch } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import 'tailwindcss/tailwind.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadLinks } from '../../../redux/action';
+import { loadLinks, updateLinkStatus } from '../../../redux/action';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
 
 const LinksList = () => {
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const history = useNavigate();
 
   const handleClickOpen = (item) => {
     setSelectedItem(item);
@@ -27,41 +30,37 @@ const LinksList = () => {
     dispatch(loadLinks());
   }, [dispatch])
 
+  const handleToggleChange = (link) => {
+    console.log("link", link)
 
-  const data= [
-    {
-        "activation_date": "Fri, 01 Jan 2021 00:00:00 GMT",
-        "created_by": 48,
-        "created_date": "2024-02-10 21:16:53.724076",
-        "description": "xxxxxxxxxxxxxxxxxxxxxxxxx",
-        "expiry_date": "Tue, 30 Dec 2025 00:00:00 GMT",
-        "id": 1,
-        "is_active": true,
-        "max_capacity": 10,
-        "name": "Test-1",
-        "unique_code": "6a32fb7b-1c0d-4b09-a097-c2efcce30a30",
-        "updated_by": 48,
-        "updated_date": "2024-02-10 21:16:53.724076"
-    },
-    {
-        "activation_date": "Fri, 01 Jan 2021 00:00:00 GMT",
-        "created_by": 48,
-        "created_date": "2024-02-10 21:38:21.256136",
-        "description": "xxxxxxxxxxxxxxxxxxxxxxxxx",
-        "expiry_date": "Tue, 30 Dec 2025 00:00:00 GMT",
-        "id": 2,
-        "is_active": true,
-        "max_capacity": 10,
-        "name": "Test-1",
-        "unique_code": "71bb6ea2-f36f-45b1-a932-b07362500a8c",
-        "updated_by": 48,
-        "updated_date": "2024-02-10 21:38:21.256136"
-    }
-]
+    dispatch(updateLinkStatus(link.id, link.is_active ? "deactive" : "active", () => {
+      dispatch(loadLinks());
+    }))
 
+  };
+
+  const handleCreateLink = () => {
+    history('/screeningUsers/createLink'); // Update with your path
+  };
 
   return (
-    <div className="p-4">
+    <div className="p-6">
+
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-2xl font-semibold">Links List</span>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{background: '#2BE2D0', color: "#252525"}}
+          onClick={handleCreateLink}
+          className="top-0 right-0 m-4"
+        >
+          Create Link
+        </Button>
+
+
+      </div>
+
       <TableContainer component={Paper} >
         <Table sx={{ minWidth: 650 }} aria-label="customized table">
           <TableHead>
@@ -71,17 +70,25 @@ const LinksList = () => {
               <TableCell>Expiry Date</TableCell>
               <TableCell>Max Capacity</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id} className="hover:bg-gray-50 transition duration-300">
-                <TableCell>{new Date(row.activation_date).toLocaleDateString()}</TableCell>
-                <TableCell>{row.description}</TableCell>
-                <TableCell>{new Date(row.expiry_date).toLocaleDateString()}</TableCell>
-                <TableCell>{row.max_capacity}</TableCell>
+            {linksList?.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" onClick={() => handleClickOpen(row)}>{new Date(row.activation_date).toLocaleDateString()}</TableCell>
+                <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" onClick={() => handleClickOpen(row)}>{row.description}</TableCell>
+                <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" onClick={() => handleClickOpen(row)}>{new Date(row.expiry_date).toLocaleDateString()}</TableCell>
+                <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" onClick={() => handleClickOpen(row)}>{row.max_capacity}</TableCell>
                 <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" onClick={() => handleClickOpen(row)}>
                   {row.name}
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.is_active}
+                    onChange={() => handleToggleChange(row)}
+                    color="primary"
+                  />
                 </TableCell>
               </TableRow>
             ))}

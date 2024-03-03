@@ -821,6 +821,58 @@ export const user_delete = (params, callback) => {
   };
 };
 
+export const updateLinkStatus = (id,param_text, callback) => {
+  console.log(id,param_text,"hehe")
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Updating Link Status", { type: "loading", autoClose: false });
+    axios
+      .put(`${GLOBAL_CONSTANTS.backend_url}institution/screening/${id}/${param_text}`, { headers: headers })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: 2000 })
+
+        }
+        else {
+          toast.update(toastId, { render: "User Deleted Sucessfully", type: "success", autoClose: 2000 })
+          callback
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        toast.update(toastId, { render: "Something bad happend ", type: "error", autoClose: 2000 })
+      });
+  };
+};
+
+export const createLink = (payload, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Updating Link Status", { type: "loading", autoClose: false });
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}institution/generate_screening_link`, payload, { headers })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: 2000 })
+
+        }
+        else {
+          toast.update(toastId, { render: "User Deleted Sucessfully", type: "success", autoClose: 2000 })
+          callback
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        toast.update(toastId, { render: "Something bad happend ", type: "error", autoClose: 2000 })
+      });
+  };
+};
 
 export const userStatUpdate = (id, endpoint, callback) => {
   return function () {

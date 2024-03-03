@@ -265,7 +265,7 @@ const DataReducers = (state = initialState, action) => {
     }
     case types.SCREENING_USER_LINKS_LIST: return{
       ...state,
-      linksList: action.payload.courses,
+      linksList: action.payload.data,
       loading:false
     }
     case types.SET_REDUX_STATE : { 
