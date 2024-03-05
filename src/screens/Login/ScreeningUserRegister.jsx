@@ -8,12 +8,14 @@ import {
   loadCourseList,
   loadDepartmentList,
   loadInstitutionList,
+  screeining_user_signup,
   user_signup,
 } from "../../redux/action";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ScreeningUserRegister = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { courseList, departmentList, branchList, institutionList } =
@@ -65,13 +67,13 @@ const ScreeningUserRegister = () => {
       type: "text",
       required:true
     },
-    {
-      label: "Institution",
-      key: "institution",
-      value: mainData?.institution ?? "",
-      type: "text",
-      required:true,
-    },
+    // {
+    //   label: "Institution",
+    //   key: "institution",
+    //   value: mainData?.institution ?? "",
+    //   type: "text",
+    //   required:true,
+    // },
     {
       label: "Branch",
       key: "branch",
@@ -98,40 +100,41 @@ const ScreeningUserRegister = () => {
   const handleInputChange = (key, value) => {
     let temp = { ...mainData };
   
-    // When an institution is selected
-    if (key === "institution") {
-      // Update the institution, reset branch, course, and department
-      temp = {
-        ...temp,
-        institution: value,
-        branch: null,
-        course: null,
-        department: null,
-      };
-      dispatch(loadBrachList(`institution_id=${value?.value}`));
-      // Also dispatch for empty course and department lists
-    } else if (key === "branch") {
-      // Update the branch, reset course and department
-      temp = {
-        ...temp,
-        branch: value,
-        course: null,
-        department: null,
-      };
-      dispatch(loadCourseList(`branch_id=${value?.value}`));
-    } else if (key === "course") {
-      // Update the course, reset department
-      temp = {
-        ...temp,
-        course: value,
-        department: null,
-      };
-      dispatch(loadDepartmentList(`course_id=${value?.value}`));
-    } else {
-      // For all other fields, just update the value
-      temp[key] = value;
-    }
-  
+    // // When an institution is selected
+    // if (key === "institution") {
+    //   // Update the institution, reset branch, course, and department
+    //   temp = {
+    //     ...temp,
+    //     institution: value,
+    //     branch: null,
+    //     course: null,
+    //     department: null,
+    //   };
+    //   dispatch(loadBrachList(`institution_id=${value?.value}`));
+    //   // Also dispatch for empty course and department lists
+    // } else if (key === "branch") {
+    //   // Update the branch, reset course and department
+    //   temp = {
+    //     ...temp,
+    //     branch: value,
+    //     course: null,
+    //     department: null,
+    //   };
+    //   dispatch(loadCourseList(`branch_id=${value?.value}`));
+    // } else if (key === "course") {
+    //   // Update the course, reset department
+    //   temp = {
+    //     ...temp,
+    //     course: value,
+    //     department: null,
+    //   };
+    //   dispatch(loadDepartmentList(`course_id=${value?.value}`));
+    // } else {
+    //   // For all other fields, just update the value
+    //   temp[key] = value;
+    // }
+    
+    temp[key] = value;
     setMainData(temp);
   };
   
@@ -175,14 +178,14 @@ const ScreeningUserRegister = () => {
       last_name: mainData?.last_name,
       email: mainData?.email,
       phone_number: mainData?.mobile_number,
-      branch_id: mainData?.branch?.value,
-      department_id: mainData?.department?.value,
+      branch_name: mainData?.branch,
+      department_name: mainData?.department,
       address: mainData?.address,
-      institution_id: mainData?.institution?.value,
+      unique_code: id,
       password: mainData?.password,
-      course_id: mainData?.course?.value,
+      course_name: mainData?.course,
     };
-    dispatch(user_signup(payload, (test) => {
+    dispatch(screeining_user_signup(payload, (test) => {
       setMainData({});
       console.log("test", test);
       navigate("../studentLogin", { replace: true });

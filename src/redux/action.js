@@ -115,6 +115,36 @@ export const user_signup = (data, callback) => {
   };
 };
 
+export const screeining_user_signup = (data, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+    };
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/register_screening_user`, JSON.stringify(data), {
+        headers,
+      })
+      .then((resp) => {
+        console.log("resp", resp)
+        if (resp?.data?.status == false) {
+          toast.error(resp?.data?.message);
+        }
+        else {
+          console.log('heeh')
+          toast.success(resp?.data?.message);
+          callback(resp?.data);
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
+  };
+};
 
 const getQuizList = (data) => ({
   type: types.QUIZ_LIST,
@@ -830,20 +860,44 @@ export const updateLinkStatus = (id,param_text, callback) => {
     };
     let toastId = toast("Updating Link Status", { type: "loading", autoClose: false });
     axios
-      .put(`${GLOBAL_CONSTANTS.backend_url}institution/screening/${id}/${param_text}`, { headers: headers })
+      .get(`${GLOBAL_CONSTANTS.backend_url}institution/screening/${id}/${param_text}`, { headers })
       .then((resp) => {
         if (resp?.data?.error) {
           toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: 2000 })
 
         }
         else {
-          toast.update(toastId, { render: "User Deleted Sucessfully", type: "success", autoClose: 2000 })
-          callback
+          // console.log("resp",resp)
+          toast.update(toastId, { render: param_text=="deactive"?"Link Deactivated Successfully":"Link Activated Successfully", type: "success", autoClose: 2000 })
+          callback(resp?.data)
         }
       })
       .catch((error) => {
         console.log(error)
         toast.update(toastId, { render: "Something bad happend ", type: "error", autoClose: 2000 })
+      });
+  };
+};
+
+
+export const getLinkUsers = (id, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios
+      .get(`${GLOBAL_CONSTANTS.backend_url}institution/screening_user_list?screening_code=${id}`, { headers })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          // console.log("resp")
+        }
+        else {
+          callback(resp?.data)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
       });
   };
 };
@@ -854,7 +908,7 @@ export const createLink = (payload, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("Updating Link Status", { type: "loading", autoClose: false });
+    let toastId = toast("Generating Link", { type: "loading", autoClose: false });
     axios
       .post(`${GLOBAL_CONSTANTS.backend_url}institution/generate_screening_link`, payload, { headers })
       .then((resp) => {
@@ -863,8 +917,9 @@ export const createLink = (payload, callback) => {
 
         }
         else {
-          toast.update(toastId, { render: "User Deleted Sucessfully", type: "success", autoClose: 2000 })
-          callback
+          toast.update(toastId, { render: "Link Generated Sucessfully", type: "success", autoClose: 2000 })
+          console.log("resp",resp)
+          callback(resp?.data)
         }
       })
       .catch((error) => {

@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 
 const AppHeader = ({ open, role1 }) => {
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   const names = [
     { label: " Dashboard", url: "/studentDashboard" },
@@ -61,8 +61,8 @@ const AppHeader = ({ open, role1 }) => {
           }}
         >
           {names.map((item, index) => {
-            console.log(location.pathname.toLowerCase());
-            console.log(item.url.toLowerCase());
+            // console.log(location.pathname.toLowerCase());
+            // console.log(item.url.toLowerCase());
 
             return (
               location.pathname.toLowerCase() === item.url.toLowerCase() && (
