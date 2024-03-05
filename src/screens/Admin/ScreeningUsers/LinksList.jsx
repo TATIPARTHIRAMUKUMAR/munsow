@@ -6,25 +6,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getLinkUsers, loadLinks, updateLinkStatus } from '../../../redux/action';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
-// import { ToastContainer, toast } from 'react-toastify';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-// import 'react-toastify/dist/ReactToastify.css';
+import FileCopyIcon from '@mui/icons-material/FileCopy'; 
 
 const LinksList = () => {
+  
+  const history = useNavigate();
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [screeningUsers, setScreeningUsers] = useState(null);
-
-  const history = useNavigate();
+  const { linksList } = useSelector((state) => state?.data)
 
   const handleClickOpen = (item) => {
     setSelectedItem(item);
-
     dispatch(getLinkUsers(selectedItem.unique_code, (resp) => {
-      // console.log("res", resp)
       setScreeningUsers(resp?.data)
     }))
-
     setOpen(true);
   };
 
@@ -32,35 +31,28 @@ const LinksList = () => {
     setOpen(false);
   };
 
-
-  const dispatch = useDispatch();
-  const { linksList } = useSelector((state) => state?.data)
-
-
   useEffect(() => {
     dispatch(loadLinks());
   }, [dispatch])
 
   const handleToggleChange = (link) => {
-    // console.log("link", link)
-
     dispatch(updateLinkStatus(link.unique_code, link.is_active ? "deactive" : "active", () => {
       dispatch(loadLinks());
     }))
-
   };
 
   const handleCreateLink = () => {
     history('/screeningUsers/createLink'); 
   };
 
-  const [copied, setCopied] = useState(false);
+  const [copiedRows, setCopiedRows] = useState({});
 
-
-  const handleCopyToClipboard = (text) => {
+  const handleCopyToClipboard = (text, rowId) => {
     navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000); // Reset tooltip state after 2 seconds
+    setCopiedRows(prevState => ({...prevState, [rowId]: true }));
+    setTimeout(() => {
+      setCopiedRows(prevState => ({...prevState, [rowId]: false }));
+    }, 10000);
   };
 
 
@@ -78,8 +70,6 @@ const LinksList = () => {
         >
           Create Link
         </Button>
-
-
       </div>
 
       <TableContainer component={Paper} >
@@ -99,9 +89,9 @@ const LinksList = () => {
               <TableRow key={row.id}>
                 <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" >
                 https://munsow-stg.vercel.app/studentRegistration/{row.name}
-                <Tooltip title={copied ? "Copied!" : "Copy to clipboard"}>
-                  <IconButton onClick={() => handleCopyToClipboard(`https://munsow-stg.vercel.app/studentRegistration/${row.name}`)}>
-                    <ContentCopyIcon fontSize="small" />
+                <Tooltip title={copiedRows[row.id] ? "Copied!" : "Copy to clipboard"}>
+                  <IconButton onClick={() => handleCopyToClipboard(`https://munsow-stg.vercel.app/studentRegistration/${row.name}`, row.id)}>
+                    {copiedRows[row.id] ? <FileCopyIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
                   </IconButton>
                 </Tooltip>
                 </TableCell>
