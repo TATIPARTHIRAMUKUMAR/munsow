@@ -10,9 +10,9 @@ import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import image from "../../assets/h.jpeg";
 import InterviewOver from "./InterviewOver";
 import { Step, StepLabel, Stepper } from '@mui/material';
+import { useDarkMode } from "./../../Dark";
 
 let mediaRecorder;
-let interviewEnded = false;
 
 function formatTime(seconds) {
   const hrs = Math.floor(seconds / 3600);
@@ -58,9 +58,26 @@ export default function NewGridLayout({ questions }) {
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [spokenQuestions, setSpokenQuestions] = useState([]);
 
+  const { isDarkMode, colorTheme } = useDarkMode();
+
+  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const linearGradientBackground = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
+  const buttonTextColor = isDarkMode
+    ? reduxColorTheme.dark.textColor2
+    : reduxColorTheme.light.textColor2;
+
+    const backgroundColor = isDarkMode
+    ? reduxColorTheme.dark.foreground
+    : reduxColorTheme.light.foreground;
+
+    const textColor = isDarkMode
+    ? reduxColorTheme.dark.textColor3
+    : reduxColorTheme.light.textColor3;
+
   const handleFinishInterview = () => {
     setShowConfirmationPopup(true);
-    interviewEnded = true;
   };
 
   const nextQuestion = () => {
@@ -76,7 +93,6 @@ export default function NewGridLayout({ questions }) {
   const confirmEndInterview = () => {
     setTotalTimeLeft(0);
     setShowConfirmationPopup(false);
-    interviewEnded = true;
   };
 
   function startStreamAndRecording() {
@@ -302,8 +318,27 @@ export default function NewGridLayout({ questions }) {
                                 fontSize: "18px",
                                 borderRadius: "8px",
                                 padding: "10px",
-                                background: "#886cc0",
+                                background: linearGradientBackground,
                                 color: "white",
+                                visibility:
+                                  questionIndex < questions?.length - 1
+                                    ? ""
+                                    : "hidden",
+                              }}
+                              className="text-secondary"
+                            >
+                              Next Question
+                            </button>
+
+                            <button
+                              onClick={nextQuestion}
+                              style={{
+                                cursor: "pointer",
+                                fontSize: "18px",
+                                borderRadius: "8px",
+                                padding: "10px",
+                                background: linearGradientBackground,
+                                color: textColor,
                                 visibility:
                                   questionIndex < questions?.length - 1
                                     ? ""
@@ -410,5 +445,3 @@ export default function NewGridLayout({ questions }) {
     </>
   );
 }
-
-export { interviewEnded };

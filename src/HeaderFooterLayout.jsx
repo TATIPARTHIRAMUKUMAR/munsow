@@ -45,8 +45,8 @@ import { FaHeartPulse, FaSection } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
-import { interviewStarted } from "./screens/PracticeNow/Practice";
-import { interviewEnded } from "./screens/PracticeNow/NewGridLayout";
+
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 270;
 
@@ -109,6 +109,21 @@ const CustomDrawer = styled(MuiDrawer, {
 }));
 
 export default function HeaderFooterLayout({ Component }) {
+  const location = useLocation();
+  const [interviewStarted, setInterviewStarted] = useState(false);
+
+
+  useEffect(() => {
+    if (location.pathname === "/interview") {
+      setInterviewStarted(true);
+      setOpen(false);
+    } else {
+      setInterviewStarted(false);
+      setOpen(true);
+    }
+  }, [location]);
+
+
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(true);
@@ -341,6 +356,17 @@ export default function HeaderFooterLayout({ Component }) {
     setOpen(false);
   };
 
+  // useEffect(() => {
+  //   if (interviewStarted) {
+  //     if (interviewEnded) {
+  //       setOpen(true);
+  //     }
+  //     else {
+  //       setOpen(false);
+  //     }
+  //   }
+  // }, [interviewStarted, interviewEnded]);
+
   const handleListItemClick = (index, route) => {
     if (
       route == "/adminDashboard" ||
@@ -408,7 +434,7 @@ export default function HeaderFooterLayout({ Component }) {
           <div className="font-bold text-2xl pr-8" style={{ color: textColor }}>
             MUNSOW
           </div>
-          {!open && !interviewStarted ? (
+          {!open ? (
             <IconButton onClick={handleDrawerOpen}>
               {theme.direction === "rtl" ? (
                 <ChevronLeftIcon style={{ color: textColor }} />
@@ -443,14 +469,14 @@ export default function HeaderFooterLayout({ Component }) {
               <ListItem
                 disablePadding
                 onClick={() => {
-                  if (mainItem.subItems.length > 0) {
-                    if (selectedItem !== mainIndex) {
-                      setSelectedSubItem(null);
-                    }
-                    setOpenSubMenu(
-                      openSubMenu === mainIndex ? null : mainIndex
-                    );
-                  } else if (!interviewEnded) {
+                  if (!interviewStarted && mainItem.subItems.length > 0) {
+                      if (selectedItem !== mainIndex) {
+                        setSelectedSubItem(null);
+                      }
+                      setOpenSubMenu(
+                        openSubMenu === mainIndex ? null : mainIndex
+                      );
+                  } else {
                     handleListItemClick(mainIndex, mainItem.route);
                   }
                 }}
@@ -462,10 +488,6 @@ export default function HeaderFooterLayout({ Component }) {
                 ...(interviewStarted && {
                   pointerEvents: "none",
                   opacity: 0.5,
-                }),
-                ...(interviewEnded && {
-                  pointerEvents: "visible",
-                  opacity: 1,
                 }),
                 }}
               >
