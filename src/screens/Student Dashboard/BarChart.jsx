@@ -61,10 +61,9 @@ const LineChartComponent = () => {
   // const dataWithSerialNumbers = data;
 
   useEffect(() => {
-    setData(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : [])
-    setdataWithSerialNumbers(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : [])
-  }, [userStats])
-
+    setData(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : []);
+    setdataWithSerialNumbers(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : []);
+  }, [userStats]);
 
 
 
@@ -98,6 +97,15 @@ const LineChartComponent = () => {
     const slicedData = dataWithSerialNumbers.slice(-newShowLast);
     setData(slicedData);
   };
+
+  const noDataComponent = (
+    <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+      <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+      <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+        There's not enough data to present any insights. Start attending interviews to see your journey.
+      </div>
+    </div>
+  );
 
   return (
     <div>
@@ -139,18 +147,7 @@ const LineChartComponent = () => {
       </div>
       <Divider style={{ opacity: "0.4", marginBottom: "25px" }} />
       <ResponsiveContainer width="100%" height={300}>
-        {data.length === 0 ? (
-          <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
-            <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
-            <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
-              There's nothing to show here yet. Start attending interviews to see your journey
-            </div>
-          </div>
-
-          // <div className='font-bold' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', }}>
-          //   No data for now, attend interviews to see your progress.
-          // </div>
-        ) : (
+      {data.length === 0 ? noDataComponent :  (
           <LineChart
             data={data}
             margin={{ top: 0, right: 30, left: 20, bottom: 20 }}

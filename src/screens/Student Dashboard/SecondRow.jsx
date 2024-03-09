@@ -6,6 +6,8 @@ import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import hardSkill from '../../assets/tools.png'
 import sofSkills from '../../assets/expertise.png'
 import { useSelector } from 'react-redux';
+import TrendingFlatIcon from '@mui/icons-material/TrendingFlat'; // Import for the flat trend icon
+
 const SecondRow = () => {
 
     const { userStats } = useSelector((state) => state.data);
@@ -17,6 +19,16 @@ const SecondRow = () => {
         console.log("data1", data)
         // setdataWithSerialNumbers(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : [])
     }, [userStats])
+
+    const renderTrendIcon = (value) => {
+        if (value > 0) {
+            return <TrendingUpIcon fontSize="large" style={{ color: "green" }} />;
+        } else if (value < 0) {
+            return <TrendingDownIcon fontSize="large" style={{ color: "red" }} />;
+        } else {
+            return <TrendingFlatIcon fontSize="large" style={{ color: "gray" }} />;
+        }
+    };
 
     return (
         <div className="col-span-1 bg-white rounded-lg">
@@ -41,11 +53,7 @@ const SecondRow = () => {
                         </div>
                     </div>
                     <div>
-                        {data?.hard_skill > 0 ?
-                            <TrendingUpIcon fontSize="large" style={{ color: "green" }} />
-                            :
-                            <TrendingDownIcon fontSize="large" style={{ color: "red" }} />
-                        }
+                    {renderTrendIcon(data?.hard_skill)}
                     </div>
                 </div>
                 <Divider className='pt-4' />
@@ -68,11 +76,7 @@ const SecondRow = () => {
                         </div>
                     </div>
                     <div>
-                        {data?.soft_skill > 0 ?
-                            <TrendingUpIcon fontSize="large" style={{ color: "green" }} />
-                            :
-                            <TrendingDownIcon fontSize="large" style={{ color: "red" }} />
-                        }
+                    {renderTrendIcon(data?.soft_skill)}
                     </div>
                 </div>
             </div>
