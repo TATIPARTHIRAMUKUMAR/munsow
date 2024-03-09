@@ -36,9 +36,9 @@ export default function StudentDashboard() {
                             </button>
                         </div>
                     </div>
-                    <div>
+                    {/* <div>
                         <img className="h-40 w-40 bg-transparent" src={image2} />
-                    </div>
+                    </div> */}
 
                 </div>
             </div>

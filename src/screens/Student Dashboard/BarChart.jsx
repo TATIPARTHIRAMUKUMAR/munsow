@@ -153,14 +153,15 @@ const LineChartComponent = () => {
         ) : (
           <LineChart
             data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            margin={{ top: 0, right: 30, left: 20, bottom: 20 }}
+            padding={{ top: 50 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis dataKey="Knowledge/Skills" label={{ value: 'Interview Scores', angle: -90, position: 'insideLeft' }} />
+            <XAxis dataKey="name" label={{ value: 'Number of Interviews', angle: -0, position: 'middle', dy: 20 }} />
+            <YAxis dataKey="Knowledge/Skills" label={{ value: 'Interview Scores', angle: -90, position: 'middle',dx:-10 }} />
             <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="Knowledge/Skills" name="Knowledge/Skills" stroke="#8884d8" />
+            <Legend verticalAlign="top" height={36}/>
+            <Line type="monotone" dataKey="Knowledge/Skills" name="Knowledge/Skills" stroke="#8884d8"/>
             <Line type="monotone" dataKey="Mindset/Attitude" name="Mindset/Attitude" stroke="#87CEEB" />
             <Line type="monotone" dataKey="Practical Thinking" name="Practical Thinking" stroke="#E97451" />
           </LineChart>

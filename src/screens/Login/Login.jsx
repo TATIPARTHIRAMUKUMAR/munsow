@@ -171,14 +171,14 @@ const LoginPage = () => {
               </span>
             </div> */}
 
-            <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
+            {/* <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
               <div className="flex items-center justify-center">
                 <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome !</h2>
                 <Link to={"/registration"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
                   Join Us Today!
                 </Link>
               </div>
-            </div>
+            </div> */}
             <div className="mt-10 text-center text-gray-600">
               <span>
                 By continuing, you agree to our
