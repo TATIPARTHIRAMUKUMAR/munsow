@@ -27,7 +27,7 @@ const StyledFormControlLabel = styled(FormControlLabel)({
   '& .MuiTypography-root': {
     color: '#333',
     fontSize: "20px",
-    paddingRight:"30px"
+    paddingRight: "30px"
   }
 });
 
@@ -68,7 +68,8 @@ const LoginPage = () => {
     setOpen(false);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = {
       email: universityId,
       password: password,
@@ -122,46 +123,56 @@ const LoginPage = () => {
                 Get access to our expert insights about your students across departments, branches, and cities today!
               </p> */}
             </div>
+            <form onSubmit={handleSubmit}>
+              <div>
+                <div className="space-y-4">
+                  <div className="mb-2">
+                    <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
+                      University ID
+                    </label>
+                    <input
+                      type="text"
+                      className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                      id="universityId"
+                      name="universityId"
+                      placeholder=""
+                      value={universityId}
+                      onChange={loginInputHandler}
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label htmlFor="password" className="text-sm font-medium text-gray-600">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                      id="password"
+                      name="password"
+                      placeholder=""
+                      value={password}
+                      onChange={loginInputHandler}
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  >
+                    Login
+                  </button>
 
-            <div className="space-y-4">
-              <div className="mb-2">
-                <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
-                  University ID
-                </label>
-                <input
-                  type="text"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                  id="universityId"
-                  name="universityId"
-                  placeholder=""
-                  value={universityId}
-                  onChange={loginInputHandler}
-                />
+                  {/* <button
+                    type="button"
+                    className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                    onClick={handleSubmit}
+                  >
+                    Login
+                  </button> */}
+                </div>
               </div>
-              <div className="mb-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-600">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                  id="password"
-                  name="password"
-                  placeholder=""
-                  value={password}
-                  onChange={loginInputHandler}
-                />
-              </div>
-            </div>
-            <div className="mt-4">
-              <button
-                type="button"
-                className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-                onClick={handleSubmit}
-              >
-                Login
-              </button>
-            </div>
+            </form>
             {/* <div className="mt-7 text-center">
               <span className="text-gray-600">
                 Not a member with us yet? {" "}

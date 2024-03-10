@@ -27,7 +27,7 @@ const StyledFormControlLabel = styled(FormControlLabel)({
   '& .MuiTypography-root': {
     color: '#333',
     fontSize: "20px",
-    paddingRight:"30px"
+    paddingRight: "30px"
   }
 });
 
@@ -72,11 +72,12 @@ const StudentLogin = () => {
   };
 
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = {
       email: universityId,
       password: password,
-      role:"student"
+      role: "student"
 
     }
     dispatch(user_login(payload, () => {
@@ -101,7 +102,7 @@ const StudentLogin = () => {
         <div className="w-full md:w-3/6 p-5 md:p-20">
           <div className="bg-white   rounded-lg p-6">
 
-          <FormControl component="fieldset">
+            <FormControl component="fieldset">
               {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
               <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
                 <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
@@ -114,45 +115,54 @@ const StudentLogin = () => {
             {/* <p className="text-base text-gray-600 mb-4">
               Get personalized insights on your interview skills, strengths, and areas for improvement.
             </p> */}
-            <div className="space-y-4">
-              <div className="mb-2">
-                <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
-                  Email ID
-                </label>
-                <input
-                  type="text"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                  id="universityId"
-                  name="universityId"
-                  placeholder=""
-                  value={universityId}
-                  onChange={loginInputHandler}
-                />
-              </div>
-              <div className="mb-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-600">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
-                  id="password"
-                  name="password"
-                  placeholder=""
-                  value={password}
-                  onChange={loginInputHandler}
-                />
-              </div>
-            </div>
-            <div className="mt-4">
-              <button
+            <form onSubmit={handleSubmit}>
+              <div>
+                <div className="space-y-4">
+                  <div className="mb-2">
+                    <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
+                      Email ID
+                    </label>
+                    <input
+                      type="text"
+                      className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                      id="universityId"
+                      name="universityId"
+                      placeholder=""
+                      value={universityId}
+                      onChange={loginInputHandler}
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label htmlFor="password" className="text-sm font-medium text-gray-600">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                      id="password"
+                      name="password"
+                      placeholder=""
+                      value={password}
+                      onChange={loginInputHandler}
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  >
+                    Login
+                  </button>
+                  {/* <button
                 type="button"
                 className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                 onClick={handleSubmit}
               >
                 Login
-              </button>
-            </div>
+              </button> */}
+                </div>
+              </div></form>
             {/* <div className="mt-3 text-center">
               <span className="text-blue-600 hover:underline cursor-pointer" onClick={handleClickOpen}>
                 Forget Password?
