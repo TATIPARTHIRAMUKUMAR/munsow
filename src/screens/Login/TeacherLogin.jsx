@@ -72,7 +72,8 @@ const TeacherLogin = () => {
   };
 
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = {
       email: universityId,
       password: password,
@@ -113,6 +114,8 @@ const TeacherLogin = () => {
             {/* <p className="text-base text-gray-600 mb-4">
               Get personalized insights on your interview skills, strengths, and areas for improvement.
             </p> */}
+             <form onSubmit={handleSubmit}>
+              <div>
             <div className="space-y-4">
               <div className="mb-2">
                 <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
@@ -144,14 +147,21 @@ const TeacherLogin = () => {
               </div>
             </div>
             <div className="mt-4">
-              <button
+            <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  >
+                    Login
+                  </button>
+              {/* <button
                 type="button"
                 className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                 onClick={handleSubmit}
               >
                 Login
-              </button>
+              </button> */}
             </div>
+            </div></form>
             {/* <div className="mt-3 text-center">
               <span className="text-blue-600 hover:underline cursor-pointer" onClick={handleClickOpen}>
                 Forget Password?

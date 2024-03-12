@@ -17,11 +17,11 @@ const SummarySnapshot = (props) => {
   };
   const progressBarColor = (x) => {
     if (x >= 0 && x <= 4) {
-      return 'bar-red-bg'; // Apply red color
+      return 'bg-red-500'; // Apply red color
     } else if (x >= 5 && x <= 7) {
-      return 'bar-orange-bg'; // Apply yellow color
+      return 'bg-orange-500'; // Apply yellow color
     } else if (x >= 8 && x <= 10) {
-      return 'bar-green-bg'; // Apply green color
+      return 'bg-green-500'; // Apply green color
     } else {
       return 'text-gray'; // Default color or handle other cases
     }

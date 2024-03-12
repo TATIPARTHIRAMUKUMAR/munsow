@@ -14,7 +14,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
@@ -114,6 +114,8 @@ const CustomDrawer = styled(MuiDrawer, {
 
 export default function HeaderFooterLayout({ Component }) {
   const navigate = useNavigate();
+  const location = useLocation(); 
+
   const theme = useTheme();
   const [open, setOpen] = useState(true);
 
@@ -334,6 +336,34 @@ export default function HeaderFooterLayout({ Component }) {
     navigate(route);
     handleDrawerOpen();
   };
+
+  useEffect(() => {
+    if (menuData?.length > 0) {
+      const route = location.pathname; 
+
+      let menuItem = menuData.find(
+        (m) => m.route === route || m.subItems.some((s) => s.route === route)
+      );
+
+      if (menuItem) {
+        const mainIndex = menuData.indexOf(menuItem);
+        setSelectedItem(mainIndex);
+
+        const subItem = menuItem.subItems.find((s) => s.route === route);
+        if (subItem) {
+          const subIndex = menuItem.subItems.indexOf(subItem);
+          setSelectedSubItem(subIndex);
+          setOpenSubMenu(mainIndex);
+        } else {
+          setSelectedSubItem(null);
+        }
+      } else {
+        setSelectedItem(null);
+        setSelectedSubItem(null);
+        setOpenSubMenu(null);
+      }
+    }
+  }, [location, menuData]);
 
   return (
     <Box sx={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden" }}>
