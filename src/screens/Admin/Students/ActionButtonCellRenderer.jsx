@@ -14,7 +14,10 @@ const ActionButtonCellRenderer = (props) => {
   const handleChange = (event) => {
     console.info(event,"--")
     setChecked(event);
-    dispatch(userStatUpdate( row?.id , event ? "activate" : "deactivate"))
+    dispatch(userStatUpdate( row?.id , event ? "activate" : "deactivate",()=>{
+      window.location.reload();
+      
+    }))
   };
 
   return (
