@@ -216,7 +216,7 @@ const AdminDashboard = () => {
         </div>
         <div className="flex flex-wrap pt-5">
           {/* Chart section */}
-          <div className="lg:w-4/12 pr-4">
+          <div className="lg:w-11/12 pr-4">
             {/* Department wise Participation */}
             <div className={classNames(
               "p-4 mb-4"
@@ -240,7 +240,7 @@ const AdminDashboard = () => {
 
 
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={barPlot.slice(0, 1)} width={"200px"}>
+                  <BarChart data={barPlot.slice(0, 1)} width={"500px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
                     <XAxis
                       dataKey="name"
@@ -301,10 +301,8 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="lg:w-4/12 pr-4">
-            {/* Department wise Improvement Rate */}
+          {/* <div className="lg:w-4/12 pr-4">
             <div className={classNames(
-              // "bg-white shadow-md",
               "p-4 mb-4"
             )}>
               <div className="mb-6">
@@ -335,7 +333,7 @@ const AdminDashboard = () => {
                         className="text"
                         value="WEEK"
                         position="bottom"
-                        dy={10} // Adjust the distance from the X-axis
+                        dy={10} 
                       />
                     </XAxis>
                     <YAxis
@@ -348,8 +346,8 @@ const AdminDashboard = () => {
                         className="text"
                         value="INTERVIEW SCORE"
                         position="middle"
-                        angle={-90} // Rotate the label for vertical orientation
-                        dx={-30} // Adjust the distance from the Y-axis
+                        angle={-90} 
+                        dx={-30} 
                       />
                     </YAxis>
                     <Tooltip />
@@ -391,11 +389,9 @@ const AdminDashboard = () => {
                 </ResponsiveContainer>
               </div>
             </div>
-          </div>
-          <div className="lg:w-4/12">
-            {/* Critical Improvement Areas */}
+          </div> */}
+          {/* <div className="lg:w-4/12">
             <div className={classNames(
-              // "bg-white shadow-md",
               "p-4 mb-4"
             )}>
               <div className="mb-6 flex justify-between">
@@ -416,7 +412,6 @@ const AdminDashboard = () => {
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    {/* Place the legend horizontally at the bottom */}
                     <Legend
                       formatter={(value, entry) =>
                         legendFormatter(value, entry, "pie")
@@ -450,7 +445,7 @@ const AdminDashboard = () => {
 
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
