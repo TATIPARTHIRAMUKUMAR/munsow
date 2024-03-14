@@ -15,7 +15,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 const styles = {
     tooltip: {
-        backgroundColor: 'black',
+        backgroundColor: 'white',
         color: 'white',
         fontSize: '20rem',
         // padding: '10px',
@@ -85,7 +85,7 @@ export default function ReportIndex() {
                             {renderSkillsSection(softSkills, "Soft Skills")}
                         </>
                     } 
-                    // arrow 
+                    arrow 
                     // style={{background:"black"}}
                     placement="top" 
                     PopperProps={{ style: styles.tooltip }}>
