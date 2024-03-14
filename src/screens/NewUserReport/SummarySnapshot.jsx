@@ -105,7 +105,7 @@ const SummarySnapshot = (props) => {
                     <h1 className={`text-xl font-bold ${getScoreColor(segment.secured_marks)}`}>
                       {segment.secured_marks}/10
                     </h1>
-                    <p className="text-purple font-bold underline">{setTitle(category.main_title, sIndex)}</p>
+                    <p className="text-purple font-bold underline">{segment?.title}</p>
                   </span>
                 </div>
               ))}
