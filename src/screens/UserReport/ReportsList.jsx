@@ -9,6 +9,25 @@ import { loadReportsList, loadUserReport } from "../../redux/action";
 import NoDataPage from "./NoData";
 import { prototype } from "postcss/lib/previous-map";
 import moment from "moment";
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
+
+
+const styles = {
+    tooltip: {
+        backgroundColor: 'black',
+        color: 'white',
+        fontSize: '20rem',
+        // padding: '10px',
+        borderRadius: '4px'
+    },
+    heading: {
+        fontWeight: 'bold',
+        marginTop: '10px',
+        fontSize:"20px",
+        marginBottom: '5px'
+    }
+};
 
 export default function ReportIndex() {
     const dispatch = useDispatch();
@@ -23,7 +42,7 @@ export default function ReportIndex() {
 
     useEffect(() => {
         setLessonsList(userReportList);
-        setIsLoading(false);  // Set isLoading to false once data is set
+        setIsLoading(false); 
     }, [userReportList]);
 
     const navigate = useNavigate();
@@ -39,6 +58,48 @@ export default function ReportIndex() {
             //   },[])
         };
 
+        const renderSkillsSection = (skills, title) => {
+            if (!skills || skills.length === 0) {
+                return null;
+            }
+    
+            return (
+                <>
+                    <div style={styles.heading}>{title}</div>
+                    {skills.map(skill => <div key={skill} style={{fontSize:"13px"}}>{skill}</div>)}
+                </>
+            );
+        };
+    
+        const renderSkills = (skillsList) => {
+            const hardSkills = Object.keys(skillsList?.hard_skill || {});
+            const softSkills = Object.keys(skillsList?.soft_skill || {});
+            const allSkills = hardSkills.concat(softSkills);
+            const skillsString = allSkills.join(' | ');
+    
+            if (skillsString.length > 20) {
+                return (
+                    <Tooltip title={
+                        <>
+                            {renderSkillsSection(hardSkills, "Hard Skills")}
+                            {renderSkillsSection(softSkills, "Soft Skills")}
+                        </>
+                    } 
+                    // arrow 
+                    // style={{background:"black"}}
+                    placement="top" 
+                    PopperProps={{ style: styles.tooltip }}>
+                        <span>
+                            {skillsString.substring(0, 17)}...
+                            <InfoIcon style={{ fontSize: "1rem", marginLeft: "4px" }} />
+                        </span>
+                    </Tooltip>
+                );
+            }
+            return skillsString;
+        };
+    
+
         return (
             <div className="max-h-[320px] transition-transform duration-300 hover:scale-105 shadow-lg rounded-lg">
                 <div className="flex flex-col h-full p-4 bg-white">
@@ -46,17 +107,8 @@ export default function ReportIndex() {
                         {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}
                         </div> : <div className="text-xl font-semibold">Skill based report
                             <div className="text-base text-[#886cc0]">
-                                Skills : {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
-                                    <>
-                                        {skill} <span className="px-2">|</span>
-                                    </>
-                                ))}
-                                {Object.keys(skills_list?.soft_skill || {}).map((skill, index) => (
-                                    <>
-                                        {skill}
-                                    </>
-                                ))}
-                            </div>
+                        Skills : {renderSkills(skills_list)}
+                    </div>
                         </div>}
                         {skill_type == "role based report" ? <div className="font-medium"><span className="font-bold">Company:</span> {company}</div> : <></>}
                         <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>
