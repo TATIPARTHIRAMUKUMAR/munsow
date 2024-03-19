@@ -183,7 +183,11 @@ const StepperComponent = () => {
   //button
   const textColors = isDarkMode
     ? colorTheme.dark.textColor2
-    : colorTheme.light.textColor2;   
+    : colorTheme.light.textColor2; 
+    
+    const textColor = isDarkMode
+    ? colorTheme.dark.textColor3
+    : colorTheme.light.textColor3;
 
     const blackColors = isDarkMode
     ? colorTheme.dark. blackColor4
@@ -515,12 +519,9 @@ const StepperComponent = () => {
                       setLevel(0);
                       setExperienceLevel("low");
                     }}
-                    className="text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                    className="text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
                     style={{
                       backgroundColor: linearGradientBackground,
-                    
-                      padding: "0.5rem 1rem",
-                      borderRadius: "0.375rem",
                       color:grayColors
                     }}
                   >
@@ -532,7 +533,8 @@ const StepperComponent = () => {
                       setExperienceLevel("medium");
                     }}
                     className="text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                    style={{ backgroundColor: linearGradientBackground,color:grayColors }}
+                    style={{ backgroundColor: linearGradientBackground,
+                      color:grayColors }}
                   >
                     Intermediate
                   </button>
@@ -657,15 +659,19 @@ const StepperComponent = () => {
                     {currentStep > 0 && (
                         <button
                             onClick={handlePrev}
+                            disabled={handleSelection()}
+                            className="shadow-md"
                             style={{
                               margin: "0 0.5rem",
-                              backgroundColor: previousButton,
-              
+                              borderColor: linearGradientBackground,
+                              border: `2px solid ${linearGradientBackground}`,
                               color: grayColors,
                               padding: "0.5rem 1rem",
                               borderRadius: "0.375rem",
                               cursor: "pointer",
                             }}
+                          onMouseEnter={(e) => { e.target.style.background = `${linearGradientBackground}` }}
+                          onMouseLeave={(e) => { e.target.style.background = "none" }}
                         >
                             Previous
                         </button>
@@ -674,13 +680,12 @@ const StepperComponent = () => {
                         <button
                             onClick={handleNext}
                             disabled={handleSelection()} // Use the isRoleSelected state variable here
-                            className="bg-[#886cc0] mx-2 hover:bg-[#886cc0] text-white py-2 px-4 rounded-md"
+                            className={`shadow-md mx-2 py-2 px-4 rounded-md ${handleSelection() ? 'opacity-50 cursor-not-allowed' : ''}`}
                             style={{
                               backgroundColor: linearGradientBackground,
-                              color: grayColors,
+                              color: textColor,
                               padding: "0.5rem 1rem",
                               borderRadius: "0.375rem",
-                              cursor: "pointer",
                             }}
                         >
                             Next
@@ -701,8 +706,11 @@ const StepperComponent = () => {
                             {(chosenCompany && audioValidated && videoValidated) ? (
                                 <button
                                     onClick={handleNext}
-                                    className=" mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-                                    style={{ backgroundColor: linearGradientBackground,color:grayColors }}
+                                    className="shadow-md mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+                                    style={{ 
+                                      backgroundColor: linearGradientBackground,
+                                      color: textColor, 
+                                    }}
                                 >
                                     Submit
                                 </button>
@@ -711,8 +719,11 @@ const StepperComponent = () => {
                                     <button
                                         onClick={handleNext}
                                         disabled={!chosenCompany}
-                                        className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md opacity-50 cursor-not-allowed"
-                                        style={{ backgroundColor: linearGradientBackground,color:grayColors }}
+                                        className="shadow-md bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md opacity-50 cursor-not-allowed"
+                                        style={{ 
+                                          backgroundColor: linearGradientBackground,
+                                          color: textColor, 
+                                        }}
                                     >
                                         Submit
                                     </button>
