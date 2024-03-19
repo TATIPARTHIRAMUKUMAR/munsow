@@ -25,7 +25,12 @@ const SkillChart = () => {
                 }
             },
             xAxis: {
-                type: 'category'
+                type: 'category',
+                // labels: {
+                //     style: {
+                //         color: 'red' // Change the color to your desired color
+                //     }
+                // }
             },
             yAxis: {
                 tickInterval: 2,
@@ -42,6 +47,7 @@ const SkillChart = () => {
                     borderWidth: 0,
                     dataLabels: {
                         enabled: true,
+                        
                         // format: '{point.y:.1f}%'
                     }
                 }
@@ -60,19 +66,31 @@ const SkillChart = () => {
                         {
                             name: 'Behavioural',
                             y: 4,
-                            drilldown: 'Behavioural'
+                            color: "#b772ba",
+                            drilldown: 'Behavioural',
+                            dataLabels: {
+                                color: 'black' 
+                            },
                         },
                         {
                             name: 'Practical',
                             y: 6,
-                            drilldown: 'Practical'
+                            color: "#f99a2a",
+                            drilldown: 'Practical',
+                            dataLabels: {
+                                color: 'black' 
+                            },
                         },
                         {
                             name: 'Domain',
                             y: 8,
-                            drilldown: 'Domain'
+                            color: "#7bb06c",
+                            drilldown: 'Domain',
+                            dataLabels: {
+                                color: 'black' 
+                            },
                         },
-                    ]
+                    ],
                 }
             ],
             drilldown: {
@@ -88,7 +106,7 @@ const SkillChart = () => {
                         data: [
                             [
                                 'Adaptability',
-                                3
+                                3,
                             ],
                             [
                                 'Collaboration',
@@ -159,8 +177,8 @@ const SkillChart = () => {
     return (
         <figure className="highcharts-figure">
             <div id="container"></div>
-            <p className="highcharts-description p-5 text-center">
-               Average score of your skills.
+            <p className="highcharts-description p-5 text-center font-bold p-3">
+            Explore deeper insights by clicking on any skill. Dive into specific parameters and metrics related to that skill to gain a comprehensive understanding of its performance and impact.
             </p>
         </figure>
     );
