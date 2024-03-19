@@ -319,25 +319,6 @@ export default function NewGridLayout({ questions }) {
                                 borderRadius: "8px",
                                 padding: "10px",
                                 background: linearGradientBackground,
-                                color: "white",
-                                visibility:
-                                  questionIndex < questions?.length - 1
-                                    ? ""
-                                    : "hidden",
-                              }}
-                              className="text-secondary"
-                            >
-                              Next Question
-                            </button>
-
-                            <button
-                              onClick={nextQuestion}
-                              style={{
-                                cursor: "pointer",
-                                fontSize: "18px",
-                                borderRadius: "8px",
-                                padding: "10px",
-                                background: linearGradientBackground,
                                 color: textColor,
                                 visibility:
                                   questionIndex < questions?.length - 1
