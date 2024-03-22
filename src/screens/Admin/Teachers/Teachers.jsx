@@ -1,4 +1,6 @@
 
+import XLSX from 'xlsx/dist/xlsx.full.min.js';
+
 import { useMemo, useCallback, useEffect, useState, useRef } from "react";
 import ActionButtonCellRenderer from "./ActionButtonCellRenderer";
 import { useDispatch, useSelector } from "react-redux";
@@ -168,109 +170,142 @@ const Teachers = () => {
     setPage(0);
   };
   
+  // const exportToExcel = () => {
+  //   const worksheet = XLSX.utils.table_to_sheet(document.getElementById('teachers-table'));
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Teachers');
+  //   XLSX.writeFile(workbook, 'teachers.xlsx');
+  // };
+
+  const exportToExcel = () => {
+    const table = document.getElementById('teachers-table');
   
+    // Create a copy of the table data
+    const copiedTableData = Array.from(table.rows).map(row =>
+      Array.from(row.cells).map(cell => cell.textContent)
+    );
+  
+    // Remove the last column from the copied table data
+    const modifiedTableData = copiedTableData.map(row => row.slice(0, -1));
+  
+    // Convert the modified table data to Excel sheet
+    const worksheet = XLSX.utils.aoa_to_sheet(modifiedTableData);
+  
+    // Create workbook and append the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Teachers');
+  
+    // Save the workbook as an Excel file
+    XLSX.writeFile(workbook, 'teachers.xlsx');
+  };
+
   return (
-    <Paper sx={{ width: '100%', mb: 2 }}>
-      <TableContainer>
-        <Table>
-          <TableHead
-          style={{backgroundColor:"#F8F8F8"}}>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth, fontWeight:"bold",backgroundColor:'#F0F0F0',color:'black' }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {teachersList?.data && teachersList.data.length > 0 ? (
-            teachersList.data
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => (
-            <TableRow
-                hover
-                // role="checkbox"
-                // tabIndex={-1}
-                // key={row.code}
-                style={{ borderBottom: '1px solid rgb(224 224 224)' }}
-            >
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.branch_name}</TableCell>
-                <TableCell>{row.course_name}</TableCell>
-                <TableCell>{row.department_name}</TableCell>
-                <TableCell padding="none">
-                {/* <Tooltip title="Edit">
+    <>
+    <div class="flex justify-start" style={{backgroundColor: "white", marginTop: "3px", padding:"16px"}}>
+      <button onClick={exportToExcel} class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded">
+        Export as Excel
+    </button>
+    </div>
+      <Paper sx={{ width: '100%', mb: 2,}}>
+        <TableContainer>
+          <Table id="teachers-table">
+            <TableHead
+              style={{ backgroundColor: "#F8F8F8" }}>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth, fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {teachersList?.data && teachersList.data.length > 0 ? (
+                teachersList.data
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => (
+                    <TableRow
+                      hover
+                      // role="checkbox"
+                      // tabIndex={-1}
+                      // key={row.code}
+                      style={{ borderBottom: '1px solid rgb(224 224 224)' }}
+                    >
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.branch_name}</TableCell>
+                      <TableCell>{row.course_name}</TableCell>
+                      <TableCell>{row.department_name}</TableCell>
+                      <TableCell padding="none">
+                        {/* <Tooltip title="Edit">
                     <IconButton onClick={() => handleOpenEdit(row)}>
                         <EditIcon sx={{ color: '#006db5' }} />
                         
                     </IconButton>
                 </Tooltip>
                  */}
-                 <Stack direction="row" spacing={0}>
-                 <EditTeachersModal
-                 teacherId={index}
-                 teacherName={row.name}
-                 />
+                        <Stack direction="row" spacing={0}>
+                          <EditTeachersModal
+                            teacherId={index}
+                            teacherName={row.name} />
 
-                  <Tooltip title="Delete">
-                    <IconButton onClick={() => handleOpenDelete(index)}>
-                      <DeleteIcon sx={{ color: '#d11a2a' }} />
-                    </IconButton>
-                  </Tooltip>
-                 </Stack>
-                 
-                <Modal
-                  open={openDeleteIndex === index}
-                  onClose={handleCloseDelete}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" style={{color:'#d11a2a',fontWeight:'bold'}}>
-                    Delete
-                  </Typography>
-                  <Typography id="modal-modal-description" sx={{ mt: 0 }}>
-                    Are you sure you want to delete <span style={{fontWeight:'bold'}}> {row.name}</span>?
-                  </Typography>
-                  <Stack direction="row" spacing={2} sx={{ mt: 3 }} style={{justifyContent:'end'}}>
-                    <Button onClick={handleCloseDelete} variant="outlined" style={{color:'#6c757d', border:'1px solid #6c757d'}}>
-                      CANCEL
-                    </Button>
-                    <Button  variant="contained" color="error" endIcon={<DeleteIcon />}>
-                      DELETE
-                    </Button>
-                  </Stack>
-                </Box>
-                </Modal>
-                </TableCell>
-            </TableRow>
-            ))
-        ) : (
-            <TableRow>
-                <TableCell colSpan={5} align="center">
-                No data to show here yet.
-                </TableCell>
-            </TableRow>
-        )}
-        </TableBody>
+                          <Tooltip title="Delete">
+                            <IconButton onClick={() => handleOpenDelete(index)}>
+                              <DeleteIcon sx={{ color: '#d11a2a' }} />
+                            </IconButton>
+                          </Tooltip>
+                        </Stack>
 
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={teacherCount}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+                        <Modal
+                          open={openDeleteIndex === index}
+                          onClose={handleCloseDelete}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2" style={{ color: '#d11a2a', fontWeight: 'bold' }}>
+                              Delete
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 0 }}>
+                              Are you sure you want to delete <span style={{ fontWeight: 'bold' }}> {row.name}</span>?
+                            </Typography>
+                            <Stack direction="row" spacing={2} sx={{ mt: 3 }} style={{ justifyContent: 'end' }}>
+                              <Button onClick={handleCloseDelete} variant="outlined" style={{ color: '#6c757d', border: '1px solid #6c757d' }}>
+                                CANCEL
+                              </Button>
+                              <Button variant="contained" color="error" endIcon={<DeleteIcon />}>
+                                DELETE
+                              </Button>
+                            </Stack>
+                          </Box>
+                        </Modal>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    No data to show here yet.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={teacherCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage} />
+      </Paper>
+    </>
   );
 };
 
