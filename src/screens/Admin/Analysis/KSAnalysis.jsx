@@ -252,7 +252,8 @@ const KSAnalysis = () => {
                 </span>
                 {hardSkillData?.length > 0 && (
                   <ResponsiveHeatMap
-                    data={hardSkillData}
+                    // data={hardSkillData}
+                    data={hardSkills}
                     margin={{ top: 70, right: 90, bottom: 60, left: 90 }}
                     valueFormat=">-.2s"
                     axisTop={{
@@ -304,7 +305,8 @@ const KSAnalysis = () => {
                 </span>
                 {softSkillData?.length > 0 && (
                   <ResponsiveHeatMap
-                    data={softSkillData}
+                    // data={softSkillData}
+                    data={softSkills}
                     margin={{ top: 90, right: 90, bottom: 60, left: 90 }}
                     valueFormat=">-.2s"
                     axisTop={{

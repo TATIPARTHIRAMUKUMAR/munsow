@@ -124,6 +124,29 @@ const EmotionSensing = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const PositiveEmotions = [
+    { 'name': 'Point 1', 'Happiness': 3 },
+    { 'name': 'Point 2', 'Happiness': 4 },
+    { 'name': 'Point 3', 'Happiness': 6 },
+    { 'name': 'Point 4', 'Happiness': 2 },
+    { 'name': 'Point 5', 'Happiness': 5 }
+  ];
+  const NeutralEmotions = [
+    { 'name': 'Point 1', 'Suprise': 3 },
+    { 'name': 'Point 2', 'Suprise': 5 },
+    { 'name': 'Point 3', 'Suprise': 6 },
+    { 'name': 'Point 4', 'Suprise': 2 },
+    { 'name': 'Point 5', 'Suprise': 1 }
+  ];
+  const NegativeEmotions = [
+    { 'name': 'Point 1', 'Disgust': 2, 'Contempt': 3, 'Sadnesss': 4, 'Anger': 5, 'Fear': 2 },
+    { 'name': 'Point 2', 'Disgust': 3, 'Contempt': 2, 'Sadnesss': 5, 'Anger': 4, 'Fear': 3 },
+    { 'name': 'Point 3', 'Disgust': 4, 'Contempt': 5, 'Sadnesss': 3, 'Anger': 3, 'Fear': 4 },
+    { 'name': 'Point 4', 'Disgust': 3, 'Contempt': 4, 'Sadnesss': 2, 'Anger': 2, 'Fear': 5 },
+    { 'name': 'Point 5', 'Disgust': 5, 'Contempt': 3, 'Sadnesss': 4, 'Anger': 4, 'Fear': 3 }
+  ];
+
   return (
     <div>
       <div className="bg-white p-10">
@@ -159,20 +182,23 @@ const EmotionSensing = () => {
         <div className="flex">
           <div className="w-[32rem] mx-6">
             <PositiveEmotionsChart
-              data={emotionStats?.graph_1?.data}
+              // data={emotionStats?.graph_1?.data}
+              data={PositiveEmotions}
               name={emotionStats?.graph_1?.name}
             />
           </div>
           <div className="w-[32rem] mx-6">
             <NeutralEmotionsChart
-              data={emotionStats?.graph_2?.data}
+              // data={emotionStats?.graph_2?.data}
+              data={NeutralEmotions}
               name={emotionStats?.graph_2?.name}
             />
           </div>
         </div>
         <div className="max-w-lg mx-80">
           <NegativeEmotionsChart
-            data={emotionStats?.graph_3?.data}
+            // data={emotionStats?.graph_3?.data}
+            data={NegativeEmotions}
             name={emotionStats?.graph_3?.name}
           />
         </div>
