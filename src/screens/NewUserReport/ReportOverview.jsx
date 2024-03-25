@@ -71,7 +71,7 @@ const ReportOverview = (props) => {
                     <span className={`text-2xl font-bold ${getScoreColor(score.score)}`}>{score.score}/10</span>
                 </div>
                 <div>
-                    <h1 className="text-purple font-semibold underline py-1">{setTitle(head, index)}</h1>
+                    <h1 className="text-purple font-semibold underline py-1">{score?.title}</h1>
                     <p className="text-purple">{score.desc}</p>
                 </div>
             </div>

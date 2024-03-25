@@ -87,12 +87,12 @@ export default function StudentDashboard() {
                 </button>
               </div>
             </div>
-            <div className="overflow-auto">
+            {/* <div className="overflow-auto">
               <img
                 className="h-40 w-40 bg-transparent max-w-full h-auto"
                 src={image2}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="col-span-1 relative overflow-auto max-w-full h-auto">
