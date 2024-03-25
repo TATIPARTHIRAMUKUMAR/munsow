@@ -23,6 +23,7 @@ import { Collapse } from "@mui/material";
 import AppHeader from "./screens/Admin/AppHeader";
 import { IoMdSettings } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
+import  munsowLogo  from "../src/assets/MunsowLogo.png";
 
 import {
   FaThLarge,
@@ -233,7 +234,53 @@ export default function HeaderFooterLayout({ Component }) {
           subItems: [],
         },
       ]);
-    } else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 2) {
+    } else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
+      setMenuData([
+        {
+          label: "Dashboard",
+          icon: <FaThLarge size={20} className="" />,
+          route: "/studentDashboard",
+          subItems: [],
+        },
+        // {
+        //   label: "Practice Now",
+        //   icon: <FaClone size={20} className="" />,
+        //   route: "/practice",
+        //   subItems: [],
+        // },
+        {
+          label: "My Interview Reports",
+          icon: <FaChartLine size={20} className="" />,
+          route: "/report",
+          subItems: [],
+        },
+        // {
+        //   label: "My Courses",
+        //   icon: <FaChartLine size={20} className="" />,
+        //   route: "/studentCourseList",
+        //   subItems: [],
+        // },
+        {
+          label: "My Profile",
+          icon: <FaUser size={20} className="" />,
+          route: "/profile",
+          subItems: [],
+        },
+        // {
+        //   label: "Settings",
+        //   icon: <FaCog size={20} className="" />,
+        //   route: "/settings",
+        //   subItems: [],
+        // },
+        // {
+        //   label: "Help & Support",
+        //   icon: <FaQuestionCircle size={20} className="" />,
+        //   route: "/help",
+        //   subItems: [],
+        // },
+      ]);
+    } 
+     else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 2) {
       setMenuData([
         {
           label: "Dashboard",
@@ -434,7 +481,7 @@ export default function HeaderFooterLayout({ Component }) {
       >
         <DrawerHeader style={{ background: backgroundColorClass }}>
           <img
-            src="src/assets/MunsowLogo.png"
+            src={munsowLogo}
             alt="Logo"
             style={{ height: "85px", width: "65px", marginRight: "10px" }}
           />
