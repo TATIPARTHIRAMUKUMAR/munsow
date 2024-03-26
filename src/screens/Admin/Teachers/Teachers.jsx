@@ -26,6 +26,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 
 import EditTeachersModal from "./EditTeachersModal";
 
@@ -169,27 +170,22 @@ const Teachers = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  
-  // const exportToExcel = () => {
-  //   const worksheet = XLSX.utils.table_to_sheet(document.getElementById('teachers-table'));
-  //   const workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Teachers');
-  //   XLSX.writeFile(workbook, 'teachers.xlsx');
-  // };
 
   const exportToExcel = () => {
-    const table = document.getElementById('teachers-table');
+    // Extracting data from the teachersList array
+    const data = teachersList?.data?.map(row => [
+      row.name,
+      row.branch_name,
+      row.course_name,
+      row.department_name,
+    ]);
   
-    // Create a copy of the table data
-    const copiedTableData = Array.from(table.rows).map(row =>
-      Array.from(row.cells).map(cell => cell.textContent)
-    );
+    // Adding headers to the data
+    const headers = ['Name', 'Branch', 'Course', 'Department'];
+    data.unshift(headers);
   
-    // Remove the last column from the copied table data
-    const modifiedTableData = copiedTableData.map(row => row.slice(0, -1));
-  
-    // Convert the modified table data to Excel sheet
-    const worksheet = XLSX.utils.aoa_to_sheet(modifiedTableData);
+    // Convert the data to Excel sheet
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
   
     // Create workbook and append the worksheet
     const workbook = XLSX.utils.book_new();
@@ -198,12 +194,13 @@ const Teachers = () => {
     // Save the workbook as an Excel file
     XLSX.writeFile(workbook, 'teachers.xlsx');
   };
+  
 
   return (
     <>
-    <div class="flex justify-start" style={{backgroundColor: "white", marginTop: "3px", padding:"16px"}}>
-      <button onClick={exportToExcel} class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded">
-        Export as Excel
+    <div class="flex justify-end" style={{backgroundColor: "white", marginTop: "3px", padding:"16px"}}>
+      <button onClick={exportToExcel} class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded flex items-center">
+        Export as Excel<DownloadForOfflineIcon fontSize='medium' style={{marginLeft:"4px"}}/>
     </button>
     </div>
       <Paper sx={{ width: '100%', mb: 2,}}>
