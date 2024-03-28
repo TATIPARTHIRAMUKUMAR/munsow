@@ -173,6 +173,7 @@ const LinksList = () => {
               <TableCell style={{fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Expiry Date</TableCell>
               <TableCell style={{fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Status</TableCell>
               <TableCell style={{fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Get Link</TableCell>
+              <TableCell style={{fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Progress</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -210,6 +211,17 @@ const LinksList = () => {
                         {copiedRows[row.id] ? <FileCopyIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
                       </IconButton>
                       </Tooltip>
+                    </TableCell>
+                    <TableCell>{
+                        <div className="w-full bg-gray-300 rounded-full">
+                        <div
+                          style={{ width: "60%"}}
+                          className={`text-center text-xs text-white bg-red-500 rounded-full`}
+                        >
+                          &nbsp;
+                        </div>
+                      </div>
+                      }
                     </TableCell>
               </TableRow>
             ))
