@@ -46,6 +46,8 @@ const Configurations = () => {
     { label: 'Hard Skills', key: 'hard_skill' },
     { label: 'Company', key: 'company' },
     { label: 'Institution', key: 'institution' },
+    { label: 'Interview Questions', key: 'interview_questions' },
+
   ];
 
   const generateDownloadUrl = (mode) => {
