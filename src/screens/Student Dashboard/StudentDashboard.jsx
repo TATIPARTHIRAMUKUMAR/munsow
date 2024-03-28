@@ -6,7 +6,7 @@ import BarChartLines from "./BarChart";
 import Carousel from "./Carousel";
 import { useNavigate } from "react-router-dom";
 import GLOBAL_CONSTANTS from "../../../GlobalConstants";
-import { loadUserStats } from "../../redux/action";
+import { interviewAllowed, loadUserStats } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useDarkMode } from "./../../Dark";
 
@@ -24,11 +24,11 @@ export default function StudentDashboard() {
     ? reduxColorTheme.dark.textColor2
     : reduxColorTheme.light.textColor2;
 
-    const backgroundColor = isDarkMode
+  const backgroundColor = isDarkMode
     ? reduxColorTheme.dark.foreground
     : reduxColorTheme.light.foreground;
 
-    const textColor = isDarkMode
+  const textColor = isDarkMode
     ? reduxColorTheme.dark.textColor3
     : reduxColorTheme.light.textColor3;
 
@@ -36,8 +36,22 @@ export default function StudentDashboard() {
     dispatch(loadUserStats());
   }, []);
 
+
+  const navigateUser = () => {
+    if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
+      dispatch(interviewAllowed(1, (resp) => {
+        if (resp) {
+          navigate("/practice");
+        }
+      }))
+    }
+    else {
+      navigate("/practice");
+    }
+  };
+
   return (
-    <div  style={{ background: backgroundColor}}>
+    <div style={{ background: backgroundColor }}>
       <div
         className="grid grid-cols-1 sm:grid-cols-3 gap-7 px-6 py-6 relative overflow-auto max-w-full h-auto"
       >
@@ -71,7 +85,8 @@ export default function StudentDashboard() {
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                   }}
                   onClick={() => {
-                    navigate("/practice");
+                    navigateUser()
+                    // navigate("/practice");
                   }}
                 >
                   Practice Now

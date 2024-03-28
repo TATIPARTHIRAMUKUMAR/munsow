@@ -879,6 +879,34 @@ export const updateLinkStatus = (id,param_text, callback) => {
   };
 };
 
+export const interviewAllowed = (id, callback) => {
+  // console.log(id,param_text,"hehe")
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Checking...", { type: "loading", autoClose: false });
+    axios
+      .get(`${GLOBAL_CONSTANTS.backend_url}user/is_interview_allowed`, { headers })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: 2000 })
+
+        }
+        else {
+          // console.log("resp",resp)
+          // toast.update(toastId, { render: param_text=="deactive"?"Link Deactivated Successfully":"Link Activated Successfully", type: "success", autoClose: 2000 })
+          callback(resp?.data)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        // toast.update(toastId, { render: "Something bad happend ", type: "error", autoClose: 2000 })
+      });
+  };
+};
+
 
 export const getLinkUsers = (id, callback) => {
   return function () {
