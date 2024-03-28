@@ -6,13 +6,21 @@ import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import hardSkill from '../../assets/tools.png'
 import sofSkills from '../../assets/expertise.png'
 import { useSelector } from 'react-redux';
+
+
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat'; // Import for the flat trend icon
+import { useDarkMode } from "./../../Dark";
 
 const SecondRow = () => {
+  const { userStats } = useSelector((state) => state.data);
 
-    const { userStats } = useSelector((state) => state.data);
+  const [data, setData] = useState([]);
+  const { isDarkMode, colorTheme } = useDarkMode();
 
-    const [data, setData] = useState([]);
+  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const textColor = isDarkMode
+    ? reduxColorTheme.dark.textColor2
+    : reduxColorTheme.light.textColor2;
 
     useEffect(() => {
         setData(userStats?.skill_trends ? userStats.skill_trends : {})
@@ -32,8 +40,9 @@ const SecondRow = () => {
 
     return (
         <div className="col-span-1 bg-white rounded-lg">
-            <p className="text-[#886cc0] text-lg font-semibold p-2">Hard Skill vs Soft Skill Trend</p>
-            <Divider style={{ opacity: "0.4" }} />
+ <p className=" text-lg font-semibold p-2" style={{ color: textColor }}>
+        Hard Skill vs Soft Skill Trend
+      </p>            <Divider style={{ opacity: "0.4" }} />
             <div className='p-6'>
                 <div className='flex justify-between items-center'>
                     <div className='flex flex-row justify-start items-center space-x-4'>

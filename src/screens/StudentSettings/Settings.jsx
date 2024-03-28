@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDarkMode } from '../../Dark';
 
 const SettingsPage = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +10,15 @@ const SettingsPage = () => {
   const [interviewAlertsEnabled, setInterviewAlertsEnabled] = useState(true);
   const [classScheduleAlertsEnabled, setClassScheduleAlertsEnabled] = useState(true);
   const [libraryDueAlertsEnabled, setLibraryDueAlertsEnabled] = useState(true);
+  const {
+    colorTheme,
+  } = useSelector((state) => state?.data);
+
+  const { isDarkMode } = useDarkMode();
+
+  const background = isDarkMode
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +27,7 @@ const SettingsPage = () => {
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-4">
-      <h1 className="text-3xl text-[#886cc0] font-semibold mb-6">Settings</h1>
+      <h1 className="text-3xl  font-semibold mb-6">Settings</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-600">
@@ -51,7 +62,8 @@ const SettingsPage = () => {
             type="checkbox"
             checked={notificationsEnabled}
             onChange={(e) => setNotificationsEnabled(e.target.checked)}
-            className="mt-1 text-[#886cc0]"
+            style={{color: background}}
+            className="mt-1 "
           />
         </div>
         <div>
@@ -63,7 +75,8 @@ const SettingsPage = () => {
             type="checkbox"
             checked={marksAlertsEnabled}
             onChange={(e) => setMarksAlertsEnabled(e.target.checked)}
-            className="mt-1 text-[#886cc0]"
+            style={{color: background}}
+            className="mt-1"
           />
         </div>
         <div>
@@ -75,7 +88,8 @@ const SettingsPage = () => {
             type="checkbox"
             checked={interviewAlertsEnabled}
             onChange={(e) => setInterviewAlertsEnabled(e.target.checked)}
-            className="mt-1 text-[#886cc0]"
+            style={{color: background}}
+            className="mt-1"
           />
         </div>
         <div>
@@ -87,7 +101,8 @@ const SettingsPage = () => {
             type="checkbox"
             checked={classScheduleAlertsEnabled}
             onChange={(e) => setClassScheduleAlertsEnabled(e.target.checked)}
-            className="mt-1 text-[#886cc0]"
+            style={{color: background}}
+            className="mt-1 "
           />
         </div>
         <div>
@@ -99,11 +114,12 @@ const SettingsPage = () => {
             type="checkbox"
             checked={libraryDueAlertsEnabled}
             onChange={(e) => setLibraryDueAlertsEnabled(e.target.checked)}
-            className="mt-1 text-[#886cc0]"
+            style={{color: background}}
+            className="mt-1 "
           />
         </div>
         <div className='pt-5'>
-          <button type="submit" className="bg-[#886cc0] text-white py-2  px-4 rounded">
+          <button type="submit" style={{background: background}}className="text-white py-2  px-4 rounded">
             Save
           </button>
         </div>

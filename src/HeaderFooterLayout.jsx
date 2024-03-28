@@ -23,6 +23,7 @@ import { Collapse } from "@mui/material";
 import AppHeader from "./screens/Admin/AppHeader";
 import { IoMdSettings } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
+import  munsowLogo  from "../src/assets/MunsowLogo.png";
 
 import {
   FaThLarge,
@@ -38,32 +39,27 @@ import {
   FaChalkboardTeacher,
   FaCode,
   FaUserSecret,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
-import {
-  FaHeartPulse, FaSection,
-} from 'react-icons/fa6';
+import { FaHeartPulse, FaSection } from "react-icons/fa6";
 
-import {
-  BiSolidReport
-} from 'react-icons/bi';
+import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
 
 const drawerWidth = 270;
 
-const openedMixin = (theme, role1) => ({
+const openedMixin = (theme, role1, color) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
-  background: role1 === 1 ? "white" : "white",
-  color: "#FFFFFF",
+  background: role1 === 1 ? "rgb(36, 45, 54)" : "rgb(36, 45, 54)",
 });
 
-const closedMixin = (theme, role1) => ({
+const closedMixin = (theme, role1, color) => ({
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -73,7 +69,7 @@ const closedMixin = (theme, role1) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  background: role1 === 1 ? "white" : "white",
+  background: role1 === 1 ? "rgb(36, 45, 54)" : "rgb(36, 45, 54)",
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -91,24 +87,23 @@ const DrawerFooter = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 1),
   position: "fixed",
   bottom: 0,
-  color: "#FFFFFF",
   ...theme.mixins.toolbar,
 }));
 
 const CustomDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open, role1 }) => ({
+})(({ theme, open, role1, color }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
   ...(open && {
-    ...openedMixin(theme, role1),
-    "& .MuiDrawer-paper": openedMixin(theme, role1),
+    ...openedMixin(theme, role1, color),
+    "& .MuiDrawer-paper": openedMixin(theme, role1, color),
   }),
   ...(!open && {
-    ...closedMixin(theme, role1),
-    "& .MuiDrawer-paper": closedMixin(theme, role1),
+    ...closedMixin(theme, role1, color),
+    "& .MuiDrawer-paper": closedMixin(theme, role1, color),
   }),
 }));
 
@@ -126,9 +121,31 @@ export default function HeaderFooterLayout({ Component }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedSubItem, setSelectedSubItem] = useState(null);
 
+  const { isDarkMode, toggleDarkMode, color, colorTheme } = useDarkMode();
 
-  const { isDarkMode } = useDarkMode();
-  const backgroundColorClass = isDarkMode ? "bg-dark-primary" : "bg-primary";
+  const backgroundColorClass = isDarkMode
+    ? colorTheme.dark.background
+    : colorTheme.light.background;
+
+  const borderSelectedColor = isDarkMode
+    ? colorTheme.dark.selectBorder
+    : colorTheme.light.selectBorder;
+
+  const selectedBackgroundColor = isDarkMode
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
+
+  const selectedIcon = isDarkMode
+    ? colorTheme.dark.selectIcon
+    : colorTheme.light.selectIcon;
+
+  const textColor = isDarkMode
+    ? colorTheme.dark.textColor
+    : colorTheme.light.textColor;
+
+  const selectTextColor = isDarkMode
+    ? colorTheme.dark.selectTextColor
+    : colorTheme.light.selectTextColor;
 
   useEffect(() => {
     if (GLOBAL_CONSTANTS?.user_cred?.role_id === 1) {
@@ -191,6 +208,11 @@ export default function HeaderFooterLayout({ Component }) {
               icon: <FaChalkboardTeacher size={20} className="" />,
               route: "/teachersList",
             },
+            {
+              label: "Screening Users",
+              icon: <FaChalkboardTeacher size={20} className="" />,
+              route: "/screeningUsers",
+            },
           ],
         },
         {
@@ -212,7 +234,53 @@ export default function HeaderFooterLayout({ Component }) {
           subItems: [],
         },
       ]);
-    } else if(GLOBAL_CONSTANTS?.user_cred?.role_id===2){
+    } else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
+      setMenuData([
+        {
+          label: "Dashboard",
+          icon: <FaThLarge size={20} className="" />,
+          route: "/studentDashboard",
+          subItems: [],
+        },
+        // {
+        //   label: "Practice Now",
+        //   icon: <FaClone size={20} className="" />,
+        //   route: "/practice",
+        //   subItems: [],
+        // },
+        {
+          label: "My Interview Reports",
+          icon: <FaChartLine size={20} className="" />,
+          route: "/report",
+          subItems: [],
+        },
+        // {
+        //   label: "My Courses",
+        //   icon: <FaChartLine size={20} className="" />,
+        //   route: "/studentCourseList",
+        //   subItems: [],
+        // },
+        {
+          label: "My Profile",
+          icon: <FaUser size={20} className="" />,
+          route: "/profile",
+          subItems: [],
+        },
+        // {
+        //   label: "Settings",
+        //   icon: <FaCog size={20} className="" />,
+        //   route: "/settings",
+        //   subItems: [],
+        // },
+        // {
+        //   label: "Help & Support",
+        //   icon: <FaQuestionCircle size={20} className="" />,
+        //   route: "/help",
+        //   subItems: [],
+        // },
+      ]);
+    } 
+     else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 2) {
       setMenuData([
         {
           label: "Dashboard",
@@ -251,8 +319,7 @@ export default function HeaderFooterLayout({ Component }) {
         //   subItems: [],
         // },
       ]);
-    }
-    else{
+    } else {
       setMenuData([
         {
           label: "Dashboard",
@@ -310,11 +377,13 @@ export default function HeaderFooterLayout({ Component }) {
     if (menuData?.length > 0) {
       let route = location.pathname;
 
-      let meunItem = menuData?.find((m) => m?.route == route || m?.subItems?.find((s) => s.route == route));
+      let meunItem = menuData?.find(
+        (m) => m?.route == route || m?.subItems?.find((s) => s.route == route)
+      );
       let index = menuData?.findIndex((m) => m?.route == meunItem?.route);
       setSelectedItem(index);
     }
-  }, [menuData])
+  }, [menuData]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -325,16 +394,22 @@ export default function HeaderFooterLayout({ Component }) {
   };
 
   const handleListItemClick = (index, route) => {
-    if(route=="/adminDashboard" || route=="/behaviourAnalysis" || route=="/ksanalysis" || route=="/practicalThinking" || route=="/emotionSensing"){
+    if (
+      route == "/adminDashboard" ||
+      route == "/behaviourAnalysis" ||
+      route == "/ksanalysis" ||
+      route == "/practicalThinking" ||
+      route == "/emotionSensing"
+    ) {
       localStorage.setItem("branch", "All Branches");
       localStorage.setItem("course", "All Courses");
       localStorage.setItem("department", "All Departments");
       localStorage.setItem("user", "All Users");
-
     }
     setSelectedItem(index);
+    setSelectedSubItem(null);
     navigate(route);
-    handleDrawerOpen();
+    // handleDrawerOpen();
   };
 
   useEffect(() => {
@@ -365,45 +440,96 @@ export default function HeaderFooterLayout({ Component }) {
     }
   }, [location, menuData]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 900) {
+        setOpen(false);
+      } else {
+        setOpen(true);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <Box sx={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden" }}>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
       <CssBaseline />
-      <CustomDrawer variant="permanent" open={open} role1={GLOBAL_CONSTANTS?.user_cred?.role_id ? GLOBAL_CONSTANTS?.user_cred?.role_id : 1}>
-        <DrawerHeader style={{ background: `${backgroundColorClass}` }}>
-          <div className="font-bold  text-[#4e3f6b] text-2xl pr-10">MUNSOW</div>
+      <CustomDrawer
+        variant="permanent"
+        open={open}
+        role1={
+          GLOBAL_CONSTANTS?.user_cred?.role_id
+            ? GLOBAL_CONSTANTS?.user_cred?.role_id
+            : 1
+        }
+        color={color.background}
+        background={backgroundColorClass}
+      >
+        <DrawerHeader style={{ background: backgroundColorClass }}>
+          <img
+            src={munsowLogo}
+            alt="Logo"
+            style={{ height: "85px", width: "65px", marginRight: "10px" }}
+          />
+          <div className="font-bold text-2xl pr-8" style={{ color: textColor }}>
+            MUNSOW
+          </div>
           {!open ? (
             <IconButton onClick={handleDrawerOpen}>
               {theme.direction === "rtl" ? (
-                <ChevronLeftIcon style={{ color: "black" }} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               ) : (
-                <ChevronRightIcon style={{ color: "black" }} />
+                <ChevronRightIcon style={{ color: textColor }} />
               )}
             </IconButton>
           ) : (
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
-                <ChevronRightIcon style={{ color: "black" }} />
+                <ChevronRightIcon style={{ color: textColor }} />
               ) : (
-                <ChevronLeftIcon style={{ color: "black" }} />
+                <ChevronLeftIcon style={{ color: textColor }} />
               )}
             </IconButton>
           )}
         </DrawerHeader>
-        <Divider style={{ opacity: "0.2" }} />
-        <List>
+        <Divider style={{ opacity: "0.2", background: backgroundColorClass }} />
+        <List style={{ background: backgroundColorClass }}>
           {menuData.map((mainItem, mainIndex) => (
             <div
               key={mainIndex}
               className={classNames(
-                GLOBAL_CONSTANTS?.user_cred?.role_id !== 1 && (mainIndex == 3 || mainIndex == 5) ? "mb-16" : "mb-2",
+                GLOBAL_CONSTANTS?.user_cred?.role_id !== 1 &&
+                  (mainIndex == 3 || mainIndex == 5)
+                  ? "mb-16"
+                  : "mb-2",
                 ""
               )}
+              style={{ background: backgroundColorClass }}
             >
               <ListItem
                 disablePadding
                 onClick={() => {
                   if (mainItem.subItems.length > 0) {
-                    setOpenSubMenu(openSubMenu === mainIndex ? null : mainIndex);
+                    if (selectedItem !== mainIndex) {
+                      setSelectedSubItem(null);
+                    }
+                    setOpenSubMenu(
+                      openSubMenu === mainIndex ? null : mainIndex
+                    );
                   } else {
                     handleListItemClick(mainIndex, mainItem.route);
                   }
@@ -415,16 +541,25 @@ export default function HeaderFooterLayout({ Component }) {
                   },
                 }}
               >
-
                 <ListItemButton
                   sx={{
                     minHeight: 50,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
-                    backgroundColor: selectedItem === mainIndex ? "#f3f0f9" : "transparent",
-                    borderLeft: selectedItem === mainIndex ? "5px solid purple" : "5px solid transparent",
-                    borderBottomRightRadius: open && "40px",
-                    // color:selectedItem === mainIndex ? "purple" : "transparent",
+                    // backgroundColor: selectedItem === mainIndex ? color : 0,
+                    borderLeft:
+                      selectedItem === mainIndex
+                        ? `5px solid ${borderSelectedColor}`
+                        : "5px solid transparent",
+                    borderRadius: open && "5px",
+                    margin: "0px 10px",
+                    "&:hover": {
+                      backgroundColor: selectedBackgroundColor,
+                    },
+                    background:
+                      selectedItem === mainIndex
+                        ? selectedBackgroundColor
+                        : "transparent",
                   }}
                 >
                   <ListItemIcon
@@ -432,21 +567,32 @@ export default function HeaderFooterLayout({ Component }) {
                       minWidth: 0,
                       mr: open ? 2 : "auto",
                       justifyContent: "center",
-                      color: selectedItem === mainIndex ? "#a590cf" : "rgb(107 114 128)",
+                      color:
+                        selectedItem === mainIndex
+                          ? `${selectedIcon}`
+                          : "white",
                     }}
-                  // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
+                    // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                   >
                     {mainItem.icon}
                   </ListItemIcon>
                   <ListItemText
                     disableTypography
-                    // style={{ color: selectedItem === mainIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }}
+                    style={{
+                      color:
+                        selectedItem === mainIndex
+                          ? selectTextColor
+                          : "#FFFFFF",
+                    }}
                     className={classNames(
-                      selectedItem === mainIndex ? "text-[#a590cf] font-bold" : "text-gray-500 font-medium",
+                      selectedItem === mainIndex
+                        ? "font-semibold"
+                        : `text-500 font-medium`,
                       "text-base"
                     )}
                     primary={mainItem.label}
-                    sx={{ opacity: open ? 1 : 0 }} />
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
                   {mainItem.subItems.length > 0 && (
                     <ListItemIcon
                       sx={{
@@ -455,15 +601,33 @@ export default function HeaderFooterLayout({ Component }) {
                       }}
                     >
                       {openSubMenu === mainIndex ? (
-                        <ExpandLessIcon />
+                        <ExpandLessIcon
+                          style={{
+                            color:
+                              selectedItem === mainIndex
+                                ? "#21263e"
+                                : "#fafcfc",
+                          }}
+                        />
                       ) : (
-                        <ExpandMoreIcon />
+                        <ExpandMoreIcon
+                          style={{
+                            color:
+                              selectedItem === mainIndex
+                                ? "#21263e"
+                                : "#fafcfc",
+                          }}
+                        />
                       )}
                     </ListItemIcon>
                   )}
                 </ListItemButton>
               </ListItem>
-              <Collapse in={openSubMenu === mainIndex} timeout="auto" unmountOnExit>
+              <Collapse
+                in={openSubMenu === mainIndex}
+                timeout="auto"
+                unmountOnExit
+              >
                 <List component="div" disablePadding>
                   {mainItem.subItems.map((subItem, subIndex) => (
                     <ListItem
@@ -471,8 +635,12 @@ export default function HeaderFooterLayout({ Component }) {
                       disablePadding
                       sx={{ display: "block", pl: open ? 3 : 0 }}
                       onClick={() => {
-                        let meunItem = menuData?.find((m) => m?.subItems?.find((s) => s.route == subItem.route));
-                        let index = menuData?.findIndex((m) => m?.route == meunItem?.route);
+                        let meunItem = menuData?.find((m) =>
+                          m?.subItems?.find((s) => s.route == subItem.route)
+                        );
+                        let index = menuData?.findIndex(
+                          (m) => m?.route == meunItem?.route
+                        );
                         handleListItemClick(index, subItem.route);
                         setSelectedSubItem(subIndex);
                       }}
@@ -483,9 +651,15 @@ export default function HeaderFooterLayout({ Component }) {
                           minHeight: 48,
                           justifyContent: open ? "initial" : "center",
                           px: 2.5,
-                          // backgroundColor: selectedItem === mainIndex ? "#f3f0f9" : "transparent",
-                          // borderBottomRightRadius:"40px"
-
+                          backgroundColor:
+                            selectedSubItem === subIndex
+                              ? "#2BE2D0"
+                              : "transparent",
+                          borderRadius: "5px",
+                          margin: "4px 10px",
+                          "&:hover": {
+                            backgroundColor: "#2BE2D0",
+                          },
                         }}
                       >
                         <ListItemIcon
@@ -493,20 +667,34 @@ export default function HeaderFooterLayout({ Component }) {
                             minWidth: 0,
                             mr: open ? 2 : "auto",
                             justifyContent: "center",
-                            color: selectedSubItem === subIndex ? "#a590cf" : "rgb(107 114 128)",
+                            color:
+                              selectedSubItem === subIndex
+                                ? "#21263e"
+                                : "white ",
                           }}
-                        // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
+
+                          // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                         >
                           {subItem.icon}
                         </ListItemIcon>
                         <ListItemText
                           disableTypography
-                          // style={{ color: selectedSubItem === subIndex ? "#a590cf" : "rgb(107 114 128)", fontSize: "15px" }} 
+                          style={{
+                            color:
+                              selectedSubItem === subIndex
+                                ? "#21263e"
+                                : "white",
+                            fontSize: "15px",
+                          }}
                           className={classNames(
-                            selectedSubItem === subIndex ? "text-[#a590cf] font-semibold" : "text-gray-500 font-medium",
+                            selectedSubItem === subIndex
+                              ? "font-semibold"
+                              : `text-500 font-medium`,
                             "text-base"
                           )}
-                          primary={subItem.label} sx={{ opacity: open ? 1 : 0 }} />
+                          primary={subItem.label}
+                          sx={{ opacity: open ? 1 : 0 }}
+                        />
                       </ListItemButton>
                     </ListItem>
                   ))}
@@ -515,10 +703,17 @@ export default function HeaderFooterLayout({ Component }) {
             </div>
           ))}
         </List>
-        <DrawerFooter>
+        <DrawerFooter
+          style={{
+            background: backgroundColorClass,
+            width: "inherit",
+          }}
+        >
           <ListItem
             disablePadding
-            sx={{ display: "block" }}
+            sx={{
+              display: "block",
+            }}
             onClick={() => {
               localStorage.clear();
               sessionStorage.clear();
@@ -531,6 +726,11 @@ export default function HeaderFooterLayout({ Component }) {
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
+                borderRadius: open && "5px",
+                margin: "0px 10px",
+                "&:hover": {
+                  backgroundColor: "#fad7d4",
+                },
               }}
             >
               <ListItemIcon
@@ -540,19 +740,29 @@ export default function HeaderFooterLayout({ Component }) {
                   justifyContent: "center",
                 }}
               >
-                <LogoutOutlinedIcon style={{ color: "black" }} />
+                <LogoutOutlinedIcon style={{ color: "#eb4034" }} />
               </ListItemIcon>
-              <ListItemText style={{ color: "black" }} primary={"Logout"} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText
+                style={{ color: "#eb4034" }}
+                primary={"Logout"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
             </ListItemButton>
           </ListItem>
         </DrawerFooter>
       </CustomDrawer>
 
-      <AppHeader open={open} role1={GLOBAL_CONSTANTS?.user_cred ? GLOBAL_CONSTANTS?.user_cred : {}} />
+      <AppHeader
+        open={open}
+        role1={GLOBAL_CONSTANTS?.user_cred ? GLOBAL_CONSTANTS?.user_cred : {}}
+      />
 
-      <div className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`} style={{ flexGrow: 1 }}>
-      {Component}
-    </div>
+      <div
+        className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`}
+        style={{ flexGrow: 1 }}
+      >
+        {Component}
+      </div>
     </Box>
   );
 }
