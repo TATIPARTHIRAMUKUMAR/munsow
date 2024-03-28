@@ -886,11 +886,11 @@ export const interviewAllowed = (id, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("Checking...", { type: "loading", autoClose: false });
     axios
       .get(`${GLOBAL_CONSTANTS.backend_url}user/is_interview_allowed`, { headers })
       .then((resp) => {
         if (resp?.data?.error) {
+          let toastId = toast("Checking...", { type: "loading", autoClose: 500 });
           toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: 2000 })
 
         }
