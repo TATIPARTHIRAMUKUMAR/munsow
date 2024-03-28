@@ -88,9 +88,9 @@ const LinksList = () => {
             {linksList?.map((row) => (
               <TableRow key={row.id}>
                 <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" >
-                https://munsow-stg.vercel.app/studentRegistration/{row.name}
+                https://munsow.vercel.app/studentRegistration/{row.name}
                 <Tooltip title={copiedRows[row.id] ? "Copied!" : "Copy to clipboard"}>
-                  <IconButton onClick={() => handleCopyToClipboard(`https://munsow-stg.vercel.app/studentRegistration/${row.unique_code}`, row.id)}>
+                  <IconButton onClick={() => handleCopyToClipboard(`https://munsow.vercel.app/studentRegistration/${row.unique_code}`, row.id)}>
                     {copiedRows[row.id] ? <FileCopyIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
                   </IconButton>
                 </Tooltip>
