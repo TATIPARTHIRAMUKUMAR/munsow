@@ -87,6 +87,7 @@ const SettingsPageAdmin = () => {
           <label className="flex items-center space-x-3">
             <input
               type="checkbox"
+              style={{color: '#2BE2D0'}}
               name="twoFactorAuth"
               checked={formData.twoFactorAuth}
               onChange={handleCheckChange}
@@ -102,6 +103,7 @@ const SettingsPageAdmin = () => {
           <label className="flex items-center space-x-3 mb-3">
             <input
               type="checkbox"
+              style={{color: '#2BE2D0'}}
               name="emailNotifications"
               checked={formData.emailNotifications}
               onChange={handleCheckChange}
@@ -113,6 +115,7 @@ const SettingsPageAdmin = () => {
             <input
               type="checkbox"
               name="smsNotifications"
+              style={{color: '#2BE2D0'}}
               checked={formData.smsNotifications}
               onChange={handleCheckChange}
               className="rounded"
@@ -122,7 +125,7 @@ const SettingsPageAdmin = () => {
         </section>
 
         {/* Submit Button */}
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button type="submit" style={{background: '#2BE2D0', color: '#252525'}} className="bg-blue-500 text-white py-2 px-4 rounded">
           Save Changes
         </button>
       </form>

@@ -7,14 +7,25 @@ import PasswordIcon from "@mui/icons-material/Password";
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import GLOBAL_CONSTANTS from "../../GlobalConstants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { user_update } from "../redux/action";
+import { useDarkMode } from "../Dark";
 
 export default function Profile() {
   const dispatch = useDispatch();
 
   const [loginData, setLoginData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    colorTheme,
+  } = useSelector((state) => state?.data);
+
+  const { isDarkMode } = useDarkMode();
+
+  const background = isDarkMode
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
 
   const onLogingChange = (key, value) => {
     console.log(key, value);
@@ -116,13 +127,13 @@ export default function Profile() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <PasswordIcon color="secondary" />
+                    <PasswordIcon style={{color: background}} />
                   </InputAdornment>
                 ),
                 endAdornment: (
                   <InputAdornment position="start">
                     {
-                      showPassword ? <VisibilityOffOutlinedIcon color="secondary" style={{ cursor: "pointer" }} onClick={() => { setShowPassword(() => false) }} /> : <RemoveRedEyeOutlinedIcon color="secondary" style={{ cursor: "pointer" }} onClick={() => setShowPassword(true)} />
+                      showPassword ? <VisibilityOffOutlinedIcon  style={{ cursor: "pointer", color: background }} onClick={() => { setShowPassword(() => false) }} /> : <RemoveRedEyeOutlinedIcon  style={{ cursor: "pointer", color: background }} onClick={() => setShowPassword(true)} />
                     }
                   </InputAdornment>
                 ),
@@ -133,7 +144,7 @@ export default function Profile() {
             <div className='flex justify-end gap-x-4'>
               <Button
                 size="small"
-                style={{ backgroundColor: '#886cc0', cursor: "pointer", padding: "5px 10px", color: "white" }}
+                style={{ backgroundColor: background, cursor: "pointer", padding: "5px 10px", color: "white" }}
                 onClick={() => { onUpdate() }}
               >
                 Update
