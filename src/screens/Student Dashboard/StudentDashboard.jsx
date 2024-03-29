@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import GLOBAL_CONSTANTS from "../../../GlobalConstants";
 import { loadUserStats } from "../../redux/action";
 import { useDispatch } from "react-redux";
+import LineChart from "./LineChart";
 
 
 export default function StudentDashboard() {
@@ -58,6 +59,10 @@ export default function StudentDashboard() {
                     <Carousel />
                 </div>
             </div>
+            
+        </div>
+        <div>
+            <LineChart/>
         </div>
     </div>);
 }
