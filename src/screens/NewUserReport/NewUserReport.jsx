@@ -22,7 +22,7 @@ const NewUserReport = () => {
     const storedReportData = localStorage.getItem('reportData');
     
     if (storedReportData) {
-      userReport = JSON.parse(storedReportData);
+      userReport = JSON?.parse(storedReportData);
     } else {
       console.log('No report data found in local storage');
     }
@@ -124,7 +124,7 @@ const NewUserReport = () => {
               sampleAns={question.suggested_answer}
               gotRight={question.Insights.what_you_got_right}
               gotWrong={question.Insights.what_you_got_wrong}
-              feedback={question.Insights["feedback_for_the candidate"]}
+              feedback={question.Insights["feedback_for_the candidate"]?.slice(0, -1)}
             />
             </div>
           ))}
