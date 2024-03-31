@@ -1,3 +1,5 @@
+import './UserReport.css'
+
 const SummarySnapshot = (props) => {
   const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score, head } = props;
 
@@ -17,12 +19,18 @@ const SummarySnapshot = (props) => {
   };
   const progressBarColor = (x) => {
     if (x >= 0 && x <= 4) {
-      return 'bg-red-500'; // Apply red color
+      console.log("if")
+      return 'bar-red-bg'; // Apply red color
     } else if (x >= 5 && x <= 7) {
-      return 'bg-orange-500'; // Apply yellow color
+      console.log("else if 1")
+      return 'bar-orange-bg'; // Apply yellow color
     } else if (x >= 8 && x <= 10) {
-      return 'bg-green-500'; // Apply green color
+      console.log("else if 2")
+
+      return 'bar-green-bg'; // Apply green color
     } else {
+      console.log("else")
+
       return 'text-gray'; // Default color or handle other cases
     }
   };
@@ -105,7 +113,7 @@ const SummarySnapshot = (props) => {
                     <h1 className={`text-xl font-bold ${getScoreColor(segment.secured_marks)}`}>
                       {segment.secured_marks}/10
                     </h1>
-                    <p className="text-purple font-bold underline">{segment?.title}</p>
+                    <p className="text-purple font-bold underline">{setTitle(category.main_title, sIndex)}</p>
                   </span>
                 </div>
               ))}
