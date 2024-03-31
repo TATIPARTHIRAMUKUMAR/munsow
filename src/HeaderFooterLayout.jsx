@@ -47,6 +47,8 @@ import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
 
+import { useLocation } from "react-router-dom";
+
 const drawerWidth = 270;
 
 const openedMixin = (theme, role1, color) => ({
@@ -108,6 +110,21 @@ const CustomDrawer = styled(MuiDrawer, {
 }));
 
 export default function HeaderFooterLayout({ Component }) {
+  const location = useLocation();
+  const [interviewStarted, setInterviewStarted] = useState(false);
+
+
+  useEffect(() => {
+    if (location.pathname === "/interview") {
+      setInterviewStarted(true);
+      setOpen(false);
+    } else {
+      setInterviewStarted(false);
+      setOpen(true);
+    }
+  }, [location]);
+
+
   const navigate = useNavigate();
   const location = useLocation(); 
 
@@ -393,6 +410,17 @@ export default function HeaderFooterLayout({ Component }) {
     setOpen(false);
   };
 
+  // useEffect(() => {
+  //   if (interviewStarted) {
+  //     if (interviewEnded) {
+  //       setOpen(true);
+  //     }
+  //     else {
+  //       setOpen(false);
+  //     }
+  //   }
+  // }, [interviewStarted, interviewEnded]);
+
   const handleListItemClick = (index, route) => {
     if (
       route == "/adminDashboard" ||
@@ -497,13 +525,13 @@ export default function HeaderFooterLayout({ Component }) {
               )}
             </IconButton>
           ) : (
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon style={{ color: textColor }} />
-              ) : (
-                <ChevronLeftIcon style={{ color: textColor }} />
-              )}
-            </IconButton>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "rtl" ? (
+                  <ChevronRightIcon style={{ color: textColor }} />
+                ) : (
+                  <ChevronLeftIcon style={{ color: textColor }} />
+                )}
+              </IconButton>
           )}
         </DrawerHeader>
         <Divider style={{ opacity: "0.2", background: backgroundColorClass }} />
@@ -523,13 +551,13 @@ export default function HeaderFooterLayout({ Component }) {
               <ListItem
                 disablePadding
                 onClick={() => {
-                  if (mainItem.subItems.length > 0) {
-                    if (selectedItem !== mainIndex) {
-                      setSelectedSubItem(null);
-                    }
-                    setOpenSubMenu(
-                      openSubMenu === mainIndex ? null : mainIndex
-                    );
+                  if (!interviewStarted && mainItem.subItems.length > 0) {
+                      if (selectedItem !== mainIndex) {
+                        setSelectedSubItem(null);
+                      }
+                      setOpenSubMenu(
+                        openSubMenu === mainIndex ? null : mainIndex
+                      );
                   } else {
                     handleListItemClick(mainIndex, mainItem.route);
                   }
@@ -539,6 +567,10 @@ export default function HeaderFooterLayout({ Component }) {
                   "&.Mui-selected": {
                     backgroundColor: "transparent",
                   },
+                ...(interviewStarted && {
+                  pointerEvents: "none",
+                  opacity: 0.5,
+                }),
                 }}
               >
                 <ListItemButton
