@@ -94,7 +94,7 @@ const NewUserReport = () => {
           </div>
         
           
-            {userReport?.interview_score_by_category.data.map((category, index) => (
+            {userReport?.interview_score_by_category?.data?.map((category, index) => (
               <div className="page-break">
               <ReportOverview
               key={index} 
@@ -111,7 +111,7 @@ const NewUserReport = () => {
             </div>
             ))}
           
-          {userReport?.interview_score_by_category.data.map((category, index) => (
+          {userReport?.interview_score_by_category?.data.map((category, index) => (
           <>
           {category.interview_questions.map((question, qIndex) => (
             <div key={index} id="DeepDive" className="page-break">
