@@ -31,7 +31,7 @@ const DeepDive = (props) => {
 
   const formatFeedback = (rawFeedback) => {
     const lines = rawFeedback.split('\n');
-    return lines.map((line, index) => (
+    return lines?.map((line, index) => (
         <React.Fragment key={index}>
             {line.replace(/"/g, '')}
             {index < lines.length - 1 && <br/>}
