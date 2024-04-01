@@ -16,12 +16,17 @@ import { branchesList } from "./mockbranchesdata";
 import {
   loadBrachList,
   getCourseList,
-  getDepartmentList
+  getDepartmentList,
+  loadPracticalThinking,
+  loadCourseList,
+  loadDepartmentList,
+  loadUsersList
 } from "../../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
+import format from 'date-fns/format';
 
 const PracticalThinking = () => {
   window.onbeforeunload = ()=>{
@@ -59,14 +64,14 @@ const PracticalThinking = () => {
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  const {practicalFilters,practicalThinking, branchList, courseList, departmentList, userListByDepartment} = useSelector((state)=>state?.data)
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
-    // dispatch(loadPracticalThinking());
+    dispatch(loadPracticalThinking());
     dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
   }, [dispatch]);
 
@@ -107,6 +112,47 @@ const PracticalThinking = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(()=>{
+    if (practicalFilters?.branch != undefined && practicalFilters?.branch != null) {
+      localStorage.setItem("branch", practicalFilters?.branch);
+      localStorage.setItem("course", practicalFilters?.course);
+      localStorage.setItem("department", practicalFilters?.department);
+      localStorage.setItem("user", practicalFilters?.user_name);
+
+      setEndDate(practicalFilters?.end_date)
+      setStartDate(practicalFilters?.start_date)
+
+      dispatch(loadCourseList(`branch_id=${practicalFilters?.branch_id}`));
+      dispatch(loadDepartmentList(`course_id=${practicalFilters?.course_id}`));
+      dispatch(loadUsersList(`department_id=${practicalFilters?.department_id}`));
+
+
+    }
+
+  },[practicalThinking])
+
+  const onDateSelect = (value) => {
+    console.log("api calls",value)
+    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
+    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    let params = {
+      branch: localStorage.getItem("branch"),
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+      start_date: formattedStartDate,
+      end_date: formattedEndDate
+    };
+    if (startDate && endDate) {
+
+
+      // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      dispatch(loadPracticalThinking(params))
+      // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+    }
+  }
+
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
@@ -122,26 +168,29 @@ const PracticalThinking = () => {
                 </span> */}
                 <div>
                 <div className="flex justify-end mr-10 mb-3">
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Branches" dependencyList={branchList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Courses" dependencyList={courseList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
-                  </div>
-                  {startDate != "" && (
-                  <div className="">
-                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
-                    </div>
-                  )}
+                <div className="">
+                <PopUpFilter route="EmotionSensing" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
+              </div>
+              <div className="">
+                <PopUpFilter route="EmotionSensing" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
+              </div>
+              <div className="">
+                <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
+              </div>
+              {/* <div className="">
+                <PopUpFilter route="EmotionSensing" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate}/>
+              </div>
+              {startDate != "" && (
+              <div className="">
+                <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect}/>
+              </div>
+              )} */}
                 </div>
                 </div>
               </div>
               <div className="mt-5 pt-3">
                 <ResponsiveContainer width="100%" height={480}>
-                  <BarChart data={barPlot} width={"1000px"}>
+                  <BarChart data={practicalThinking} width={"1000px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
                     <XAxis
                       dataKey="name"
