@@ -51,19 +51,19 @@ const DeepDive = (props) => {
       </div>
       <div className="p-4 grid max-w-xl grid-cols-1 gap-x-8 gap-y-6 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
         
-        {candidateAns && (
+       
           <div className="">
             <h3 className="text-lg font-semibold italic text-purple mb-4">Candidate's Answer:</h3>
-            <p className="text-purple">{candidateAns}</p>
+            {candidateAns && ( <p className="text-purple">{candidateAns}</p>  )}
           </div>
-        )}
+       
         
-        {sampleAns && (
+       
           <div className="">
             <h3 className="text-lg font-semibold italic text-purple mb-4">Sample Answer for reference</h3>
-            <p className="text-purple">{sampleAns}</p>
+            {sampleAns && ( <p className="text-purple">{sampleAns}</p>  )}
           </div>
-        )}
+       
 
       </div>
 
