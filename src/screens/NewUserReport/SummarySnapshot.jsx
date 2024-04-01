@@ -97,7 +97,7 @@ const SummarySnapshot = (props) => {
                     <div className="w-full bg-gray-300 rounded-full">
                       <div
                         style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
-                        className={`text-center text-xs text-white ${progressBarColor(category.secured_marks)} rounded-full`}
+                        className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
                       >
                         &nbsp;
                       </div>
