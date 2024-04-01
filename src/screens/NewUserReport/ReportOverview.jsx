@@ -65,7 +65,7 @@ const ReportOverview = (props) => {
         </div> 
 
         <div className={`mx-4 rounded-t-3xl ${bgColor}`}>
-        {scores.map((score, index) => (
+        {scores?.map((score, index) => (
             <div className="p-4 md:p-8 flex" key={index}>
                 <div className="mr-2 md:mr-4">
                     <span className={`text-2xl font-bold ${getScoreColor(score.score)}`}>{score.score}/10</span>

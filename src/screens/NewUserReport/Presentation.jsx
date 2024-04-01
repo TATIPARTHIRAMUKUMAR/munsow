@@ -32,7 +32,7 @@ const Presentation = (props) => {
 
         <div className="p-4 grid max-w-xl grid-cols-1 gap-x-8 gap-y-6 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
 
-          {behavioral_presentation_and_grooming.data.map((value, index) => (
+          {behavioral_presentation_and_grooming?.data?.map((value, index) => (
             <div className="">
               <h1 className={`text-center text-4xl font-bold ${getScoreColor(value.secured_marks)}`}>{value.secured_marks}/10</h1>
               <h3 className="text-center text-lg font-semibold text-purple">{value.title}</h3>

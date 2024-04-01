@@ -102,7 +102,7 @@ const NewUserReport = () => {
               overallScore={category.secured_marks}
               notes={category.notes}
              
-              scores={category.sub_segements.map((segment, sIndex) => ({
+              scores={category.sub_segements?.map((segment, sIndex) => ({
                 title: segment.title,
                 score: segment.secured_marks,
                 desc: segment.notes,
@@ -111,9 +111,9 @@ const NewUserReport = () => {
             </div>
             ))}
           
-          {userReport?.interview_score_by_category?.data.map((category, index) => (
+          {userReport?.interview_score_by_category?.data?.map((category, index) => (
           <>
-          {category.interview_questions.map((question, qIndex) => (
+          {category?.interview_questions?.map((question, qIndex) => (
             <div key={index} id="DeepDive" className="page-break">
             <DeepDive
               key={qIndex}
