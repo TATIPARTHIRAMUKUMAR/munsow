@@ -18,6 +18,62 @@ import {
 } from "../../../redux/action";
 import DateRangePicker from "../../../Components/DateRange.jsx";
 
+
+import { styled, alpha } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/Edit';
+import Divider from '@mui/material/Divider';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Checkbox from '@mui/material/Checkbox';
+
+
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+  },
+}));
+
+
 const KSAnalysis = () => {
   window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
@@ -28,22 +84,388 @@ const KSAnalysis = () => {
   }
   const hardSkills = [
     {
-      id: "Programming Language (Python)",
-      data: [
-        { x: "Finance", y: 50 },
-        { x: "Marketing", y: 48 },
-        { x: "Operations", y: 31 },
-        { x: "HR", y: 20 },
-      ],
+      id: "Languages",
+      data: [{
+        id: "Computer Engineering",
+        data: [
+          { 
+            x: "Programming Language (Python)", 
+            y: 50,
+            data: [
+              {x: "Basic Syntax", y: 20},
+              {x: "Data Structures", y: 50},
+              {x: "Functions and Modules", y: 30},
+              {x: "Web Scraping", y: 33},
+              {x: "File Handling", y: 70},
+              {x: "Object-Oriented Programming (OOP)", y: 65},
+              {x: "Exception Handling", y: 40},
+              {x: "Regular Expressions", y: 90},
+            ]
+          },
+          { 
+            x: "C++", 
+            y: 48,
+            data: [
+              {x: "Basic Syntax", y: 20},
+              {x: "Data Structures", y: 40}
+            ] 
+          },
+          { 
+            x: "C Programming Language", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "Java", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "JavaScript", 
+            y: 31,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "Go", 
+            y: 20,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+        ],
+      },
+      {
+        id: "Computer Science and Engineering",
+        data: [
+          { 
+            x: "Programming Language (Python)", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 54},
+              {x: "Data Structures", y: 59},
+              {x: "Functions and Modules", y: 78},
+              {x: "Web Scraping", y: 56},
+              {x: "File Handling", y: 67},
+              {x: "Object-Oriented Programming (OOP)", y: 75},
+              {x: "Exception Handling", y: 40},
+              {x: "Regular Expressions", y: 90},
+            ] 
+          },
+          { 
+            x: "C++", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "C Programming Language", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "Java", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "JavaScript", 
+            y: 21,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "Go", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          } ,
+        ],
+      },
+      {
+        id: "IT Engineering",
+        data: [
+          { 
+            x: "Programming Language (Python)", 
+            y: 70,
+            data: [
+              {x: "Basic Syntax", y: 54},
+              {x: "Data Structures", y: 58},
+              {x: "Functions and Modules", y: 32},
+              {x: "Web Scraping", y: 21},
+              {x: "File Handling", y: 54},
+              {x: "Object-Oriented Programming (OOP)", y: 21},
+              {x: "Exception Handling", y: 87},
+              {x: "Regular Expressions", y: 56},
+            ]
+          },
+          { 
+            x: "C++", 
+            y: 55,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "C Programming Language", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Java", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "JavaScript", 
+            y: 27,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Go", 
+            y: 60,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+        ],
+      },
+      {
+        id: "Electronic Engineering",
+        data: [
+          { 
+            x: "Programming Language (Python)", 
+            y: 20,
+            data: [
+              {x: "Basic Syntax", y: 25},
+              {x: "Data Structures", y: 65},
+              {x: "Functions and Modules", y: 56},
+              {x: "Web Scraping", y: 33},
+              {x: "File Handling", y: 83},
+              {x: "Object-Oriented Programming (OOP)", y: 56},
+              {x: "Exception Handling", y: 53},
+              {x: "Regular Expressions", y: 21},
+            ] 
+          },
+          { 
+            x: "C++", 
+            y: 60,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "C Programming Language", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Java", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "JavaScript", 
+            y: 25,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Go", 
+            y: 11,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+        ],
+      },
+      {
+        id: "Electronic and Communication Engineering",
+        data: [
+          { 
+            x: "Programming Language (Python)", 
+            y: 30,
+            data: [
+              {x: "Basic Syntax", y: 54},
+              {x: "Data Structures", y: 76},
+              {x: "Functions and Modules", y: 98},
+              {x: "Web Scraping", y: 34},
+              {x: "File Handling", y: 100},
+              {x: "Object-Oriented Programming (OOP)", y: 54},
+              {x: "Exception Handling", y: 22},
+              {x: "Regular Expressions", y: 56},
+            ] 
+          },
+          {
+            x: "C++", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          { 
+            x: "C Programming Language", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Java", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "JavaScript", 
+            y: 37,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Go", 
+            y: 30,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+        ],
+      },
+      {
+        id: "Mechanical Engineering",
+        data: [
+          { 
+            x: "Programming Language (Python)", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 64},
+              {x: "Data Structures", y: 89},
+              {x: "Functions and Modules", y: 74},
+              {x: "Web Scraping", y: 43},
+              {x: "File Handling", y: 12},
+              {x: "Object-Oriented Programming (OOP)", y: 32},
+              {x: "Exception Handling", y: 57},
+              {x: "Regular Expressions", y: 44},
+            ] 
+          },
+          { 
+            x: "C++", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "C Programming Language", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Java", 
+            y: 58,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ] 
+          },
+          {
+            x: "JavaScript", 
+            y: 21,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+          { 
+            x: "Go", 
+            y: 40,
+            data: [
+              {x: "Basic Syntax", y: 20}
+            ]  
+          },
+        ],
+      },
+    ]
     },
     {
       id: "Data Analysis",
       data: [
-        { x: "Finance", y: 64 },
-        { x: "Marketing", y: 10 },
-        { x: "Operations", y: 2 },
-        { x: "HR", y: 11 },
-      ],
+      {
+        id: "C++",
+        data: [
+          { x: "Finance", y: 50 },
+          { x: "Marketing", y: 48 },
+          { x: "Operations", y: 31 },
+          { x: "HR", y: 35 },
+          // { x: "Knowledge", y: 30 },
+        ],
+      },
+      {
+        id: "C Programming Language",
+        data: [
+          { x: "Finance", y: 20 },
+          { x: "Marketing", y: 40 },
+          { x: "Operations", y: 33 },
+          { x: "HR", y: 53 },
+          // { x: "Knowledge", y: 50 },
+        ],
+      },
+      {
+        id: "Java",
+        data: [
+          { x: "Finance", y: 80 },
+          { x: "Marketing", y: 44 },
+          { x: "Operations", y: 71 },
+          { x: "HR", y: 33 },
+          // { x: "Knowledge", y: 11 },
+        ],
+      },
+      {
+        id: "JavaScript",
+        data: [
+          { x: "Finance", y: 11 },
+          { x: "Marketing", y: 22 },
+          { x: "Operations", y: 67 },
+          { x: "HR", y: 44 },
+          // { x: "Knowledge", y: 55 },
+        ],
+      },
+      {
+        id: "Go",
+        data: [
+          { x: "Finance", y: 55 },
+          { x: "Marketing", y: 11 },
+          { x: "Operations", y: 77 },
+          { x: "HR", y: 88 },
+          // { x: "Knowledge", y: 34 },
+        ],
+      },
+    ]
     },
     {
       id: "Data Science ",
@@ -51,6 +473,7 @@ const KSAnalysis = () => {
         { x: "Finance", y: 56 },
         { x: "Marketing", y: 97 },
         { x: "Operations", y: 36 },
+        { x: "HR", y: 30 },
         { x: "HR", y: 30 },
       ],
     },
@@ -185,7 +608,7 @@ const KSAnalysis = () => {
     }
     setActive(value);
     handleClose();
-  };
+  };  
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -212,6 +635,266 @@ const KSAnalysis = () => {
     }
   }
 
+  const [yAxisId, setyAxisId] = useState("");
+
+  useEffect(() => {
+
+    let y_axes=[]
+    let x_axes=[]
+
+    x_axes['departments'] = hardSkillData?.map(skill => skill.id)
+    y_axes['courses'] = hardSkillData[0]?.data?.map(dept => dept.x)
+    y_axes[yAxisId] = hardSkillData[0]?.data?.flatMap(skill => skill?.data?.map(subskill => subskill.x))
+
+    const drilldownSeries = hardSkillData.flatMap((skill, x) => {
+
+      if (!yAxisId && skill.data && skill.data.length > 0) {
+        setyAxisId(`${skill.id}-${skill.data[0].x}`);
+      }
+
+      return skill?.data?.map((dept) => ({
+          name: dept.x,
+          id: `${skill.id}-${dept.x}`,
+          data: dept?.data?.map((subSkill, y) => {
+              return {
+                'title': subSkill.x, 
+                'x': x,
+                'y': y,
+                'value': subSkill.y
+              };
+          }),
+          dataLabels: {
+            enabled: true
+          }
+      }));
+    });
+
+    const transformedData = hardSkillData.flatMap((skill, x) => {
+      return skill?.data.map((dept, y) => ({
+          x: x,
+          y: y,
+          value: dept.y,
+          drilldown: `${skill.id}-${dept.x}`,
+          dataLabels: {
+            enabled: true
+          }
+      }));
+    });
+  
+    Highcharts.chart('hardskills', {
+        chart: {
+            type: 'heatmap',
+            events:{
+              drilldown: function() {
+                var chart = this;
+                chart.yAxis[0].update({
+                        type: 'category',
+                        categories: y_axes[yAxisId]
+                                });
+              },
+              drillup: function() {
+                var chart = this;
+                chart.yAxis[0].update({
+                        type: 'category',
+                        categories: y_axes['courses']
+                                });
+                chart.xAxis[0].update({
+                        type: 'category',
+                        categories: x_axes['departments']
+                                });
+              }
+            }
+        },
+        title: {
+            text: null
+        },
+        xAxis: {
+            categories: x_axes['departments']
+        },
+        yAxis: [{
+            categories: y_axes['courses']
+        }],
+        plotOptions: {
+          heatmap: {
+            enableMouseTracking: true
+          }
+        },
+        accessibility: {
+            point: {
+                descriptionFormat: '{(add index 1)}. ' +
+                    '{series.xAxis.categories.(x)} skill level ' +
+                    '{series.yAxis.categories.(y)}, {value}.'
+            },
+            announceNewData: {
+              enabled: true
+            }
+        },
+        colorAxis: {
+            min: 0,
+            minColor: '#FFFFFF'
+        },
+        legend: {
+            align: 'right',
+            layout: 'vertical',
+            margin: 0,
+            verticalAlign: 'top',
+            y: 25,
+            symbolHeight: 280
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> has a skill level of <b>' +
+                    this.point.value + '</b> on <b>' +
+                    this.series.yAxis.categories[this.point.y] + '</b>';
+            }
+        },
+        series: [{
+            name: 'Skill Levels per Department',
+            borderWidth: 1,
+            data: transformedData,
+            dataLabels: {
+                enabled: true,
+                color: '#000000'
+            }
+        }],
+        drilldown: {
+          breadcrumbs: {
+              position: {
+                  align: 'right'
+              }
+          },
+          series: drilldownSeries 
+        },
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    yAxis: {
+                        labels: {
+                            format: '{substr value 0 1}'
+                        }
+                    }
+                }
+            }]
+        }
+    });
+}, [hardSkillData]);
+
+useEffect(() => {
+  Highcharts.chart('softskills', {
+      chart: {
+          type: 'heatmap'
+      },
+      title: {
+          text: null
+      },
+      xAxis: {
+          categories: softSkillData?.map(skill => skill.id)
+      },
+      yAxis: {
+          categories: softSkillData[0]?.data.map(dept => dept.x),
+          title: null
+      },
+      accessibility: {
+          point: {
+              descriptionFormat: '{(add index 1)}. ' +
+                  '{series.xAxis.categories.(x)} skill level ' +
+                  '{series.yAxis.categories.(y)}, {value}.'
+          }
+      },
+      colorAxis: {
+          min: 0,
+          minColor: '#FFFFFF'
+      },
+      legend: {
+          align: 'right',
+          layout: 'vertical',
+          margin: 0,
+          verticalAlign: 'top',
+          y: 25,
+          symbolHeight: 280
+      },
+      tooltip: {
+          formatter: function () {
+              return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> has a skill level of <b>' +
+                  this.point.value + '</b> on <b>' +
+                  this.series.yAxis.categories[this.point.y] + '</b>';
+          }
+      },
+      series: [{
+          name: 'Skill Levels per Department',
+          borderWidth: 1,
+          data: softSkillData.flatMap((skill, x) => skill.data.map((dept, y) => [x, y, dept.y])),
+          dataLabels: {
+              enabled: true,
+              color: '#000000'
+          }
+      }],
+      responsive: {
+          rules: [{
+              condition: {
+                  maxWidth: 500
+              },
+              chartOptions: {
+                  yAxis: {
+                      labels: {
+                          format: '{substr value 0 1}'
+                      }
+                  }
+              }
+          }]
+      }
+  });
+}, [softSkillData]);
+
+const [anchorEl1, setAnchorEl1] = useState(null);
+const [selectedSkills, setSelectedSkills] = useState([]);
+const [selectedSkillData, setSelectedSkillData] = useState('');
+
+const open1 = Boolean(anchorEl1);
+const handleClick1 = (event) => {
+  setAnchorEl1(event.currentTarget);
+};
+const handleClose1 = (selectedOption) => {
+  setAnchorEl1(null);
+  const selectedSkillData = hardSkills.find(skillGroup => skillGroup.id === selectedOption);
+  setSelectedSkillData(selectedSkillData);
+  setHardSkillsData(selectedSkillData?.data || []);
+};
+
+const handleSkillToggle = (skillId) => {
+  const selectedIndex = selectedSkills.indexOf(skillId);
+  let newSelectedSkills = [];
+
+  if (selectedIndex === -1) 
+  {
+    newSelectedSkills = [...selectedSkills, skillId];
+  } 
+  else if (selectedIndex === 0) 
+  {
+    newSelectedSkills = selectedSkills.slice(1);
+  } 
+  else if (selectedIndex === selectedSkills.length - 1) 
+  {
+    newSelectedSkills = selectedSkills.slice(0, -1);
+  } 
+  else if (selectedIndex > 0) 
+  {
+    newSelectedSkills = [
+      ...selectedSkills.slice(0, selectedIndex),
+      ...selectedSkills.slice(selectedIndex + 1),
+    ];
+  }
+
+  let newdata = hardSkillData?.filter((department) => newSelectedSkills.includes(department.id));
+  setHardSkillsData(newdata)
+  setSelectedSkills(newSelectedSkills);
+};
+
+
+
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
@@ -233,6 +916,7 @@ const KSAnalysis = () => {
                     <div className="">
                       <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
                     </div>
+                    
                     {/* <div className="">
                       <PopUpFilter route="KSAnalysis" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate} />
                     </div>
@@ -250,7 +934,73 @@ const KSAnalysis = () => {
                 <span className="text-2xl font-normal text-gray-900">
                   Hard skills
                 </span>
-                {hardSkillData?.length > 0 && (
+                <div className="mt-4 mr-6 float-right">
+                      <Button
+                        id="demo-customized-button"
+                        aria-controls={open1 ? 'demo-customized-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open1 ? 'true' : undefined}
+                        variant="contained"
+                        disableElevation
+                        onClick={handleClick1}
+                        endIcon={<KeyboardArrowDownIcon />}
+                      >
+                        Categories
+                      </Button>
+                      <StyledMenu
+                        id="demo-customized-menu"
+                        MenuListProps={{
+                          'aria-labelledby': 'demo-customized-button',
+                        }}
+                        anchorEl={anchorEl1}
+                        open={open1}
+                        onClose={handleClose1}
+                      >
+                        {hardSkills.map(skillGroup => (
+                          <div key={skillGroup.id}>
+                            <MenuItem onClick={() => handleClose1(skillGroup.id)} disableRipple>
+                              {skillGroup.id}
+                            </MenuItem>
+                          </div>
+                        ))}
+                      </StyledMenu>
+                </div>
+                <div className="mt-4 mr-6 float-right">
+                  <Button
+                    id="demo-customized-button"
+                    aria-controls={anchorEl ? 'demo-customized-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={anchorEl ? 'true' : undefined}
+                    variant="contained"
+                    disableElevation
+                    onClick={handleClick}
+                    endIcon={<KeyboardArrowDownIcon />}
+                  >
+                    Departments
+                  </Button>
+                  <Menu
+                    id="demo-customized-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      'aria-labelledby': 'demo-customized-button',
+                    }}
+                  >
+                    {selectedSkillData?.data?.map((skillGroup) => (
+                      <MenuItem key={skillGroup.id} disableRipple>
+                        <Checkbox
+                          checked={selectedSkills.indexOf(skillGroup.id) !== -1}
+                          onChange={() => handleSkillToggle(skillGroup.id)}
+                        />
+                        {skillGroup.id}
+                      </MenuItem>
+                    ))
+                  }
+                  </Menu>
+                </div><br/><br/><br/><br/>
+                <div id="hardskills"></div>
+                {/* {hardSkillData?.length > 0 && (
                   <ResponsiveHeatMap
                     data={hardSkillData}
                     margin={{ top: 70, right: 90, bottom: 60, left: 90 }}
@@ -296,13 +1046,14 @@ const KSAnalysis = () => {
                       },
                     ]}
                   />
-                )}
+                )} */}
               </div>
               <div className="mt-5 pt-3" style={{ height: 500 }}>
                 <span className="text-2xl font-normal text-gray-900">
                   Soft skills
                 </span>
-                {softSkillData?.length > 0 && (
+                <div id="softskills"></div>
+                {/* {softSkillData?.length > 0 && (
                   <ResponsiveHeatMap
                     data={softSkillData}
                     margin={{ top: 90, right: 90, bottom: 60, left: 90 }}
@@ -348,7 +1099,7 @@ const KSAnalysis = () => {
                       },
                     ]}
                   />
-                )}
+                )} */}
               </div>
             </div>
           </div>
