@@ -1247,6 +1247,25 @@ export const loadKSAnalysis = (params) => {
   };
 };
 
+const getPracticalThinkingAnalysis = (data) => ({
+  type: types.PRACTICAL_THINKING_ANALYSIS,
+  payload: data,
+});
+
+export const loadPracticalThinkingAnalysis = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/practical_thinking_analysis`, { params, headers })
+      .then((resp) => {
+        dispatch(getPracticalThinkingAnalysis(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 export const setReduxState = (data) => ({
   type: types.SET_REDUX_STATE,
   payload: data,

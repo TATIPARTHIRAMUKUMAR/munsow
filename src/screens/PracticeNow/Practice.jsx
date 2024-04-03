@@ -26,6 +26,18 @@ import Tooltip from "@mui/material/Tooltip";
 import MutiSelect from "../../Components/Multiselect";
 import { useDarkMode } from "./../../Dark";
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const QontoConnector = styled(StepConnector)(({ theme , linearGradientBackground}) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 17,
@@ -53,6 +65,15 @@ const QontoConnector = styled(StepConnector)(({ theme , linearGradientBackground
 const StepperComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const [steps] = useState([
     { title: "Skill Specific" },
@@ -70,7 +91,7 @@ const StepperComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState("skills");
 
   const [selectedSoftskill, setSelectedSoftskill] = useState(null);
-  const [selectedHardskill, setSelectedHardskill] = useState(null);
+  let [selectedHardskill, setSelectedHardskill] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const payload = {
@@ -187,6 +208,39 @@ const StepperComponent = () => {
     dispatch(loadInterviewRolesList());
     dispatch(loadCompaniesList());
   }, [dispatch]);
+
+  
+  const [hardSkillsLength, setHardSkillsLength] = useState(false);
+  const [softSkillsLength, setSoftSkillsLength] = useState(false);
+
+  useEffect(() => {
+    let isOpen = false;
+  
+    if (selectedHardskill?.length > 3) {
+      setHardSkillsLength(true);
+      isOpen = true;
+    } else {
+      isOpen = false
+      setHardSkillsLength(false);
+    }
+  
+    setOpen(isOpen);
+    // setSelectedHardskill(selectedHardskill?.slice(0, 3))
+    // setSelectedSoftskill(selectedSoftskill?.slice(0, 3))
+  }, [selectedHardskill]);
+
+  useEffect(() => {
+    let isOpen = false;
+
+    if (selectedSoftskill?.length > 3) {
+      setSoftSkillsLength(true);
+      isOpen = true;
+    } else {
+      setSoftSkillsLength(false);
+    }
+
+    setOpen(isOpen);
+  }, [selectedSoftskill])
 
   return (
     <div className="p-5 lg:p-10 ">
@@ -440,7 +494,31 @@ const StepperComponent = () => {
                   </div>
                 )}
               </div>
-
+              { (hardSkillsLength || softSkillsLength) && (
+                <>
+                  {/* <Button variant="outlined" onClick={handleClickOpen}>
+                    Slide in alert dialog
+                  </Button> */}
+                  <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                  >
+                    <DialogTitle>{"Limit Exceeded: Maximum 3 Skills Allowed!"}</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-slide-description">
+                        You have exceeded the maximum limit of selected skills. 
+                        Please ensure that you select a maximum of three skills, whether they are hard skills or soft skills.
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose}>Close</Button>
+                    </DialogActions>
+                  </Dialog>
+                </>
+              )  }
               {/* </div> */}
             </>
           )}
@@ -472,7 +550,7 @@ const StepperComponent = () => {
                   min="0"
                   max="100"
                   value={level}
-                  // onChange={(e) => setLevel(e.target.value)}
+                  onChange={(e) => setLevel(e.target.value)}
                   className="w-full mb-4 appearance-none h-2 rounded-lg"
                   style={{ backgroundColor: linearGradientBackground }}
                 />
@@ -483,14 +561,7 @@ const StepperComponent = () => {
                       setLevel(0);
                       setExperienceLevel("low");
                     }}
-                    className="text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                    style={{
-                      backgroundColor: linearGradientBackground,
-                    
-                      padding: "0.5rem 1rem",
-                      borderRadius: "0.375rem",
-                      color:grayColors
-                    }}
+                    className="bg-green-500 hover:bg-green-700 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
                   >
                     Beginner
                   </button>
@@ -499,8 +570,7 @@ const StepperComponent = () => {
                       setLevel(50);
                       setExperienceLevel("medium");
                     }}
-                    className="text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                    style={{ backgroundColor: linearGradientBackground,color:grayColors }}
+                    className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
                   >
                     Intermediate
                   </button>
@@ -509,8 +579,7 @@ const StepperComponent = () => {
                       setLevel(100);
                       setExperienceLevel("high");
                     }}
-                    className="text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
-                    style={{ backgroundColor: linearGradientBackground , color :grayColors }}
+                    className="bg-red-500 hover:bg-red-700 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
                   >
                     Advanced
                   </button>

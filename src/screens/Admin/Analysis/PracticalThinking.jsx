@@ -14,9 +14,13 @@ import _mockChartData from "./EmotionSensing/_mockChartData.json";
 import FilterCommon from "../../../Components/FilterCommon";
 import { branchesList } from "./mockbranchesdata";
 import {
+  loadPracticalThinkingAnalysis,
   loadBrachList,
   getCourseList,
-  getDepartmentList
+  getDepartmentList, 
+  loadCourseList, 
+  loadDepartmentList, 
+  loadUsersList
 } from "../../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import PopUpFilter from "../../../Components/PopUpFilter";
@@ -59,14 +63,17 @@ const PracticalThinking = () => {
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  const {practicalThinkingAnalysis, practicalThinkingFilters, branchList, departmentList, courseList} = useSelector((state)=>state?.data);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   
+  
+  console.log(practicalThinkingAnalysis, 'practicalThinkingAnalysis')
+
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
-    // dispatch(loadPracticalThinking());
+    dispatch(loadPracticalThinkingAnalysis());
     dispatch(loadBrachList(`institution_id=${GLOBAL_CONSTANTS.user_cred?.id}`));
   }, [dispatch]);
 
@@ -104,9 +111,51 @@ const PracticalThinking = () => {
     handleClose();
   };
 
+  useEffect(()=>{
+    if (practicalThinkingFilters?.branch != undefined && practicalThinkingFilters?.branch != null) {
+      localStorage.setItem("branch", practicalThinkingFilters?.branch);
+      localStorage.setItem("course", practicalThinkingFilters?.course);
+      localStorage.setItem("department", practicalThinkingFilters?.department);
+      localStorage.setItem("user", practicalThinkingFilters?.user_name);
+
+      setEndDate(practicalThinkingFilters?.end_date)
+      setStartDate(practicalThinkingFilters?.start_date)
+
+      dispatch(loadCourseList(`branch_id=${practicalThinkingFilters?.branch_id}`));
+      dispatch(loadDepartmentList(`course_id=${practicalThinkingFilters?.course_id}`));
+      dispatch(loadUsersList(`department_id=${practicalThinkingFilters?.department_id}`));
+
+    }
+
+  },[practicalThinkingAnalysis])
+
+  const onDateSelect = (value) => {
+    console.log("api calls",value)
+    // const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
+    // const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    let params = {
+      branch: localStorage.getItem("branch"),
+      // branch:'All Branches',
+      // course
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+      // start_date: formattedStartDate,
+      // end_date: formattedEndDate
+    };
+    if (startDate && endDate) {
+
+
+      // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      dispatch(loadPracticalThinkingAnalysis(params))
+      // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+    }
+  }
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
@@ -131,17 +180,17 @@ const PracticalThinking = () => {
                   <div className="">
                     <PopUpFilter route="PracticalThinking" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
                   </div>
-                  {startDate != "" && (
+                  {/* {startDate != "" && (
                   <div className="">
                       <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
                     </div>
-                  )}
+                  )} */}
                 </div>
                 </div>
               </div>
               <div className="mt-5 pt-3">
                 <ResponsiveContainer width="100%" height={480}>
-                  <BarChart data={barPlot} width={"1000px"}>
+                  <BarChart data={practicalThinkingAnalysis} width={"1000px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
                     <XAxis
                       dataKey="name"
