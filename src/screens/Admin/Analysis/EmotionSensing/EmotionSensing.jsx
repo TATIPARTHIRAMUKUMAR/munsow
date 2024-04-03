@@ -28,7 +28,7 @@ const EmotionSensing = () => {
   const [endDate, setEndDate] = useState("");
 
   const { emotionStats, emotionFilters, branchList, courseList, departmentList, userListByDepartment } = useSelector((state) => state.data);
-
+  console.log('emotionStats : ', emotionStats)
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
@@ -95,7 +95,6 @@ const EmotionSensing = () => {
       dispatch(loadDepartmentList(`course_id=${emotionFilters?.course_id}`));
       dispatch(loadUsersList(`department_id=${emotionFilters?.department_id}`));
 
-
     }
 
   },[emotionStats])
@@ -126,7 +125,7 @@ const EmotionSensing = () => {
   };
   return (
     <div>
-      <div className="bg-white p-10">
+      <div className="bg-white py-10 pl-10 pr-2">
         <div
           className="pb-5"
           style={{ display: "flex", justifyContent: "space-between" }}

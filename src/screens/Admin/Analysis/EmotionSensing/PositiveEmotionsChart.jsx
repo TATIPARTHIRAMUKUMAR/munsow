@@ -11,10 +11,10 @@ import {
   Label,
 } from "recharts";
 import "./EmotionSensing.css";
+import { SentimentDissatisfied } from '@mui/icons-material';
 
 const PositiveEmotionsChart = (props) => {
   const {data, name} = props;
-
 
   const legendFormatter = (value, entry) => {
     return (
@@ -30,7 +30,7 @@ const PositiveEmotionsChart = (props) => {
 
   return (
     <div
-      className="mt-5 pt-3"
+      className="mt-5 pt-3 pb-3"
       style={{
         background: "#F5FBFF",
         borderRadius: "30px",
@@ -43,6 +43,7 @@ const PositiveEmotionsChart = (props) => {
       >
         {name}
       </div>
+      {data?.length > 0 ? (
       <ResponsiveContainer width="100%" height={250}>
         <LineChart
           data={data}
@@ -113,6 +114,14 @@ const PositiveEmotionsChart = (props) => {
           />
         </LineChart>
       </ResponsiveContainer>
+      ) : (
+        <div className='font-bold' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+            <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+            <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+              There's no data to show here yet.
+            </div>
+          </div>
+      )}
     </div>
   );
 };
