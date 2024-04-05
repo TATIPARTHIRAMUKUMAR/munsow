@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   LineChart,
   Line,
@@ -28,6 +28,69 @@ const PositiveEmotionsChart = (props) => {
     );
   };
 
+  useEffect(() => {
+    Highcharts.chart('Positive', {
+      chart: {
+        type: 'line',
+        height: 250,
+        backgroundColor: 'transparent',
+        margin: [20, 50, 5, 5]
+      },
+      title: {
+        text: null
+      },
+      xAxis: {
+        categories: data?.map(item => item.name),
+        labels: {
+          style: {
+            fontSize: '12px'
+          }
+        },
+        title: {
+          text: 'TIME',
+          style: {
+            fontSize: '14px'
+          }
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'EMOTIONS',
+          style: {
+            fontSize: '14px' // Adjust title font size as needed
+          }
+        },
+        labels: {
+          style: {
+            fontSize: '12px' // Adjust label font size as needed
+          }
+        }
+      },
+      legend: {
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        itemDistance: 10
+      },
+      tooltip: {
+        enabled: true // Enable tooltip as needed
+      },
+      series: [{
+        name: 'Happiness',
+        data: data?.map(item => item.Happiness),
+        color: '#9F9A8F',
+        lineWidth: 3,
+        marker: {
+          symbol: 'circle',
+          lineWidth: 3,
+          lineColor: '#9F9A8F',
+          radius: 2
+        }
+      }]
+    });
+  }, [data]);
+  
+
   return (
     <div
       className="mt-5 pt-3 pb-3"
@@ -43,7 +106,8 @@ const PositiveEmotionsChart = (props) => {
       >
         {name}
       </div>
-      {data?.length > 0 ? (
+      <div id='Positive'></div>
+      {/* {data?.length > 0 ? (
       <ResponsiveContainer width="100%" height={250}>
         <LineChart
           data={data}
@@ -121,7 +185,7 @@ const PositiveEmotionsChart = (props) => {
               There's no data to show here yet.
             </div>
           </div>
-      )}
+      )} */}
     </div>
   );
 };

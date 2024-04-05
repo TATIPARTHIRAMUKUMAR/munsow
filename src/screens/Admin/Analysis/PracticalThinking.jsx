@@ -111,9 +111,103 @@ const PracticalThinking = () => {
     handleClose();
   };
 
+  useEffect(()=>{
+    if (practicalThinkingFilters?.branch != undefined && practicalThinkingFilters?.branch != null) {
+      localStorage.setItem("branch", practicalThinkingFilters?.branch);
+      localStorage.setItem("course", practicalThinkingFilters?.course);
+      localStorage.setItem("department", practicalThinkingFilters?.department);
+      localStorage.setItem("user", practicalThinkingFilters?.user_name);
+
+      setEndDate(practicalThinkingFilters?.end_date)
+      setStartDate(practicalThinkingFilters?.start_date)
+
+      dispatch(loadCourseList(`branch_id=${practicalThinkingFilters?.branch_id}`));
+      dispatch(loadDepartmentList(`course_id=${practicalThinkingFilters?.course_id}`));
+      dispatch(loadUsersList(`department_id=${practicalThinkingFilters?.department_id}`));
+
+    }
+
+  },[practicalThinkingAnalysis])
+
+  const onDateSelect = (value) => {
+    console.log("api calls",value)
+    // const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
+    // const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+    let params = {
+      branch: localStorage.getItem("branch"),
+      // branch:'All Branches',
+      // course
+      course: localStorage.getItem("course"),
+      department: localStorage.getItem("department"),
+      student_id: localStorage.getItem("user_id"),
+      // start_date: formattedStartDate,
+      // end_date: formattedEndDate
+    };
+    // if (startDate && endDate) {
+
+
+      // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
+      dispatch(loadPracticalThinkingAnalysis(params))
+      // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
+    // }
+  }
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    console.log('/// : ', practicalThinkingAnalysis)
+    Highcharts.chart('hardskills', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: null
+      },
+      xAxis: {
+        categories: practicalThinkingAnalysis.map(data => data.name),
+        title: {
+          text: 'Department'
+        }
+      },
+      yAxis: {
+        
+        title: {
+          text: 'Problem Solving %'
+        },
+        labels: {
+          align: 'center'
+        }
+      },
+      legend: {
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        itemDistance: 10
+      },
+      plotOptions: {
+        column: {
+          pointWidth: 100, // Adjust the width of the column bars here
+          borderRadius: 5
+        },
+        series: {
+          stacking: 'normal',
+          borderRadius: 5
+        }
+      },
+      series: [{
+        name: 'Solved',
+        data: practicalThinkingAnalysis.map(data => data.Solved),
+        color: '#3D3B8E'
+      }, {
+        name: 'Not Solved',
+        data: practicalThinkingAnalysis.map(data => data['Not Solved']),
+        color: '#6883BA'
+      }]
+    });
+  }, [practicalThinkingAnalysis]);
+  
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
@@ -147,7 +241,8 @@ const PracticalThinking = () => {
                 </div>
               </div>
               <div className="mt-5 pt-3">
-              {practicalThinkingAnalysis?.length > 0 ? (
+              <div id="hardskills"></div>
+              {/* {practicalThinkingAnalysis?.length > 0 ? (
                 <ResponsiveContainer width="100%" height={480}>
                   <BarChart data={practicalThinkingAnalysis} width={"1000px"}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
@@ -205,7 +300,7 @@ const PracticalThinking = () => {
                       There's no data to show here yet.
                     </div>
                   </div>
-              )}
+              )} */}
                 {/* <ResponsiveContainer width="100%" height={480}>
                                     <BarChart
                                         data={_mockChartData}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   LineChart,
   Line,
@@ -28,6 +28,82 @@ const NegativeEmotionsChart = (props) => {
         </div>
       );
     };
+
+    useEffect(() => {
+      Highcharts.chart('Negative', {
+        chart: {
+          type: 'line',
+          height: 250,
+          backgroundColor: 'transparent', // Set background color to transparent
+          margin: [20, 50, 5, 5], // Adjust margins as per requirement
+        },
+        title: {
+          text: null
+        },
+        xAxis: {
+          categories: data?.map(item => item.name),
+          title: {
+            text: 'TIME'
+          },
+          labels: {
+            align: 'center',
+            style: {
+              color: 'black', // Adjust X-axis label color if needed
+            }
+          },
+        },
+        yAxis: {
+          title: {
+            text: 'EMOTIONS'
+          },
+          labels: {
+            align: 'center',
+            style: {
+              color: 'black', // Adjust Y-axis label color if needed
+            }
+          },
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom',
+          itemDistance: 10
+        },
+        plotOptions: {
+          series: {
+            stacking: 'normal',
+            borderRadius: 5
+          }
+        },
+        series: [{
+          name: 'Disgust',
+          data: data?.map(item => item.Disgust),
+          color: '#F3DCBF',
+          lineWidth: 3
+        }, {
+          name: 'Contempt',
+          data: data?.map(item => item.Contempt),
+          color: '#C4A6FA',
+          lineWidth: 3
+        }, {
+          name: 'Sadnesss',
+          data: data?.map(item => item.Sadnesss),
+          color: '#A6A6A6',
+          lineWidth: 3
+        }, {
+          name: 'Anger',
+          data: data?.map(item => item.Anger),
+          color: '#4FD3C4',
+          lineWidth: 3
+        }, {
+          name: 'Fear',
+          data: data?.map(item => item.Fear),
+          color: '#FBC046',
+          lineWidth: 3
+        }]
+      });
+    }, [data]);
+  
     return (
       <div
         className="mt-5 pt-3 pb-3"
@@ -43,7 +119,8 @@ const NegativeEmotionsChart = (props) => {
         >
           {name}
         </div>
-        {data > 0 ? (
+        <div id="Negative"></div>
+        {/* {data > 0 ? (
         <ResponsiveContainer width="100%" height={250}>
           <LineChart
             data={data}
@@ -169,7 +246,7 @@ const NegativeEmotionsChart = (props) => {
                 There's no data to show here yet.
               </div>
             </div>
-        )}
+        )} */}
       </div>
     );
   };

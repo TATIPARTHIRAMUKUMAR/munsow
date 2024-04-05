@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   LineChart,
   Line,
@@ -48,6 +48,61 @@ const NeutralEmotionsChart = (props) => {
     //     </div>
     //   );
     // }
+
+    useEffect(() => {
+      Highcharts.chart('Neutral', {
+        chart: {
+          type: 'line',
+          height: 250,
+          backgroundColor: 'transparent', // Set background color to transparent
+          margin: [20, 50, 5, 5], // Adjust margins as per requirement
+        },
+        title: {
+          text: null
+        },
+        xAxis: {
+          categories: data?.map(item => item.name),
+          title: {
+            text: 'TIME'
+          },
+          labels: {
+            align: 'center',
+            style: {
+              color: 'black', // Adjust X-axis label color if needed
+            }
+          },
+        },
+        yAxis: {
+          title: {
+            text: 'EMOTIONS'
+          },
+          labels: {
+            align: 'center',
+            style: {
+              color: 'black', // Adjust Y-axis label color if needed
+            }
+          },
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom',
+          itemDistance: 10
+        },
+        plotOptions: {
+          series: {
+            stacking: 'normal',
+            borderRadius: 5
+          }
+        },
+        series: [{
+          name: 'Surprise',
+          data: data?.map(item => item.Suprise),
+          color: '#AFDFEF'
+        }]
+      });
+    }, [data]);
+  
   
     return (
       <div
@@ -64,7 +119,8 @@ const NeutralEmotionsChart = (props) => {
         >
           {name}
         </div>
-        {data > 0 ? (
+        <div id="Neutral"></div>
+        {/* {data > 0 ? (
         <ResponsiveContainer width="100%" height={250}>
           <LineChart
             data={data}
@@ -142,7 +198,7 @@ const NeutralEmotionsChart = (props) => {
                 There's no data to show here yet.
               </div>
             </div>
-        )}
+        )} */}
       </div>
     );
   };
