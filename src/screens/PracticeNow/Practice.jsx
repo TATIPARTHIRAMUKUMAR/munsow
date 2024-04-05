@@ -445,7 +445,8 @@ const StepperComponent = () => {
           )}
 
           {currentStep === 1 && (
-            <div  className="relative overflow-auto max-w-full h-auto">
+            <div  className="relative overflow-auto max-w-full h-auto "
+            >
               <h2
               className="relative overflow-auto max-w-full h-auto"
                 style={{
@@ -453,7 +454,7 @@ const StepperComponent = () => {
                   fontSize: "1.5rem",
                   fontWeight: "bold",
                   marginBottom: "2px",
-                  color: textColors,
+                  color: grayColors,
                 }}
               >
                 Level
@@ -461,9 +462,9 @@ const StepperComponent = () => {
               <div
               className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
                 style={{
-                  border: "4px solid #0fe1d2",
+                  border: `3.5px solid ${textColors}`,
                   borderRadius: "20px",
-                  padding: "2rem 2.5rem",
+                  padding: "2rem 2.5rem"
                 }}
               >
                 <input
@@ -473,7 +474,7 @@ const StepperComponent = () => {
                   value={level}
                   onChange={(e) => setLevel(e.target.value)}
                   className="w-full mb-4 appearance-none h-2 rounded-lg"
-                  style={{ backgroundColor: linearGradientBackground }}
+                  style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
                 />
 
                 <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
