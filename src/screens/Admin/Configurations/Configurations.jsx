@@ -13,7 +13,8 @@ const Configurations = () => {
     soft_skill: useRef(null),
     hard_skill: useRef(null),
     company: useRef(null),
-    institution: useRef(null)
+    institution: useRef(null),
+    interview_questions:useRef(null)
   };
 
   const handleSelectFiles = (e, key) => {
