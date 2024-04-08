@@ -39,6 +39,8 @@ import {
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 import format from 'date-fns/format';
 
+import NewCard from "./NewCard.jsx";
+
 const AdminDashboard = () => {
   window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
@@ -187,8 +189,9 @@ const AdminDashboard = () => {
     }
   }
 
+  console.log(cardLists, "cardslist")//to check cards on dashboard
   return (
-    <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll ">
+    <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll " style={{background: "#E7EFEE"}}>
       <div className="container ">
         {/* Card section */}
         <div className="">
@@ -208,11 +211,16 @@ const AdminDashboard = () => {
             </div>)} */}
           </div>
           
-          <div className=" grid grid-cols-3 gap-2 ">
+          {/* <div className=" grid grid-cols-3 gap-2 ">
             {cardLists.length ? (
               <CardContainer cardLists={cardLists} />
             ) : null}
+          </div> */}
+
+          <div>   
+            <NewCard cardLists={cardLists} />
           </div>
+
         </div>
         <div className="flex flex-wrap pt-5">
           {/* Chart section */}
