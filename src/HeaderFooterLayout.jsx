@@ -47,6 +47,8 @@ import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
 
+
+
 const drawerWidth = 270;
 
 const openedMixin = (theme, role1, color) => ({
@@ -109,7 +111,20 @@ const CustomDrawer = styled(MuiDrawer, {
 
 export default function HeaderFooterLayout({ Component }) {
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
+  
+  const [interviewStarted, setInterviewStarted] = useState(false);
+
+
+  useEffect(() => {
+    if (location.pathname === "/interview") {
+      setInterviewStarted(true);
+      setOpen(false);
+    } else {
+      setInterviewStarted(false);
+      setOpen(true);
+    }
+  }, [location]);
 
   const theme = useTheme();
   const [open, setOpen] = useState(true);
@@ -523,7 +538,7 @@ export default function HeaderFooterLayout({ Component }) {
               <ListItem
                 disablePadding
                 onClick={() => {
-                  if (mainItem.subItems.length > 0) {
+                  if (!interviewStarted && mainItem.subItems.length > 0) {
                     if (selectedItem !== mainIndex) {
                       setSelectedSubItem(null);
                     }
@@ -539,6 +554,10 @@ export default function HeaderFooterLayout({ Component }) {
                   "&.Mui-selected": {
                     backgroundColor: "transparent",
                   },
+                  ...(interviewStarted && {
+                    pointerEvents: "none",
+                    opacity: 0.5,
+                  }),
                 }}
               >
                 <ListItemButton
