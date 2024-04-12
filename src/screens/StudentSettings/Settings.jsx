@@ -42,10 +42,16 @@ const SettingsForm = () => {
   };
 
   return (
+    <>
+    <div className="m-6">
+      <div class="p-4 bg-yellow-100 rounded-2">
+        <p class="text-yellow-800">Please note that the values on this page are not editable at the moment. Kindly contact our team at <a href="mailto:admin@munsow.com" class="font-bold">admin@munsow.com</a></p>
+      </div>
+    </div>
     <div className="max-w-lg mx-auto mt-10 p-4 relative overflow-auto h-auto">
       <h1
         className="text-3xl text-700 font-semibold mb-6 relative overflow-auto max-w-full h-auto"
-        style={{ color: headerTextColor }}
+        style={{ color: textColor }}
       >
         Settings
       </h1>
@@ -75,8 +81,7 @@ const SettingsForm = () => {
                   ? "translateX(24px)"
                   : "translateX(0px)",
                 background: reportAlertsEnabled ? "white" : headerTextColor,
-              }}
-            />
+              }} />
           </button>
         </div>
         <div className="flex items-center justify-between">
@@ -106,8 +111,7 @@ const SettingsForm = () => {
                 background: munsowUpdatesAlertsEnabled
                   ? "white"
                   : headerTextColor,
-              }}
-            />
+              }} />
           </button>
         </div>
         <div className="pt-5 relative overflow-auto max-w-full h-auto">
@@ -124,6 +128,7 @@ const SettingsForm = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 

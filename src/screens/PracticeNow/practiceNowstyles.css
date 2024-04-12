@@ -10,4 +10,35 @@
     background-size: 200% 200%;
     animation: gradient-x 3s infinite linear;
   }
-  
+  .tick {
+    stroke-dasharray: 350;
+    stroke-dashoffset: 350;
+    animation: tick .8s ease-out;
+    animation-fill-mode: forwards;
+    animation-delay: .95s;
+  }
+
+  .circle {
+    stroke-dasharray: 1194;
+    stroke-dashoffset: 1194;
+    animation: circle 1s ease-in-out;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes circle {
+    from {
+      stroke-dashoffset: 1194;
+    }
+    to {
+      stroke-dashoffset: 2388;
+    }
+  }
+
+  @keyframes tick {
+    from {
+      stroke-dashoffset: 350;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
