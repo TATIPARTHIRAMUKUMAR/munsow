@@ -32,7 +32,7 @@ export default function CheckboxesTags(props) {
           {option.label}
         </li>
       )}
-      style={{ width: "20rem" }}
+      style={{ width: "18rem" }}
       renderInput={(params) => (
         <TextField
         {...params} 

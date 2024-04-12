@@ -40,7 +40,7 @@ const AddTeachers = () => {
         base64Data = base64Data.replace(mimeRegex, '');
       }
       // Ensure the base64 data length is a multiple of 4
-      while (base64Data.length % 4 !== 0) {
+      while (base64Data?.length % 4 !== 0) {
         base64Data += '=';
       }
 
@@ -67,6 +67,26 @@ const AddTeachers = () => {
 
 
   const [mainData, setMainData] = useState({});
+  const [branch, setBranch] = useState(null);
+  const [course, setCourse] = useState(null);
+
+  const handleBranchChange = (event, newValue) => {
+    setBranch(newValue);
+    setCourse(null);
+    console.log("Called : ", branch);
+  };
+
+  const handleCourseChange = (event, newValue) => {
+    setCourse(newValue);
+  };
+
+  const courseOptions = courseList?.filter(course => course.branchId === branch?.value) ?? [];
+  console.log('Over Here : ', courseList?.filter(course => course.branchId === mainData.branch?.value) ?? [])
+  console.log('courseList : ', courseList)
+
+  const departmentOptions = departmentList?.filter(department => department.courseId === course?.value) ?? [];
+
+
   const userFeilds =
     [
       {
@@ -114,24 +134,24 @@ const AddTeachers = () => {
       {
         label: "Branch",
         key: "branch",
-        value: mainData?.branch ?? null,
+        value: mainData?.branch ?? [],
         options: branchList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
         type: "select",
-        required:true
+        required:true 
       },
       {
         label: "Course",
         key: "course",
-        value: mainData?.course ?? null,
+        value: mainData?.course ?? [],
         type: "select",
-        options: courseList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
+        options: courseList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })),
         required:true
       },
       {
         label: "Department",
         key: "department",
-        value: mainData?.department ?? null,
-        options: departmentList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })) ?? [],
+        value: mainData?.department ?? [],
+        options: departmentList?.map((o) => ({ label: o?.name ?? "-", value: o?.id })),
         type: "select",
         required:true
       },
@@ -205,7 +225,6 @@ const AddTeachers = () => {
 
   return (
     <div className="p-4" >
-
       <TabContext value={value} >
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example" style={{ backgroundColor: "white", borderRadius: "8px" }}  >
@@ -320,6 +339,7 @@ const AddTeachers = () => {
                           onClickCapture={(e, value) => {
                             handleSelectionError(o?.key, value);
                           }}
+                          multiple
                         />
 
                       </>

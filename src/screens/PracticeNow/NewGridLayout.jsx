@@ -235,14 +235,7 @@ export default function NewGridLayout({ questions }) {
           ) : (
             <>
               <div className="p-5">
-                <div className="flex justify-end">
-                  <button
-                    className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
-                    onClick={handleFinishInterview}
-                  >
-                    Finish Interview
-                  </button>
-                </div>
+                
                 <div>
                   {/* <LinearProgress
                   className="my-2"
@@ -291,7 +284,41 @@ export default function NewGridLayout({ questions }) {
                         </div>
                         <div className="flex w-full justify-between items-center">
                           <div></div>
-                          <div className="flex items-center gap-4">
+                          
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Vertical Cell */}
+                    <div className="col-span-1 bg-white p-4 rounded-xl">
+                      <div>
+                        <div className="text-xl font-bold">
+                          Total Interview Duration
+                        </div>
+                        <div className="flex items-center py-5 text-xl">
+                          {formatTime(totalTimeLeft)}
+                          <div className="ml-[53px]">
+                            <button
+                              className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
+                              onClick={handleFinishInterview}
+                            >
+                              Finish Interview
+                            </button>
+                          </div>
+                        </div>
+                        
+                      </div>
+                      <div className="relative">
+                        <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
+                          REC
+                        </div>
+                        <video
+                          id="vid"
+                          className="rounded-md"
+                          muted
+                          autoPlay
+                        ></video>
+                        <div className="ml-[125px] mt-6 ">
                             <button
                               onClick={nextQuestion}
                               style={{
@@ -311,30 +338,6 @@ export default function NewGridLayout({ questions }) {
                               Next Question
                             </button>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right Vertical Cell */}
-                    <div className="col-span-1 bg-white p-4 rounded-xl">
-                      <div>
-                        <div className="text-xl font-bold">
-                          Total Interview Duration
-                        </div>
-                        <div className="py-5 text-xl">
-                          {formatTime(totalTimeLeft)}
-                        </div>
-                      </div>
-                      <div className="relative">
-                        <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
-                          REC
-                        </div>
-                        <video
-                          id="vid"
-                          className="rounded-md"
-                          muted
-                          autoPlay
-                        ></video>
                       </div>
                     </div>
                   </div>
