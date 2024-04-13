@@ -789,6 +789,25 @@ export const loadCountryList = (params) => {
   };
 };
 
+const getPracticalThinking = (data) => ({
+  type: types.PRACTICAL_THINKING,
+  payload: data,
+});
+
+export const loadPracticalThinking = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/practical_thinking_analysis`, { params, headers })
+      .then((resp) => {
+        dispatch(getPracticalThinking(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 export const user_create = (data, params, callback) => {
   return function () {
     var headers = {
@@ -886,11 +905,11 @@ export const interviewAllowed = (id, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("Checking...", { type: "loading", autoClose: false });
     axios
       .get(`${GLOBAL_CONSTANTS.backend_url}user/is_interview_allowed`, { headers })
       .then((resp) => {
         if (resp?.data?.error) {
+          let toastId = toast("Checking...", { type: "loading", autoClose: 500 });
           toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: 2000 })
 
         }

@@ -13,7 +13,8 @@ const Configurations = () => {
     soft_skill: useRef(null),
     hard_skill: useRef(null),
     company: useRef(null),
-    institution: useRef(null)
+    institution: useRef(null),
+    interview_questions:useRef(null)
   };
 
   const handleSelectFiles = (e, key) => {
@@ -46,6 +47,8 @@ const Configurations = () => {
     { label: 'Hard Skills', key: 'hard_skill' },
     { label: 'Company', key: 'company' },
     { label: 'Institution', key: 'institution' },
+    { label: 'Interview Questions', key: 'interview_questions' },
+
   ];
 
   const generateDownloadUrl = (mode) => {

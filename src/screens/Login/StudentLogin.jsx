@@ -80,8 +80,12 @@ const StudentLogin = () => {
       role: "student"
 
     }
-    dispatch(user_login(payload, () => {
-      window.location.href = "./studentDashboard";
+    dispatch(user_login(payload, (resp) => {
+      if(resp?.data?.role_id==5){
+        window.location.href = "./studentDashboardScreening";
+      }else{
+        window.location.href = "./studentDashboard";
+      }
     }))
   };
 

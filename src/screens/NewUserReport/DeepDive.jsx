@@ -1,4 +1,5 @@
 
+import React from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegThumbsDown } from "react-icons/fa";
 
@@ -10,7 +11,7 @@ const DeepDive = (props) => {
   const feedbackData = feedback;
 
   // Parse the feedbackData string into an object
-  const feedbackObject = JSON.parse(feedbackData);
+  // const feedbackObject = JSON.parse(feedbackData);
 
   const getBackgroundColor = (head) => {
     const firstWord = head.split(' ')[0];
@@ -28,6 +29,16 @@ const DeepDive = (props) => {
 
   const bgColor = getBackgroundColor(head);
 
+  const formatFeedback = (rawFeedback) => {
+    const lines = rawFeedback.split('\n');
+    return lines?.map((line, index) => (
+        <React.Fragment key={index}>
+            {line.replace(/"/g, '')}
+            {index < lines.length - 1 && <br/>}
+        </React.Fragment>
+    ));
+};
+
   return (
 
     <>
@@ -40,19 +51,19 @@ const DeepDive = (props) => {
       </div>
       <div className="p-4 grid max-w-xl grid-cols-1 gap-x-8 gap-y-6 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
         
-        {candidateAns && (
+       
           <div className="">
             <h3 className="text-lg font-semibold italic text-purple mb-4">Candidate's Answer:</h3>
-            <p className="text-purple">{candidateAns}</p>
+            {candidateAns && ( <p className="text-purple">{candidateAns}</p>  )}
           </div>
-        )}
+       
         
-        {sampleAns && (
+       
           <div className="">
             <h3 className="text-lg font-semibold italic text-purple mb-4">Sample Answer for reference</h3>
-            <p className="text-purple">{sampleAns}</p>
+            {sampleAns && ( <p className="text-purple">{sampleAns}</p>  )}
           </div>
-        )}
+       
 
       </div>
 
@@ -84,13 +95,7 @@ const DeepDive = (props) => {
         <div className="mb-4">
           <h3 className="text-lg font-semibold italic text-purple">Feedback for the Candidate:</h3>
         </div>
-        <ol className="pl-4 text-purple">
-          {Object.keys(feedbackObject).map((key) => (
-            <li className="mb-1" key={key}>
-              {key.includes('.') ? key.split('.')[1] : key}.{feedbackObject[key]}
-            </li>
-          ))}
-        </ol>
+        {formatFeedback(feedback)}
         </div>
       )}
       

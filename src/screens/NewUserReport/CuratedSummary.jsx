@@ -80,7 +80,7 @@ const CuratedSummary = (props) => {
                 <div className="mb-4">
                   <h4 className="p-4 text-xl font-semibold text-purple mb-4 munsow-dark-bg text-white">Role Specific Skills</h4>
                   <ol className="pl-4 text-purple">
-                    {report_data?.role_specific_skills.map((suggestion, Index) => (
+                    {report_data?.role_specific_skills?.map((suggestion, Index) => (
                       suggestion && (<li key={Index} className="mb-1 list-disc">
                         {suggestion}
                       </li>)
