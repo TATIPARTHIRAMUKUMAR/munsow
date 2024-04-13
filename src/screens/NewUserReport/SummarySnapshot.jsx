@@ -87,7 +87,7 @@ const SummarySnapshot = (props) => {
 
         {interview_score_by_category.data.map((category, index) => (
           <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category.main_title)}`}>
-            <div className="flex flex-col lg:flex-row mb-8 lg:justify-around items-center">
+            <div className="flex flex-col lg:flex-row lg:justify-around items-center">
               <div>
                 <h1 className="text-xl font-bold text-purple p-3 text-center">{category.main_title}</h1>
               </div>
@@ -106,7 +106,7 @@ const SummarySnapshot = (props) => {
                 </div>
               </div>
             </div>
-            <div className="lg:columns-2 sm:columns-1">
+            {/* <div className="lg:columns-2 sm:columns-1 mt-8">
               {category.sub_segements.map((segment, sIndex) => (
                 <div key={sIndex} className="flex justify-center">
                   <span className="flex items-center justify-start gap-2 p-2">
@@ -117,7 +117,7 @@ const SummarySnapshot = (props) => {
                   </span>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

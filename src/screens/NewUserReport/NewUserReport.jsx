@@ -94,7 +94,7 @@ const NewUserReport = () => {
           </div>
         
           
-            {userReport?.interview_score_by_category.data.map((category, index) => (
+            {/* {userReport?.interview_score_by_category.data.map((category, index) => (
               <div className="page-break">
               <ReportOverview
               key={index} 
@@ -109,7 +109,7 @@ const NewUserReport = () => {
               }))}
               />
             </div>
-            ))}
+            ))} */}
           
           {userReport?.interview_score_by_category.data.map((category, index) => (
           <>
@@ -120,6 +120,7 @@ const NewUserReport = () => {
               head={category.main_title}
               
               ques={question.question}
+              queScore={question.score}
               candidateAns={question.answer}
               sampleAns={question.suggested_answer}
               gotRight={question.Insights.what_you_got_right}
