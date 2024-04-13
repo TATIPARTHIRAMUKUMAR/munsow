@@ -41,95 +41,96 @@ const SettingsPageAdmin = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-4 bg-white rounded-md shadow-md">
-      <h1 className="text-3xl font-semibold mb-8">Settings</h1>
-
-      <form onSubmit={handleSubmit}>
-        {/* Personal Information */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Personal Information</h2>
-          <div className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-md"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-md"
-            />
-          </div>
-        </section>
-
-        {/* Account Settings */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Account Settings</h2>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-2/3 p-3 border rounded-md"
-          />
-        </section>
-
-        {/* Security */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Security</h2>
-          <label className="flex items-center space-x-3">
-            <input
-              type="checkbox"
-              style={{color: '#2BE2D0'}}
-              name="twoFactorAuth"
-              checked={formData.twoFactorAuth}
-              onChange={handleCheckChange}
-              className="rounded"
-            />
-            <span>Enable Two-Factor Authentication</span>
-          </label>
-        </section>
-
-        {/* Notification Preferences */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-medium mb-4">Notification Preferences</h2>
-          <label className="flex items-center space-x-3 mb-3">
-            <input
-              type="checkbox"
-              style={{color: '#2BE2D0'}}
-              name="emailNotifications"
-              checked={formData.emailNotifications}
-              onChange={handleCheckChange}
-              className="rounded"
-            />
-            <span>Email Notifications</span>
-          </label>
-          <label className="flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="smsNotifications"
-              style={{color: '#2BE2D0'}}
-              checked={formData.smsNotifications}
-              onChange={handleCheckChange}
-              className="rounded"
-            />
-            <span>SMS Notifications</span>
-          </label>
-        </section>
-
-        {/* Submit Button */}
-        <button type="submit" style={{background: '#2BE2D0', color: '#252525'}} className="bg-blue-500 text-white py-2 px-4 rounded">
-          Save Changes
-        </button>
-      </form>
+    <>
+    <div className="m-6">
+      <div class="p-4 bg-yellow-100 rounded-2">
+        <p class="text-yellow-800">Please note that the values on this page are not editable at the moment. Kindly contact our team at <a href="mailto:admin@munsow.com" class="font-bold">admin@munsow.com</a></p>
+      </div>
     </div>
+    <div className="max-w-4xl mx-auto mt-10 p-4 bg-white rounded-md">
+        <h1 className="text-3xl font-semibold mb-8">Settings</h1>
+
+        <form onSubmit={handleSubmit}>
+          {/* Personal Information */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-medium mb-4">Personal Information</h2>
+            <div className="space-y-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-2/3 p-3 border rounded-md" />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-2/3 p-3 border rounded-md" />
+            </div>
+          </section>
+
+          {/* Account Settings */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-medium mb-4">Account Settings</h2>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-md" />
+          </section>
+
+          {/* Security */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-medium mb-4">Security</h2>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                style={{ color: '#2BE2D0' }}
+                name="twoFactorAuth"
+                checked={formData.twoFactorAuth}
+                onChange={handleCheckChange}
+                className="rounded" />
+              <span>Enable Two-Factor Authentication</span>
+            </label>
+          </section>
+
+          {/* Notification Preferences */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-medium mb-4">Notification Preferences</h2>
+            <label className="flex items-center space-x-3 mb-3">
+              <input
+                type="checkbox"
+                style={{ color: '#2BE2D0' }}
+                name="emailNotifications"
+                checked={formData.emailNotifications}
+                onChange={handleCheckChange}
+                className="rounded" />
+              <span>Email Notifications</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="smsNotifications"
+                style={{ color: '#2BE2D0' }}
+                checked={formData.smsNotifications}
+                onChange={handleCheckChange}
+                className="rounded" />
+              <span>SMS Notifications</span>
+            </label>
+          </section>
+
+          {/* Submit Button */}
+          <button type="submit" style={{ background: '#2BE2D0', color: '#252525' }} className="bg-blue-500 text-white py-2 px-4 rounded">
+            Save Changes
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

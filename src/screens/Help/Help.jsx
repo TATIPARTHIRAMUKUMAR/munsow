@@ -63,14 +63,22 @@ const HelpAndSupportPage = () => {
     ? colorTheme.dark.selectBackground
     : colorTheme.light.selectBackground;
 
+  const textColor = isDarkMode
+    ? colorTheme.dark.textColor3
+    : colorTheme.light.textColor3; 
+    
+  const headerTextColor = isDarkMode
+    ? colorTheme.dark.textColor2
+    : colorTheme.light.textColor2;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission here
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-4">
-      <h1 className="text-3xl text-[#886cc0] font-semibold mb-6" style={{color: background}}>Help & Support</h1>
+    <div className="max-w-2xl mx-auto mt-10 mb-10 p-4">
+      <h1 className="text-3xl text-[#886cc0] font-semibold mb-10" style={{color: textColor}}>Help & Support</h1>
       
       <section className="mb-8">
         <h2 className="text-2xl font-medium mb-4">Frequently Asked Questions</h2>
@@ -82,7 +90,8 @@ const HelpAndSupportPage = () => {
         ))}
       </section>
       
-      <section>
+      {/* Temporary commented, because it was not functional. Have added msg for user to contact admin */}
+      {/* <section>
         <h2 className="text-2xl font-medium mb-4">Contact Support</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <textarea
@@ -92,12 +101,22 @@ const HelpAndSupportPage = () => {
             placeholder="Type your query here..."
             rows={4}
           />
-          <button type="submit" className="text-white py-2 px-4 rounded float-right" 
-          style={{background: background}}>
-            Submit
+          <div class="flex justify-end">
+          <button type="submit" className="py-2 px-4 rounded" 
+            style={{background: background,color: textColor,}}>
+              Submit
           </button>
+          </div>
         </form>
-      </section>
+      </section> */}
+
+      <div class="p-4 bg-yellow-100 rounded-2">
+        <h2 class="text-xl text-yellow-800 font-bold mb-3">Need Further Assistance?</h2>
+        <p class="text-yellow-800">You can reach out to us via email at <a href="mailto:admin@munsow.com">admin@munsow.com</a>, or simply click the link below to access our contact page.</p>
+        <a href="https://www.munsow.com/contact" target='_blank' class="text-lg text-yellow-800 font-bold mb-3 underline">Contact Us</a>
+      </div>
+
+
     </div>
   );
 };

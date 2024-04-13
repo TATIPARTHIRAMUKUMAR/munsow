@@ -10,6 +10,7 @@ import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import image from "../../assets/h.jpeg";
 import InterviewOver from "./InterviewOver";
 import { Step, StepLabel, Stepper } from '@mui/material';
+import { useDarkMode } from "./../../Dark";
 
 let mediaRecorder;
 
@@ -56,6 +57,25 @@ export default function NewGridLayout({ questions }) {
   const [interviewCompleted, setInterviewCompleted] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [spokenQuestions, setSpokenQuestions] = useState([]);
+
+  const { isDarkMode, colorTheme } = useDarkMode();
+
+  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const linearGradientBackground = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
+  const buttonTextColor = isDarkMode
+    ? reduxColorTheme.dark.textColor2
+    : reduxColorTheme.light.textColor2;
+
+    const backgroundColor = isDarkMode
+    ? reduxColorTheme.dark.foreground
+    : reduxColorTheme.light.foreground;
+
+    const textColor = isDarkMode
+    ? reduxColorTheme.dark.textColor3
+    : reduxColorTheme.light.textColor3;
+
 
   const handleFinishInterview = () => {
     setShowConfirmationPopup(true);
@@ -299,8 +319,8 @@ export default function NewGridLayout({ questions }) {
                                 fontSize: "18px",
                                 borderRadius: "8px",
                                 padding: "10px",
-                                background: "#886cc0",
-                                color: "white",
+                                background: linearGradientBackground,
+                                color: textColor,
                                 visibility:
                                   questionIndex < questions?.length - 1
                                     ? ""
@@ -310,6 +330,22 @@ export default function NewGridLayout({ questions }) {
                             >
                               Next Question
                             </button>
+                            <div 
+                              className="flex justify-end"
+                              style={{
+                                visibility:
+                                  questionIndex === questions?.length - 1
+                                    ? ""
+                                    : "hidden",
+                              }}   
+                            >
+                              <button
+                                className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
+                                onClick={handleFinishInterview}
+                              >
+                                Finish Interview
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>

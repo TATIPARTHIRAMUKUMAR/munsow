@@ -9,7 +9,7 @@ export default function StudentDashboardScreenig() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isDarkMode, colorTheme } = useDarkMode();
-  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const { colorTheme: reduxColorTheme,userStats } = useSelector((state) => state?.data);
 
   const linearGradientBackground = isDarkMode
     ? reduxColorTheme.dark.selectBackground
@@ -69,11 +69,11 @@ export default function StudentDashboardScreenig() {
         <div className="flex flex-col space-y-4">
           <div className="card bg-white shadow-lg rounded-lg p-6">
             <div className="text-2xl font-bold" style={{ color: textColor }}>Number of Interviews Allocated</div>
-            <div className="text-xl" style={{ color: textColor }}>8</div>
+            <div className="text-xl" style={{ color: textColor }}>{userStats?.cards?.length>0?userStats?.cards[0]?.value:""}</div>
           </div>
           <div className="card bg-white shadow-lg rounded-lg p-6">
             <div className="text-2xl font-bold" style={{ color: textColor }}>Number of Interviews Conducted</div>
-            <div className="text-xl" style={{ color: textColor }}>5</div>
+            <div className="text-xl" style={{ color: textColor }}>{userStats?.cards?.length>0?userStats?.cards[1]?.value:""}</div>
           </div>
         </div>
       </div>

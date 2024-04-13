@@ -29,8 +29,8 @@ const AvatarContainer = styled('div')({
 });
 
 const StyledAvatar = styled(Avatar)({
-  backgroundColor: "#ede9fe",
-  color: "#5E7AFC",
+  backgroundColor: "#ccfbf1",
+  color: "#082f49",
   height: "8rem",
   width: "7rem",
   border: "2px solid white",
@@ -83,6 +83,10 @@ export default function Profile() {
   const background = isDarkMode
     ? colorTheme.dark.selectBackground
     : colorTheme.light.selectBackground;
+
+  const textColor = isDarkMode
+    ? colorTheme.dark.textColor3
+    : colorTheme.light.textColor3;
 
   const onLogingChange = (key, value) => {
     console.log(key, value);
@@ -140,11 +144,18 @@ export default function Profile() {
     <>
      <div>
       <div className="bg-white mt-0 p-2 border-b">
-        <h3 className="font-semibold">Personal Information</h3>
+        <h3 className="font-semibold text-xl">Personal Information</h3>
         <p className="text-gray-400 text-sm">Update your personal information</p>
       </div>
+
+      <div className="m-6">
+      <div class="p-4 bg-yellow-100 rounded-2">
+        <p class="text-yellow-800">Please note that the values on this page are not editable at the moment. Kindly contact our team at <a href="mailto:admin@munsow.com" class="font-bold">admin@munsow.com</a></p>
+      </div>
+      </div>
+
       <div className="bg-white max-[525px]:px-6 px-12 md:px-24 py-12">
-        <h3 className="mb-3 text-gray-500 font-semibold">Profile Info</h3>
+        <h3 className="mb-3 text-gray-500 font-semibold text-xl">Profile Info</h3>
         
         <div>
         <AvatarContainer>
@@ -227,8 +238,11 @@ export default function Profile() {
         </div>
         <hr></hr>
         <div className="flex justify-end my-8">
-          <button className="border rounded-lg max-[425px]:p-2 p-3 mr-5 text-blue-400">Cancel</button>
-          <button onClick={() => { onUpdate() }} className="border rounded-lg max-[425px]:p-2 p-3 text-white bg-blue-400">Save changes</button>
+          <button className="border rounded-lg max-[425px]:p-2 p-3 mr-5 shadow-md" style={{border: `2px solid ${background}`,color: textColor}}
+          onMouseEnter={(e) => { e.target.style.background = `${background}` }}
+          onMouseLeave={(e) => { e.target.style.background = "none" }}
+          >Cancel</button>
+          <button onClick={() => { onUpdate() }} className="border rounded-lg max-[425px]:p-2 p-3 shadow-md" style={{background: background,color: textColor}}>Save changes</button>
         </div>
         <div>
           <h3 className="mb-5 text-gray-500 font-semibold">Password Settings</h3>
@@ -247,7 +261,7 @@ export default function Profile() {
               />
             </div>
             <div className="flex justify-end my-8">
-              <button onClick={() => { handleOpen() }} className="border rounded-lg max-[425px]:p-2 p-3 text-black-300">Reset Password</button>
+              <button onClick={() => { handleOpen() }} className="border rounded-lg max-[425px]:p-2 p-3 shadow-md" style={{background: background,color: textColor}}>Reset Password</button>
               {/* <Button >Open modal</Button> */}
               <Modal
                 open={open}
@@ -305,8 +319,11 @@ export default function Profile() {
               </div>
               <hr></hr>
               <div className="flex justify-end my-8">
-                <button onClick={handleClose} className="border rounded-lg max-[425px]:p-2 p-3 mr-5 text-blue-400">Cancel</button>
-                <button onClick={() => { onUpdate() }} className="border rounded-lg max-[425px]:p-2 p-3 text-white bg-blue-400">Change Password</button>
+                <button onClick={handleClose} className="border rounded-lg max-[425px]:p-2 p-3 mr-5 shadow-md" style={{border: `2px solid ${background}`,color: textColor}}
+                onMouseEnter={(e) => { e.target.style.background = `${background}` }}
+                onMouseLeave={(e) => { e.target.style.background = "none" }}
+                >Cancel</button>
+                <button onClick={() => { onUpdate() }} className="border rounded-lg max-[425px]:p-2 p-3 shadow-md" style={{background: background,color: textColor}}>Change Password</button>
               </div>
               </Box>
               </Modal>
