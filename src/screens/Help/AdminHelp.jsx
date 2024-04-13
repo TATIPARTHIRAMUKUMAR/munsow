@@ -49,7 +49,8 @@ const HelpAndSupportAdmin = () => {
         ))}
       </section>
       
-      <section>
+      {/* Temporary commented, because it was not functional. Have added msg for user to contact admin */}
+      {/* <section>
         <h2 className="text-2xl font-medium mb-4">Contact Support</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <textarea
@@ -59,11 +60,20 @@ const HelpAndSupportAdmin = () => {
             placeholder="Type your query here..."
             rows={4}
           />
-          <button type="submit" style={{background: '#2BE2D0', color: '#252525'}} className="bg-blue-500 text-white py-2 px-4 rounded">
-            Submit
-          </button>
+          <div class="flex justify-end">
+            <button type="submit" style={{background: '#2BE2D0', color: '#252525'}} className="bg-blue-500 text-white py-2 px-4 rounded">
+              Submit
+            </button>
+          </div>
         </form>
-      </section>
+      </section> */}
+
+      <div class="p-4 bg-yellow-100 rounded-2">
+        <h2 class="text-xl text-yellow-800 font-bold mb-3">Need Further Assistance?</h2>
+        <p class="text-yellow-800">You can reach out to us via email at <a href="mailto:admin@munsow.com">admin@munsow.com</a>, or simply click the link below to access our contact page.</p>
+        <a href="https://www.munsow.com/contact" target='_blank' class="text-lg text-yellow-800 font-bold mb-3 underline">Contact Us</a>
+      </div>
+      
     </div>
   );
 };
