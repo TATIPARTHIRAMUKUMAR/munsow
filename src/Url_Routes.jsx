@@ -46,6 +46,7 @@ import ReportIndex from "./screens/UserReport/ReportsList";
 import ScreeningUserRegister from "./screens/Login/ScreeningUserRegister";
 import LinksList from "./screens/Admin/ScreeningUsers/LinksList";
 import CreateLink from "./screens/Admin/ScreeningUsers/CreateLink";
+import StudentDashboardScreenig from "./screens/Student Dashboard/StudentDashboard-Screening";
 
 
 function Url_Routes() {
@@ -85,6 +86,8 @@ function Url_Routes() {
                 <Route exact path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
                 <Route exact path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
                 <Route exact path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
+                <Route exact path="/studentDashboardScreening" element={<HeaderFooterLayout Component={<StudentDashboardScreenig />} />} />
+
               </>
             }
           </>

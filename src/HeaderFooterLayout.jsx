@@ -239,7 +239,7 @@ export default function HeaderFooterLayout({ Component }) {
         {
           label: "Dashboard",
           icon: <FaThLarge size={20} className="" />,
-          route: "/studentDashboard",
+          route: "/studentDashboardScreening",
           subItems: [],
         },
         // {
@@ -248,24 +248,24 @@ export default function HeaderFooterLayout({ Component }) {
         //   route: "/practice",
         //   subItems: [],
         // },
-        {
-          label: "My Interview Reports",
-          icon: <FaChartLine size={20} className="" />,
-          route: "/report",
-          subItems: [],
-        },
+        // {
+        //   label: "My Interview Reports",
+        //   icon: <FaChartLine size={20} className="" />,
+        //   route: "/report",
+        //   subItems: [],
+        // },
         // {
         //   label: "My Courses",
         //   icon: <FaChartLine size={20} className="" />,
         //   route: "/studentCourseList",
         //   subItems: [],
         // },
-        {
-          label: "My Profile",
-          icon: <FaUser size={20} className="" />,
-          route: "/profile",
-          subItems: [],
-        },
+        // {
+        //   label: "My Profile",
+        //   icon: <FaUser size={20} className="" />,
+        //   route: "/profile",
+        //   subItems: [],
+        // },
         // {
         //   label: "Settings",
         //   icon: <FaCog size={20} className="" />,
