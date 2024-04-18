@@ -85,19 +85,19 @@ const SummarySnapshot = (props) => {
           <h2 className="text-center font-bold">Munsow Interview Classification Highlights</h2>
         </div>
 
-        {interview_score_by_category.data.map((category, index) => (
-          <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category.main_title)}`}>
+        {interview_score_by_category?.data?.map((category, index) => (
+          <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
             <div className="flex flex-col lg:flex-row mb-8 lg:justify-around items-center">
               <div>
-                <h1 className="text-xl font-bold text-purple p-3 text-center">{category.main_title}</h1>
+                <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
               </div>
               <div className="rounded-full bg-white w-48 p-4">
                 <div className="relative pt-1">
                   <div className="flex mb-2 items-center justify-start">
                     <div className="w-full bg-gray-300 rounded-full">
                       <div
-                        style={{ width: `${(category.secured_marks / 10) * 100}%` }}
-                        className={`text-center text-xs text-white ${progressBarColor(category.secured_marks)} rounded-full`}
+                        style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
+                        className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
                       >
                         &nbsp;
                       </div>
@@ -107,13 +107,13 @@ const SummarySnapshot = (props) => {
               </div>
             </div>
             <div className="lg:columns-2 sm:columns-1">
-              {category.sub_segements.map((segment, sIndex) => (
+              {category?.sub_segements?.map((segment, sIndex) => (
                 <div key={sIndex} className="flex justify-center">
                   <span className="flex items-center justify-start gap-2 p-2">
-                    <h1 className={`text-xl font-bold ${getScoreColor(segment.secured_marks)}`}>
-                      {segment.secured_marks}/10
+                    <h1 className={`text-xl font-bold ${getScoreColor(segment?.secured_marks)}`}>
+                      {segment?.secured_marks}/10
                     </h1>
-                    <p className="text-purple font-bold underline">{setTitle(category.main_title, sIndex)}</p>
+                    <p className="text-purple font-bold underline">{setTitle(category?.main_title, sIndex)}</p>
                   </span>
                 </div>
               ))}

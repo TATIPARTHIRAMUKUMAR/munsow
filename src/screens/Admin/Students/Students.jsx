@@ -353,6 +353,9 @@ import { alpha } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Toolbar from '@mui/material/Toolbar';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import Switch from '@mui/material/Switch';
+import ActionButtonCellRenderer from "./ActionButtonCellRenderer";
+
 
 const style = {
   position: 'absolute',
@@ -365,50 +368,8 @@ const style = {
   p: 4,
 };
 
-const columns = [
-  { 
-    id: 'name', 
-    label: 'Name', 
-    align: 'left',
-    numeric: false,
-  },
-  { 
-    id: 'branch',
-    label: 'Branch',
-    align: 'left',
-    numeric: false,
-  },
-  {
-    id: 'course',
-    label: 'Course',
-    align: 'left',
-    numeric: false,
-  },
-  {
-    id: 'department',
-    label: 'Department',
-    align: 'left',
-    numeric: false,
-  },
-  {
-    id: 'interviews',
-    label: 'No of Interviews',
-    align: 'left',
-    numeric: true,
-  },
-  {
-    id: 'avgscore',
-    label: 'Average Score',
-    align: 'left',
-    numeric: true,
-  },
-  {
-    id: 'action',
-    label: 'Actions',
-    align: 'left',
-    numeric: false,
-  },
-];
+
+
 
 const Students = () => {
   const [page, setPage] = useState(0);
@@ -471,6 +432,53 @@ const Students = () => {
     }));
   };
 
+  const columns = [
+    { 
+      id: 'name', 
+      label: 'Name', 
+      align: 'left',
+      numeric: false,
+    },
+    { 
+      id: 'branch',
+      label: 'Branch',
+      align: 'left',
+      numeric: false,
+    },
+    {
+      id: 'course',
+      label: 'Course',
+      align: 'left',
+      numeric: false,
+    },
+    {
+      id: 'department',
+      label: 'Department',
+      align: 'left',
+      numeric: false,
+    },
+    {
+      id: 'interviews',
+      label: 'No of Interviews',
+      align: 'left',
+      numeric: true,
+    },
+    {
+      id: 'avgscore',
+      label: 'Average Score',
+      align: 'left',
+      numeric: true,
+    },
+    {
+      id: 'action',
+      label: 'Actions',
+      align: 'left',
+      cellRenderer: ActionButtonCellRenderer,
+      cellRendererParams: { deleteHandler },
+      numeric: false,
+    },
+  ];
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -503,6 +511,15 @@ const Students = () => {
   
     // Save the workbook as an Excel file
     XLSX.writeFile(workbook, 'students.xlsx');
+  };
+
+  const handleToggleSwitch = (index) => {
+    setFilteredData(prevData => {
+      const newData = [...prevData];
+      const updatedRow = { ...newData[index], is_active: !newData[index].is_active };
+      newData[index] = updatedRow;
+      return newData;
+    });
   };
 
   return (
@@ -553,7 +570,7 @@ const Students = () => {
                   .map((row, index) => (
                     <TableRow
                       hover
-                      key={row.name}
+                      key={row.id}
                       style={{ borderBottom: '1px solid rgb(224 224 224)' }}
                     >
                       <TableCell>{row.name}</TableCell>
@@ -563,7 +580,10 @@ const Students = () => {
                       <TableCell>{row.no_of_interviews}</TableCell>
                       <TableCell>{row.avg_score}</TableCell>
                       <TableCell>
-                        <Stack direction="row" spacing={0}>
+                        <ActionButtonCellRenderer 
+                          data={row} />
+
+                        {/* <Stack direction="row" spacing={0}>
                           <Tooltip title="Edit">
                             <IconButton>
                               <EditIcon sx={{ color: '#006db5' }} />
@@ -597,7 +617,7 @@ const Students = () => {
                               </Button>
                             </Stack>
                           </Box>
-                        </Modal>
+                        </Modal> */}
                       </TableCell>
                     </TableRow>
                   ))

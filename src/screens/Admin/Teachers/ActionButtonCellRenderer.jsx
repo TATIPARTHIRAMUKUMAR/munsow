@@ -4,8 +4,10 @@ import { loadTeachersList, userStatUpdate } from "../../../redux/action";
 import { Switch } from "@mui/material";
 const ActionButtonCellRenderer = (props) => {
 
-  const { deleteHandler = ()=>{} } = props;
-  const row = props?.node?.data;
+  // const { deleteHandler = ()=>{} } = props;
+  // const row = props?.node?.data;
+
+  const row = props?.data;
 
   const dispatch = useDispatch()
 

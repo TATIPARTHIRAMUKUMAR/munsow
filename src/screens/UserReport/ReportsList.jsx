@@ -12,6 +12,7 @@ import moment from "moment";
 import { useDarkMode } from "../../Dark";
 import Tooltip from '@mui/material/Tooltip';
 import InfoIcon from '@mui/icons-material/Info';
+import { stringify } from "postcss";
 
 
 const styles = {
@@ -61,7 +62,8 @@ export default function ReportIndex() {
     const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company }) => {
 
         const viewReport = (data) => {
-            console.log("d", data)
+            // console.log("d", data)
+            localStorage.setItem("reportData",JSON.stringify(data))
             //    useEffect(()=>{
             dispatch(loadUserReport(data));
             navigate("/reportView")

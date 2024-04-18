@@ -22,7 +22,7 @@ const NewUserReport = () => {
     const storedReportData = localStorage.getItem('reportData');
     
     if (storedReportData) {
-      userReport = JSON.parse(storedReportData);
+      userReport = JSON?.parse(storedReportData);
     } else {
       console.log('No report data found in local storage');
     }
@@ -94,7 +94,7 @@ const NewUserReport = () => {
           </div>
         
           
-            {userReport?.interview_score_by_category.data.map((category, index) => (
+            {userReport?.interview_score_by_category?.data?.map((category, index) => (
               <div className="page-break">
               <ReportOverview
               key={index} 
@@ -102,7 +102,7 @@ const NewUserReport = () => {
               overallScore={category.secured_marks}
               notes={category.notes}
              
-              scores={category.sub_segements.map((segment, sIndex) => ({
+              scores={category.sub_segements?.map((segment, sIndex) => ({
                 title: segment.title,
                 score: segment.secured_marks,
                 desc: segment.notes,
@@ -111,9 +111,9 @@ const NewUserReport = () => {
             </div>
             ))}
           
-          {userReport?.interview_score_by_category.data.map((category, index) => (
+          {userReport?.interview_score_by_category?.data?.map((category, index) => (
           <>
-          {category.interview_questions.map((question, qIndex) => (
+          {category?.interview_questions?.map((question, qIndex) => (
             <div key={index} id="DeepDive" className="page-break">
             <DeepDive
               key={qIndex}
@@ -124,7 +124,7 @@ const NewUserReport = () => {
               sampleAns={question.suggested_answer}
               gotRight={question.Insights.what_you_got_right}
               gotWrong={question.Insights.what_you_got_wrong}
-              feedback={question.Insights["feedback_for_the candidate"]}
+              feedback={question.Insights["feedback_for_the candidate"]?.slice(0, -1)}
             />
             </div>
           ))}

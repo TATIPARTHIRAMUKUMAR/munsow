@@ -44,6 +44,8 @@ const initialState = {
   assignedUsers:[],
   unAssignedUsers:[],
   linksList:[],
+  practicalThinking:[],
+  practicalFilters:{},
   colorTheme: {
     light: {
       // primaryBg-black
@@ -274,6 +276,12 @@ const DataReducers = (state = initialState, action) => {
     case types.SCREENING_USER_LINKS_LIST: return{
       ...state,
       linksList: action.payload.data,
+      loading:false
+    }
+    case types.PRACTICAL_THINKING: return{
+      ...state,
+      practicalThinking: action.payload.data,
+      practicalFilters:action.payload.filters,
       loading:false
     }
     case types.SET_REDUX_STATE : { 

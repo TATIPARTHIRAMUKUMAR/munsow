@@ -581,188 +581,69 @@ const StepperComponent = () => {
           )}
 
           {currentStep === 1 && (
-            <div  className="relative overflow-auto max-w-full h-auto "
+          <div  className="relative overflow-auto max-w-full h-auto "
+          >
+            <h2
+            className="relative overflow-auto max-w-full h-auto"
+              style={{
+                textAlign: "center",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                marginBottom: "2px",
+                color: grayColors,
+              }}
             >
-              <h2
-              className="relative overflow-auto max-w-full h-auto"
-                style={{
-                  textAlign: "center",
-                  fontSize: "1.5rem",
-                  fontWeight: "bold",
-                  marginBottom: "2px",
-                  color: grayColors,
-                }}
-              >
-                Level
-              </h2>
-              <div
-              className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
-                style={{
-                  border: `3.5px solid ${textColors}`,
-                  borderRadius: "20px",
-                  padding: "2rem 2.5rem"
-                }}
-              >
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={level}
-                  onChange={(e) => setLevel(e.target.value)}
-                  className="w-full mb-4 appearance-none h-2 rounded-lg"
-                  style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%) `}}
-                />
-            <>
-              <div  className="relative overflow-auto max-w-full h-auto "
-              >
-                <h2
-                className="relative overflow-auto max-w-full h-auto"
-                  style={{
-                    textAlign: "center",
-                    fontSize: "1.5rem",
-                    fontWeight: "bold",
-                    marginBottom: "2px",
-                    color: grayColors,
-                  }}
-                >
-                  Level
-                </h2>
-                <div
-                className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
-                  style={{
-                    border: `3.5px solid ${textColors}`,
-                    borderRadius: "20px",
-                    padding: "2rem 2.5rem"
-                  }}
-                >
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={level}
-                    onChange={(e) => setLevel(e.target.value)}
-                    className="w-full mb-4 appearance-none h-2 rounded-lg"
-                    style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
-                  />
+              Level
+            </h2>
+            <div
+            className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
+              style={{
+                border: `3.5px solid ${textColors}`,
+                borderRadius: "20px",
+                padding: "2rem 2.5rem"
+              }}
+            >
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+                className="w-full mb-4 appearance-none h-2 rounded-lg"
+                style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
+              />
 
-                <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
-                  <button
-                    onClick={() => {
-                      setLevel(0);
-                      setExperienceLevel("low");
-                    }}
-                    className="bg-green-500 hover:bg-green-600 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                  >
-                    Beginner
-                  </button>
-                  <button
-                    onClick={() => {
-                      setLevel(50);
-                      setExperienceLevel("medium");
-                    }}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                  >
-                    Intermediate
-                  </button>
-                  <button
-                    onClick={() => {
-                      setLevel(100);
-                      setExperienceLevel("high");
-                    }}
-                    className="bg-red-500 hover:bg-red-600 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
-                  >
-                    Advanced
-                  </button>
-                </div>
+              <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
+                <button
+                  onClick={() => {
+                    setLevel(0);
+                    setExperienceLevel("low");
+                  }}
+                  className="bg-green-500 hover:bg-green-700 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                >
+                  Beginner
+                </button>
+                <button
+                  onClick={() => {
+                    setLevel(50);
+                    setExperienceLevel("mid");
+                  }}
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                >
+                  Intermediate
+                </button>
+                <button
+                  onClick={() => {
+                    setLevel(100);
+                    setExperienceLevel("high");
+                  }}
+                  className="bg-red-500 hover:bg-red-700 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
+                >
+                  Advanced
+                </button>
               </div>
-              {/* <div className="text-center font-semibold">Or</div>
-                            <h2 className="text-center text-sm font-semibold mb-2 text-purple-600">Choose your Experience level</h2>
-                            <div className="flex justify-between items-center"> */}
-              {/* <div>
-                                    <select
-                                        className="border rounded p-1"
-                                        value={experienceLevel}
-                                        onChange={(e) => setExperienceLevel(e.target.value)}
-                                    >
-                                        <option value="Beginner">Beginner</option>
-                                        <option value="Intermediate">Intermediate</option>
-                                        <option value="Advanced">Advanced</option>
-                                    </select>
-                                </div> */}
-                  <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
-                    <button
-                      onClick={() => {
-                        setLevel(0);
-                        setExperienceLevel("low");
-                      }}
-                      className="bg-green-500 hover:bg-green-700 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                    >
-                      Beginner
-                    </button>
-                    <button
-                      onClick={() => {
-                        setLevel(50);
-                        setExperienceLevel("mid");
-                      }}
-                      className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                    >
-                      Intermediate
-                    </button>
-                    <button
-                      onClick={() => {
-                        setLevel(100);
-                        setExperienceLevel("high");
-                      }}
-                      className="bg-red-500 hover:bg-red-700 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
-                    >
-                      Advanced
-                    </button>
-                  </div>
-                </div>
-                {/* <div className="text-center font-semibold">Or</div>
-                              <h2 className="text-center text-sm font-semibold mb-2 text-purple-600">Choose your Experience level</h2>
-                              <div className="flex justify-between items-center"> */}
-                {/* <div>
-                                      <select
-                                          className="border rounded p-1"
-                                          value={experienceLevel}
-                                          onChange={(e) => setExperienceLevel(e.target.value)}
-                                      >
-                                          <option value="Beginner">Beginner</option>
-                                          <option value="Intermediate">Intermediate</option>
-                                          <option value="Advanced">Advanced</option>
-                                      </select>
-                                  </div> */}
-
-                {/* <Autocomplete
-                                      size="small"
-                                      fullWidth
-                                      disablePortal
-                                      value={experienceLevel}
-                                      defaultValue={experienceLevel}
-                                      id="combo-box-demo"
-                                      options={[
-                                          { label: "Beginner", value: "Beginner" },
-                                          { label: "Intermediate", value: "Intermediate" },
-                                          { label: "Advanced", value: "Advanced" },
-                                      ]}
-                                      renderInput={(params) => (
-                                          <TextField
-                                              {...params}
-                                              // label={o?.label} 
-                                              InputProps={{
-                                                  ...params.InputProps,
-                                                  style: {
-                                                      borderRadius: "0.4rem",
-                                                  },
-                                              }}
-                                          />
-                                      )}
-                                      onChange={(e, value) => { setExperienceLevel(value) }}
-                                  />
-                              </div> */}
-              </div>
-            </>
+          </div>
+          </div>
           )}
 
           {currentStep == 2 && (

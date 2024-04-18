@@ -206,7 +206,7 @@ const LinksList = () => {
                     <TableCell>
                       Copy
                       <Tooltip title={copiedRows[row.id] ? "Copied!" : "Copy to clipboard"}>
-                      <IconButton onClick={() => handleCopyToClipboard(`https://munsow-stg.vercel.app/studentRegistration/${row.unique_code}`, row.id)}>
+                      <IconButton onClick={() => handleCopyToClipboard(`https://munsow.vercel.app/studentRegistration/${row.unique_code}`, row.id)}>
                         {copiedRows[row.id] ? <FileCopyIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
                       </IconButton>
                       </Tooltip>

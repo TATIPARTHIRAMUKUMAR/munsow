@@ -266,14 +266,14 @@ export default function NewGridLayout({ questions }) {
                     } 
                   /> */}
                   <Stepper activeStep={questionIndex} alternativeLabel>
-              {questions.map((question, index) => (
-                <Step key={index} completed={index < questionIndex}>
-                  <StepLabel>{index + 1}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+                    {questions.map((question, index) => (
+                      <Step key={index} completed={index < questionIndex}>
+                        <StepLabel></StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
             
-                  <div className="grid grid-cols-3  gap-4 ">
+                  <div className="grid grid-cols-3  gap-4 mt-9">
                     {/* Left Top Cell */}
                     <div className="col-span-2 flex flex-col">
                       <div className="flex-grow">

@@ -225,11 +225,11 @@ const Teachers = () => {
                 teachersList.data
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
-                    <TableRow
+                    <TableRow 
                       hover
                       // role="checkbox"
                       // tabIndex={-1}
-                      // key={row.code}
+                      key={row.id}
                       style={{ borderBottom: '1px solid rgb(224 224 224)' }}
                     >
                       <TableCell>{row.name}</TableCell>
@@ -237,6 +237,8 @@ const Teachers = () => {
                       <TableCell>{row.course_name}</TableCell>
                       <TableCell>{row.department_name}</TableCell>
                       <TableCell padding="none">
+                        <ActionButtonCellRenderer 
+                            data={row} />
                         {/* <Tooltip title="Edit">
                     <IconButton onClick={() => handleOpenEdit(row)}>
                         <EditIcon sx={{ color: '#006db5' }} />
@@ -244,7 +246,7 @@ const Teachers = () => {
                     </IconButton>
                 </Tooltip>
                  */}
-                        <Stack direction="row" spacing={0}>
+                        {/* <Stack direction="row" spacing={0}>
                           <EditTeachersModal
                             teacherId={index}
                             teacherName={row.name} />
@@ -278,7 +280,7 @@ const Teachers = () => {
                               </Button>
                             </Stack>
                           </Box>
-                        </Modal>
+                        </Modal> */}
                       </TableCell>
                     </TableRow>
                   ))
