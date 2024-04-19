@@ -400,13 +400,35 @@ const Students = () => {
     const isAsc = orderBy === property && order === 'asc';
     console.log("Is ascending?", isAsc);
 
+    // const sortedData = [...studentsList.data].sort((a, b) => {
+    //   if (isAsc) {
+    //       console.log(a[property] > b[property] ? 1 : -1, 'sorting')
+    //       return a[property] > b[property] ? 1 : -1;
+    //   } else {
+    //       return a[property] < b[property] ? -1 : 1;
+    //   }
+    // });
+
     const sortedData = [...studentsList.data].sort((a, b) => {
-      if (isAsc) {
-          return a[property] > b[property] ? 1 : -1;
+      if (typeof a[property] === 'number' && typeof b[property] === 'number') {
+        if (isAsc) {
+          return a[property] - b[property];
+        } else {
+          return b[property] - a[property];
+        }
+      } else if (typeof a[property] === 'string' && typeof b[property] === 'string') {
+        if (isAsc) {
+          return a[property].localeCompare(b[property]);
+        } else {
+          return b[property].localeCompare(a[property]);
+        }
       } else {
-          return a[property] < b[property] ? -1 : 1;
+        console.log(a[property], 'here')
+        console.log(a, 'here')
+        return 0;
       }
     });
+
     console.log("Sorted data:", sortedData);
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -440,31 +462,31 @@ const Students = () => {
       numeric: false,
     },
     { 
-      id: 'branch',
+      id: 'branch_name',
       label: 'Branch',
       align: 'left',
       numeric: false,
     },
     {
-      id: 'course',
+      id: 'course_name',
       label: 'Course',
       align: 'left',
       numeric: false,
     },
     {
-      id: 'department',
+      id: 'department_name',
       label: 'Department',
       align: 'left',
       numeric: false,
     },
     {
-      id: 'interviews',
+      id: 'no_of_interviews',
       label: 'No of Interviews',
       align: 'left',
       numeric: true,
     },
     {
-      id: 'avgscore',
+      id: 'avg_score',
       label: 'Average Score',
       align: 'left',
       numeric: true,
@@ -513,14 +535,6 @@ const Students = () => {
     XLSX.writeFile(workbook, 'students.xlsx');
   };
 
-  const handleToggleSwitch = (index) => {
-    setFilteredData(prevData => {
-      const newData = [...prevData];
-      const updatedRow = { ...newData[index], is_active: !newData[index].is_active };
-      newData[index] = updatedRow;
-      return newData;
-    });
-  };
 
   return (
     <>
