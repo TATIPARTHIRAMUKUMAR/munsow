@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import image from "../../assets/testPng.png";
 import image2 from "../../assets/dashboard_std.png";
 import SecondRow from "./SecondRow";
@@ -9,10 +9,16 @@ import GLOBAL_CONSTANTS from "../../../GlobalConstants";
 import { interviewAllowed, loadUserStats } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useDarkMode } from "./../../Dark";
+import MeterChart from "./MeterChart";
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { userStats } = useSelector((state) => state.data);
+
+  // State to store average scores
+  const [averageScores, setAverageScores] = useState(null);
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
@@ -50,11 +56,69 @@ export default function StudentDashboard() {
     }
   };
 
+  // console.log(userStats,"UserStats..")
+
+
+
+  useEffect(() => {
+
+    // Calculate average scores
+   const calculateAverageScores = (userStats) => {
+    if (!userStats || !userStats.graphs || !Array.isArray(userStats.graphs)) {
+      return null;
+    }
+
+    const { graphs } = userStats;
+    const { totalInterviews, skillSums } = graphs.reduce(
+      (accumulator, graph) => {
+        const { data } = graph;
+        data.forEach((interview) => {
+          accumulator.totalInterviews++;
+          Object.keys(interview).forEach((key) => {
+            if (key !== "name") {
+              accumulator.skillSums[key] += interview[key];
+            }
+          });
+        });
+        return accumulator;
+      },
+      {
+        totalInterviews: 0,
+        skillSums: {
+          "Knowledge/Skills": 0,
+          "Mindset/Attitude": 0,
+          "Practical Thinking": 0,
+        },
+      }
+    );
+
+    const averageScores = {
+      "Knowledge/Skills": Math.round(skillSums["Knowledge/Skills"] / totalInterviews),
+      "Mindset/Attitude": Math.round(skillSums["Mindset/Attitude"] / totalInterviews),
+      "Practical Thinking": Math.round(skillSums["Practical Thinking"] / totalInterviews),
+    };
+
+    return averageScores;
+  };
+
+    const scores = calculateAverageScores(userStats);
+    if (scores) {
+      setAverageScores(scores);
+    }
+  }, [userStats]);
+
+  // console.log(averageScores,"scoresss")
+  // if (averageScores) {
+  //   console.log(averageScores["Knowledge/Skills"], "Knowledge/Skills score");
+  //   console.log(averageScores["Mindset/Attitude"], "Mindset/Attitude score");
+  //   console.log(averageScores["Practical Thinking"], "Practical Thinking score");
+  // } else {
+  //   console.log("Average scores are not available yet.");
+  // }
+  
   return (
-    <div style={{ background: backgroundColor }}>
-      <div
-        className="grid grid-cols-1 sm:grid-cols-3 gap-7 px-6 py-6 relative overflow-auto max-w-full h-auto"
-      >
+    <div style={{ background: backgroundColor }} className="px-6 py-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-7 mb-5 relative overflow-auto max-w-full h-auto">
         <div className="col-span-2 relative overflow-auto max-w-full h-auto">
           <div
             style={{
@@ -116,9 +180,44 @@ export default function StudentDashboard() {
           </div>
         </div>
         <div className="col-span-2 relative overflow-auto max-w-full h-auto">
-          <div className="bg-white rounded-lg">
-            <BarChartLines />
+        {averageScores ? (
+        <div className="flex">
+          <div className="">
+            <div className="bg-white ">
+              <MeterChart
+              title={"Mindset/Attitude"}
+              
+              score={averageScores["Mindset/Attitude"]}
+              container={"container1"}
+              color={"#bf83c2"}
+              />
+            </div>
           </div>
+          <div className="">
+            <div className="bg-white">
+              <MeterChart
+              title={"Knowledge/Skills"}
+              score={averageScores["Knowledge/Skills"]}
+              container={"container2"}
+              color={"#8ab97d"}
+              />
+            </div>
+          </div>
+          <div className="">
+            <div className="bg-white ">
+              <MeterChart
+              title={"Practical Thinking"}
+              score={averageScores["Practical Thinking"]}
+              container={"container3"}
+              color={"#faa542"}
+              />
+            </div>
+          </div>
+        </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+          
         </div>
         <div className="col-span-1 relative overflow-auto max-w-full h-auto">
           {/* <p className="text-gray-500 text-md pb-2">Hard Skill vs Soft Skill Trend</p> */}
@@ -126,7 +225,16 @@ export default function StudentDashboard() {
             <Carousel />
           </div>
         </div>
+
+        
       </div>
+
+      <div>
+        <div className="bg-white rounded-lg">
+          <BarChartLines />
+        </div>
+      </div>
+
     </div>
   );
 }
