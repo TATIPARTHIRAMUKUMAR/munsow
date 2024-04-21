@@ -41,6 +41,9 @@ import format from 'date-fns/format';
 
 import NewCard from "./NewCard.jsx";
 
+import CircularProgress from '@mui/material/CircularProgress';
+
+
 const AdminDashboard = () => {
   window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
@@ -222,9 +225,78 @@ const AdminDashboard = () => {
           </div>
 
         </div>
-        <div className="flex flex-wrap pt-5">
+
+        <div className="mt-5 flex flex-wrap pt-5 bg-white rounded-xl">
+          <div className="mb-6 ml-4 flex justify-between">
+              <span className="text-lg font-normal">
+                Department wise Analysis
+              </span>
+          </div>
+          {/* mb-6 ml-4  */}
+
+          <div className="mt-4 p-7">
+            <div className="flex flex-wrap justify-between">
+              {/* First row */}
+              <div className="w-[300px] mb-4 ml-7">
+                <span className="text-md font-normal"> Computer Engineering </span>
+                <br /><br /><br />
+                <div style={{position: 'relative'}}>
+                  <span style={{position: 'absolute', top: '10px', left: '50px'}}>400</span>
+                  <CircularProgress variant="determinate" value={400} style={{ color: '#9F2B68', width: '80px' }} />
+                </div>
+                
+                {/* <BorderLinearProgress variant="determinate" value={90} style={{ color: '#40826D', width: '120px' }} /> */}
+              </div>
+              <div className="w-[300px] mb-[70px]">
+                <span className="text-md font-normal"> Electrical Engineering </span>
+                <br /><br /><br />
+                <div style={{position: 'relative'}}>
+                  <span style={{position: 'absolute', top: '10px', left: '50px'}}>65</span>
+                  <CircularProgress variant="determinate" value={65} style={{ color: '#9F2B68', width: '80px' }} />
+                </div>
+              </div>
+              <div className="w-[300px] mb-7">
+                <span className="text-md font-normal"> IT Engineering </span>
+                <br /><br /><br />
+                <div style={{position: 'relative'}}>
+                  <span style={{position: 'absolute', top: '10px', left: '50px'}}>250</span>
+                  <CircularProgress variant="determinate" value={250} style={{ color: '#40B5AD', width: '80px' }} />
+                </div>
+              </div>
+
+              {/* Second row */}
+              <div className="w-[300px] mb-4 ml-7">
+                <span className="text-md font-normal"> Mechanical Engineering </span>
+                <br /><br /><br />
+                <div style={{position: 'relative'}}>
+                  <span style={{position: 'absolute', top: '10px', left: '50px'}}>40</span>
+                  <CircularProgress variant="determinate" value={40} style={{ color: '#FFDB58', width: '80px' }} />
+                </div>
+              </div>
+              <div className="w-[300px] mb-4">
+                <span className="text-md font-normal"> Electronics & Communication Engineering </span>
+                <br /><br /><br />
+                <div style={{position: 'relative'}}>
+                  <span style={{position: 'absolute', top: '10px', left: '50px'}}>350</span>
+                  <CircularProgress variant="determinate" value={350} style={{ color: '#E05234', width: '80px' }} />
+                </div>
+              </div>
+              <div className="w-[300px] mb-4">
+                <span className="text-md font-normal"> Environmental Engineering </span>
+                <br /><br /><br />
+                <div style={{position: 'relative'}}>
+                  <span style={{position: 'absolute', top: '10px', left: '50px'}}>75</span>
+                  <CircularProgress variant="determinate" value={75} style={{ color: '#4169e1', width: '80px' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="mt-5 flex flex-wrap pt-5 bg-white rounded-xl">
           {/* Chart section */}
-          <div className="lg:w-11/12 pr-4">
+          <div className="lg:w-11/12 pr-4 ">
             {/* Department wise Participation */}
             <div className={classNames(
               "p-4 mb-4"

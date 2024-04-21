@@ -42,15 +42,15 @@ const NewCard = ({ cardLists = [], className = "" }) => {
     return (
         <>
         <div className="grid md:grid-cols-3 gap-4">
-          <div class="shadow-lg col-span-1 md:col-span-2 gap-5 grid grid-cols-1 md:grid-cols-2 p-5 rounded-xl" style={{backgroundColor:"#fff"}}>
+          <div className="shadow-lg col-span-1 md:col-span-2 gap-5 grid grid-cols-1 md:grid-cols-2 p-5 rounded-xl" style={{backgroundColor:"#fff"}}>
           {cardLists.slice(2).map((card, index) => (
-            <div class="rounded-xl p-2" style={{backgroundColor: getBackgroundColor(index)}}>
-              <div class="flex justify-between">
+            <div className="rounded-xl p-2" key={index} style={{backgroundColor: getBackgroundColor(index)}}>
+              <div className="flex justify-between">
                 <div>
-                  <h1 class="text-xl font-bold mb-1 ms-2">{card.cardValue}</h1>
-                  <p class="text-md mb-4 ms-2 capitalize">{card.cardContent}</p>
+                  <h1 className="text-xl font-bold mb-1 ms-2">{card.cardValue}</h1>
+                  <p className="text-md mb-4 ms-2 capitalize">{card.cardContent}</p>
                 </div>
-                <img src={card3} alt="icon" class="p-2" style={{height:"44px"}} />
+                <img src={card3} alt="icon" className="p-2" style={{height:"44px"}} />
               </div>
               {card.subValues?.active  ? <div className="grid grid-cols-2 col-span-2 gap-2" >
              <div className="text-green-500 bg-white p-1 flex items-center justify-center rounded-full" >
@@ -66,23 +66,23 @@ const NewCard = ({ cardLists = [], className = "" }) => {
             </div>
           ))}
           </div>
-          <div class="shadow-lg grid md:grid-rows-2 gap-5 p-5 rounded-xl" style={{backgroundColor:"#fff"}}>
+          <div className="shadow-lg grid md:grid-rows-2 gap-5 p-5 rounded-xl" style={{backgroundColor:"#fff"}}>
           {cardLists.slice(0, 2).map((card, index) => (
             
-            <div class="rounded-xl p-2" style={{backgroundColor: getBackgroundColor2(index)}}>
-              <div class="flex justify-between">
+            <div className="rounded-xl p-2" key={index} style={{backgroundColor: getBackgroundColor2(index)}}>
+              <div className="flex justify-between">
                 <div>
-                  <h1 class="text-xl font-bold mb-1 ms-2">{card.cardValue}</h1>
-                  <p class="text-md mb-4 ms-2">{card.cardContent}</p>
+                  <h1 className="text-xl font-bold mb-1 ms-2">{card.cardValue}</h1>
+                  <p className="text-md mb-4 ms-2">{card.cardContent}</p>
                 </div>
-                {/* <div class="mb-3" style={{color:"black"}}>{card.icon}</div> */}
-                {/* <img src={student} alt="icon" class="p-2" style={{height:"44px"}} /> */}
+                {/* <div className="mb-3" style={{color:"black"}}>{card.icon}</div> */}
+                {/* <img src={student} alt="icon" className="p-2" style={{height:"44px"}} /> */}
                 {index === 0 ? (
-                  <img src={student} alt="Student icon" class="p-2" style={{height:"44px"}} />
+                  <img src={student} alt="Student icon" className="p-2" style={{height:"44px"}} />
                 ) : index === 1 ? (
-                  <img src={teacher} alt="Teacher icon" class="p-2" style={{height:"44px"}} />
+                  <img src={teacher} alt="Teacher icon" className="p-2" style={{height:"44px"}} />
                 ) : (
-                  <img src={users} alt="Default user icon" class="p-2" style={{height:"44px"}} />
+                  <img src={users} alt="Default user icon" className="p-2" style={{height:"44px"}} />
                 )}
               </div>
               {card.subValues?.active  ? <div className="grid grid-cols-2 col-span-2 gap-2" >
