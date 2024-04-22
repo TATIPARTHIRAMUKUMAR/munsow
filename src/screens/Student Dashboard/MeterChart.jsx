@@ -17,7 +17,7 @@ const MeterChart = (props) => {
           plotBackgroundImage: null,
           plotBorderWidth: 0,
           plotShadow: false,
-          height: "80%",
+          height: "80%"
         },
         title: {
           text: title,
@@ -27,7 +27,7 @@ const MeterChart = (props) => {
           endAngle: 90,
           background: null,
           center: ["50%", "75%"],
-          size: "110%",
+          size: "97%",
         },
         // the value axis
         yAxis: {
@@ -95,6 +95,20 @@ const MeterChart = (props) => {
             },
           },
         ],
+        responsive: {
+          rules: [{
+            condition: {
+              maxWidth: 10
+            },
+            chartOptions: {
+              legend: {
+                align: 'center',
+                verticalAlign: 'bottom',
+                layout: 'horizontal'
+              }
+            }
+          }]
+        }
       });
     };
 
@@ -121,8 +135,8 @@ const MeterChart = (props) => {
 
   return (
     <div className="meterchart">
-      <figure className="highcharts-figure">
-        <div id={`${container}`}></div>
+      <figure className="highcharts-figure relative overflow-auto max-w-full h-auto">
+        <div id={`${container}`} className='relative overflow-auto max-w-full h-auto'></div>
       </figure>
     </div>
   );
