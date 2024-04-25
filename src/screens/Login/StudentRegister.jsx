@@ -1,6 +1,8 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import MunsowLogo from '../../assets/MunsowLogo.png'
+import './Register.css'
 import {
   getCourseList,
   getDepartmentList,
@@ -205,92 +207,88 @@ const StudentRegister = () => {
       requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) 
     setIsFormValid(isValid);
   }, [mainData]);
-
+  const textFieldStyle = {
+    '& label.Mui-focused': {
+      color: 'blue',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'blue',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderColor: 'blue',
+      },
+    },
+  };
   return (
-    <div
-      className="p-4 bg-[#f5f5f5] h-[100vh] flex flex-col justify-center  items-center"
-      style={{ backdropFilter: "" }}
+<div  className="sd"
+      
     >
-      <div className="bg-white  flex flex-col justify-center p-4 rounded-xl shadow-2xl min-w-[70%] max-w-[80%]">
+      <img src={MunsowLogo} alt="logo" className="w-20 h-20 mt-1 simg " />
+    
+   {/* <div style={{textAlign:"center"}}> Student Registration Form</div>  */}
+    <div
+      className="h-[100vh] flex flex-col justify-center  items-center"
+     
+    >
+
+      <div className="bg-white sde  flex flex-col justify-center p-4 rounded-xl shadow-2xl min-w-[100%] max-w-[80%] " style={{  // Combine borderColor and borderRadius in the border property
+      }}>
         <div className="p-4 font-medium text-2xl">
           {" "}
-          Student Registration Form{" "}
+          Student Registration Form
+         {" "}
         </div>
         <div className="grid grid-cols-2 gap-8 bg-white p-4">
-          {userFeilds?.map((o) => (
-            <>
-              {o?.type === "select" ? (
-                <>
-                  <Autocomplete
-                    size="small"
-                    fullWidth
-                    disablePortal
-                    value={o?.value || null}  
-                    // value={o?.value}
-                    defaultValue={o?.value}
-                    id="combo-box-demo"
-                    options={o?.options ?? []}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={(
-                          <div>
-                            {o?.label}
-                            {o?.required && (
-                              <span style={{ color: 'red' }}>*</span>
-                            )}
-                          </div>
-                        )}
-                        InputProps={{
-                          ...params.InputProps,
-                          style: {
-                            borderRadius: "0.4rem",
-                          },
-                        }}
-                      />
-                    )}
-                    onChange={(e, value) => {
-                      handleInputChange(o?.key, value);
-                    }}
-                    onClickCapture={(e, value) => {
-                      handleSelectionError(o?.key, value);
-                    }}
-                  />
-                </>
-              ) : (
-                <TextField
-                  key={o?.key}
-                  type={o?.type}
-                  label={(
-                    <div>
-                      {o?.label}
-                      {o?.required && (
-                        <span style={{ color: 'red' }}>*</span>
-                      )}
-                    </div>
-                  )}
-                  value={o?.value}
-                  size="small"
-                  onChange={(e) => {
-                    handleInputChange(o?.key, e.target.value);
-                  }}
-                  InputProps={{
-                    style: {
-                      borderRadius: "0.4rem",
-                    },
-                  }}
+        {userFeilds?.map((o) => (
+  <div key={o.key}> {/* Add a wrapping div with a key */}
+    <div className="flex flex-col"> {/* Add a wrapping div for the label and input field */}
+      <p className="mb-1 text-gray-400 text-sm">{o.label} {o.required && <span style={{ color: 'red' }}>*</span>}</p>
+      {o.type === "select" ? (
+        <Autocomplete
+          size="small"
+          fullWidth
+          disablePortal
+          value={o?.value || null}
+          defaultValue={o?.value}
+          id="combo-box-demo"
+          options={o?.options ?? []}
+          renderInput={(params) => (
+            <TextField {...params} label={o.label} variant="outlined" />
+          )}
+          onChange={(e, value) => {
+            handleInputChange(o.key, value);
+          }}
+        />
+      ) : (
+        <TextField
+          key={o.key}
+          type={o.type}
+          value={o.value}
+          size="small"
+          variant="outlined"
+          style={{ borderRadius: "15px" }}
+          onChange={(e) => {
+            handleInputChange(o.key, e.target.value);
+          }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
+        />
+      )}
+    </div>
+  </div>
+))}
 
-                />
-              )}
-            </>
-          ))}
         </div>
         <div className="flex justify-end gap-6 p-4">
           <Button
             variant="outlined"
             onClick={() => {
               navigate(-1)
-            }}
+            }} className="fdes"
+
+           
           >
             Back
           </Button>
@@ -300,12 +298,16 @@ const StudentRegister = () => {
               onHandleCreate();
             }}
             disabled={!isFormValid}
+             className="ffs"
+            
           >
             Register
           </Button>
         </div>
       </div>
     </div>
+    </div>
+
   );
 };
 
