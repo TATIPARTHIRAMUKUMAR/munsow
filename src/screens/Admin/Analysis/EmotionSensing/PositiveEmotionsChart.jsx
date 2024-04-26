@@ -13,8 +13,7 @@ import {
 import "./EmotionSensing.css";
 
 const PositiveEmotionsChart = (props) => {
-  const {data, name} = props;
-
+  const { data, name } = props;
 
   const legendFormatter = (value, entry) => {
     return (
@@ -53,64 +52,72 @@ const PositiveEmotionsChart = (props) => {
             bottom: 5,
           }}
         >
-          <CartesianGrid
-            vertical={false}
-            horizontal={true}
-            strokeDasharray="0 0"
-          />
-          <XAxis
-            dataKey="name"
-            axisLine={false}
-            tickLine={false}
-            className="text axis-data"
-            interval={0}
-            dy={10}
-            dx={20}
-          >
-            <Label
-              className="text"
-              value="TIME"
-              position="bottom"
-              dy={20} // Adjust the distance from the X-axis
-            />
-          </XAxis>
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            className="text axis-data"
-            dx={-5}
-          >
-            <Label
-              className="text"
-              value="EMOTIONS"
-              position="middle"
-              angle={-90} // Rotate the label for vertical orientation
-              dx={-30} // Adjust the distance from the Y-axis
-            />
-          </YAxis>
-          <Tooltip />
-          <Legend
-            formatter={(value, entry) => legendFormatter(value, entry)}
-            layout="horizontal"
-            iconSize={0}
-            wrapperStyle={{
-              width: "95%",
-              marginBottom: "20px",
-              top: "-50px",
-            }}
-          />
-          <Line
-            dataKey="Happiness"
-            stroke="#9F9A8F"
-            strokeWidth={3}
-            type="monotone"
-            dot={{
-              stroke: "#9F9A8F",
-              strokeWidth: 4,
-              r: 2,
-              strokeDasharray: "",
-            }}
-          />
+          {data?.length > 0 ? ( // Check if data is not empty
+            <>
+              <CartesianGrid
+                vertical={false}
+                horizontal={true}
+                strokeDasharray="0 0"
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                className="text axis-data"
+                interval={0}
+                dy={10}
+                dx={20}
+              >
+                <Label
+                  className="text"
+                  value="TIME"
+                  position="bottom"
+                  dy={20} // Adjust the distance from the X-axis
+                />
+              </XAxis>
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                className="text axis-data"
+                dx={-5}
+              >
+                <Label
+                  className="text"
+                  value="EMOTIONS"
+                  position="middle"
+                  angle={-90} // Rotate the label for vertical orientation
+                  dx={-30} // Adjust the distance from the Y-axis
+                />
+              </YAxis>
+              <Tooltip />
+              <Legend
+                formatter={(value, entry) => legendFormatter(value, entry)}
+                layout="horizontal"
+                iconSize={0}
+                wrapperStyle={{
+                  width: "95%",
+                  marginBottom: "20px",
+                  top: "-50px",
+                }}
+              />
+              <Line
+                dataKey="Happiness"
+                stroke="#9F9A8F"
+                strokeWidth={3}
+                type="monotone"
+                dot={{
+                  stroke: "#9F9A8F",
+                  strokeWidth: 4,
+                  r: 2,
+                  strokeDasharray: "",
+                }}
+              />
+            </>
+          ) : (
+            <text x="50%" y="50%" fontSize={21} textAnchor="middle" dominantBaseline="middle">
+              No data available
+            </text>
+          )}
         </LineChart>
       </ResponsiveContainer>
     </div>

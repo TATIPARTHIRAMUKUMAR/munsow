@@ -73,6 +73,8 @@ const NeutralEmotionsChart = (props) => {
               bottom: 5,
             }}
           >
+            {data?.length > 0 ? ( // Check if data is not empty
+            <>
             <CartesianGrid
               vertical={false}
               horizontal={true}
@@ -131,6 +133,12 @@ const NeutralEmotionsChart = (props) => {
                 strokeDasharray: "",
               }}
             />
+             </>
+          ) : (
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize={21}>
+              No data available
+            </text>
+          )}
           </LineChart>
         </ResponsiveContainer>
       </div>
