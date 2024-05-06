@@ -131,7 +131,10 @@ export default function ReportIndex() {
                     <div className="py-2 w-full">
                         {report_ready === "true" ? (
                             <>
-                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] "  style={{ color: textColor, background: backgroundColor, fontWeight: "600",}} endIcon={<ArrowForwardIcon />} onClick={() => { viewReport({...report_data, ...result_data}) }} > View Report</Button>
+                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] "  
+                                style={{ color: textColor, background: backgroundColor, fontWeight: "600",}} 
+                                endIcon={<ArrowForwardIcon />} 
+                                onClick={() => { viewReport({...report_data, ...result_data}) }} > View Report</Button>
                             </>
                         ) : (
                             <div className="flex items-center justify-center text-orange-300">

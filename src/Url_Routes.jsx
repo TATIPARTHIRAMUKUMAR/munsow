@@ -48,6 +48,8 @@ import LinksList from "./screens/Admin/ScreeningUsers/LinksList";
 import CreateLink from "./screens/Admin/ScreeningUsers/CreateLink";
 import StudentDashboardScreenig from "./screens/Student Dashboard/StudentDashboard-Screening";
 
+import AdminDepartmentStudentList from './screens/Admin/Students/AdminDepartmentStudentList';
+
 
 function Url_Routes() {
   return (
@@ -114,6 +116,7 @@ function Url_Routes() {
         <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
         <Route exact path="/studentCourseList/edit/:id" element={<HeaderFooterLayout Component={<CourseEdit />} />} />
 
+        <Route exact path="/adminDepartmentStudentList"  element={<HeaderFooterLayout Component={<AdminDepartmentStudentList />} />} />
       </Routes>
     </BrowserRouter>
   );

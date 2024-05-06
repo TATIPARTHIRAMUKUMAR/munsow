@@ -68,14 +68,14 @@ const Carousel = () => {
         Emotional Insight
       </p>
       <Divider style={{ opacity: "0.4" }} />
-      <div className="flex items-center justify-center carousel-container py-2 rounded-lg relative">
+      <div className="flex items-center justify-center carousel-container py-2 rounded-lg relative h-[234px]">
         <IconButton onClick={goToPrevious}>
           <ArrowBackIosIcon
             style={{
               background: textColor2,
               borderRadius: "50%",
               color: "white",
-              padding: "4px",
+              padding: "4px"
             }}
           />
         </IconButton>

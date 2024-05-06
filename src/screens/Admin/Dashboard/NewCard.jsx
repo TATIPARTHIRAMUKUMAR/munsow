@@ -15,10 +15,14 @@ const getBackgroundColor = (index) => {
       return "#FCF5DC";
     case 2:
       // return "#88CEA7";
-      return "#DEFAE8";
+      return "#DDFAE8";
     case 3:
       // return "#A791D4";
       return "#F5E8FF";
+    case 4:
+      return "#E4FFEC";
+    case 5:
+      return "#F2F4FF"
     default:
       return "#FBD466"; // Default color
   }
@@ -42,7 +46,7 @@ const NewCard = ({ cardLists = [], className = "" }) => {
     return (
         <>
         <div className="grid md:grid-cols-3 gap-4">
-          <div className="shadow-lg col-span-1 md:col-span-2 gap-5 grid grid-cols-1 md:grid-cols-2 p-5 rounded-xl" style={{backgroundColor:"#fff"}}>
+          <div className="shadow-lg col-span-1 md:col-span-2 gap-5 grid grid-cols-1 md:grid-cols-3 p-5 rounded-xl" style={{backgroundColor:"#fff"}}>
           {cardLists.slice(2).map((card, index) => (
             <div className="rounded-xl p-2" key={index} style={{backgroundColor: getBackgroundColor(index)}}>
               <div className="flex justify-between">
