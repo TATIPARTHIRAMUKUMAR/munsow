@@ -73,7 +73,7 @@ const StepperComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState("skills");
 
   const [selectedSoftskill, setSelectedSoftskill] = useState(null);
-  const [selectedHardskill, setSelectedHardskill] = useState(null);
+  let [selectedHardskill, setSelectedHardskill] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showAcknowledgement, setShowAcknowledgement] = useState(false);
@@ -278,328 +278,427 @@ const StepperComponent = () => {
           ))}
         </Stepper>
         <Divider style={{ marginTop: "1rem" }} />
-        <div className="flex mt-4 p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
+        <div className="flex mt-4 p-4 items-center justify-center relative overflow-auto flex-row md:flex-col max-w-full h-auto">
           {currentStep === 0 && (
             <>
               {/* <div > */}
-              <div
-                className={`bg-${
-                  selectedCategory === "skills" ? "gray-100" : ""
-                } p-7 rounded-xl relative overflow-auto max-w-full h-auto`}
-                onClick={() => {
-                  setSelectedCategory("skills");
-                  setSelectedRole(null);
-                  setSelectedCompany(null);
-                }}
-              >
-                <div className="flex relative overflow-auto ">
-                  {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
-
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="skills"
-                    checked={selectedCategory === "skills"}
-                    onChange={() => setSelectedCategory("skills")}
-                    className="p-1 m-2 relative overflow-auto"
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-                  <h2
-                    className="relative overflow-auto"
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color:grayColors , // Set the desired text color
-                    }}
-                  >
-                    Skill Specific
-                  </h2>
-                </div>
-                <div
-                  className={
-                    selectedCategory !== "skills"
-                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-            
-                  }
-                >
-                  <label className="flex items-center space-x-2 my-3 relative overflow-auto">
-                    {/* <input
-                                            type="checkbox"
-                                            name="hardSkills"
-                                            checked={hardSkills}
-                                            className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
-                                            onChange={() => setHardSkills(!hardSkills)}
-                                        /> */}
-                    <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
-                  </label>
-                  <MutiSelect
-                    options={hardSkillsList?.map((o) => {
-                      return {
-                        label: o.name,
-                        id: o.id,
-                      };
-                    })}
-                    label="Hard Skills"
-                    selectedItems={selectedHardskill}
-                    onSelectionChange={setSelectedHardskill}
-                  />
-                  <div>
-                    <label className="flex items-center space-x-2 my-3">
-                      {/* <input
-                                            type="checkbox"
-                                            name="softSkills"
-                                            checked={softSkills}
-                                            className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
-                                            onChange={() => setSoftSkills(!softSkills)}
-                                        /> */}
-                      <span className="font-bold pr-2">Soft Skills</span>
-                    </label>
-                    <MutiSelect
-                      options={(softSkillsList || []).map((o) => ({
-                        label: o.name,
-                        id: o.id,
-                      }))}
-                      // onSelectionChange={(e) => testselection(e)}
-                      selectedItems={selectedSoftskill}
-                      onSelectionChange={setSelectedSoftskill}
-                      label="Soft Skills"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="p-10"></div>
-
-              <div
-                className={`bg-${
-                  selectedCategory === "role" ? "gray-100" : ""
-                } p-7 rounded-xl relative overflow-auto max-w-full h-auto`}
-                onClick={() => {
-                  setSelectedCategory("role");
-                  setSelectedSoftskill(null);
-                  setSelectedHardskill(null);
-                }}
-                style={{ color: textColors }}
-              >
-                <div className="flex ">
-                  {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="role"
-                    checked={selectedCategory === "role"}
-                    onChange={() => setSelectedCategory("role")}
-                    className="p-1 m-2 "
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-
-                  <h2
-                    style={{
-                      fontSize: "1.5rem",
-
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color:  grayColors, // Set the desired text color
-                    }}
-                  >
-                    Role Specific
-                  </h2>
-                </div>
-
-                <div
-                  className={
-                    selectedCategory !== "role"
-                      ? "opacity-50 pointer-events-none"
-                      : ""
-                  }
-                >
-                  <label className="flex items-center space-x-2 my-3">
-                    {/* <input
-                                            type="checkbox"
-                                            name="chosenCompany"
-                                            checked={chosenCompany}
-                                            className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
-                                            onChange={() => setChosenCompany(!chosenCompany)}
-                                        /> */}
-
-                    <span className="font-bold pr-2"  style={{color:grayColors}}
+              <div className="flex flex-col">
+                <div className="md:flex md:flex-row">
+                    <div
+                        className={`bg-gray-100 p-7 rounded-xl relative overflow-auto max-w-full h-auto`}
+                        onClick={() => {
+                        setSelectedCategory("skills");
+                        setSelectedRole(null);
+                        setSelectedCompany(null);
+                        }}
                     >
-                      Choose Company{" "}
-                      <span className="font-bold text-red-500 text-2xl">
-                        {" "}
-                        {selectedCategory == "role" ? "*" : ""}
-                      </span>
-                    </span>
-                  </label>
-                  <CheckboxesTags
-                    options={companiesList?.map((o) => {
-                      return {
-                        label: o.name,
-                        id: o.id,
-                        role_ids: o.role_ids,
-                      };
-                    })}
-                    selectedItems={selectedCompany}
-                    onSelectionChange={setSelectedCompany}
-                    label="Companies"
-                  />
+                        <div className="flex relative overflow-auto ">
+                        {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
+
+                        <input
+                            type="radio"
+                            name="selectionCategory"
+                            value="skills"
+                            checked={selectedCategory === "skills"}
+                            onChange={() => setSelectedCategory("skills")}
+                            className="p-1 m-2 relative overflow-auto"
+                            style={{
+                            color: linearGradientBackground,
+                            outlineColor: linearGradientBackground
+                            }}
+                        />
+                        <h2
+                            className="relative overflow-auto"
+                            style={{
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            marginBottom: "0.5rem",
+                            color: `${
+                                selectedCategory === "skills" ? "black" : textColors
+                            }`
+                            }}
+                        >
+                            Skill Specific
+                        </h2>
+                        </div>
+                        <div
+                        className={
+                            selectedCategory !== "skills"
+                            ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
+                    
+                        }
+                        >
+                        <label className="flex items-center space-x-2 my-3 relative overflow-auto">
+                            {/* <input
+                                                    type="checkbox"
+                                                    name="hardSkills"
+                                                    checked={hardSkills}
+                                                    className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
+                                                    onChange={() => setHardSkills(!hardSkills)}
+                                                /> */}
+                            <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
+                        </label>
+                        <MutiSelect
+                            options={hardSkillsList?.map((o) => {
+                            return {
+                                label: o.name,
+                                id: o.id,
+                            };
+                            })}
+                            label="Hard Skills"
+                            selectedItems={selectedHardskill}
+                            onSelectionChange={setSelectedHardskill}
+                        />
+                        <div>
+                            <label className="flex items-center space-x-2 my-3">
+                            {/* <input
+                                                    type="checkbox"
+                                                    name="softSkills"
+                                                    checked={softSkills}
+                                                    className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
+                                                    onChange={() => setSoftSkills(!softSkills)}
+                                                /> */}
+                            <span className="font-bold pr-2">Soft Skills</span>
+                            </label>
+                            <MutiSelect
+                            options={(softSkillsList || []).map((o) => ({
+                                label: o.name,
+                                id: o.id,
+                            }))}
+                            // onSelectionChange={(e) => testselection(e)}
+                            selectedItems={selectedSoftskill}
+                            onSelectionChange={setSelectedSoftskill}
+                            label="Soft Skills"
+                            />
+                        </div>
+                        </div>
+                    </div>
+                    <div className="p-7"></div>
+
+                    <div
+                        className={`bg-gray-100 p-7 rounded-xl relative overflow-auto max-w-full h-auto`}
+                        onClick={() => {
+                        setSelectedCategory("role");
+                        setSelectedSoftskill(null);
+                        setSelectedHardskill(null);
+                        }}
+                        // style={{ color: textColors }}
+                    >
+                        <div className="flex ">
+                        {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
+                        <input
+                            type="radio"
+                            name="selectionCategory"
+                            value="role"
+                            checked={selectedCategory === "role"}
+                            onChange={() => setSelectedCategory("role")}
+                            className="p-1 m-2 "
+                            style={{
+                            color: linearGradientBackground,
+                            outlineColor: linearGradientBackground
+                            }}
+                        />
+
+                        <h2
+                            style={{
+                            fontSize: "1.5rem",
+
+                            fontWeight: "600",
+                            marginBottom: "0.5rem",
+                            color: `${
+                                selectedCategory === "role" ? "black" : textColors
+                            }`
+                            }}
+                        >
+                            Role Specific
+                        </h2>
+                        </div>
+
+                        <div
+                        className={
+                            selectedCategory !== "role"
+                            ? "opacity-50 pointer-events-none"
+                            : ""
+                        }
+                        >
+                        <label className="flex items-center space-x-2 my-3">
+                            {/* <input
+                                                    type="checkbox"
+                                                    name="chosenCompany"
+                                                    checked={chosenCompany}
+                                                    className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
+                                                    onChange={() => setChosenCompany(!chosenCompany)}
+                                                /> */}
+
+                            <span className="font-bold pr-2"
+                            >
+                            Choose Company{" "}
+                            <span className="font-bold text-red-500 text-2xl">
+                                {" "}
+                                {selectedCategory == "role" ? "*" : ""}
+                            </span>
+                            </span>
+                        </label>
+                        <CheckboxesTags
+                            options={companiesList?.map((o) => {
+                            return {
+                                label: o.name,
+                                id: o.id,
+                                role_ids: o.role_ids,
+                            };
+                            })}
+                            selectedItems={selectedCompany}
+                            onSelectionChange={setSelectedCompany}
+                            label="Companies"
+                        />
+                        </div>
+
+                        {selectedCompany != null && (
+                        <div
+                            className={
+                            selectedCategory !== "role"
+                                ? "opacity-50 pointer-events-none"
+                                : ""
+                            }
+                        >
+                            <label className="flex items-center space-x-2 my-3">
+                            {/* <input
+                                                    type="checkbox"
+                                                    name="chosenRole"
+                                                    checked={chosenRole}
+                                                    className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
+                                                    onChange={() => setChosenRole(!chosenRole)}
+                                                /> */}
+
+                            <span className="font-bold pr-2 ">
+                                Choose Role{" "}
+                                <span className="font-bold text-red-500 text-2xl">
+                                {selectedCategory == "role" ? "*" : ""}
+                                </span>
+                            </span>
+                            </label>
+                            <CheckboxesTags
+                            options={selectedCompany?.role_ids?.map((o) => {
+                                return {
+                                label: o.name,
+                                id: o.id,
+                                };
+                            })}
+                            selectedItems={selectedRole}
+                            onSelectionChange={setSelectedRole}
+                            label="Interview Roles"
+                            />
+                        </div>
+                        )}
+                    </div>
                 </div>
-
-                {selectedCompany != null && (
-                  <div
-                    className={
-                      selectedCategory !== "role"
-                        ? "opacity-50 pointer-events-none"
-                        : ""
-                    }
-                  >
-                    <label className="flex items-center space-x-2 my-3">
-                      {/* <input
-                                            type="checkbox"
-                                            name="chosenRole"
-                                            checked={chosenRole}
-                                            className="h-5 w-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
-                                            onChange={() => setChosenRole(!chosenRole)}
-                                        /> */}
-
-                      <span className="font-bold pr-2 ">
-                        Choose Role{" "}
-                        <span className="font-bold text-red-500 text-2xl">
-                          {selectedCategory == "role" ? "*" : ""}
-                        </span>
-                      </span>
-                    </label>
-                    <CheckboxesTags
-                      options={selectedCompany?.role_ids?.map((o) => {
-                        return {
-                          label: o.name,
-                          id: o.id,
-                        };
-                      })}
-                      selectedItems={selectedRole}
-                      onSelectionChange={setSelectedRole}
-                      label="Interview Roles"
-                    />
-                  </div>
-                )}
               </div>
 
+              <div className="flex flex-row items-center justify-center mt-8 ">
+                <div
+                    className={`bg-gray-100 p-7 py-[40px] rounded-xl relative overflow-auto max-w-full h-auto`}
+                    onClick={() => {
+                    setSelectedCategory("cultural");
+                    setSelectedSoftskill(null);
+                    setSelectedHardskill(null);
+                    setSelectedCompany(null);
+                    }}
+                    style={{ color: textColors }}
+                >
+                    <div className="flex ">
+                    {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
+                    <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="role"
+                        checked={selectedCategory === "cultural"}
+                        onChange={() => setSelectedCategory("cultural")}
+                        className="p-1 m-2 "
+                        style={{
+                        color: linearGradientBackground,
+                        outlineColor: linearGradientBackground
+                        }}
+                    />
+
+                    <h2
+                        style={{
+                        fontSize: "1.5rem",
+                        fontWeight: "600",
+                        marginBottom: "0.5rem",
+                        color: `${
+                            selectedCategory === "cultural" ? "black" : textColors
+                        }`, // Set the desired text color
+                        }}
+                    >
+                        Cultural Fit
+                    </h2>
+                    </div>
+
+                    <div
+                    className={
+                        selectedCategory !== "cultural"
+                        ? "opacity-50 flex flex-col"
+                        : "flex flex-col"
+                    }
+                    >
+                        <input 
+                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-3 w-full py-2 px-3 text-black leading-tight" 
+                        id="companyName" 
+                        type="text" 
+                        placeholder="Company Name"
+                        style={{ width: '20rem' }}/>
+
+                        <input 
+                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 text-black leading-tight" 
+                        id="role" 
+                        type="text" 
+                        placeholder="Role"
+                        style={{ width: '20rem' }}/>
+
+                        <textarea 
+                        className="bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 resize-y rounded-md"
+                        style={{ width: '20rem' }}
+                        placeholder="Copy & Paste Role Responsibilities here"></textarea>
+                    </div>
+                </div>
+                <div className="p-7"></div>
+
+                <div
+                    className={`bg-gray-100 p-7 pt-[40px] pb-[40px] rounded-xl relative overflow-auto max-w-full h-auto`}
+                    onClick={() => {
+                    setSelectedCategory("jd");
+                    setSelectedSoftskill(null);
+                    setSelectedHardskill(null);
+                    setSelectedCompany(null);
+                    }}
+                    style={{ color: textColors }}
+                >
+                    <div className="flex ">
+                    {/* <div className="text-sm font-semibold text-gray-500 mb-4">Choose your mock interview</div> */}
+                    <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="role"
+                        checked={selectedCategory === "jd"}
+                        onChange={() => setSelectedCategory("jd")}
+                        className="p-1 m-2 "
+                        style={{
+                        color: linearGradientBackground,
+                        outlineColor: linearGradientBackground
+                        }}
+                    />
+
+                    <h2
+                        style={{
+                        fontSize: "1.5rem",
+
+                        fontWeight: "600",
+                        marginBottom: "0.5rem",
+                        color: `${
+                            selectedCategory === "jd" ? "black" : textColors
+                        }`, // Set the desired text color
+                        }}
+                    >
+                        Job Description Specific
+                    </h2>
+                    </div>
+
+                    <div
+                    className={
+                        selectedCategory !== "jd"
+                        ? "opacity-50 flex flex-col"
+                        : "flex flex-col"
+                    }
+                    >
+                        <input 
+                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-3 w-full py-2 px-3 text-black leading-tight" 
+                        id="companyName" 
+                        type="text" 
+                        placeholder="Company Name"
+                        style={{ width: '20rem' }}/>
+
+                        <input 
+                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 text-black leading-tight" 
+                        id="role" 
+                        type="text" 
+                        placeholder="Role"
+                        style={{ width: '20rem' }}/>
+
+                        <textarea 
+                        className="bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 resize-y rounded-md"
+                        style={{ width: '20rem' }}
+                        placeholder="Copy & Paste Role Responsibilities here"></textarea>
+                    </div>
+                </div>
+              </div>
               {/* </div> */}
             </>
           )}
 
           {currentStep === 1 && (
-            <div  className="relative overflow-auto max-w-full h-auto "
+          <div  className="relative overflow-auto max-w-full h-auto "
+          >
+            <h2
+            className="relative overflow-auto max-w-full h-auto"
+              style={{
+                textAlign: "center",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                marginBottom: "2px",
+                color: grayColors,
+              }}
             >
-              <h2
-              className="relative overflow-auto max-w-full h-auto"
-                style={{
-                  textAlign: "center",
-                  fontSize: "1.5rem",
-                  fontWeight: "bold",
-                  marginBottom: "2px",
-                  color: grayColors,
-                }}
-              >
-                Level
-              </h2>
-              <div
-              className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
-                style={{
-                  border: `3.5px solid ${textColors}`,
-                  borderRadius: "20px",
-                  padding: "2rem 2.5rem"
-                }}
-              >
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={level}
-                  onChange={(e) => setLevel(e.target.value)}
-                  className="w-full mb-4 appearance-none h-2 rounded-lg"
-                  style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%) `}}
-                />
+              Level
+            </h2>
+            <div
+            className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
+              style={{
+                border: `3.5px solid ${textColors}`,
+                borderRadius: "20px",
+                padding: "2rem 2.5rem"
+              }}
+            >
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+                className="w-full mb-4 appearance-none h-2 rounded-lg"
+                style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
+              />
 
-                <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
-                  <button
-                    onClick={() => {
-                      setLevel(0);
-                      setExperienceLevel("low");
-                    }}
-                    className="bg-green-500 hover:bg-green-600 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                  >
-                    Beginner
-                  </button>
-                  <button
-                    onClick={() => {
-                      setLevel(50);
-                      setExperienceLevel("medium");
-                    }}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                  >
-                    Intermediate
-                  </button>
-                  <button
-                    onClick={() => {
-                      setLevel(100);
-                      setExperienceLevel("high");
-                    }}
-                    className="bg-red-500 hover:bg-red-600 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
-                  >
-                    Advanced
-                  </button>
-                </div>
+              <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
+                <button
+                  onClick={() => {
+                    setLevel(0);
+                    setExperienceLevel("low");
+                  }}
+                  className="bg-green-500 hover:bg-green-700 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                >
+                  Beginner
+                </button>
+                <button
+                  onClick={() => {
+                    setLevel(50);
+                    setExperienceLevel("mid");
+                  }}
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                >
+                  Intermediate
+                </button>
+                <button
+                  onClick={() => {
+                    setLevel(100);
+                    setExperienceLevel("high");
+                  }}
+                  className="bg-red-500 hover:bg-red-700 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
+                >
+                  Advanced
+                </button>
               </div>
-              {/* <div className="text-center font-semibold">Or</div>
-                            <h2 className="text-center text-sm font-semibold mb-2 text-purple-600">Choose your Experience level</h2>
-                            <div className="flex justify-between items-center"> */}
-              {/* <div>
-                                    <select
-                                        className="border rounded p-1"
-                                        value={experienceLevel}
-                                        onChange={(e) => setExperienceLevel(e.target.value)}
-                                    >
-                                        <option value="Beginner">Beginner</option>
-                                        <option value="Intermediate">Intermediate</option>
-                                        <option value="Advanced">Advanced</option>
-                                    </select>
-                                </div> */}
-
-              {/* <Autocomplete
-                                    size="small"
-                                    fullWidth
-                                    disablePortal
-                                    value={experienceLevel}
-                                    defaultValue={experienceLevel}
-                                    id="combo-box-demo"
-                                    options={[
-                                        { label: "Beginner", value: "Beginner" },
-                                        { label: "Intermediate", value: "Intermediate" },
-                                        { label: "Advanced", value: "Advanced" },
-                                    ]}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            // label={o?.label} 
-                                            InputProps={{
-                                                ...params.InputProps,
-                                                style: {
-                                                    borderRadius: "0.4rem",
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                    onChange={(e, value) => { setExperienceLevel(value) }}
-                                />
-                            </div> */}
-            </div>
+          </div>
+          </div>
           )}
 
           {currentStep == 2 && (
