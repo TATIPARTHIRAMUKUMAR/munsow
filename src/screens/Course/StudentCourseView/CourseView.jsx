@@ -16,6 +16,7 @@ const StudentCourseView = () => {
     const { detailedCourse } = useSelector((state) => state?.data);
     const [selectedSubtopic, setSelectedSubtopic] = useState(null);
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [spokenContent, setSpokenContent] = useState('');
 
     // Maintain a reference to the latest utterance
     const latestUtteranceRef = useRef(null);
@@ -29,51 +30,49 @@ const StudentCourseView = () => {
     };
 
     useEffect(() => {
-
         const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic?.subtopics).find(subtopic => !subtopic?.completed);
         setSelectedSubtopic(firstUncompletedSubtopic);
         handleSpeak(firstUncompletedSubtopic?.content);
     }, [detailedCourse]);
 
-
-    //new code
     useEffect(() => {
         handleSpeak(selectedSubtopic?.content);
     }, [selectedSubtopic]);
 
-    // Cleanup function to stop speech when the component is unmounted
     useEffect(() => {
         return () => {
             handleStop();
         };
     }, []);
 
-    // Cleanup function to stop speech when the route changes
     useEffect(() => {
         const unlisten = () => {
             handleStop();
         };
 
-        // navigate('/', { state: {} });
-
         return unlisten;
     }, [navigate]);
-
 
     const handleSpeak = (text) => {
         const description = text || selectedSubtopic?.content;
         if (description) {
-            // Cancel any previous utterances
             if (latestUtteranceRef.current) {
                 window.speechSynthesis.cancel();
             }
 
-            const sanitizedDescription = description.replace(/<[^>]*>/g, ''); // Remove HTML tags
+            const sanitizedDescription = description.replace(/<[^>]*>/g, '');
             const utterance = new SpeechSynthesisUtterance(sanitizedDescription);
+            utterance.rate = 0.75;
+            utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.gender === 'female');
+
+            utterance.onboundary = (event) => {
+                const highlightedText = `${sanitizedDescription.slice(0, event.charIndex)}<span style="background-color: #886cc0;padding:5px;border-radius:5px;color:white">${sanitizedDescription.slice(event.charIndex, event.charIndex + event.charLength)}</span>${sanitizedDescription.slice(event.charIndex + event.charLength)}`;
+                setSpokenContent(highlightedText);
+            };
+
             window.speechSynthesis.speak(utterance);
             setIsSpeaking(true);
 
-            // Update the latest utterance reference
             latestUtteranceRef.current = utterance;
         }
     };
@@ -81,8 +80,7 @@ const StudentCourseView = () => {
     const handleStop = () => {
         window.speechSynthesis.cancel();
         setIsSpeaking(false);
-
-        // Reset the latest utterance reference
+        setSpokenContent('');
         latestUtteranceRef.current = null;
     };
 
@@ -91,11 +89,9 @@ const StudentCourseView = () => {
             <CourseOverview course={detailedCourse} show={true} text={"Back"} />
 
             <div className="flex w-full">
-                <div className="w-4/6 p-4 overflow-y-auto rounded-lg bg-white mr-4">
+                <div className="w-4/6 p-4 overflow-y-auto rounded-lg  mr-4">
                     {selectedSubtopic && (
-                        <div>
-                            <div dangerouslySetInnerHTML={{ __html: selectedSubtopic.content }} />
-                        </div>
+                        <div dangerouslySetInnerHTML={{ __html: spokenContent || selectedSubtopic.content }} />
                     )}
                 </div>
 
@@ -103,12 +99,12 @@ const StudentCourseView = () => {
                     <div className="flex items-center justify-end mb-4">
                         {!isSpeaking ? (
                             <VolumeOffIcon
-                                style={{ cursor: 'pointer', fontSize: '3rem',color:"#886cc0" }}
+                                style={{ cursor: 'pointer', fontSize: '3rem', color: "#886cc0" }}
                                 onClick={() => handleSpeak(selectedSubtopic?.content)}
                             />
                         ) : (
                             <VolumeUpIcon
-                                style={{ cursor: 'pointer', fontSize: '3rem',color:"#886cc0" }}
+                                style={{ cursor: 'pointer', fontSize: '3rem', color: "#886cc0" }}
                                 onClick={handleStop}
                             />
                         )}
