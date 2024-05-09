@@ -312,7 +312,7 @@ export default function HeaderFooterLayout({ Component }) {
         {
           label: "Question Bank",
           icon: <FaChartLine size={20} className="" />,
-          route: "/questionBank",
+          route: "/questionBanksList",
           subItems: [],
         },
         {
