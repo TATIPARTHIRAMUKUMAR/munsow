@@ -1312,6 +1312,25 @@ export const loadcourses = () => {
   };
 };
 
+const getQuestionBanks = (data) => ({
+  type: types.QUESTIONBANKS,
+  payload: data,
+});
+
+export const loadQuestionBanks = () => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}question_bank/list`, {  headers })
+      .then((resp) => {
+        dispatch(getQuestionBanks(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 const getCourseDetails = (data) => ({
   type: types.DETAILED_COURSES,
   payload: data,
@@ -1326,6 +1345,25 @@ export const loadDetailedCourse = (id) => {
     axios.get(`${GLOBAL_CONSTANTS?.backend_url}course/get/${id}`, {  headers })
       .then((resp) => {
         dispatch(getCourseDetails(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+const getQuestionBankDetails = (data) => ({
+  type: types.DETAILED_QUESTIONBANK,
+  payload: data,
+});
+
+export const loadDetailedQuestionBanks = (id) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}question_bank/get/${id}`, {  headers })
+      .then((resp) => {
+        dispatch(getQuestionBankDetails(resp?.data));
       })
       .catch((error) => console.log(error));
   };

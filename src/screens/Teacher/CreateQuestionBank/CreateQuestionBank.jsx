@@ -3,6 +3,7 @@ import { TextField, Radio, RadioGroup, FormControlLabel, Button, FormControl, Fo
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material';
+import GLOBAL_CONSTANTS from '../../../../GlobalConstants';
 
 const CustomTextField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
@@ -82,11 +83,35 @@ const QuestionBankForm = () => {
         setQuestionBank({ ...questionBank, questions: updatedQuestions });
     };
 
+    const handleSubmit = async () => {
+        const apiUrl =`${GLOBAL_CONSTANTS.backend_url}question_bank/create`; // Change this to your actual API URL
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                 headers : {
+                    "Content-type": "application/json",
+                    "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+                  },
+                body: JSON.stringify(questionBank),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to submit question bank');
+            }
+            const result = await response.json();
+            console.log('Question bank submitted successfully:', result);
+            alert('Question bank submitted successfully!');
+        } catch (error) {
+            console.error('Error submitting question bank:', error);
+            alert('Error submitting question bank. Please try again.');
+        }
+    };
+
+
 
     return (
         <div className="min-h-screen pt-5 pb-20">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <Paper elevation={3} className="overflow-hidden mb-6 bg-gradient-to-br from-indigo-50 to-pink-50">
+                <Paper elevation={0} className="overflow-hidden mb-6 bg-gradient-to-br from-indigo-50 to-pink-50">
                     <div className="p-3 md:p-5">
                         <h1 className="text-3xl font-bold text-center text-indigo-600 mb-4">New Question Bank</h1>
 
@@ -258,7 +283,7 @@ const QuestionBankForm = () => {
                 ))}
 
 
-                {questionBank.method === 'addUI' && (
+                {questionBank?.method === 'addUI' && (
                     <Button
                         startIcon={<AddCircleOutlineIcon />}
                         variant="contained"
@@ -267,6 +292,16 @@ const QuestionBankForm = () => {
                         className="mt-4"
                     >
                         Add Question
+                    </Button>
+                )}
+                 {questionBank?.questions?.length > 0 && (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmit}
+                        className="mt-4"
+                    >
+                        Submit Question Bank
                     </Button>
                 )}
             </div>
