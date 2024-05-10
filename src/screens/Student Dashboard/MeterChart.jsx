@@ -135,8 +135,8 @@ const MeterChart = (props) => {
 
   return (
     <div className="meterchart">
-      <figure className="highcharts-figure relative overflow-auto max-w-full h-auto">
-        <div id={`${container}`} className='relative overflow-auto max-w-full h-auto'></div>
+      <figure className="highcharts-figure">
+        <div id={`${container}`}></div>
       </figure>
     </div>
   );

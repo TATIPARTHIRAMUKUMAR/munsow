@@ -181,15 +181,14 @@ export default function StudentDashboard() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row justify-evenly w-[100%] gap-4 relative overflow-auto max-w-full h-auto">
-          <div className=" w-[100%] sm:w-[70%] relative overflow-auto max-w-full h-auto rounded-lg">
+        <div className="flex flex-col sm:flex-row justify-evenly w-[100%] gap-4 relative overflow-auto max-w-full ">
+          <div className=" w-[100%] sm:w-[70%] relative bg-white overflow-auto max-w-full rounded-lg">
           {averageScores ? (
           <div className="flex ">
             <div className="w-[33%]">
-              <div className="bg-white ">
+              <div className="bg-white mt-4">
                 <MeterChart
                 title={"Mindset/Attitude"}
-                
                 score={averageScores["Mindset/Attitude"]}
                 container={"container1"}
                 color={"#bf83c2"}
@@ -197,7 +196,7 @@ export default function StudentDashboard() {
               </div>
             </div>
             <div className="w-[33%]">
-              <div className="bg-white">
+              <div className="bg-white mt-4">
                 <MeterChart
                 title={"Knowledge/Skills"}
                 score={averageScores["Knowledge/Skills"]}
@@ -207,7 +206,7 @@ export default function StudentDashboard() {
               </div>
             </div>
             <div className="w-[34%]">
-              <div className="bg-white ">
+              <div className="bg-white mt-4">
                 <MeterChart
                 title={"Practical Thinking"}
                 score={averageScores["Practical Thinking"]}
@@ -224,7 +223,7 @@ export default function StudentDashboard() {
           </div>
           <div className=" w-[100%] sm:w-[30%] relative overflow-auto max-w-full h-auto">
             {/* <p className="text-gray-500 text-md pb-2">Hard Skill vs Soft Skill Trend</p> */}
-            <div className="bg-white  rounded-lg">
+            <div className="bg-white pb-4 rounded-lg">
               <Carousel />
             </div>
           </div>
