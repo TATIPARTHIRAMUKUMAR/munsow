@@ -27,6 +27,7 @@ import MutiSelect from "../../Components/Multiselect";
 import { useDarkMode } from "./../../Dark";
 import interview from "../../assets/interview.jpeg";
 
+import keywordExtractor from "keyword-extractor";
 
 const QontoConnector = styled(StepConnector)(({ theme , linearGradientBackground}) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -78,6 +79,15 @@ const StepperComponent = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showAcknowledgement, setShowAcknowledgement] = useState(false);
 
+  
+  const [jdCompanyName, setJdCompanyName] = useState("");
+  const [jdRole, setJdRole] = useState("");
+  const [jdRoleResponsibilities, setJdRoleResponsibilities] = useState("");
+
+  const [culturalCompanyName, setCulturalCompanyName] = useState("");
+  const [culturalRole, setCulturalRole] = useState("");
+  const [culturalRoleResponsibilities, setCulturalRoleResponsibilities] = useState("");
+
   const payload = {
     level: "",
     specifications: {
@@ -111,6 +121,20 @@ const StepperComponent = () => {
         return true;
       }
     }
+    if (selectedCategory == "cultural") {
+        if (culturalCompanyName != '' && culturalRole != '' && culturalRoleResponsibilities != '') {
+          return false;
+        } else {
+          return true;
+        }
+    }
+    if (selectedCategory == "jd") {
+        if (jdCompanyName != '' && jdRole != '' && jdRoleResponsibilities != '') {
+          return false;
+        } else {
+          return true;
+        }
+    }
   };
 
   const {
@@ -135,13 +159,23 @@ const StepperComponent = () => {
       ? selectedSoftskill.map((skill) => skill.label)
       : [];
     console.log("currentStep", payload);
-    if (currentStep == 1) {
+    if (currentStep == 0 && selectedCategory == 'cultural') {
+        console.log('Before ', currentStep)
+        setCurrentStep(currentStep + 2);
+        console.log('After ', currentStep)
+    }
+    else if (currentStep == 0 && selectedCategory != 'cultural') {
+        setCurrentStep(currentStep + 1);
+    }
+    else if (currentStep == 1 && selectedCategory != 'cultural') {
       console.log('currentStep == 1 : ', questionsList)
       dispatch(loadQuestions(payload));
+      setCurrentStep(currentStep + 1);
     }
     else if (currentStep == 2) {
       console.log('currentStep == 2 : ', questionsList)
       setShowAcknowledgement(true);
+      setCurrentStep(currentStep + 1);
 
       // let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
       // toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
@@ -150,37 +184,42 @@ const StepperComponent = () => {
       //         navigate("/interview")
       //     }, 3000);
       // }
-  }
-  else if ((showAcknowledgement) && (currentStepModal === 0)) {
-      console.log('currentStepModal == 0 : ', questionsList)
-      setCurrentStepModal(currentStepModal + 1);
-  }
-  else if (currentStepModal === 1) {
-      console.log('currentStepModal == 1 : ', questionsList)
-      setCurrentStepModal(currentStepModal + 1);
-  } 
-  else if (currentStepModal === 2) {
-      console.log('currentStepModal == 2 : ', questionsList)
-      let toastId = toast("Wait .. redirecting to Interview Section", {
-        autoClose: false,
-      });
-      toast.update(toastId, {
-        render: "Wait .. redirecting to Interview Section",
-        type: "success",
-        autoClose: true,
-      });
-      if (questionsList?.questions?.length > 0) {
-        setTimeout(() => {
-          navigate("/interview");
-        }, 3000);
-      }
-      console.log(questionsList, "QuestionsList")
     }
-    setCurrentStep(currentStep + 1);
+    else if ((showAcknowledgement) && (currentStepModal === 0)) {
+        console.log('currentStepModal == 0 : ', questionsList)
+        setCurrentStepModal(currentStepModal + 1);
+    }
+    else if (currentStepModal === 1) {
+        console.log('currentStepModal == 1 : ', questionsList)
+        setCurrentStepModal(currentStepModal + 1);
+    } 
+    else if (currentStepModal === 2) {
+        console.log('currentStepModal == 2 : ', questionsList)
+        let toastId = toast("Wait .. redirecting to Interview Section", {
+            autoClose: false,
+        });
+        toast.update(toastId, {
+            render: "Wait .. redirecting to Interview Section",
+            type: "success",
+            autoClose: true,
+        });
+        if (questionsList?.questions?.length > 0) {
+            setTimeout(() => {
+            navigate("/interview");
+            }, 3000);
+        }
+        console.log(questionsList, "QuestionsList")
+        }
+        // setCurrentStep(currentStep + 1);
   };
 
   const handlePrev = () => {
-    setCurrentStep(currentStep - 1);
+    if (selectedCategory == 'cultural') {
+        setCurrentStep(currentStep - 2);
+    }
+    else {
+        setCurrentStep(currentStep - 1);
+    }
   };
 
   const handlePrevModal = () => {
@@ -236,6 +275,94 @@ const StepperComponent = () => {
         }, 3000);
     }
   };
+
+  const keywords = [
+    "JavaScript",
+    "Programming Language - (Python) - Flask",
+    "Python",
+    "Java",
+    "HTML",
+    "CSS",
+    "React",
+    "Node.js",
+    "Angular",
+    "SQL",
+    "MongoDB",
+    "Git",
+    "Redux",
+    "Vue.js",
+    "C++",
+    "C#",
+    "AWS",
+    "Docker",
+    "RESTful API",
+    "GraphQL",
+    "TensorFlow",
+    "Machine Learning",
+    "Data Analysis",
+    "Agile Methodology",
+    "Scrum",
+    "Problem Solving",
+    "Teamwork",
+    "Communication",
+    "Time Management",
+    "Creativity",
+    "Adaptability"
+  ];
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+
+  const RadioDivs = ({ keywords, selectedOptions, setSelectedOptions }) => {
+    const handleOptionSelect = (option) => {
+      setSelectedOptions((prevOptions) => {
+        if (prevOptions.includes(option)) {
+          return prevOptions.filter((selected) => selected !== option);
+        } else {
+          return [...prevOptions, option];
+        }
+      });
+    };
+  
+    return (
+      <div className="flex flex-wrap">
+        {keywords?.map((option, index) => (
+          <div
+            key={index}
+            className={`flex flex-inline items-center relative overflow-auto h-auto cursor-pointer border rounded-full
+              ${selectedOptions?.includes(option) ? 'border-[#91ECEA] border-[3px] bg-[#CDFAF7]' : 'border-gray-300 border-[3px]'}
+            `}
+            style={{
+              width: "calc(50% - 2rem)",
+              padding: "0.4rem",
+              paddingLeft: "15px",
+              margin: "0.5rem",
+              fontSize: "15px"
+            }}
+            onClick={() => handleOptionSelect(option)}
+          >
+            <span className="flex-grow">{option}</span>
+            <div className={`rounded-full p-3 relative overflow-hidden w-[5px] 
+              ${selectedOptions?.includes(option) ? 'bg-[#91ECEA]' : 'bg-[#B4B6B9]'}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="h-4 w-4 text-white absolute top-1 left-1"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  d="M5.172 12.828l4.242 4.242L18.95 7.536"
+                />
+              </svg>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
 
   return (
     <div className="p-5 lg:p-10 ">
@@ -542,23 +669,30 @@ const StepperComponent = () => {
                     }
                     >
                         <input 
-                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-3 w-full py-2 px-3 text-black leading-tight" 
+                        className=" bg-white border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-3 w-full py-2 px-3 text-black leading-tight" 
                         id="companyName" 
                         type="text" 
                         placeholder="Company Name"
-                        style={{ width: '20rem' }}/>
+                        style={{ width: '20rem' }}
+                        value={selectedCategory !== "cultural" ? "" : culturalCompanyName}
+                        onChange={(e) => setCulturalCompanyName(e.target.value)}/>
 
                         <input 
-                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 text-black leading-tight" 
+                        className=" bg-white border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 text-black leading-tight" 
                         id="role" 
                         type="text" 
                         placeholder="Role"
-                        style={{ width: '20rem' }}/>
+                        style={{ width: '20rem' }}
+                        value={selectedCategory !== "cultural" ? "" : culturalRole}
+                        onChange={(e) => setCulturalRole(e.target.value)}/>
 
                         <textarea 
-                        className="bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 resize-y rounded-md"
+                        className="bg-white text-black border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 resize-y rounded-md"
                         style={{ width: '20rem' }}
-                        placeholder="Copy & Paste Role Responsibilities here"></textarea>
+                        placeholder="Copy & Paste Role Responsibilities here"
+                        value={selectedCategory !== "cultural" ? "" : culturalRoleResponsibilities}
+                        onChange={(e) => setCulturalRoleResponsibilities(e.target.value)}
+                        ></textarea>
                     </div>
                 </div>
                 <div className="p-7"></div>
@@ -611,23 +745,31 @@ const StepperComponent = () => {
                     }
                     >
                         <input 
-                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-3 w-full py-2 px-3 text-black leading-tight" 
+                        className=" bg-white border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-3 w-full py-2 px-3 text-black leading-tight" 
                         id="companyName" 
                         type="text" 
                         placeholder="Company Name"
-                        style={{ width: '20rem' }}/>
+                        style={{ width: '20rem' }}
+                        value={selectedCategory !== "jd" ? "" : jdCompanyName}
+                        onChange={(e) => setJdCompanyName(e.target.value)}/>
 
                         <input 
-                        className=" bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 text-black leading-tight" 
+                        className=" bg-white border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 text-black leading-tight" 
                         id="role" 
                         type="text" 
                         placeholder="Role"
-                        style={{ width: '20rem' }}/>
+                        style={{ width: '20rem' }}
+                        value={selectedCategory !== "jd" ? "" : jdRole}
+                        onChange={(e) => setJdRole(e.target.value)}
+                        />
 
                         <textarea 
-                        className="bg-transparent border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 resize-y rounded-md"
+                        className="bg-white text-black border border-[#BBBCBD] placeholder-[#9A9B9C] rounded mt-5 w-full py-2 px-3 resize-y rounded-md"
                         style={{ width: '20rem' }}
-                        placeholder="Copy & Paste Role Responsibilities here"></textarea>
+                        placeholder="Copy & Paste Role Responsibilities here"
+                        value={selectedCategory !== "jd" ? "" : jdRoleResponsibilities}
+                        onChange={(e) => setJdRoleResponsibilities(e.target.value)}
+                        ></textarea>
                     </div>
                 </div>
               </div>
@@ -636,70 +778,109 @@ const StepperComponent = () => {
           )}
 
           {currentStep === 1 && (
-          <div  className="relative overflow-auto max-w-full h-auto "
-          >
-            <h2
-            className="relative overflow-auto max-w-full h-auto"
-              style={{
-                textAlign: "center",
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                marginBottom: "2px",
-                color: grayColors,
-              }}
-            >
-              Level
-            </h2>
-            <div
-            className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
-              style={{
-                border: `3.5px solid ${textColors}`,
-                borderRadius: "20px",
-                padding: "2rem 2.5rem"
-              }}
-            >
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={level}
-                onChange={(e) => setLevel(e.target.value)}
-                className="w-full mb-4 appearance-none h-2 rounded-lg"
-                style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
-              />
+            selectedCategory === 'jd' ? (
+                <div>
+                    <div className="text-center mb-7 font-bold text-2xl">
+                        <p>Job Description Specific</p>
+                    </div>
+                    <div  className="relative w-[800px] overflow-auto bg-gray-100 p-5 rounded-xl max-w-full h-auto "
+                    >
+                        <p
+                        className="relative overflow-auto max-w-full h-auto pb-2"
+                        style={{
+                            textAlign: "center",
+                            fontSize: "1.1rem",
+                            fontWeight: 400,
+                            color: grayColors,
+                        }}
+                        >
+                        Key Skills Identified
+                        </p>
+                        <div
+                        className="overflow-y-auto relative overflow-auto h-auto"
+                        style={{
+                            padding: "1.3rem 2.5rem",
+                            // overflowY: "scroll",
+                            maxHeight: "250px"
+                        }}
+                        >
+                            <RadioDivs
+                                keywords={keywords}
+                                selectedOptions={selectedOptions}
+                                setSelectedOptions={setSelectedOptions}
+                            />
+                        </div>
+                    </div>
+                    <div className="text-center mt-4 text-sm">
+                        <p>Please Note: Interview Time will Increase as per Skills Selected</p>
+                    </div>
+                </div>
+            ) : (
+                <div  className="relative overflow-auto max-w-full h-auto "
+                >
+                    <h2
+                    className="relative overflow-auto max-w-full h-auto"
+                    style={{
+                        textAlign: "center",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        marginBottom: "2px",
+                        color: grayColors,
+                    }}
+                    >
+                    Level
+                    </h2>
+                    <div
+                    className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
+                    style={{
+                        border: `3.5px solid ${textColors}`,
+                        borderRadius: "20px",
+                        padding: "2rem 2.5rem"
+                    }}
+                    >
+                    <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={level}
+                        onChange={(e) => setLevel(e.target.value)}
+                        className="w-full mb-4 appearance-none h-2 rounded-lg"
+                        style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
+                    />
 
-              <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
-                <button
-                  onClick={() => {
-                    setLevel(0);
-                    setExperienceLevel("low");
-                  }}
-                  className="bg-green-500 hover:bg-green-700 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                >
-                  Beginner
-                </button>
-                <button
-                  onClick={() => {
-                    setLevel(50);
-                    setExperienceLevel("mid");
-                  }}
-                  className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
-                >
-                  Intermediate
-                </button>
-                <button
-                  onClick={() => {
-                    setLevel(100);
-                    setExperienceLevel("high");
-                  }}
-                  className="bg-red-500 hover:bg-red-700 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
-                >
-                  Advanced
-                </button>
-              </div>
-          </div>
-          </div>
-          )}
+                    <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
+                        <button
+                        onClick={() => {
+                            setLevel(0);
+                            setExperienceLevel("low");
+                        }}
+                        className="bg-green-500 hover:bg-green-700 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                        >
+                        Beginner
+                        </button>
+                        <button
+                        onClick={() => {
+                            setLevel(50);
+                            setExperienceLevel("mid");
+                        }}
+                        className="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                        >
+                        Intermediate
+                        </button>
+                        <button
+                        onClick={() => {
+                            setLevel(100);
+                            setExperienceLevel("high");
+                        }}
+                        className="bg-red-500 hover:bg-red-700 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
+                        >
+                        Advanced
+                        </button>
+                    </div>
+                </div>
+                </div>
+            )
+            )}
 
           {currentStep == 2 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center justify-center ">

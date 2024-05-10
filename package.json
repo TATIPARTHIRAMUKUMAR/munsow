@@ -45,6 +45,7 @@
     "framer-motion": "^10.17.9",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
+    "keyword-extractor": "^0.0.28",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-date-range": "^1.4.0",
