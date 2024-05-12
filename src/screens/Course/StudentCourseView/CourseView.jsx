@@ -55,27 +55,59 @@ const StudentCourseView = () => {
 
     const handleSpeak = (text) => {
         const description = text || selectedSubtopic?.content;
-        if (description) {
+        if (description && !isSpeaking) {
             if (latestUtteranceRef.current) {
                 window.speechSynthesis.cancel();
             }
-
+    
             const sanitizedDescription = description.replace(/<[^>]*>/g, '');
             const utterance = new SpeechSynthesisUtterance(sanitizedDescription);
             utterance.rate = 0.75;
-            utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.gender === 'female');
-
+    
+            // Function to set voice and ensure speech starts only after the voice is set
+            function setVoiceAndSpeak() {
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(voice => voice.gender === 'female' || voice.name.toLowerCase().includes('female'));
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                } else {
+                    // Retry setting the voice if not found
+                    setTimeout(setVoiceAndSpeak, 50);
+                    return;
+                }
+    
+                // Log voices to console for debugging
+                console.log("Voices loaded, using voice: ", utterance.voice.name);
+    
+                window.speechSynthesis.speak(utterance);
+                setIsSpeaking(true);
+            }
+    
+            if (window.speechSynthesis.getVoices().length === 0) {
+                window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
+            } else {
+                setVoiceAndSpeak();
+            }
+    
             utterance.onboundary = (event) => {
-                const highlightedText = `${sanitizedDescription.slice(0, event.charIndex)}<span style="background-color: #886cc0;padding:5px;border-radius:5px;color:white">${sanitizedDescription.slice(event.charIndex, event.charIndex + event.charLength)}</span>${sanitizedDescription.slice(event.charIndex + event.charLength)}`;
-                setSpokenContent(highlightedText);
+                console.log("Boundary event: ", event.charIndex, event.charLength); // Log for debugging
+                const start = event.charIndex;
+                const end = start + event.charLength;
+                const beforeText = sanitizedDescription.slice(0, start);
+                const highlightedText = sanitizedDescription.slice(start, end);
+                const afterText = sanitizedDescription.slice(end);
+    
+                // Set highlighted text in state
+                setSpokenContent(`${beforeText}<span style="background-color: #886cc0; padding: 5px; border-radius: 5px; color: white;">${highlightedText}</span>${afterText}`);
             };
-
-            window.speechSynthesis.speak(utterance);
-            setIsSpeaking(true);
-
+    
             latestUtteranceRef.current = utterance;
         }
     };
+    
+    
+    
+    
 
     const handleStop = () => {
         window.speechSynthesis.cancel();
