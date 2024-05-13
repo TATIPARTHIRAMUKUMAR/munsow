@@ -25,9 +25,9 @@ const StudentCourseView = () => {
         dispatch(loadDetailedCourse(id));
     }, [dispatch, id]);
 
-    const handleSelectSubtopic = (subtopic) => {
-        setSelectedSubtopic(subtopic);
-    };
+    // const handleSelectSubtopic = (subtopic) => {
+    //     setSelectedSubtopic(subtopic);
+    // };
 
     useEffect(() => {
         const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic?.subtopics).find(subtopic => !subtopic?.completed);
@@ -55,66 +55,64 @@ const StudentCourseView = () => {
 
     const handleSpeak = (text) => {
         const description = text || selectedSubtopic?.content;
-        if (description && !isSpeaking) {
-            if (latestUtteranceRef.current) {
-                window.speechSynthesis.cancel();
-            }
+        if (description) {
+            // Cancel any ongoing speech synthesis
+            window.speechSynthesis.cancel();
     
             const sanitizedDescription = description.replace(/<[^>]*>/g, '');
-            const utterance = new SpeechSynthesisUtterance(sanitizedDescription);
-            utterance.rate = 0.75;
+            const chunks = sanitizedDescription.match(/.{1,200}/g) || [];
     
-            // Function to set voice and ensure speech starts only after the voice is set
-            function setVoiceAndSpeak() {
+            let chunkIndex = 0;
+    
+            const speakNextChunk = () => {
+                if (chunkIndex < chunks.length) {
+                    const chunk = chunks[chunkIndex++];
+                    const utterance = new SpeechSynthesisUtterance(chunk);
+                    utterance.rate = 1.0;
+                    setVoiceAndSpeak(utterance);
+                    utterance.onend = speakNextChunk;
+    
+                    latestUtteranceRef.current = utterance;
+                } else {
+                    setIsSpeaking(false);
+                    setSpokenContent('');
+                }
+            };
+    
+            const setVoiceAndSpeak = (utterance) => {
                 const voices = window.speechSynthesis.getVoices();
                 const femaleVoice = voices.find(voice => voice.gender === 'female' || voice.name.toLowerCase().includes('female'));
                 if (femaleVoice) {
                     utterance.voice = femaleVoice;
                 } else {
-                    // Retry setting the voice if not found
-                    setTimeout(setVoiceAndSpeak, 50);
+                    setTimeout(() => setVoiceAndSpeak(utterance), 50);
                     return;
                 }
     
-                // Log voices to console for debugging
-                console.log("Voices loaded, using voice: ", utterance.voice.name);
-    
                 window.speechSynthesis.speak(utterance);
                 setIsSpeaking(true);
-            }
-    
-            if (window.speechSynthesis.getVoices().length === 0) {
-                window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
-            } else {
-                setVoiceAndSpeak();
-            }
-    
-            utterance.onboundary = (event) => {
-                console.log("Boundary event: ", event.charIndex, event.charLength); // Log for debugging
-                const start = event.charIndex;
-                const end = start + event.charLength;
-                const beforeText = sanitizedDescription.slice(0, start);
-                const highlightedText = sanitizedDescription.slice(start, end);
-                const afterText = sanitizedDescription.slice(end);
-    
-                // Set highlighted text in state
-                setSpokenContent(`${beforeText}<span style="background-color: #886cc0; padding: 5px; border-radius: 5px; color: white;">${highlightedText}</span>${afterText}`);
             };
     
-            latestUtteranceRef.current = utterance;
+            speakNextChunk();
         }
     };
     
+    const handleSelectSubtopic = (subtopic) => {
+        if (subtopic !== selectedSubtopic) {
+            // Stop any current speech synthesis
+            handleStop();
+            setSelectedSubtopic(subtopic);
+            handleSpeak(subtopic.content);
+        }
+    };
     
-    
-    
-
     const handleStop = () => {
         window.speechSynthesis.cancel();
         setIsSpeaking(false);
         setSpokenContent('');
         latestUtteranceRef.current = null;
     };
+    
 
     return (
         <div className="p-4">
