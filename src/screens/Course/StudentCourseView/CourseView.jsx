@@ -25,9 +25,9 @@ const StudentCourseView = () => {
         dispatch(loadDetailedCourse(id));
     }, [dispatch, id]);
 
-    const handleSelectSubtopic = (subtopic) => {
-        setSelectedSubtopic(subtopic);
-    };
+    // const handleSelectSubtopic = (subtopic) => {
+    //     setSelectedSubtopic(subtopic);
+    // };
 
     useEffect(() => {
         const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic?.subtopics).find(subtopic => !subtopic?.completed);
@@ -56,33 +56,63 @@ const StudentCourseView = () => {
     const handleSpeak = (text) => {
         const description = text || selectedSubtopic?.content;
         if (description) {
-            if (latestUtteranceRef.current) {
-                window.speechSynthesis.cancel();
-            }
-
+            // Cancel any ongoing speech synthesis
+            window.speechSynthesis.cancel();
+    
             const sanitizedDescription = description.replace(/<[^>]*>/g, '');
-            const utterance = new SpeechSynthesisUtterance(sanitizedDescription);
-            utterance.rate = 0.75;
-            utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.gender === 'female');
-
-            utterance.onboundary = (event) => {
-                const highlightedText = `${sanitizedDescription.slice(0, event.charIndex)}<span style="background-color: #886cc0;padding:5px;border-radius:5px;color:white">${sanitizedDescription.slice(event.charIndex, event.charIndex + event.charLength)}</span>${sanitizedDescription.slice(event.charIndex + event.charLength)}`;
-                setSpokenContent(highlightedText);
+            const chunks = sanitizedDescription.match(/.{1,200}/g) || [];
+    
+            let chunkIndex = 0;
+    
+            const speakNextChunk = () => {
+                if (chunkIndex < chunks.length) {
+                    const chunk = chunks[chunkIndex++];
+                    const utterance = new SpeechSynthesisUtterance(chunk);
+                    utterance.rate = 1.0;
+                    setVoiceAndSpeak(utterance);
+                    utterance.onend = speakNextChunk;
+    
+                    latestUtteranceRef.current = utterance;
+                } else {
+                    setIsSpeaking(false);
+                    setSpokenContent('');
+                }
             };
-
-            window.speechSynthesis.speak(utterance);
-            setIsSpeaking(true);
-
-            latestUtteranceRef.current = utterance;
+    
+            const setVoiceAndSpeak = (utterance) => {
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(voice => voice.gender === 'female' || voice.name.toLowerCase().includes('female'));
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                } else {
+                    setTimeout(() => setVoiceAndSpeak(utterance), 50);
+                    return;
+                }
+    
+                window.speechSynthesis.speak(utterance);
+                setIsSpeaking(true);
+            };
+    
+            speakNextChunk();
         }
     };
-
+    
+    const handleSelectSubtopic = (subtopic) => {
+        if (subtopic !== selectedSubtopic) {
+            // Stop any current speech synthesis
+            handleStop();
+            setSelectedSubtopic(subtopic);
+            handleSpeak(subtopic.content);
+        }
+    };
+    
     const handleStop = () => {
         window.speechSynthesis.cancel();
         setIsSpeaking(false);
         setSpokenContent('');
         latestUtteranceRef.current = null;
     };
+    
 
     return (
         <div className="p-4">
