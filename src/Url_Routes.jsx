@@ -42,7 +42,7 @@ import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseL
 import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
 import NewUserReport from "./screens/NewUserReport/NewUserReport";
-import ReportIndex from "./screens/UserReport/ReportsList";
+import ReportIndex from "./screens/NewUserReport/ReportsList";
 import ScreeningUserRegister from "./screens/Login/ScreeningUserRegister";
 import LinksList from "./screens/Admin/ScreeningUsers/LinksList";
 import CreateLink from "./screens/Admin/ScreeningUsers/CreateLink";

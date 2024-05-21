@@ -6,7 +6,7 @@ import { FaRegThumbsDown } from "react-icons/fa";
 
 const DeepDive = (props) => {
 
-  const { head, ques, candidateAns, sampleAns, gotRight, gotWrong, feedback } = props;
+  const { head, ques, candidateAns, sampleAns, gotRight, gotWrong, feedback, report_data } = props;
 
   const feedbackData = feedback;
 
@@ -23,7 +23,7 @@ const DeepDive = (props) => {
     } else if (head.startsWith('Domain Knowledge')) {
       return 'bg-green'; // Apply green color
     } else {
-      return 'bg-gray'; // Default color or handle other cases
+      return 'munsow-light-bg'; // Default color or handle other cases
     }
   };
 
@@ -43,9 +43,21 @@ const DeepDive = (props) => {
 
     <>
     <div className="mx-3 my-3 md:mx-6 md:my-6">
-      <div className={`mb-8 ${bgColor}`}>
-        <h1 className={`text-2xl lg:text-4xl font-semibold text-purple p-6 md:p-8`}>{head} Deep Dive</h1>
-      </div>
+      {report_data?.report_type === "skill based report" ? (
+        <div className={`mb-8 ${bgColor}`}>
+          <h1 className={`text-2xl lg:text-4xl font-semibold text-purple p-6 md:p-8`}>{head} Deep Dive</h1>
+        </div>
+        ) : report_data?.report_type === "role based report" ? (
+        <div className={`mb-8 ${bgColor}`}>
+          <h1 className={`text-2xl lg:text-4xl font-semibold text-purple p-6 md:p-8`}>{head} Deep Dive</h1>
+        </div>
+        ) : report_data?.report_type === "JD based report" ? (
+          <></>
+        ) : report_data?.report_type === "cultural fit report" ? (
+          <></>
+        ) : null
+        }
+      
       <div className={`mb-8 ${bgColor}`}>
         <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
       </div>
