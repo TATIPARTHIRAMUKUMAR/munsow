@@ -17,7 +17,7 @@ const MeterChart = (props) => {
           plotBackgroundImage: null,
           plotBorderWidth: 0,
           plotShadow: false,
-          height: "80%"
+          height: "120%"
         },
         title: {
           text: title,
@@ -61,6 +61,9 @@ const MeterChart = (props) => {
               thickness: 50,
             },
           ],
+        },
+        credits: {
+            enabled: false
         },
         series: [
           {
