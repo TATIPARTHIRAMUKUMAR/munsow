@@ -31,7 +31,7 @@ const JDCult = () => {
     return (
         <div className="col-span-1 bg-white rounded-lg">
             <p className=" text-lg font-semibold p-2" style={{ color: textColor }}>
-                JD  vs Cult 
+            Interview Submissions
             </p>            <Divider style={{ opacity: "0.4" }} />
             <div className='p-5'>
                 <div className='flex justify-between items-center'>
@@ -45,7 +45,7 @@ const JDCult = () => {
                             />
                         </div>
                         <div>
-                            <Typography variant="h6">JD</Typography>
+                            <Typography variant="h6">Job Description</Typography>
                            
                         </div>
                     </div>
@@ -65,7 +65,7 @@ const JDCult = () => {
                             />
                         </div>
                         <div>
-                            <Typography variant="h6">Cult</Typography>
+                            <Typography variant="h6">Cultural Fit</Typography>
                             
 
                         </div>

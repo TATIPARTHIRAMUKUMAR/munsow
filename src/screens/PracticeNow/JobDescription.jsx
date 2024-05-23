@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { interviewSkills } from '../../redux/action';
 
-const JobDescriptionForm = ({ selectedCategory,jdcompany,jdrole,cultcompany,cultrole,selectedOptions,setSelectedOptions }) => {
+const JobDescriptionForm = ({ selectedCategory, jdcompany, jdrole, cultcompany, cultrole, selectedOptions, setSelectedOptions }) => {
 
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
-    console.log("test",jdcompany,jdrole,cultcompany,cultrole)
+    console.log("test", jdcompany, jdrole, cultcompany, cultrole)
     const [jobDetails, setJobDetails] = useState({
         text: '',
         file: null,
-        mode:null,
+        mode: null,
         company_name: jdcompany || cultcompany,
         company_role: jdrole || cultrole,
-        interview_type:selectedCategory=="jd"? "jd_interview":"cultural_interview"
+        interview_type: selectedCategory == "jd" ? "jd_interview" : "cultural_interview"
     });
 
     const [showMultiSelect, setShowMultiSelect] = useState(false);
@@ -35,30 +35,30 @@ const JobDescriptionForm = ({ selectedCategory,jdcompany,jdrole,cultcompany,cult
             reader.onloadend = () => {
                 setJobDetails({
                     ...jobDetails,
-                    file:  reader.result.split(',')[1] ,
-                    mode: 'file' 
+                    file: reader.result.split(',')[1],
+                    mode: 'file'
                 });
-                setFileName( uploadedFile.name)
+                setFileName(uploadedFile.name)
             };
             reader.readAsDataURL(uploadedFile);
         }
-        console.log("jobDetails",jobDetails)
+        console.log("jobDetails", jobDetails)
 
     };
 
     const handleSubmit = () => {
         const details = { ...jobDetails };
         if (details.mode === 'text') {
-            delete details.file; 
+            delete details.file;
         } else if (details.mode === 'file') {
-            delete details.text; 
+            delete details.text;
         }
         setShowMultiSelect(true);
-        setJobDetails(details); 
+        setJobDetails(details);
         console.log("jobDetails.mode", details);
 
         dispatch(interviewSkills(details, (resp) => {
-            console.log("resp",resp)
+            console.log("resp", resp)
             setMultiSelectOptions(resp?.required_skills)
         }))
 
@@ -74,8 +74,18 @@ const JobDescriptionForm = ({ selectedCategory,jdcompany,jdrole,cultcompany,cult
     };
 
     const submitSelection = () => {
-        console.log("multiSelectOptions",selectedOptions)
+        console.log("multiSelectOptions", selectedOptions)
 
+    };
+
+    const handleDisable = () => {
+        // console.log("jobDetails", jobDetails)
+        if (jobDetails?.text == '' && jobDetails?.file == null) {
+            return true
+        }
+        else {
+            return false
+        }
     };
 
     const handleOptionChange = (option) => {
@@ -84,7 +94,7 @@ const JobDescriptionForm = ({ selectedCategory,jdcompany,jdrole,cultcompany,cult
                 ? prevSelectedOptions.filter((o) => o !== option)
                 : [...prevSelectedOptions, option]
         );
-        console.log("option",option)
+        console.log("option", option)
 
     };
     // const multiSelectOptions = ["Python", "Java", "C++"];
@@ -131,12 +141,15 @@ const JobDescriptionForm = ({ selectedCategory,jdcompany,jdrole,cultcompany,cult
                     </div>
                     <div className="flex justify-center">
                         <button
-                            className="bg-indigo-500 text-white py-2 px-8 rounded-lg mr-4 hover:bg-indigo-600 transition-colors duration-300"
+                            className={`py-2 px-8 rounded-lg mr-4 transition-colors duration-300 ${handleDisable() ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-500 hover:bg-indigo-600 text-white"
+                                }`}
                             onClick={handleSubmit}
+                            disabled={handleDisable()}
                         >
                             Submit
                         </button>
                     </div>
+
                 </>
             ) : (
                 <>
@@ -144,7 +157,7 @@ const JobDescriptionForm = ({ selectedCategory,jdcompany,jdrole,cultcompany,cult
                     <div className="bg-gray-100 rounded-lg p-6">
                         {multiSelectOptions.map((option, index) => (
                             <div key={index} className="mb-4 flex items-center">
-                               <input
+                                <input
                                     type="checkbox"
                                     id={`option-${option}`}
                                     className="mr-2"
@@ -155,12 +168,12 @@ const JobDescriptionForm = ({ selectedCategory,jdcompany,jdrole,cultcompany,cult
                             </div>
                         ))}
                         <div className="flex justify-center mt-6">
-                            <button
+                            {/* <button
                                 className="bg-indigo-500 text-white py-2 px-8 rounded-lg hover:bg-indigo-600 transition-colors duration-300"
                                 onClick={() => submitSelection()}
                             >
-                                Confirm Selection
-                            </button>
+                                Confirm Selection */}
+                            {/* </button> */}
                             <button
                                 className="bg-gray-300 text-gray-700 py-2 px-8 rounded-lg ml-4 hover:bg-gray-400 transition-colors duration-300"
                                 onClick={handleGoBack}

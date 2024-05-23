@@ -121,6 +121,15 @@ const StepperComponent = () => {
         return true;
       }
     }
+    if ((selectedCategory == "jd"||selectedCategory == "cult")&&currentStep==1) {
+      // console.log("selectedOptions",typeof (selectedOptions),currentStep)
+      if (Object.keys(selectedOptions).length>=3) {
+        console.log("hehe")
+        return false;
+      } else {
+        return true;
+      }
+    }
   };
 
   const {
@@ -271,8 +280,8 @@ const StepperComponent = () => {
   return (
     <div className=" ">
       <div className="w-full mx-auto rounded-xl">
-        <p className="p-5 text-xl font-semibold">Practice</p>
-        <Divider />
+        {/* <p className="p-5 text-xl font-semibold">Practice</p>
+        <Divider /> */}
 
         <Stepper
           activeStep={currentStep}
@@ -301,7 +310,7 @@ const StepperComponent = () => {
           ))}
         </Stepper>
         <Divider style={{ marginTop: "1rem" }} />
-        <div className="flex mt-4 p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
+        <div className="flex  p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
           
           {currentStep === 0 && (
             <div className="grid grid-cols-2 grid-rows-2 gap-8 h-auto p-8">
@@ -386,7 +395,7 @@ const StepperComponent = () => {
 
               <div
                 className={`bg-${selectedCategory === "role" ? "gray-300" : "gray-100"
-                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto`}
+                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
                 onClick={() => {
                   setSelectedCategory("role");
                   setSelectedSoftskill(null);
@@ -493,7 +502,7 @@ const StepperComponent = () => {
 
               <div
                 className={`bg-${selectedCategory === "jd" ? "gray-200" : "gray-100"
-                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto`}
+                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
                 onClick={() => {
                   setSelectedCategory("jd");
                   setSelectedRole(null);
@@ -566,7 +575,7 @@ const StepperComponent = () => {
 
               <div
                 className={`bg-${selectedCategory === "cult" ? "gray-200" : "gray-100"
-                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto`}
+                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
                 onClick={() => {
                   setSelectedCategory("cult");
                   setSelectedRole(null);
