@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Button, CircularProgress, Divider } from "@mui/material";
+import { Button, CircularProgress, Divider, Pagination, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { loadReportsList, loadUserReport } from "../../redux/action";
 import NoDataPage from "./NoData";
-import { prototype } from "postcss/lib/previous-map";
 import moment from "moment";
 
 import { useDarkMode } from "./../../Dark";
@@ -17,86 +16,81 @@ export default function ReportIndex() {
     const { userReportList } = useSelector((state) => state.data);
     const [lessonsList, setLessonsList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [reportsPerPage] = useState(10);  // Number of reports per page
     const { isDarkMode, colorTheme } = useDarkMode();
-
     const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
-    const textColor = isDarkMode
-        ? reduxColorTheme.dark.background
-        : reduxColorTheme.light.background;
-    const backgroundColor = isDarkMode
-        ? reduxColorTheme.dark.selectBackground
-        : reduxColorTheme.light.selectBackground;
+    const textColor = isDarkMode ? reduxColorTheme.dark.background : reduxColorTheme.light.background;
+    const backgroundColor = isDarkMode ? reduxColorTheme.dark.selectBackground : reduxColorTheme.light.selectBackground;
+    const [filterType, setFilterType] = useState('');
 
     useEffect(() => {
-        dispatch(loadReportsList())
-    }, [])
+        dispatch(loadReportsList());
+    }, [dispatch]);
 
     useEffect(() => {
         setLessonsList(userReportList);
-        setIsLoading(false);  // Set isLoading to false once data is set
+        setIsLoading(false);
     }, [userReportList]);
 
     const navigate = useNavigate();
 
-    // navigation.navigate('reportView', {
-    //     report_data: loadReportsList,      
-    //   });
-      
+    // Pagination logic
+    const indexOfLastReport = currentPage * reportsPerPage;
+    const indexOfFirstReport = indexOfLastReport - reportsPerPage;
+    const currentReports = lessonsList.slice(indexOfFirstReport, indexOfLastReport);
 
+    const handleChangePage = (event, newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const handleFilterChange = (event) => {
+        setFilterType(event.target.value);
+        const filteredReports = userReportList.filter(report => report.report_type.includes(event.target.value));
+        setLessonsList(filteredReports);
+    };
 
     const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company }) => {
-
         const viewReport = (data) => {
-            
-            // useEffect(()=>{
-            // dispatch(loadUserReport(data));
-            // navigate("/reportView")
-            // },[])
-
-
             localStorage.setItem('reportData', JSON.stringify(data));
-    
             navigate('/reportView');
-            console.log("ee", data);
+            console.log("Report Data:", data);
         };
 
         return (
             <div className="transition-transform duration-300 hover:scale-105 shadow-lg rounded-lg">
                 <div className="flex flex-col h-full p-4 bg-white">
                     <div className="flex-grow p-2 flex flex-col gap-y-2">
-                        {skill_type == "role based report" ? <div className="text-xl font-semibold">Role: {role}
-                        </div> : <div className="text-xl font-semibold">Skill based report
-                            <div className="text-base">
-                                <span className="font-semibold"> Skills : </span>
-                                {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
-                                    <>
-                                        {skill} <span className="px-2">|</span>
-                                    </>
-                                ))}
-                                {Object.keys(skills_list?.soft_skill || {}).map((skill, index) => (
-                                    <>
-                                        {skill}
-                                    </>
-                                ))}
+                        {skill_type === "role based report" ? (
+                            <div className="text-xl font-semibold">Role: {role}</div>
+                        ) : (
+                            <div className="text-xl font-semibold">Skill based report
+                                <div className="text-base">
+                                    <span className="font-semibold"> Skills: </span>
+                                    {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
+                                        <React.Fragment key={index}>
+                                            {skill} <span className="px-2">|</span>
+                                        </React.Fragment>
+                                    ))}
+                                    {Object.keys(skills_list?.soft_skill || {}).map((skill, index) => (
+                                        <React.Fragment key={index}>{skill}</React.Fragment>
+                                    ))}
+                                </div>
                             </div>
-                        </div>}
-                        {skill_type == "role based report" ? <div className="font-medium"><span className="font-bold">Company:</span> {company}</div> : <></>}
+                        )}
+                        {skill_type === "role based report" && <div className="font-medium"><span className="font-bold">Company:</span> {company}</div>}
                         <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>
-                        <div className="font-medium"><span className="font-bold">Generated On:</span> {moment(generated)?.format('MMMM DD, YYYY HH:mm:ss')}</div>
-
+                        <div className="font-medium"><span className="font-bold">Generated On:</span> {moment(generated).format('MMMM DD, YYYY HH:mm:ss')}</div>
                     </div>
                     <Divider className="my-5" />
                     <div className="py-2 w-full">
                         {report_ready === "true" ? (
-                            <>
-                                <Button className="font-bold w-full py-2 cursor-pointer transition-colors duration-300 hover:bg-[#886cc0] " endIcon={<ArrowForwardIcon />} onClick={() => { viewReport({...report_data, ...result_data}) }} style={{ color: textColor, background: backgroundColor, fontWeight: "600",}}>View Report</Button>
-                            </>
+                            <Button className="font-bold w-full py-2 transition-colors duration-300" endIcon={<ArrowForwardIcon />} onClick={() => viewReport({...report_data, ...result_data})} style={{ color: textColor, background: backgroundColor, fontWeight: "600",}}>View Report</Button>
                         ) : (
                             <div className="flex items-center justify-center text-orange-300">
                                 <HttpsOutlinedIcon className="mr-2 animate-spin" />
                                 Your report is being generated
                             </div>
-
                         )}
                     </div>
                 </div>
@@ -104,46 +98,32 @@ export default function ReportIndex() {
         );
     };
 
-
-    ReportCards.propTypes = {
-        id: PropTypes.number.isRequired,
-        role: PropTypes.string.isRequired,
-        level: PropTypes.bool.isRequired,
-        report_ready: PropTypes.bool.isRequired,
-        report_data: PropTypes.bool.isRequired,
-        skill_type: PropTypes.string.isRequired,
-        skills_list: PropTypes.string.isRequired,
-        generated: PropTypes.string.isRequired,
-        company: PropTypes.string.isRequired,
-
-    }
     return (
         <>
-            {lessonsList?.length == 0 ? (<>
-                <NoDataPage />
-            </>) : (
-                <div className="w-full h-full overflow-y-auto px-4 ">
+            <FormControl variant="filled" className="w-full max-w-xs mb-4">
+                <InputLabel id="report-filter-label">Filter Reports</InputLabel>
+                <Select labelId="report-filter-label" value={filterType} onChange={handleFilterChange} className="text-sm">
+                    <MenuItem value="">All Reports</MenuItem>
+                    <MenuItem value="role based report">Role Based Reports</MenuItem>
+                    <MenuItem value="skill based report">Skill Based Reports</MenuItem>
+                </Select>
+            </FormControl>
+            {lessonsList.length === 0 ? <NoDataPage /> : (
+                <div className="w-full h-full overflow-y-auto px-4">
                     {isLoading ? (
                         <div className="flex justify-center items-center h-screen">
                             <CircularProgress style={{ color: "#886cc0" }} />
                         </div>
                     ) : (
-                        <div
-                            className=" p-5 gap-8 pt-5"
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "repeat(auto-fill, minmax(min(240px, 100%), 1fr))",
-                            }}
-                        >
-                            {lessonsList?.map((o, index) => (
-                                <ReportCards id={o?.id} role={o?.specifications?.role} skill_type={o?.report_json?.report_type} report_data={o?.report_json == null ? {} : o?.report_json} result_data={o?.result_json == null ? {} : o?.result_json} report_ready={o?.report_json == null ? "false" : "true"} skills_list={o?.report_json?.hard_and_soft_skill_dic} level={o?.level} generated={o?.updated_date} key={index} company={o?.report_json?.interview_company} />
+                        <div className="p-5 gap-8 pt-5" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
+                            {currentReports.map((o, index) => (
+                                <ReportCards key={index} id={o.id} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.report_json?.hard_and_soft_skill_dic} level={o.level} generated={o.updated_date} company={o.report_json?.interview_company} />
                             ))}
                         </div>
                     )}
+                    <Pagination count={Math.ceil(lessonsList.length / reportsPerPage)} page={currentPage} onChange={handleChangePage} className="py-3" />
                 </div>
             )}
         </>
     );
-
 }

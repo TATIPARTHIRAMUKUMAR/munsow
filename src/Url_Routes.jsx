@@ -49,6 +49,8 @@ import CreateLink from "./screens/Admin/ScreeningUsers/CreateLink";
 import StudentDashboardScreenig from "./screens/Student Dashboard/StudentDashboard-Screening";
 import QuestionBanksList from "./screens/Teacher/CreateQuestionBank/QuestionBankList";
 import QuestionBankView from "./screens/Teacher/CreateQuestionBank/QuestionBankView";
+import EnhancedTable from "./screens/Admin/Placements";
+import Placements from "./screens/Admin/Placements";
 
 
 function Url_Routes() {
@@ -97,6 +99,7 @@ function Url_Routes() {
         <Route exact path="/adminDashboard" element={<HeaderFooterLayout Component={<AdminDashboard />} />} />
         <Route exact path="/screeningUsers" element={<HeaderFooterLayout Component={<LinksList />} />} />
         <Route exact path="/screeningUsers/createLink" element={<HeaderFooterLayout Component={<CreateLink />} />} />
+        <Route exact path="/placements" element={<HeaderFooterLayout Component={<Placements />} />} />
 
         <Route exact path="/" element={<Login />} />
         <Route exact path="/studentLogin" element={<StudentLogin />} />

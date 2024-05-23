@@ -47,6 +47,8 @@ const initialState = {
 
   practicalThinking:[],
   practicalFilters:{},
+  placementTracker:{},
+  statusList:[],
   colorTheme: {
     light: {
       // primaryBg-black
@@ -251,6 +253,11 @@ const DataReducers = (state = initialState, action) => {
       behaviourAnalysis:action.payload.data.data,
       loading:false
     }
+    case types.STATUS_LIST: return{
+      ...state,
+      statusList:action.payload.entity_mapping,
+      loading:false
+    }
     case types.KS_ANALYSIS: return{
       ...state,
       ksAnalysis: action.payload.data,
@@ -276,6 +283,12 @@ const DataReducers = (state = initialState, action) => {
     case types.SCREENING_USER_LINKS_LIST: return{
       ...state,
       linksList: action.payload.data,
+      loading:false
+    }
+    case types.PLACEMENT_TRCKER: return{
+      ...state,
+      placementTracker: action.payload,
+      placementTrackermeta:action.payload.meta,
       loading:false
     }
     case types.QUESTIONBANKS: return{

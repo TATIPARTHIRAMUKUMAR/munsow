@@ -9,6 +9,7 @@ import GLOBAL_CONSTANTS from "../../../GlobalConstants";
 import { interviewAllowed, loadUserStats } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useDarkMode } from "./../../Dark";
+import JDCult from "./JDandCult";
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
@@ -122,10 +123,19 @@ export default function StudentDashboard() {
         </div>
         <div className="col-span-1 relative overflow-auto max-w-full h-auto">
           {/* <p className="text-gray-500 text-md pb-2">Hard Skill vs Soft Skill Trend</p> */}
-          <div className="bg-white  rounded-lg">
+        
+
+          <div className="bg-white  rounded-lg ">
+              <JDCult/>
+          </div>
+
+          <div className="bg-white  rounded-lg my-7">
             <Carousel />
           </div>
+
+
         </div>
+
       </div>
     </div>
   );

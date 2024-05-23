@@ -976,6 +976,32 @@ export const createLink = (payload, callback) => {
   };
 };
 
+export const interviewSkills = (payload, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/process_jd`, payload, { headers })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          // toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: 2000 })
+
+        }
+        else {
+          // toast.update(toastId, { render: "Link Generated Sucessfully", type: "success", autoClose: 2000 })
+          console.log("resp",resp)
+          callback(resp?.data)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        // toast.update(toastId, { render: "Something bad happend ", type: "error", autoClose: 2000 })
+      });
+  };
+};
+
 export const userStatUpdate = (id, endpoint, callback) => {
   return function () {
     var headers = {
@@ -1016,6 +1042,26 @@ export const loadHardSkillsList = (params = {}) => {
     axios.get(`${GLOBAL_CONSTANTS?.backend_url}/institution/hard_skills_list`, { params, headers })
       .then((resp) => {
         dispatch(getHardSkillsList(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+
+const getPlacementTracker = (data) => ({
+  type: types.PLACEMENT_TRCKER,
+  payload: data,
+});
+
+export const loadPlacementTracker = (params = {}) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}institution/placement_tracker/${GLOBAL_CONSTANTS?.user_cred?.id}`, { params, headers })
+      .then((resp) => {
+        dispatch(getPlacementTracker(resp?.data));
       })
       .catch((error) => console.log(error));
   };
@@ -1265,6 +1311,29 @@ export const loadKSAnalysis = (params) => {
       .catch((error) => console.log(error));
   };
 };
+
+
+
+const getStatus = (data) => ({
+  type: types.STATUS_LIST,
+  payload: data,
+});
+
+export const loadStatus = (params) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}/admin/entity/mapping/interview_mode`, { params, headers })
+      .then((resp) => {
+        dispatch(getStatus(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+
 
 export const setReduxState = (data) => ({
   type: types.SET_REDUX_STATE,

@@ -73,6 +73,8 @@ const StepperComponent = () => {
   const [level, setLevel] = useState(0);
   const [experienceLevel, setExperienceLevel] = useState("low");
   const [selectedCategory, setSelectedCategory] = useState("skills");
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
 
   const [selectedSoftskill, setSelectedSoftskill] = useState(null);
   const [selectedHardskill, setSelectedHardskill] = useState(null);
@@ -142,6 +144,27 @@ const StepperComponent = () => {
     payload.specifications.soft_skill = selectedSoftskill
       ? selectedSoftskill.map((skill) => skill.label)
       : [];
+      payload.interview_type=selectedCategory=="jd"?"jd_interview":selectedCategory=="cult"?"cultural_interview":selectedCategory=="skills"?"skill_interview":"company_role_interview";
+      if(selectedCategory=="jd"){
+        payload.specifications.jd_skill=selectedOptions;
+        payload.specifications.company=jdcompany;
+        payload.specifications.role=jdrole;
+        
+        delete payload?.specifications?.hard_skill
+        delete payload?.specifications?.soft_skill
+        delete payload?.specifications?.level
+
+      }
+      if(selectedCategory=="cult"){
+        payload.specifications.jd_skill=selectedOptions;
+        payload.specifications.company=cultcompany;
+        payload.specifications.role=cultrole;
+
+        delete payload?.specifications?.hard_skill
+        delete payload?.specifications?.soft_skill
+        delete payload?.specifications?.level
+
+      }
     console.log("currentStep", payload);
     if (currentStep == 1) {
       console.log('currentStep == 1 : ', questionsList)
@@ -620,10 +643,10 @@ const StepperComponent = () => {
           {currentStep === 1 && (
 
             <div>
-                {selectedCategory == "jd" || selectedCategory == "cult" && (
-              <JobDescriptionForm selectedCategory={selectedCategory}/>)}
+                {(selectedCategory == "jd" || selectedCategory == "cult") && (
+              <JobDescriptionForm selectedCategory={selectedCategory} jdcompany={jdcompany} jdrole={jdrole} cultcompany={cultcompany} cultrole={cultrole} selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}/>)}
 
-              {selectedCategory == "skills" || selectedCategory == "role" && (
+              {(selectedCategory == "skills" || selectedCategory == "role") && (
                 <div className="relative overflow-auto max-w-full h-auto "
                 >
                   <h2
