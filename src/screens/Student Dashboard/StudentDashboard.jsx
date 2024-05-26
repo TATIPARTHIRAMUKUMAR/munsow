@@ -180,11 +180,11 @@ export default function StudentDashboard() {
 
         <div className="flex flex-col sm:flex-row justify-evenly w-[100%] gap-4 relative overflow-auto max-w-full ">
           <div className=" w-[100%] sm:w-[50%] relative bg-white overflow-auto max-w-full rounded-lg">
-            <CulturalInterviews />
+            <CulturalInterviews interviewData={userStats?.graphs?.length>0?userStats?.graphs[2]?.data:[]}/>
             
           </div>
           <div className=" w-[100%] sm:w-[50%] relative bg-white overflow-auto max-w-full rounded-lg">
-              <JDInterviews />
+              <JDInterviews interviewData={userStats?.graphs?.length>0?userStats?.graphs[1]?.data:[]}/>
           </div>
         </div>
 
