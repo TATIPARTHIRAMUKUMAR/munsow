@@ -13,6 +13,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
 
+import { useDarkMode } from "./../../../Dark";
+
+
+  
 const CourseCard = ({ course, onClick }) => {
     const dispatch = useDispatch();
     const controls = useAnimation();
@@ -42,6 +46,19 @@ const CourseCard = ({ course, onClick }) => {
         setOpen(false);
     };
 
+    const { colorTheme } = useSelector((state) => state?.data);
+    const { isDarkMode } = useDarkMode();
+
+    const linearGradientBackground = isDarkMode
+        ? colorTheme.dark.selectBackground
+        : colorTheme.light.selectBackground;
+
+        
+    const textColor = isDarkMode
+        ? colorTheme.dark.textColor3
+        : colorTheme.light.textColor3;
+
+
     return (
         <motion.div
             className="w-full h-auto mx-auto rounded-lg overflow-hidden cursor-pointer shadow-md bg-white hover:shadow-xl transition-shadow duration-300"
@@ -67,7 +84,11 @@ const CourseCard = ({ course, onClick }) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleCardClick}
-                        className="bg-[#886CC0] text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                        style={{
+                            backgroundColor: linearGradientBackground,
+                            color: textColor
+                        }}
+                        className="px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                     >
                         Explore More
                     </motion.button>
