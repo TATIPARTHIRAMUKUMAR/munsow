@@ -1,11 +1,20 @@
 import './UserReport.css'
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import CircularProgress, {
+  circularProgressClasses,
+} from '@mui/material/CircularProgress';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
 const SummarySnapshot = (props) => {
-  const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score, head } = props;
+  const { interview_score_by_category, behavioral_presentation_and_grooming, presentation_and_grooming_score, readiness_score, head, report_data } = props;
 
   const presentationScore = Math.round(presentation_and_grooming_score);
   const readinessScore = Math.round(readiness_score);
 
+  //for score value color
   const getScoreColor = (x) => {
     if (x >= 0 && x <= 4) {
       return 'text-red'; // Apply red color
@@ -17,23 +26,48 @@ const SummarySnapshot = (props) => {
       return 'text-gray'; // Default color or handle other cases
     }
   };
+  //for progress bar in 3 main skill bucket in skill and role based report (use class name only and range 0-10)
   const progressBarColor = (x) => {
     if (x >= 0 && x <= 4) {
-      console.log("if")
       return 'bar-red-bg'; // Apply red color
     } else if (x >= 5 && x <= 7) {
-      console.log("else if 1")
       return 'bar-orange-bg'; // Apply yellow color
     } else if (x >= 8 && x <= 10) {
-      console.log("else if 2")
-
       return 'bar-green-bg'; // Apply green color
     } else {
-      console.log("else")
-
-      return 'text-gray'; // Default color or handle other cases
+      return 'bg-grey'; // Default color or handle other cases
     }
   };
+
+  //for progress bar in all skills list of JD and cultural fit report (use hex value only and range 0-100)
+  const progressBarColorSkills = (x) => {
+    if (x >= 0 && x <= 40) {    
+      return '#FF555B'; // Apply red color
+    } else if (x >= 50 && x <= 70) {   
+      return '#FE9663'; // Apply yellow color
+    } else if (x >= 80 && x <= 100) {
+      return '#00BF6F'; // Apply green color
+    } else {
+      return '#1976d2'; // Default color or handle other cases
+    }
+  };
+
+  const BorderLinearProgress = styled(LinearProgress, { shouldForwardProp: (prop) => prop !== 'value' })(({ theme, value }) => {
+  console.log('Value:', value); // Log the value to check if it's received correctly
+  return ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      backgroundColor: progressBarColorSkills(value),
+      width: `${value}%`, // Dynamically set the width based on the value
+    },
+  });
+  });
+
 
   const getBackgroundColor = (head) => {
     const firstWord = head.split(' ')[0];
@@ -85,41 +119,231 @@ const SummarySnapshot = (props) => {
           <h2 className="text-center font-bold">Munsow Interview Classification Highlights</h2>
         </div>
 
-        {interview_score_by_category?.data?.map((category, index) => (
-          <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
-            <div className="flex flex-col lg:flex-row mb-8 lg:justify-around items-center">
-              <div>
-                <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
-              </div>
-              <div className="rounded-full bg-white w-48 p-4">
-                <div className="relative pt-1">
-                  <div className="flex mb-2 items-center justify-start">
-                    <div className="w-full bg-gray-300 rounded-full">
-                      <div
-                        style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
-                        className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
-                      >
-                        &nbsp;
+        {report_data?.report_type === "skill based report" ? (
+          <div>
+          {interview_score_by_category?.data?.map((category, index) => (
+            <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
+              <div className="flex flex-col lg:flex-row lg:justify-around items-center">
+                <div>
+                  <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
+                </div>
+                <div className="rounded-full bg-white w-48 p-4">
+                  <div className="relative pt-1">
+                    <div className="flex mb-2 items-center justify-start">
+                      <div className="w-full bg-gray-300 rounded-full">
+                        <div
+                          style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
+                          className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
+                        >
+                          &nbsp;
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="lg:columns-2 sm:columns-1">
-              {category?.sub_segements?.map((segment, sIndex) => (
-                <div key={sIndex} className="flex justify-center">
-                  <span className="flex items-center justify-start gap-2 p-2">
-                    <h1 className={`text-xl font-bold ${getScoreColor(segment?.secured_marks)}`}>
-                      {segment?.secured_marks}/10
-                    </h1>
-                    <p className="text-purple font-bold underline">{setTitle(category?.main_title, sIndex)}</p>
-                  </span>
+          ))}
+          </div>
+        ) : report_data?.report_type === "role based report" ? (
+          <div>
+          {interview_score_by_category?.data?.map((category, index) => (
+            <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
+              <div className="flex flex-col lg:flex-row lg:justify-around items-center">
+                <div>
+                  <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
                 </div>
-              ))}
+                <div className="rounded-full bg-white w-48 p-4">
+                  <div className="relative pt-1">
+                    <div className="flex mb-2 items-center justify-start">
+                      <div className="w-full bg-gray-300 rounded-full">
+                        <div
+                          style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
+                          className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
+                        >
+                          &nbsp;
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          </div>
+        ) : report_data?.report_type === "JD based report" ? (
+          <div>
+          <h3 className="uppercase text-zinc-500 px-8 pt-5">JD Skills Evaluated</h3>
+          <div className="mx-4 md:mx-6 my-8 rounded-3xl py-6 bg-white">
+            {/* //loop below div for dynamic skills */}
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">HTML</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={100} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(10)}`}>10/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">CSS</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={90} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">NodeJS</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={90} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">MongoDB</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={80} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(8)}`}>8/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">ReactJS</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={70} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(7)}`}>7/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">Communication</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1}}>
+                <BorderLinearProgress variant="determinate" value={40} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(4)}`}>4/10</p>
+              </div>
             </div>
           </div>
-        ))}
+          </div>
+        ) : report_data?.report_type === "cultural fit report" ? (
+          <div>
+
+          <h3 className="uppercase text-zinc-500 px-8 pt-5">Cultural Skills Evaluated</h3>
+          <div className="mx-4 md:mx-6 my-8 rounded-3xl py-6 bg-white">
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">HTML</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={100} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(10)}`}>10/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">CSS</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={90} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">NodeJS</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={90} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">MongoDB</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={80} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(8)}`}>8/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">ReactJS</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1 }}>
+                <BorderLinearProgress variant="determinate" value={70} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(7)}`}>7/10</p>
+              </div>
+            </div>
+            <div className="px-4 py-2 flex items-center">
+              <div className="basis-1/4">
+                <p className="bold text-xl">Communication</p>
+              </div>
+              <div className="basis-1/2">
+              <Stack spacing={2} sx={{ flexGrow: 1}}>
+                <BorderLinearProgress variant="determinate" value={40} />
+              </Stack>
+              </div>
+              <div className="basis-1/4 flex justify-end">
+                <p className={`bold text-xl ${getScoreColor(4)}`}>4/10</p>
+              </div>
+            </div>
+          </div>
+          </div>
+        ) : null
+        }
+
       </div>
     </>
   );

@@ -56,6 +56,30 @@ const Intro = (props) => {
             </div>
           </div>
           </div>
+        ) : report_data?.report_type === "JD based report" ? (
+          <div className="mt-40 mb-48">
+          <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
+            <h1>{report_data?.report_type}</h1>
+          </div>
+          <div className="flex justify-center items-center mb-5">
+            <div className="munsow-light-bg px-6 py-4 rounded-full">
+              <p className="text-lg">Position: {report_data?.interview_position}</p>
+              <p className="text-lg">Company: {report_data?.interview_company}</p>
+            </div>
+          </div>
+          </div>
+        ) : report_data?.report_type === "cultural fit report" ? (
+          <div className="mt-40 mb-48">
+          <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
+            <h1>{report_data?.report_type}</h1>
+          </div>
+          <div className="flex justify-center items-center mb-5">
+            <div className="munsow-light-bg px-6 py-4 rounded-full">
+              <p className="text-lg">Position: {report_data?.interview_position}</p>
+              <p className="text-lg">Company: {report_data?.interview_company}</p>
+            </div>
+          </div>
+          </div>
         ) : null
         }
         

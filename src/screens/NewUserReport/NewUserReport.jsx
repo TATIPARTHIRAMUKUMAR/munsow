@@ -83,6 +83,7 @@ const NewUserReport = () => {
               behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
               readiness_score={userReport?.readiness_score}
+              report_data={userReport}
             />
           </div> 
     
@@ -92,9 +93,9 @@ const NewUserReport = () => {
               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
             />
           </div>
-        
-          
-            {userReport?.interview_score_by_category?.data?.map((category, index) => (
+
+            {/* don't want overview pages for report  */}
+            {/* {userReport?.interview_score_by_category?.data?.map((category, index) => (
               <div className="page-break">
               <ReportOverview
               key={index} 
@@ -109,7 +110,7 @@ const NewUserReport = () => {
               }))}
               />
             </div>
-            ))}
+            ))} */}
           
           {userReport?.interview_score_by_category?.data?.map((category, index) => (
           <>
@@ -118,8 +119,9 @@ const NewUserReport = () => {
             <DeepDive
               key={qIndex}
               head={category.main_title}
-              
+              report_data={userReport}
               ques={question.question}
+              queScore={question.score}
               candidateAns={question.answer}
               sampleAns={question.suggested_answer}
               gotRight={question.Insights.what_you_got_right}
@@ -131,13 +133,35 @@ const NewUserReport = () => {
           </>
           ))}
 
-        <div className="page-break">
+        {/* <div className="page-break">
           <CuratedSummary
             report_type={userReport?.report_type}
             skillSuggestions={userReport?.skill_based_suggestions}
             report_data={userReport}
           /> 
-        </div>
+        </div> */}
+        {userReport?.report_type === "skill based report" ? (
+          <div className="page-break">
+          <CuratedSummary
+            report_type={userReport?.report_type}
+            skillSuggestions={userReport?.skill_based_suggestions}
+            report_data={userReport}
+          /> 
+          </div>
+        ) : userReport?.report_type === "role based report" ? (
+          <div className="page-break">
+          <CuratedSummary
+            report_type={userReport?.report_type}
+            skillSuggestions={userReport?.skill_based_suggestions}
+            report_data={userReport}
+          /> 
+          </div>
+        ) : userReport?.report_type === "JD based report" ? (
+          <></>
+        ) : userReport?.report_type === "cultural fit report" ? (
+          <></>
+        ) : null
+        }
 
         <div className="page-break">
           <Extro/>
