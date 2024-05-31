@@ -89,13 +89,13 @@ export default function ReportIndex() {
     const getDarkBgColor = (head) => {
         const firstWord = head.split(' ')[0];
 
-        if (firstWord === 'skill') {
+        if (firstWord === 'skill_interview') {
           return 'bg-pink-500'; 
-        } else if (firstWord === 'role') {
+        } else if (firstWord === 'company_role_interview') {
           return 'bg-purple-500'; 
-        } else if (firstWord === 'JD') {
+        } else if (firstWord === 'jd_interview') {
             return 'bg-orange-500'; 
-        } else if (firstWord === 'cultural') {
+        } else if (firstWord === 'cultural_interview') {
             return 'bg-blue-500'; 
         } else {
           return 'bg-lime-500'; 
@@ -131,7 +131,7 @@ export default function ReportIndex() {
         if (category === "all") return true;
 
         // Otherwise, return true only for lessons with matching skill_type
-        return lesson?.report_json?.report_type === category;
+        return lesson?.interview_type === category;
     });
 
     // Initialize counts
@@ -142,13 +142,13 @@ export default function ReportIndex() {
 
     // Iterate over the filteredLessonsList to count skill-based and role-based reports
     lessonsList.forEach(skill => {
-        if (skill?.report_json?.report_type === 'skill based report') {
+        if (skill?.interview_type === 'skill_interview') {
             skillBasedCount++;
-        } else if (skill?.report_json?.report_type === 'role based report') {
+        } else if (skill?.interview_type === 'company_role_interview') {
             roleBasedCount++;
-        }else if (skill?.report_json?.report_type === 'JD based report') {
+        }else if (skill?.interview_type === 'jd_interview') {
             JDBasedCount++;
-        }else if (skill?.report_json?.report_type === 'Cultural fit report') {
+        }else if (skill?.interview_type === 'cultural_interview') {
             CulturalFitCount++;
         }
     });
@@ -172,10 +172,10 @@ export default function ReportIndex() {
                             onChange={handleChange}
                             >
                             <MenuItem value={"all"}>All Reports</MenuItem>
-                            <MenuItem value={"skill based report"}>Skill based</MenuItem>
-                            <MenuItem value={"role based report"}>Role based</MenuItem>
-                            <MenuItem value={"JD based report"}>JD based</MenuItem>
-                            <MenuItem value={"cultural fit report"}>Cultural Fit</MenuItem>
+                            <MenuItem value={"skill_interview"}>Skill based</MenuItem>
+                            <MenuItem value={"company_role_interview"}>Role based</MenuItem>
+                            <MenuItem value={"jd_interview"}>JD based</MenuItem>
+                            <MenuItem value={"cultural_interview"}>Cultural Fit</MenuItem>
                         </Select>
                     </FormControl>
                     </div>
@@ -235,7 +235,7 @@ export default function ReportIndex() {
     };
 
 
-    const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company }) => {
+    const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company, report_type, jdSkills, cultSkills}) => {
         const viewReport = (data) => {
             localStorage.setItem('reportData', JSON.stringify(data));
             navigate('/reportView');
@@ -247,18 +247,18 @@ export default function ReportIndex() {
             <div className="transition-transform duration-300 hover:scale-105 shadow-lg bg-white" style={{borderRadius:"18px",border:"2px solid #d9dde3"}}>
                     <div className="flex flex-col h-full p-1.5" style={{borderRadius:"18px"}}>
                         <div className={`flex-grow p-3 flex flex-col gap-y-2`}style={{borderRadius:"18px"}}>
-                            {skill_type == "skill based report" ? 
+                            {report_type == "skill_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(skill_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">Skill based Report</h1>
                             </div>
                             {renderSkillsSection(skills_list)}
                             </> : <></>}
-                            {skill_type == "role based report" ? 
+                            {report_type == "company_role_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(skill_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">Role based Report</h1>
                             </div>
                             <div className="font-medium flex flex-wrap items-center gap-2">
@@ -267,10 +267,10 @@ export default function ReportIndex() {
                             </div>
                             <div className="font-medium"><span className="font-bold">Company:&nbsp;</span>{company}</div>
                             </> : <></>}
-                            {skill_type == "JD based report" ? 
+                            {report_type == "jd_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(skill_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">JD based Report</h1>
                             </div>
                             <div className="font-medium flex flex-wrap items-center gap-2">
@@ -279,10 +279,10 @@ export default function ReportIndex() {
                             </div>
                             <div className="font-medium"><span className="font-bold">Company:&nbsp;</span>{company}</div>
                             </> : <></>}
-                            {skill_type == "cultural fit report" ? 
+                            {report_type == "cultural_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(skill_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">Cultural Fit Report</h1>
                             </div>
                             <div className="font-medium flex flex-wrap items-center gap-2">
@@ -336,7 +336,7 @@ export default function ReportIndex() {
                         <AllReports />
                         <div className="p-5 gap-8 pt-5" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
                             {filteredLessonsList.map((o, index) => (
-                                <ReportCards key={index} id={o.id} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.report_json?.hard_and_soft_skill_dic} level={o.level} generated={o.updated_date} company={o.report_json?.interview_company} />
+                                <ReportCards key={index} id={o.id} report_type={o.interview_type} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.report_json?.hard_and_soft_skill_dic} level={o.level} generated={o.updated_date} company={o.specifications?.company} jdSkills={o.specifications?.jd_skill} cultSkills={o.specifications?.cultural_skill} />
                             ))}
                         </div>
                         </>

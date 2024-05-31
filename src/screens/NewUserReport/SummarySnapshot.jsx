@@ -53,7 +53,7 @@ const SummarySnapshot = (props) => {
   };
 
   const BorderLinearProgress = styled(LinearProgress, { shouldForwardProp: (prop) => prop !== 'value' })(({ theme, value }) => {
-  console.log('Value:', value); // Log the value to check if it's received correctly
+  // console.log('Value:', value); // Log the value to check if it's received correctly
   return ({
     height: 10,
     borderRadius: 5,
@@ -171,174 +171,47 @@ const SummarySnapshot = (props) => {
             </div>
           ))}
           </div>
-        ) : report_data?.report_type === "JD based report" ? (
+        ) : report_data?.interview_type === "jd_interview" ? (
           <div>
           <h3 className="uppercase text-zinc-500 px-8 pt-5">JD Skills Evaluated</h3>
           <div className="mx-4 md:mx-6 my-8 rounded-3xl py-6 bg-white">
-            {/* //loop below div for dynamic skills */}
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">HTML</p>
+            {report_data?.graph_data?.map((jd) => (
+            <div className="px-4 py-2 block md:flex items-center">
+              <div className="basis-1/4 text-center md:text-start">
+                <p className="bold text-xl">{jd?.skill_name}</p>
               </div>
-              <div className="basis-1/2">
+              <div className="basis-1/2 p-4 md:p-0 text-center">
               <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={100} />
+                <BorderLinearProgress variant="determinate" value={jd?.scored*10} />
               </Stack>
               </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(10)}`}>10/10</p>
+              <div className="basis-1/4 text-center md:text-center">
+                <p className={`bold text-xl ${getScoreColor(jd?.scored)}`}>{jd?.scored}/{jd?.total}</p>
               </div>
             </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">CSS</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={90} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">NodeJS</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={90} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">MongoDB</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={80} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(8)}`}>8/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">ReactJS</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={70} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(7)}`}>7/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">Communication</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1}}>
-                <BorderLinearProgress variant="determinate" value={40} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(4)}`}>4/10</p>
-              </div>
-            </div>
+            ))}
           </div>
           </div>
-        ) : report_data?.report_type === "cultural fit report" ? (
+        ) : report_data?.interview_type === "cultural_interview" ? (
           <div>
 
           <h3 className="uppercase text-zinc-500 px-8 pt-5">Cultural Skills Evaluated</h3>
           <div className="mx-4 md:mx-6 my-8 rounded-3xl py-6 bg-white">
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">HTML</p>
+            {report_data?.graph_data?.map((cultural) => (
+            <div className="px-4 py-2 block md:flex items-center">
+              <div className="basis-1/4 text-center md:text-start">
+                <p className="bold text-xl">{cultural?.skill_name}</p>
               </div>
-              <div className="basis-1/2">
+              <div className="basis-1/2 p-4 md:p-0 text-center">
               <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={100} />
+                <BorderLinearProgress variant="determinate" value={cultural?.scored*10} />
               </Stack>
               </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(10)}`}>10/10</p>
+              <div className="basis-1/4 text-center md:text-center">
+                <p className={`bold text-xl ${getScoreColor(cultural?.scored)}`}>{cultural?.scored}/{cultural?.total}</p>
               </div>
             </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">CSS</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={90} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">NodeJS</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={90} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(9)}`}>9/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">MongoDB</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={80} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(8)}`}>8/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">ReactJS</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1 }}>
-                <BorderLinearProgress variant="determinate" value={70} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(7)}`}>7/10</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 flex items-center">
-              <div className="basis-1/4">
-                <p className="bold text-xl">Communication</p>
-              </div>
-              <div className="basis-1/2">
-              <Stack spacing={2} sx={{ flexGrow: 1}}>
-                <BorderLinearProgress variant="determinate" value={40} />
-              </Stack>
-              </div>
-              <div className="basis-1/4 flex justify-end">
-                <p className={`bold text-xl ${getScoreColor(4)}`}>4/10</p>
-              </div>
-            </div>
+            ))}
           </div>
           </div>
         ) : null
