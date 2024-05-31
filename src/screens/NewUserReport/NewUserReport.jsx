@@ -50,7 +50,7 @@ const NewUserReport = () => {
           </button>
           <button
                 type="button"
-                className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 w-[300px] sm:w-[200px] mx-4 sm:self-start"
+                className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 mx-4 sm:self-start"
                 onClick={handleGeneratePdf}
               >
                 DOWNLOAD AS PDF{" "}
@@ -74,6 +74,7 @@ const NewUserReport = () => {
             <Intro
               user={userReport?.user_name}
               report_data={userReport}
+              interview_type={userReport?.interview_type}
             />
           </div>
 
@@ -84,6 +85,7 @@ const NewUserReport = () => {
               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
               readiness_score={userReport?.readiness_score}
               report_data={userReport}
+              interview_type={userReport?.interview_type}
             />
           </div> 
     
@@ -156,9 +158,9 @@ const NewUserReport = () => {
             report_data={userReport}
           /> 
           </div>
-        ) : userReport?.report_type === "JD based report" ? (
+        ) : userReport?.interview_type === "jd_interview" ? (
           <></>
-        ) : userReport?.report_type === "cultural fit report" ? (
+        ) : userReport?.interview_type === "cultural_interview" ? (
           <></>
         ) : null
         }
