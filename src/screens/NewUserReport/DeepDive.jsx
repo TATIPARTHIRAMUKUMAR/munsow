@@ -6,12 +6,24 @@ import { FaRegThumbsDown } from "react-icons/fa";
 
 const DeepDive = (props) => {
 
-  const { head, ques, candidateAns, sampleAns, gotRight, gotWrong, feedback } = props;
+  const { head, ques, queScore, candidateAns, sampleAns, gotRight, gotWrong, feedback, report_data } = props;
 
   const feedbackData = feedback;
 
   // Parse the feedbackData string into an object
   // const feedbackObject = JSON.parse(feedbackData);
+
+  const getScoreColor = (x) => {
+    if (x >= 0 && x <= 4) {
+      return 'text-red'; // Apply red color
+    } else if (x >= 5 && x <= 7) {
+      return 'text-orange'; // Apply yellow color
+    } else if (x >= 8 && x <= 10) {
+      return 'text-green'; // Apply green color
+    } else {
+      return 'text-gray'; // Default color or handle other cases
+    }
+  };
 
   const getBackgroundColor = (head) => {
     const firstWord = head.split(' ')[0];
@@ -23,7 +35,7 @@ const DeepDive = (props) => {
     } else if (head.startsWith('Domain Knowledge')) {
       return 'bg-green'; // Apply green color
     } else {
-      return 'bg-gray'; // Default color or handle other cases
+      return 'munsow-light-bg'; // Default color or handle other cases
     }
   };
 
@@ -43,12 +55,61 @@ const DeepDive = (props) => {
 
     <>
     <div className="mx-3 my-3 md:mx-6 md:my-6">
-      <div className={`mb-8 ${bgColor}`}>
-        <h1 className={`text-2xl lg:text-4xl font-semibold text-purple p-6 md:p-8`}>{head} Deep Dive</h1>
-      </div>
-      <div className={`mb-8 ${bgColor}`}>
-        <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
-      </div>
+    {report_data?.report_type === "skill based report" ? (
+      <>
+        <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 ${bgColor}`}>
+          <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>{head}&nbsp;Deep&nbsp;Dive</h1>
+          <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${queScore}/10` : ("N/A")}</h1>
+            <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
+          </div>
+        </div>
+        <div className={`mb-8 ${bgColor}`}>
+          <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
+        </div>
+      </>
+    ) : report_data?.report_type === "role based report" ? (
+      <>
+        <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 ${bgColor}`}>
+          <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>{head}&nbsp;Deep&nbsp;Dive</h1>
+          <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${queScore}/10` : ("N/A")}</h1>
+            <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
+          </div>
+        </div>
+        <div className={`mb-8 ${bgColor}`}>
+          <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
+        </div>
+      </>
+    ) : report_data?.interview_type === "jd_interview" ? (
+      <>
+        <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 bg-green`}>
+          <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>JD Interview Deep Dive</h1>
+          <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${queScore}/10` : ("N/A")}</h1>
+            <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
+          </div>
+        </div>
+        <div className={`mb-8 bg-green`}>
+          <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
+        </div>
+      </>
+    ) : report_data?.interview_type === "cultural_interview" ? (
+      <>
+        <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 bg-purple`}>
+          <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>Cultural Interview Deep Dive</h1>
+          <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${queScore}/10` : ("N/A")}</h1>
+            <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
+          </div>
+        </div>
+        <div className={`mb-8 bg-purple`}>
+          <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
+        </div>
+      </>
+        ) : null
+        }
+      
       <div className="p-4 grid max-w-xl grid-cols-1 gap-x-8 gap-y-6 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
         
        

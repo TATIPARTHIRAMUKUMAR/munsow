@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router-dom';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
 import GLOBAL_CONSTANTS from '../../../GlobalConstants';
@@ -30,21 +30,18 @@ const CourseOverview = ({ course,show,text }) => {
     return (
         <div className="bg-white rounded-lg p-6 mb-4 flex items-center">
             <div>
-                <Button
-                    startIcon={<ArrowBackIcon />}
+                <button
                     onClick={onBack}
-                    variant="contained"
-                    style={{
-                        backgroundColor: linearGradientBackground,
-                        color: textColor,
-                        marginLeft: '1rem',
-                        textTransform: 'none',
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                    }}
+                    className='rounded-full border-solid border-black border-2 p-1 shadow-lg hover:shadow-xl hover:bg-opacity-10'
+                        style={{
+                            backgroundColor: "transparent",
+                            color: textColor,
+                            marginLeft: '1rem',
+                            marginBottom: '30px'
+                        }}
                 >
-                    {text}
-                </Button>
+                    <ArrowBackIosIcon className='pl-2' />
+                </button>
             </div>
             <div className='flex justify-center pl-20 w-9/12 flex-col'>
                 <h1 className="flex text-3xl font-semibold text-gray-800 mb-4 items-center">{course?.name}</h1>

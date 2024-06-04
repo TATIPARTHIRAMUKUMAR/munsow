@@ -212,9 +212,11 @@ const StudentCourseView = () => {
         }
     };
 
-    const handleDownload = () => {
+    const pdfExportComponent = useRef(null);
 
-    }
+    const handleDownload = () => {
+        pdfExportComponent.current.save();
+    };
 
     return (
         <div className="p-4">
@@ -223,7 +225,7 @@ const StudentCourseView = () => {
             <div className="flex w-full">
                 <div className="w-4/6 p-4 overflow-y-auto rounded-lg mr-4">
                     {selectedSubtopic && (
-                        <div style={styleObj} dangerouslySetInnerHTML={{ __html: spokenContent || selectedSubtopic.content }} />
+                        <div dangerouslySetInnerHTML={{ __html: selectedSubtopic.content }} />
                     )}
 
                     <div className='flex justify-between mt-9'>
@@ -263,7 +265,7 @@ const StudentCourseView = () => {
                 </div>
 
                 <div className={`w-2/6 `} >
-                    <div className={`p-5 bg-[#${cardColor}] rounded-xl`} >
+                    <div className={`p-5 bg-[#${cardColor}] rounded-xl`}>
                         {GLOBAL_CONSTANTS?.user_cred?.role_name === "Student" && (
                             <div className="flex flex-col bg-white p-3 rounded-xl shadow-lg">
                                 <div className="flex justify-end">
@@ -334,6 +336,32 @@ const StudentCourseView = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
+                <PDFExport
+                    ref={pdfExportComponent}
+                    paperSize="A4"
+                    scale={0.545}
+                    margin="1cm"
+                    fileName="CourseContent.pdf"
+                    forcePageBreak=".page-break"
+                >
+                    <div className='flex items-center justify-center h-[350mm] text-center flex-col'>
+                        <h1 className='text-4xl font-bold'>{detailedCourse?.name}</h1>
+                        <h3 className='text-base font-bold'>{detailedCourse?.description}</h3>
+                    </div>
+                    {topics && topics.map((topic, tIndex) => (
+                        <div key={tIndex}>
+                            {topic.subtopics && topic.subtopics.map((subtopic, sIndex) => (
+                                <div key={sIndex} className="page-break" style={{ marginBottom: '20px' }}>
+                                    <h3>{subtopic.title}</h3>
+                                    <div dangerouslySetInnerHTML={{ __html: subtopic.content }} />
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </PDFExport>
             </div>
         </div>
     );

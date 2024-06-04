@@ -165,7 +165,7 @@ const StepperComponent = () => {
 
       }
       if(selectedCategory=="cult"){
-        payload.specifications.jd_skill=selectedOptions;
+        payload.specifications.cultural_skill=selectedOptions;
         payload.specifications.company=cultcompany;
         payload.specifications.role=cultrole;
 

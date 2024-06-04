@@ -10,7 +10,26 @@ import NoDataPage from "./NoData";
 import moment from "moment";
 
 import { useDarkMode } from "./../../Dark";
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
+import { stringify } from "postcss";
 
+
+const styles = {
+    tooltip: {
+        backgroundColor: 'white',
+        color: 'white',
+        fontSize: '20rem',
+        // padding: '10px',
+        borderRadius: '4px'
+    },
+    heading: {
+        fontWeight: 'bold',
+        marginTop: '10px',
+        fontSize: "20px",
+        marginBottom: '5px'
+    }
+};
 export default function ReportIndex() {
     const dispatch = useDispatch();
     const { userReportList, statusList } = useSelector((state) => state.data);
@@ -44,7 +63,7 @@ export default function ReportIndex() {
 
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);
-        dispatch(loadReportsList({interview_filter:selectedOption,page_number:newPage}));
+        dispatch(loadReportsList({ interview_filter: selectedOption, page_number: newPage }));
 
     };
 
@@ -56,17 +75,17 @@ export default function ReportIndex() {
 
     const selectionChange = (event) => {
         setSelectedOption(event.target.value);
-        dispatch(loadReportsList({interview_filter: event.target.value,page_number:currentPage}));
+        dispatch(loadReportsList({ interview_filter: event.target.value, page_number: currentPage }));
     };
 
-    const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company }) => {
+    const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company, report_type, jdSkills,cultSkills }) => {
         const viewReport = (data) => {
             localStorage.setItem('reportData', JSON.stringify(data));
             navigate('/reportView');
             console.log("Report Data:", data);
         };
 
-      
+
 
         // useEffect(() => {
         //     if (selectedOption) {
@@ -85,30 +104,98 @@ export default function ReportIndex() {
         //         // });
         //     }
         // }, [selectedOption]);
+        const renderSkillsSection = (skills, title) => {
+            if (!skills || skills.length === 0) {
+                return null;
+            }
+
+            return (
+                <>
+                    <div style={styles.heading}>{title}</div>
+                    {skills.map(skill => <div key={skill} style={{ fontSize: "13px" }}>{skill}</div>)}
+                </>
+            );
+        };
+        const renderSkills = (skillsList) => {
+            const hardSkills = Object.keys(skillsList?.hard_skill || {});
+            const softSkills = Object.keys(skillsList?.soft_skill || {});
+            const allSkills = hardSkills.concat(softSkills);
+            const skillsString = allSkills.join(' | ');
+
+            if (skillsString.length > 20) {
+                return (
+                    <Tooltip title={
+                        <>
+                            {renderSkillsSection(hardSkills, "Hard Skills")}
+                            {renderSkillsSection(softSkills, "Soft Skills")}
+                        </>
+                    }
+                        arrow
+                        // style={{background:"black"}}
+                        placement="top"
+                        PopperProps={{ style: styles.tooltip }}>
+                        <span>
+                            {skillsString.substring(0, 17)}...
+                            <InfoIcon style={{ fontSize: "1rem", marginLeft: "4px" }} />
+                        </span>
+                    </Tooltip>
+                );
+            }
+            return skillsString;
+        };
+
+        const jdCult = (skills, type) => {
+
+            // const allSkills = hardSkills.concat(softSkills);
+            const skillsString = skills?.join(' ');
+
+            if (skillsString?.length > 20) {
+                return (
+                    <Tooltip title={
+                        <>
+                            {renderSkillsSection(skills, type)}
+                            {/* {renderSkillsSection(softSkills, "Soft Skills")} */}
+                        </>
+                    }
+                        arrow
+                        // style={{background:"black"}}
+                        placement="top"
+                        PopperProps={{ style: styles.tooltip }}>
+                        <span>
+                            {skillsString.substring(0, 17)}...
+                            <InfoIcon style={{ fontSize: "1rem", marginLeft: "4px" }} />
+                        </span>
+                    </Tooltip>
+                );
+            }
+            return skillsString;
+        };
 
         return (
             <div className="transition-transform duration-300 hover:scale-105 shadow-lg rounded-lg">
                 <div className="flex flex-col h-full p-4 bg-white">
                     <div className="flex-grow p-2 flex flex-col gap-y-2">
-                        {skill_type === "role based report" ? (
-                            <div className="text-xl font-semibold">Role: {role}</div>
-                        ) : (
+                        {report_type === "company_role_interview" ? (
+                            <div className="text-xl font-semibold">Role Based Report</div>
+                        ) : report_type === "skill_interview" ? (
                             <div className="text-xl font-semibold">Skill based report
-                                <div className="text-base">
-                                    <span className="font-semibold"> Skills: </span>
-                                    {Object.keys(skills_list?.hard_skill || {}).map((skill, index) => (
-                                        <React.Fragment key={index}>
-                                            {skill} <span className="px-2">|</span>
-                                        </React.Fragment>
-                                    ))}
-                                    {Object.keys(skills_list?.soft_skill || {}).map((skill, index) => (
-                                        <React.Fragment key={index}>{skill}</React.Fragment>
-                                    ))}
+                                <div className="text-base text-[#886cc0]">
+                                    Skills : {renderSkills(skills_list)}
                                 </div>
                             </div>
-                        )}
-                        {skill_type === "role based report" && <div className="font-medium"><span className="font-bold">Company:</span> {company}</div>}
-                        <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>
+                        ) : report_type === "cultural_interview" ? (<div className="text-xl font-semibold">Cultural Interview Report
+                            <div className="text-base text-[#886cc0]">
+                                Skills : {jdCult(cultSkills, "Cultural Fit Skills")}
+                            </div>
+                        </div>
+                        ) : (<div className="text-xl font-semibold">JD Based Report
+                            <div className="text-base text-[#886cc0]">
+                                Skills : {jdCult(jdSkills, "Job Descripition Skills")}
+                            </div>
+                        </div>)}
+                        {(report_type === "cultural_interview" || report_type === "jd_interview" || report_type === "company_role_interview") && <div className="font-medium"><span className="font-bold">Role:</span> {role}</div>}
+                        {(report_type === "cultural_interview" || report_type === "jd_interview" || report_type === "company_role_interview") && <div className="font-medium"><span className="font-bold">Company:</span> {company}</div>}
+                        {(report_type === "company_role_interview" || report_type === "skill_interview") && <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>}
                         <div className="font-medium"><span className="font-bold">Generated On:</span> {moment(generated).format('MMMM DD, YYYY HH:mm:ss')}</div>
                     </div>
                     <Divider className="my-5" />
@@ -130,7 +217,7 @@ export default function ReportIndex() {
     return (
         <>
             <div className="p-7 flex justify-between ">
-            <Pagination count={Math.ceil(lessonsList.length / reportsPerPage)} page={currentPage} onChange={handleChangePage}  />
+                <Pagination count={Math.ceil(lessonsList.length / reportsPerPage)} page={currentPage} onChange={handleChangePage} />
 
                 <select
                     id="dropdown"
@@ -155,7 +242,7 @@ export default function ReportIndex() {
                     ) : (
                         <div className="p-5 gap-8 pt-5" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
                             {currentReports.map((o, index) => (
-                                <ReportCards key={index} id={o.id} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.report_json?.hard_and_soft_skill_dic} level={o.level} generated={o.updated_date} company={o.report_json?.interview_company} />
+                                <ReportCards key={index} id={o.id} report_type={o.interview_type} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.report_json?.hard_and_soft_skill_dic} level={o.level} generated={o.updated_date} company={o.specifications?.company} jdSkills={o.specifications?.jd_skill} cultSkills={o.specifications?.cultural_skill}/>
                             ))}
                         </div>
                     )}

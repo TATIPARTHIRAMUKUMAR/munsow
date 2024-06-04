@@ -40,6 +40,8 @@ import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 import format from 'date-fns/format';
 
 import NewCard from "./NewCard.jsx";
+import CulturalInterviews from "../../Student Dashboard/CulturalInterviews.jsx";
+import JDInterviews from "../../Student Dashboard/JDInterviews.jsx";
 
 const AdminDashboard = () => {
   window.onbeforeunload = () => {
@@ -168,6 +170,9 @@ const AdminDashboard = () => {
 
   }, [institutionStats])
 
+  useEffect(() => {
+    // console.log("institutionStats",institutionStats,institutionStats?.graphs[3]?.data)
+  }, [institutionStats])
   const onDateSelect = (value) => {
     console.log("api calls", value)
     const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
@@ -191,13 +196,13 @@ const AdminDashboard = () => {
 
   console.log(cardLists, "cardslist")//to check cards on dashboard
   return (
-    <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll " style={{background: "#E7EFEE"}}>
+    <div className=" h-[100vh] p-4 pb-16 overflow-y-scroll " style={{ background: "#E7EFEE" }}>
       <div className="container ">
         {/* Card section */}
         <div className="">
           <div className="flex justify-start mr-10 mb-3">
             <div className="">
-              <PopUpFilter route="AdminDashboard" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
+              <PopUpFilter route="AdminDashboard" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate} />
             </div>
             <div className="">
               <PopUpFilter route="AdminDashboard" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate} />
@@ -210,18 +215,30 @@ const AdminDashboard = () => {
               <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect} />
             </div>)} */}
           </div>
-          
+
           {/* <div className=" grid grid-cols-3 gap-2 ">
             {cardLists.length ? (
               <CardContainer cardLists={cardLists} />
             ) : null}
           </div> */}
 
-          <div>   
+          <div className="p-7">
             <NewCard cardLists={cardLists} />
           </div>
+          <div className="flex flex-col sm:flex-row justify-evenly w-[100%] gap-4 relative overflow-auto max-w-full ">
+            <div className=" w-[100%] sm:w-[50%] relative bg-white overflow-auto max-w-full rounded-lg">
+              <CulturalInterviews interviewData={institutionStats?.graphs?.length > 0 ? institutionStats?.graphs[3]?.data : []} type={"admin"} />
 
+            </div>
+            <div className=" w-[100%] sm:w-[50%] relative bg-white overflow-auto max-w-full rounded-lg">
+              <JDInterviews interviewData={institutionStats?.graphs?.length > 0 ? institutionStats?.graphs[4]?.data : []} type={"admin"} />
+            </div>
+          </div>
         </div>
+
+
+
+
         <div className="flex flex-wrap pt-5">
           {/* Chart section */}
           <div className="lg:w-11/12 pr-4">

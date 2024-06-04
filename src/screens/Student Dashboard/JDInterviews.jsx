@@ -1,135 +1,144 @@
 import React, { useState } from 'react';
-import { FormControl, InputLabel, Select, MenuItem, Divider, LinearProgress, Box } from '@mui/material';
+import { FormControl, Button, InputLabel, Select, MenuItem, Divider, LinearProgress, Box } from '@mui/material';
 
+// const interviewData = [
+//   {
+//     "company_name": "Cognizant",
+//     "role": "Software Developer",
+//     "data": [
+//       { "skill_name": "Python", "scored": 70, "total": 100 },
+//       { "skill_name": "Java", "scored": 60, "total": 100 },
+//       { "skill_name": "C++", "scored": 50, "total": 100 },
+//       { "skill_name": "C", "scored": 40, "total": 100 }
+//     ]
+//   },
+//   {
+//     "company_name": "Cognizant",
+//     "role": "Senior Software Developer",
+//     "data": [
+//       { "skill_name": "Python", "scored": 70, "total": 100 },
+//       { "skill_name": "Java", "scored": 60, "total": 100 },
+//       { "skill_name": "C++", "scored": 50, "total": 100 },
+//       { "skill_name": "C1", "scored": 30, "total": 100 }
+//     ]
+//   }
+// ];
 
-const JDInterviews = () => {
-
-    const jdInterviews = [
-    {
-        Interview: 1,
-        skillScores: [
-            { name: 'HTML', score: 8 },
-            { name: 'CSS', score: 6 },
-            { name: 'JavaScript', score: 3 },
-            { name: 'Communication', score: 8 },
-            { name: 'Teamwork', score: 4 },
-            { name: 'Adaptability', score: 3 },
-        ]
-    },
-    {
-        Interview: 2,
-        skillScores: [
-            { name: 'React', score: 5 },
-            { name: 'Node.js', score: 4 },
-            { name: 'Communication', score: 4 },
-            { name: 'Problem-Solving', score: 5 },
-        ]
-    },
-    {
-        Interview: 3,
-        skillScores: [
-            { name: 'Angular', score: 5 },
-            { name: 'MongoDB', score: 4 },
-            { name: 'Communication', score: 4 },
-            { name: 'Creativity', score: 3 },
-            { name: 'Time Management', score: 5 },
-        ]
-    },
-    {
-        Interview: 4,
-        skillScores: [
-            { name: 'Python', score: 5 },
-            { name: 'Django', score: 4 },
-            { name: 'Communication', score: 4 },
-        ]
-    },
-    {
-        Interview: 5,
-        skillScores: [
-            { name: 'Java', score: 5 },
-            { name: 'Spring Boot', score: 4 },
-            { name: 'Communication', score: 4 },
-            { name: 'Problem-Solving', score: 5 },
-            { name: 'Leadership', score: 3 },
-        ]
-    },
-];
-
-  const latestInterview = Math.max(...jdInterviews.map(interview => interview.Interview));
-  
-  const [selectedInterview, setSelectedInterview] = useState(latestInterview);
+const JDInterview = ({ interviewData, type }) => {
+  const [currentDataIndex, setCurrentDataIndex] = useState(0);
+  const selectedInterview = interviewData[currentDataIndex];
 
   const handleChange = (event) => {
-    setSelectedInterview(event.target.value);
+    const newIndex = interviewData.findIndex(interview => interview.role === event.target.value);
+    setCurrentDataIndex(newIndex);
   };
 
-  const selectedInterviewDetails = jdInterviews.find(
-    (interview) => interview.Interview === selectedInterview
-  );
-
   const getColorClass = (score) => {
-    if (score <= 4) return '#ef4444';
-    if (score <= 7) return '#f97316';
+    if (score <= 40) return '#ef4444';
+    if (score <= 70) return '#f97316';
     return '#22c55e';
   };
 
+  const moveNext = () => {
+    setCurrentDataIndex(prev => (prev + 1) % interviewData?.length);
+  };
+
+  const movePrevious = () => {
+    setCurrentDataIndex(prev => (prev - 1 + interviewData?.length) % interviewData?.length);
+  };
 
   return (
     <div>
       <p className="text-lg font-bold p-2">
-        Job Description Interview Summary
+        JD Interview Summary
       </p>
-      <Divider className="opacity-40" />
-      <div className="flex justify-end mt-3 mb-4 mr-3">
-        <FormControl style={{ width: '160px' }} size="small">
-          <InputLabel id="interview-select-label">Select Interview</InputLabel>
-          <Select
-            labelId="interview-select-label"
-            id="interview-select"
-            value={selectedInterview}
-            label="Select Interview"
-            onChange={handleChange}
-          >
-            {jdInterviews
-              .slice() // Create a shallow copy of the array
-              .sort((a, b) => b.Interview - a.Interview) // Sort in descending order
-              .map((interview) => (
-                <MenuItem key={interview.Interview} value={interview.Interview}>
-                  Interview-{interview.Interview}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-      </div>
+      <Divider style={{ opacity: '0.4' }} />
+      <p className="text-lg p-2 text-center">
+        {selectedInterview?.company_name} - {selectedInterview?.role}
+      </p>
+      {/* <div className="flex justify-end mt-3 mb-4 mr-3">
+                <FormControl style={{ width: '200px' }} size="small">
+                    <InputLabel id="role-select-label">Select Role</InputLabel>
+                    <Select
+                        labelId="role-select-label"
+                        id="role-select"
+                        label="Select Role"
+                        value={selectedInterview.role}
+                        onChange={handleChange}
+                    >
+                        {interviewData.map((interview, index) => (
+                            <MenuItem key={index} value={interview.role}>
+                                {interview.role}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </div> */}
 
       <div className="mt-5 mx-5 mb-3">
-        {selectedInterviewDetails &&
-          selectedInterviewDetails.skillScores.map((skill, index) => (
+        {selectedInterview?.data?.map((skill, index) => (
+          <div key={index} className="flex items-center mb-4">
+            <span className="w-1/3">{skill.skill_name}</span>
+            <Box className="w-1/2" sx={{ mx: 2 }}>
+              <LinearProgress
+                variant="determinate"
+                value={(skill.scored / skill.total) * 100}
+                sx={{
+                  height: 10,
+                  borderRadius: 5,
+                  backgroundColor: '#e0e0e0',
+                  '& .MuiLinearProgress-bar': {
+                    backgroundColor: getColorClass(skill.scored),
+                  },
+                }}
+              />
+            </Box>
+            <span className={`w-1/6 text-center font-semibold`}
+              style={{ color: getColorClass(skill.scored) }}>{skill.scored}/{skill.total}</span>
+          </div>
+        ))}
+        <>{type == "admin" && (
+          interviewData.map((skill, index) => (
             <div key={index} className="flex items-center mb-4">
-              <span className="w-1/3">{skill.name}</span>
+              <span className="w-1/3">{skill.skill_name}</span>
               <Box className="w-1/2" sx={{ mx: 2 }}>
                 <LinearProgress
                   variant="determinate"
-                  value={(skill.score / 10) * 100}
+                  value={(skill.scored / skill.total) * 100}
                   sx={{
                     height: 10,
                     borderRadius: 5,
                     backgroundColor: '#e0e0e0',
                     '& .MuiLinearProgress-bar': {
-                      backgroundColor: getColorClass(skill.score),
+                      backgroundColor: getColorClass(skill.scored),
                     },
                   }}
                 />
               </Box>
-              <span className={`w-1/6 text-center font-semibold `}
-                    style={{color:getColorClass(skill.score)}}>
-                {skill.score}/10
-              </span>
+              <span className={`w-1/6 text-center font-semibold`}
+                style={{ color: getColorClass(skill.scored) }}>{skill.scored}/{skill.total}</span>
             </div>
-          ))}
+          )))
+        }
+        </>
+
       </div>
+      <>
+        {type !== "admin" && (
+
+
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', m: 2 }}>
+            <Button variant="contained" onClick={movePrevious} disabled={currentDataIndex === 0}>
+              Previous
+            </Button>
+            <Button variant="contained" onClick={moveNext} disabled={currentDataIndex === interviewData.length - 1}>
+              Next
+            </Button>
+          </Box>
+        )}
+        </>
     </div>
   );
 };
 
-export default JDInterviews;
+export default JDInterview;
