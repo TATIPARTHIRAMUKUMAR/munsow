@@ -51,6 +51,7 @@ import QuestionBanksList from "./screens/Teacher/CreateQuestionBank/QuestionBank
 import QuestionBankView from "./screens/Teacher/CreateQuestionBank/QuestionBankView";
 import EnhancedTable from "./screens/Admin/Placements";
 import Placements from "./screens/Admin/Placements";
+import StudentQuizList from "./screens/Quiz/StudentQuizView/StudentQuizList";
 
 
 function Url_Routes() {
@@ -123,6 +124,8 @@ function Url_Routes() {
         <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />
         <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
         <Route exact path="/studentCourseList/edit/:id" element={<HeaderFooterLayout Component={<CourseEdit />} />} />
+
+        <Route exact path="/studentQuizList"  element={<HeaderFooterLayout Component={<StudentQuizList />} />} />
 
       </Routes>
     </BrowserRouter>
