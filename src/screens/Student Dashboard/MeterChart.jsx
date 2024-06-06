@@ -6,7 +6,7 @@ import highchartsMore from "highcharts/highcharts-more";
 highchartsMore(Highcharts);
 
 const MeterChart = (props) => {
-    const { title, score, container, color } = props;
+  const { title, score, container, color } = props;
 
   useEffect(() => {
     const initializeChart = () => {
@@ -17,7 +17,29 @@ const MeterChart = (props) => {
           plotBackgroundImage: null,
           plotBorderWidth: 0,
           plotShadow: false,
-          height: "120%"
+          height: "100%",
+          // marginTop: -210,
+          // spacingTop: -100,
+          // events: {
+          //   render: function () {
+          //     const chart = this;
+          //     if (chart.customTitle) {
+          //       chart.customTitle.destroy();
+          //     }
+          //     chart.customTitle = chart.renderer
+          //       .text(title, chart.plotLeft + chart.plotWidth / 2, chart.plotTop + chart.plotHeight + 20)
+          //       .css({
+          //         color: '#333333',
+          //         fontSize: '16px',
+          //         fontWeight: 'bold',
+          //         marginTop: '-10px'
+          //       })
+          //       .attr({
+          //         align: 'center'
+          //       })
+          //       .add();
+          //   }
+          // }
         },
         title: {
           text: title,
@@ -26,17 +48,15 @@ const MeterChart = (props) => {
           startAngle: -90,
           endAngle: 90,
           background: null,
-          center: ["50%", "75%"],
+          center: ["50%", "72%"],
           size: "97%",
         },
-        // the value axis
         yAxis: {
           min: 0,
           max: 10,
           tickPixelInterval: 72,
           tickPosition: "inside",
-          tickColor:
-            Highcharts.defaultOptions.chart.backgroundColor || "#FFFFFF",
+          tickColor: Highcharts.defaultOptions.chart.backgroundColor || "#FFFFFF",
           tickLength: 20,
           tickWidth: 2,
           minorTickInterval: null,
@@ -63,7 +83,7 @@ const MeterChart = (props) => {
           ],
         },
         credits: {
-            enabled: false
+          enabled: false,
         },
         series: [
           {
@@ -76,10 +96,9 @@ const MeterChart = (props) => {
             dataLabels: {
               format: "{y} /10",
               borderWidth: 0,
-              color:
-                (Highcharts.defaultOptions.title &&
-                  Highcharts.defaultOptions.title.style &&
-                  Highcharts.defaultOptions.title.style.color) ||
+              color: (Highcharts.defaultOptions.title &&
+                Highcharts.defaultOptions.title.style &&
+                Highcharts.defaultOptions.title.style.color) ||
                 "#333333",
               style: {
                 fontSize: "16px",
@@ -134,7 +153,8 @@ const MeterChart = (props) => {
     // }, 3000);
 
     // return () => clearInterval();
-  }, [score]);
+
+  }, [score, title, container, color]);
 
   return (
     <div className="meterchart">

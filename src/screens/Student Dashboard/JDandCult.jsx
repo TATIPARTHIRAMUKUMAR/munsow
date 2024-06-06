@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat'; // Import for the flat trend icon
 import { useDarkMode } from "./../../Dark";
 
+import { FaFileAlt, FaUsers, FaBuilding, FaHeadSideVirus, FaUserTie } from 'react-icons/fa';
+
 const JDCult = () => {
     const { userStats } = useSelector((state) => state.data);
 
@@ -30,48 +32,64 @@ const JDCult = () => {
 
     return (
         <div className="col-span-1 bg-white rounded-lg">
-            <p className=" text-lg font-semibold p-2" style={{ color: textColor }}>
-            Interview Submissions
-            </p>            <Divider style={{ opacity: "0.4" }} />
+            <p className="ml-2 text-lg font-semibold p-2" style={{ color: "black" }}>
+            Interviews Taken
+            </p>
             <div className='p-5'>
                 <div className='flex justify-between items-center'>
-                    <div className='flex flex-row justify-start items-center space-x-4'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
                         <div className="flex-shrink-0">
-                            <Avatar
-                                style={{ border: 0, borderRadius: '0%' }}
-                                src={hardSkill}
-                                alt="Image Description"
-                                sx={{ width: 35, height: 35 }}
-                            />
+                            <FaFileAlt style={{ color: textColor, fontSize: '30px' }} />
                         </div>
                         <div>
-                            <Typography variant="h6">Job Description</Typography>
+                            <Typography variant="h7" style={{ color: textColor }}>Job Description Specific</Typography>
                            
                         </div>
                     </div>
-                    <div>
+                    <div className='text-lg font-bold'>
                        {data[0]?.value}
                     </div>
                 </div>
-                <Divider className='pt-3' />
-                <div className='flex justify-between items-center pt-4'>
-                    <div className='flex flex-row justify-start items-center space-x-4'>
+                <div className='flex justify-between items-center mt-7'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
                         <div className="flex-shrink-0">
-                            <Avatar
-                                style={{ border: 0, borderRadius: '0%' }}
-                                src={sofSkills}
-                                alt="Image Description"
-                                sx={{ width: 35, height: 35 }}
-                            />
+                            <FaUsers style={{ color: textColor, fontSize: '30px' }} />
                         </div>
                         <div>
-                            <Typography variant="h6">Cultural Fit</Typography>
-                            
-
+                            <Typography variant="h7" style={{ color: textColor }}>Cultural Fit Specific</Typography>
+                           
                         </div>
                     </div>
-                    <div>
-                    {data[1]?.value}
+                    <div className='text-lg font-bold'>
+                       {data[1]?.value}
+                    </div>
+                </div>
+                <div className='flex justify-between items-center mt-7'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
+                        <div className="flex-shrink-0">
+                            <FaHeadSideVirus style={{ color: textColor, fontSize: '30px' }} />
+                        </div>
+                        <div>
+                            <Typography variant="h7" style={{ color: textColor }}>Skill Specific</Typography>
+                           
+                        </div>
+                    </div>
+                    <div className='text-lg font-bold'>
+                       {data[0]?.value}
+                    </div>
+                </div>
+                <div className='flex justify-between items-center mt-7'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
+                        <div className="flex-shrink-0">
+                            <FaUserTie style={{ color: textColor, fontSize: '30px' }} />
+                        </div>
+                        <div>
+                            <Typography variant="h7" style={{ color: textColor }}>Company Role Specific</Typography>
+                           
+                        </div>
+                    </div>
+                    <div className='text-lg font-bold'>
+                       {data[1]?.value}
                     </div>
                 </div>
             </div>

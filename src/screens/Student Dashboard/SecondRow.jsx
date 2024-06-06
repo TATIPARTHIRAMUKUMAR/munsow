@@ -19,12 +19,12 @@ const SecondRow = () => {
 
     const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
     const textColor = isDarkMode
-        ? reduxColorTheme.dark.textColor2
-        : reduxColorTheme.light.textColor2;
+        ? reduxColorTheme.dark.textColor3
+        : reduxColorTheme.light.textColor3;
 
     useEffect(() => {
         setData(userStats?.skill_trends ? userStats.skill_trends : {})
-        console.log("data1", data)
+        console.log("data1 : ", data)
         // setdataWithSerialNumbers(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : [])
     }, [userStats])
 

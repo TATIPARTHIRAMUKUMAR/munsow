@@ -110,7 +110,7 @@ const LineChartComponent = () => {
   return (
     <div>
       <div className="flex justify-between filter-sort p-3">
-        <div className='text-lg font-semibold'>My Interview Score Trend</div>
+        <div className='text-lg font-semibold'>Role Based & Skill Based Interview Score Trend</div>
         <div className='flex'>
           {/* <div className='pr-3'>
             <label className='text-gray-600 text-lg font-semibold text-opacity-80'>Sort by: </label>

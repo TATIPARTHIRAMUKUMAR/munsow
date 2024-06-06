@@ -38,10 +38,9 @@ import {
   FaUserGraduate,
   FaChalkboardTeacher,
   FaCode,
-  FaUserSecret,
 } from "react-icons/fa";
 
-import { FaHeartPulse, FaSection } from "react-icons/fa6";
+import { FaHeartPulse } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
