@@ -104,7 +104,8 @@ const StudentCourseList = () => {
 
     useEffect(() => {
         dispatch(loadcourses());
-    }, [dispatch]);
+        console.log("??? : ", courses);
+    }, [dispatch, courses]);
 
     const handleCardClick = (courseId) => {
         const path = `/studentCourseList/view/${courseId}`;
