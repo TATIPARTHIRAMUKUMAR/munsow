@@ -12,6 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
+import { useDarkMode } from '../../Dark';
 
 const CourseCard = ({ course, onClick }) => {
     const dispatch = useDispatch();
@@ -42,6 +43,18 @@ const CourseCard = ({ course, onClick }) => {
         setOpen(false);
     };
 
+    const { colorTheme } = useSelector((state) => state?.data);
+    const { isDarkMode } = useDarkMode();
+
+    const linearGradientBackground = isDarkMode
+        ? colorTheme.dark.selectBackground
+        : colorTheme.light.selectBackground;
+
+        
+    const textColor = isDarkMode
+        ? colorTheme.dark.textColor3
+        : colorTheme.light.textColor3;
+
     return (
         <motion.div
             className="w-full h-auto mx-auto rounded-lg overflow-hidden cursor-pointer shadow-md bg-white hover:shadow-xl transition-shadow duration-300"
@@ -66,8 +79,12 @@ const CourseCard = ({ course, onClick }) => {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        style={{
+                            backgroundColor: linearGradientBackground,
+                            color: textColor
+                        }}
                         onClick={handleCardClick}
-                        className="bg-[#886CC0] text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                        className=" text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                     >
                         Explore More
                     </motion.button>
@@ -111,13 +128,30 @@ const CourseList = () => {
         navigate(path);
     };
 
+
+    const { colorTheme } = useSelector((state) => state?.data);
+    const { isDarkMode } = useDarkMode();
+
+    const linearGradientBackground = isDarkMode
+        ? colorTheme.dark.selectBackground
+        : colorTheme.light.selectBackground;
+
+        
+    const textColor = isDarkMode
+        ? colorTheme.dark.textColor3
+        : colorTheme.light.textColor3;
+        
     return (
         <div className="max-w-7xl mx-auto p-8">
             <div className="mb-6 flex justify-between items-center">
                 <h1 className="text-3xl font-bold">Courses List</h1>
                 <button
                     onClick={() => navigate("/courseList/create")}
-                    className="bg-[#886CC0] text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                    style={{
+                        backgroundColor: linearGradientBackground,
+                        color: textColor
+                    }}
+                    className=" text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                 >
                     Create Course
                 </button>

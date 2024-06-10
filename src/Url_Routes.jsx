@@ -52,6 +52,9 @@ import QuestionBankView from "./screens/Teacher/CreateQuestionBank/QuestionBankV
 import EnhancedTable from "./screens/Admin/Placements";
 import Placements from "./screens/Admin/Placements";
 import StudentQuizList from "./screens/Quiz/StudentQuizView/StudentQuizList";
+import QuizPage from "./screens/Quiz/QuizPage";
+import AssignmentList from "./screens/Assignments/AssignmentsList";
+import CreateAssignment from "./screens/Assignments/CreateAssignment";
 
 
 function Url_Routes() {
@@ -124,8 +127,12 @@ function Url_Routes() {
         <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />
         <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
         <Route exact path="/studentCourseList/edit/:id" element={<HeaderFooterLayout Component={<CourseEdit />} />} />
+        <Route exact path="/assignments"  element={<HeaderFooterLayout Component={<AssignmentList />} />} />
+        <Route exact path="/assignments/createAssignment"  element={<HeaderFooterLayout Component={<CreateAssignment />} />} />
+        <Route exact path="/assignments/view/:id" element={<HeaderFooterLayout Component={<ComingSoonPage />} />} />
 
         <Route exact path="/studentQuizList"  element={<HeaderFooterLayout Component={<StudentQuizList />} />} />
+        <Route exact path="/studentQuizList/view/:id"  element={<HeaderFooterLayout Component={<QuizPage />} />} />
 
       </Routes>
     </BrowserRouter>

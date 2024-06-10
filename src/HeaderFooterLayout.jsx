@@ -324,7 +324,7 @@ export default function HeaderFooterLayout({ Component }) {
         {
           label: "Assignments",
           icon: <FaUser size={20} className="" />,
-          route: "/comingSoon",
+          route: "/assignments",
           subItems: [],
         },
         // {
@@ -367,7 +367,7 @@ export default function HeaderFooterLayout({ Component }) {
           subItems: [],
         },
         {
-          label: "My Quizzes",
+          label: "My Assignments",
           icon: <FaFileCircleCheck size={20} className="" />,
           route: "/studentQuizList",
           subItems: [],

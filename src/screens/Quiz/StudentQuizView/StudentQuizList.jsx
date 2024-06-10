@@ -14,107 +14,107 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CircularProgressbar from './CircularProgressbar';
 
-import { loadQuestionBanks } from '../../../redux/action';
+import { deleteQuiz, loadAssignments, loadQuestionBanks } from '../../../redux/action';
 
 import { useDarkMode } from "./../../../Dark";
 
 
-const QuizList = [
-    {
-        name: "To Do Quizzes",
-        data: [
-            {
-                quiz_id: 1,
-                quiz_name: "Python Basics",
-                quiz_description: "Introduction to Python programming",
-                number_questions: 10
-            },
-            {
-                quiz_id: 2,
-                quiz_name: "JavaScript Essentials",
-                quiz_description: "Fundamentals of JavaScript",
-                number_questions: 12
-            },
-            {
-                quiz_id: 3,
-                quiz_name: "HTML and CSS",
-                quiz_description: "Basics of web development with HTML and CSS",
-                number_questions: 15
-            },
-            {
-                quiz_id: 4,
-                quiz_name: "React Basics",
-                quiz_description: "Getting started with React",
-                number_questions: 20
-            },
-            {
-                quiz_id: 5,
-                quiz_name: "Node.js Introduction",
-                quiz_description: "Learn the basics of Node.js",
-                number_questions: 18
-            },
-            {
-                quiz_id: 6,
-                quiz_name: "SQL Fundamentals",
-                quiz_description: "Introduction to databases with SQL",
-                number_questions: 14
-            },
-            {
-                quiz_id: 7,
-                quiz_name: "Data Structures",
-                quiz_description: "Learn about different data structures",
-                number_questions: 16
-            }
-        ]
-    },
-    {
-        name: "Completed Quizzes",
-        data: [
-            {
-                quiz_id: 1,
-                quiz_name: "Python Advanced",
-                quiz_description: "Advanced concepts in Python programming",
-                percentage: 60
-            },
-            {
-                quiz_id: 2,
-                quiz_name: "JavaScript Advanced",
-                quiz_description: "Advanced JavaScript programming techniques",
-                percentage: 90
-            },
-            {
-                quiz_id: 3,
-                quiz_name: "CSS Grid and Flexbox",
-                quiz_description: "Layout techniques with CSS Grid and Flexbox",
-                percentage: 30
-            },
-            {
-                quiz_id: 4,
-                quiz_name: "Redux Basics",
-                quiz_description: "State management with Redux",
-                percentage: 88
-            },
-            {
-                quiz_id: 5,
-                quiz_name: "Express.js Introduction",
-                quiz_description: "Basics of building web applications with Express.js",
-                percentage: 66
-            },
-            {
-                quiz_id: 6,
-                quiz_name: "MongoDB Basics",
-                quiz_description: "Introduction to NoSQL databases with MongoDB",
-                percentage: 82
-            },
-            {
-                quiz_id: 7,
-                quiz_name: "Algorithms",
-                quiz_description: "Introduction to algorithms and problem solving",
-                percentage: 75
-            }
-        ]
-    }
-]
+// const QuizList = [
+//     {
+//         name: "To Do Quizzes",
+//         data: [
+//             {
+//                 quiz_id: 1,
+//                 quiz_name: "Python Basics",
+//                 quiz_description: "Introduction to Python programming",
+//                 number_questions: 10
+//             },
+//             {
+//                 quiz_id: 2,
+//                 quiz_name: "JavaScript Essentials",
+//                 quiz_description: "Fundamentals of JavaScript",
+//                 number_questions: 12
+//             },
+//             {
+//                 quiz_id: 3,
+//                 quiz_name: "HTML and CSS",
+//                 quiz_description: "Basics of web development with HTML and CSS",
+//                 number_questions: 15
+//             },
+//             {
+//                 quiz_id: 4,
+//                 quiz_name: "React Basics",
+//                 quiz_description: "Getting started with React",
+//                 number_questions: 20
+//             },
+//             {
+//                 quiz_id: 5,
+//                 quiz_name: "Node.js Introduction",
+//                 quiz_description: "Learn the basics of Node.js",
+//                 number_questions: 18
+//             },
+//             {
+//                 quiz_id: 6,
+//                 quiz_name: "SQL Fundamentals",
+//                 quiz_description: "Introduction to databases with SQL",
+//                 number_questions: 14
+//             },
+//             {
+//                 quiz_id: 7,
+//                 quiz_name: "Data Structures",
+//                 quiz_description: "Learn about different data structures",
+//                 number_questions: 16
+//             }
+//         ]
+//     },
+//     {
+//         name: "Completed Quizzes",
+//         data: [
+//             {
+//                 quiz_id: 1,
+//                 quiz_name: "Python Advanced",
+//                 quiz_description: "Advanced concepts in Python programming",
+//                 percentage: 60
+//             },
+//             {
+//                 quiz_id: 2,
+//                 quiz_name: "JavaScript Advanced",
+//                 quiz_description: "Advanced JavaScript programming techniques",
+//                 percentage: 90
+//             },
+//             {
+//                 quiz_id: 3,
+//                 quiz_name: "CSS Grid and Flexbox",
+//                 quiz_description: "Layout techniques with CSS Grid and Flexbox",
+//                 percentage: 30
+//             },
+//             {
+//                 quiz_id: 4,
+//                 quiz_name: "Redux Basics",
+//                 quiz_description: "State management with Redux",
+//                 percentage: 88
+//             },
+//             {
+//                 quiz_id: 5,
+//                 quiz_name: "Express.js Introduction",
+//                 quiz_description: "Basics of building web applications with Express.js",
+//                 percentage: 66
+//             },
+//             {
+//                 quiz_id: 6,
+//                 quiz_name: "MongoDB Basics",
+//                 quiz_description: "Introduction to NoSQL databases with MongoDB",
+//                 percentage: 82
+//             },
+//             {
+//                 quiz_id: 7,
+//                 quiz_name: "Algorithms",
+//                 quiz_description: "Introduction to algorithms and problem solving",
+//                 percentage: 75
+//             }
+//         ]
+//     }
+// ]
 
 const QuizCard = ({ quiz, onClick, title }) => {
     const dispatch = useDispatch();
@@ -127,7 +127,7 @@ const QuizCard = ({ quiz, onClick, title }) => {
 
     const handleCardClick = async () => {
         await controls.start({ opacity: 0.9, scale: 0.95 });
-        onClick(quiz.quiz_id);
+        onClick(quiz.id);
     };
 
     const handleOpen = () => {
@@ -139,7 +139,7 @@ const QuizCard = ({ quiz, onClick, title }) => {
     };
 
     const handleDeleteConfirm = () => {
-        dispatch(delete_quiz(quiz.quiz_id, (resp) => {
+        dispatch(deleteQuiz(quiz.id, (resp) => {
             dispatch(loadQuestionBanks());
         }))
         setOpen(false);
@@ -167,7 +167,7 @@ const QuizCard = ({ quiz, onClick, title }) => {
         >
             <div className="p-6 flex flex-col justify-between h-full">
                 <div className="justify-between mb-2">
-                    <h2 className="text-lg font-bold mb-2">{quiz?.quiz_name}</h2>
+                    <h2 className="text-lg font-bold mb-2">{quiz?.name}</h2>
                     {/* <IconButton
                         variant="text"
                         color="error"
@@ -176,10 +176,10 @@ const QuizCard = ({ quiz, onClick, title }) => {
                     </IconButton> */}
                 </div>
 
-                <p className="text-gray-600 text-md my-4 w-full whitespace-normal">{quiz?.quiz_description}</p>
+                <p className="text-gray-600 text-md my-4 w-full whitespace-normal">{quiz?.description}</p>
                 <div className="flex justify-between items-center">
                     
-                        {title === "Completed Quizzes" ? (
+                        {quiz?.is_locked  ? (
                             <>
                                 <div>
                                     <CircularProgressbar value={quiz.percentage} />
@@ -200,7 +200,7 @@ const QuizCard = ({ quiz, onClick, title }) => {
                             ) : (
                                 <>
                                     <div className='flex text-md'>
-                                        {quiz.number_questions} Questions
+                                        {quiz?.questions?.length} Questions
                                     </div>
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
@@ -221,11 +221,11 @@ const QuizCard = ({ quiz, onClick, title }) => {
 
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
                 <DialogTitle style={{ textAlign: 'center', fontWeight: 'bold' }}>
-                    {"Delete Quiz?"}
+                    {"Delete Assignment?"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText style={{ margin: '20px', fontSize: '16px', textAlign: 'center' }}>
-                        Are you sure you want to delete this quiz?
+                        Are you sure you want to delete this Assignment?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions style={{ justifyContent: 'center' }}>
@@ -354,7 +354,7 @@ const StudentQuizList = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { quizzes } = useSelector((state) => state?.data);
+    const { assignmentsList } = useSelector((state) => state?.data);
     const { colorTheme } = useSelector((state) => state?.data);
     const { isDarkMode } = useDarkMode();
 
@@ -369,9 +369,13 @@ const StudentQuizList = () => {
 
 
     useEffect(() => {
-        dispatch(loadQuestionBanks());
-    }, [dispatch, quizzes]);
+        dispatch(loadAssignments());
+    }, [dispatch]);
 
+    useEffect(() => {
+        console.log("assignmentsList",assignmentsList)
+    }, [assignmentsList]);
+    
     const handleCardClick = (quizId) => {
         const path = `/studentQuizList/view/${quizId}`;
         navigate(path);
@@ -386,28 +390,28 @@ const StudentQuizList = () => {
                     }}>
                     <div className='flex bg-white px-4 py-4 w-[50%] rounded-lg'>
                         <p className='w-[60%] text-md flex justify-center items-center'>No. of Quizzes Attended</p>
-                        <h1 className='w-[40%] text-3xl font-bold flex justify-center items-center'>{QuizList[0].data.length}</h1>
+                        <h1 className='w-[40%] text-3xl font-bold flex justify-center items-center'>0</h1>
                     </div>
                     <div className='flex bg-white px-4 py-4 w-[50%] rounded-lg'>
                         <p className='w-[65%] text-md flex justify-center items-center'>No. of Pending Quizzes</p>
-                        <h1 className='w-[35%] text-3xl font-bold flex justify-center items-center'>{QuizList[1].data.length}</h1>
+                        <h1 className='w-[35%] text-3xl font-bold flex justify-center items-center'>{assignmentsList?.length}</h1>
                     </div>
                 </div>
             </div>
             <ScrollableContainer
-                title= {QuizList[0].name}
-                quizzes={QuizList[0].data}
+                title= {"To do Quizzes"}
+                quizzes={assignmentsList}
                 handleCardClick={handleCardClick}
                 textColor="#242D36"
                 visibleCount={4}
             />
-            <ScrollableContainer
+            {/* <ScrollableContainer
                 title= {QuizList[1].name}
                 quizzes={QuizList[1].data}
                 handleCardClick={handleCardClick}
                 textColor="#242D36"
                 visibleCount={4}
-            />
+            /> */}
         </div>
     );
 };

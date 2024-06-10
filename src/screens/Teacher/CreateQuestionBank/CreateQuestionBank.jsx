@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Radio, RadioGroup, FormControlLabel, Button, FormControl, FormLabel, Checkbox, FormGroup, Paper, Divider } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material';
 import GLOBAL_CONSTANTS from '../../../../GlobalConstants';
+import { useDispatch } from 'react-redux';
+import { Typography, Box, Card, CardContent, CardActions } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
+import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
+import UploadImage from '../../../assets/file-upload.png';
+import { uploadConfigurations } from '../../../redux/action';
 
 const CustomTextField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
-            borderColor: 'transparent', 
+            borderColor: 'transparent',
         },
         '&:hover fieldset': {
-            borderColor: 'transparent', 
+            borderColor: 'transparent',
         },
         '&.Mui-focused fieldset': {
             borderColor: 'transparent',
@@ -84,14 +90,14 @@ const QuestionBankForm = () => {
     };
 
     const handleSubmit = async () => {
-        const apiUrl =`${GLOBAL_CONSTANTS.backend_url}question_bank/create`; // Change this to your actual API URL
+        const apiUrl = `${GLOBAL_CONSTANTS.backend_url}question_bank/create`; // Change this to your actual API URL
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
-                 headers : {
+                headers: {
                     "Content-type": "application/json",
                     "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
-                  },
+                },
                 body: JSON.stringify(questionBank),
             });
             if (!response.ok) {
@@ -106,7 +112,46 @@ const QuestionBankForm = () => {
         }
     };
 
+    const dispatch = useDispatch();
+    const inputRefs = {
+        question: useRef(null),
 
+    };
+
+    const handleSelectFiles = (e, key) => {
+        const file = e.currentTarget.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            let base64Data = event.target.result.split(",")[1];
+
+            const mimeRegex = /^data:.+;base64,/;
+            if (mimeRegex.test(base64Data)) {
+                base64Data = base64Data.replace(mimeRegex, '');
+            }
+            while (base64Data.length % 4 !== 0) {
+                base64Data += '=';
+            }
+
+            const payload = {
+                mode: key,
+                base64: base64Data
+            };
+            dispatch(uploadConfigurations(payload));
+        };
+
+        reader.readAsDataURL(file);
+    };
+
+    const configurationOptions = [
+        { label: 'QUESTION BANK', key: 'question' },
+
+    ];
+
+    const generateDownloadUrl = (mode) => {
+        const downloadUrl = `${GLOBAL_CONSTANTS.backend_url}institution/download_configurations?mode=${mode}&access_token=${GLOBAL_CONSTANTS?.token}`;
+        return downloadUrl;
+    };
 
     return (
         <div className="min-h-screen pt-5 pb-20">
@@ -150,7 +195,7 @@ const QuestionBankForm = () => {
                                     >
                                         <FormControlLabel value="uploadFile" control={<Radio color="primary" />} label="Upload File" />
                                         <FormControlLabel value="addUI" control={<Radio color="primary" />} label="Add from UI" />
-                                        <FormControlLabel value="generateAI" control={<Radio color="primary" />} label="Generate from AI" />
+                                        {/* <FormControlLabel value="generateAI" control={<Radio color="primary" />} label="Generate from AI" /> */}
                                     </RadioGroup>
                                 </FormControl>
 
@@ -172,7 +217,7 @@ const QuestionBankForm = () => {
                                 <Button
                                     startIcon={<DeleteIcon />}
                                     variant="contained"
-                                    color="secondary"
+                                    // color="secondary"
                                     onClick={() => deleteQuestion(index)}
                                     className="mt-4"
                                 >
@@ -282,7 +327,59 @@ const QuestionBankForm = () => {
                     </Paper>
                 ))}
 
+                {questionBank?.method === 'uploadFile' && (
+                    <Box >
 
+
+                        {configurationOptions.map(option => (
+                            <Card key={option.key} mb={2} variant="outlined">
+                                <CardContent>
+                                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                                        <Typography variant="h6">{option.label}</Typography>
+                                        <Button
+                                            href={generateDownloadUrl(option.key)}
+                                            style={{ backgroundColor: '#2BE2D0', color: '#252525' }}
+                                            endIcon={<CloudDownloadOutlinedIcon />}
+                                            variant="outlined"
+                                            size="small"
+                                        >
+                                            Download Template
+                                        </Button>
+                                    </Box>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        border="2px dashed"
+                                        borderColor="gray.300"
+                                        borderRadius="borderRadius"
+                                        p={2}
+                                        onClick={() => inputRefs[option.key].current.click()}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <input
+                                            ref={inputRefs[option.key]}
+                                            type="file"
+                                            className="hidden"
+                                            accept=".csv, .xlsx"
+                                            onChange={(e) => handleSelectFiles(e, option.key)}
+                                            onClick={(e) => { e.target.value = null; }}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <Box textAlign="center">
+                                            <img
+                                                src={UploadImage}
+                                                alt="Upload Icon"
+                                                style={{ width: '100px', margin: 'auto' }}
+                                            />
+                                            <Typography variant="body2" color="textSecondary">Upload {option.label} File</Typography>
+                                        </Box>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </Box>
+                )}
                 {questionBank?.method === 'addUI' && (
                     <Button
                         startIcon={<AddCircleOutlineIcon />}
@@ -294,12 +391,13 @@ const QuestionBankForm = () => {
                         Add Question
                     </Button>
                 )}
-                 {questionBank?.questions?.length > 0 && (
+                {(questionBank?.questions?.length > 0 && questionBank?.method === 'addUI')&& (
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={handleSubmit}
-                        className="mt-4"
+                        style={{marginLeft:"15px"}}
+                        className="pl-10"
                     >
                         Submit Question Bank
                     </Button>
