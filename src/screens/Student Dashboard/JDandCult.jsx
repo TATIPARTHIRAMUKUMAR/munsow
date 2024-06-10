@@ -26,7 +26,7 @@ const JDCult = () => {
 
     useEffect(() => {
         setData(userStats?.cards ? userStats.cards : {})
-        console.log("data1", data)
+        console.log("data1 : ", userStats)
         // setdataWithSerialNumbers(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : [])
     }, [userStats])
 
