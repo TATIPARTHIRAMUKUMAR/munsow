@@ -49,6 +49,7 @@ const initialState = {
   practicalFilters:{},
   placementTracker:{},
   statusList:[],
+  assignmentsList:[],
   colorTheme: {
     light: {
       // primaryBg-black
@@ -118,7 +119,7 @@ const DataReducers = (state = initialState, action) => {
       {
         return {
           ...state,
-          quizView: action?.payload
+          quizView: action?.payload?.data
         }
       }
     case types.USERS_LIST:
@@ -162,6 +163,11 @@ const DataReducers = (state = initialState, action) => {
     case types.STUDENTS_LIST: return{
       ...state,
       studentsList:action.payload,
+      loading:false
+    }
+    case types.ASSIGNMENTS: return{
+      ...state,
+      assignmentsList:action.payload.data,
       loading:false
     }
     case types.TEACHERS_LIST: return{

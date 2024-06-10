@@ -12,6 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
+import { useDarkMode } from '../../../Dark';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
@@ -19,7 +20,6 @@ import Checkbox from '@mui/material/Checkbox';
 import { RadioButtonUnchecked } from '@mui/icons-material';
 import { CheckCircle } from '@mui/icons-material';
 
-import { useDarkMode } from "./../../../Dark";
 
 const CourseCard = ({ course, onClick, title }) => {
     const dispatch = useDispatch();
@@ -459,6 +459,7 @@ const StudentCourseList = () => {
 
     useEffect(() => {
         dispatch(loadcourses());
+        console.log("??? : ", courses);
     }, [dispatch]);
 
     const handleCardClick = (courseId) => {
