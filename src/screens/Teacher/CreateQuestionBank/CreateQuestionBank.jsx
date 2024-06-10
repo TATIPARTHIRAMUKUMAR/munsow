@@ -10,6 +10,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import UploadImage from '../../../assets/file-upload.png';
 import { uploadConfigurations } from '../../../redux/action';
+import { useNavigate } from 'react-router-dom';
 
 const CustomTextField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
@@ -26,6 +27,7 @@ const CustomTextField = styled(TextField)({
 });
 
 const QuestionBankForm = () => {
+    const navigate = useNavigate();
     const [questionBank, setQuestionBank] = useState({
         name: '',
         description: '',
@@ -105,7 +107,7 @@ const QuestionBankForm = () => {
             }
             const result = await response.json();
             console.log('Question bank submitted successfully:', result);
-            alert('Question bank submitted successfully!');
+            navigate(-1)
         } catch (error) {
             console.error('Error submitting question bank:', error);
             alert('Error submitting question bank. Please try again.');
@@ -391,12 +393,12 @@ const QuestionBankForm = () => {
                         Add Question
                     </Button>
                 )}
-                {(questionBank?.questions?.length > 0 && questionBank?.method === 'addUI')&& (
+                {(questionBank?.questions?.length > 0 && questionBank?.method === 'addUI') && (
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={handleSubmit}
-                        style={{marginLeft:"15px"}}
+                        style={{ marginLeft: "15px" }}
                         className="pl-10"
                     >
                         Submit Question Bank

@@ -1730,7 +1730,7 @@ export const delete_question_bank = (id, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("Deleting Course .. please wait", { autoClose: false });
+    let toastId = toast("Deleting Question Bank .. please wait", { autoClose: false });
     axios
       .delete(`${GLOBAL_CONSTANTS.backend_url}question_bank/delete/${id}`, {
          headers,
@@ -1741,7 +1741,7 @@ export const delete_question_bank = (id, callback) => {
 
         }
         else {
-          toast.update(toastId, { render: "Course Deleted", type: "success", autoClose: true })
+          toast.update(toastId, { render: "Question Bnak Deleted", type: "success", autoClose: true })
           callback(resp)
         }
       })
