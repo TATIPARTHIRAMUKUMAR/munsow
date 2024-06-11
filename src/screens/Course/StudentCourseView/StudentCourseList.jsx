@@ -19,7 +19,8 @@ import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import Checkbox from '@mui/material/Checkbox';
 import { RadioButtonUnchecked } from '@mui/icons-material';
 import { CheckCircle } from '@mui/icons-material';
-
+import bannerImg from '../../../assets/thumbnail.png';
+import bannerImg2 from '../../../assets/virginiaBannner.png';
 
 const CourseCard = ({ course, onClick, title }) => {
     const dispatch = useDispatch();
@@ -70,7 +71,7 @@ const CourseCard = ({ course, onClick, title }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
         >
-            <img src={courseImg} alt="Course" className={` ${title === "Continue Learning..." ? 'w-[228px]' : 'w-[228px]'}   max-w-full h-auto m-3 rounded-lg object-cover`} />
+            <img src={bannerImg} alt="Course" className={` ${title === "Continue Learning..." ? 'w-[228px]' : 'w-[228px]'}   max-w-full h-auto m-3 rounded-lg object-cover`} />
             <div className="p-6">
                 <div className="flex justify-between mb-2">
                     <h2 className="text-xl mb-2">{course?.course_name}</h2>
@@ -426,30 +427,6 @@ const TaskManager = () => {
     );
 };
 
-const banner = [
-    {
-        name: "Virginia Tech",
-        description: "This program is designed for students to specialize in drones technology.",
-        courses: [
-            {
-                course_id: 1,
-                course_name: "Introduction to Business Management",
-                course_time: "2hr 10mins"
-            },
-            {
-                course_id: 2,
-                course_name: "Advanced Project Management",
-                course_time: "3hr 45mins"
-            },
-            {
-                course_id: 3,
-                course_name: "Financial Analysis and Planning",
-                course_time: "4hr 30mins"
-            }
-        ]
-    }
-]
-
 const StudentCourseList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -457,9 +434,16 @@ const StudentCourseList = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedBanner, setSelectedBanner] = useState(null);
 
+    const banner = [
+        {
+            name: "Virginia Tech",
+            description: "This program is designed for students to specialize in drones technology.",
+            courses: courses
+        }
+    ]
+
     useEffect(() => {
         dispatch(loadcourses());
-        console.log("??? : ", courses);
     }, [dispatch]);
 
     const handleCardClick = (courseId) => {
@@ -468,12 +452,10 @@ const StudentCourseList = () => {
     };
 
     const handleCategoryClick = (category) => {
-        console.log('/// : ', category)
         setSelectedCategory(category);
     };
 
     const handleBannerClick = (banner) => {
-        console.log('/// : ', banner)
         setSelectedBanner(banner);
     }
 
@@ -511,12 +493,12 @@ const StudentCourseList = () => {
                                 key={course.course_id}
                                 className="p-4 bg-gray-200 rounded-lg shadow hover:shadow-xl hover:bg-opacity-80 transition duration-300"
                             >
-                                <img src={courseImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
+                                <img src={bannerImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
                                 <h2 className="text-lg font-semibold my-5">{course.course_name}</h2>
-                                <div className='flex justify-between'>
-                                    <div className='flex'>
+                                <div className='flex justify-end'>
+                                    {/* <div className='flex'>
                                         <TimerOutlinedIcon /><p className="text-gray-600">{course.course_time}</p>
-                                    </div>
+                                    </div> */}
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -554,7 +536,7 @@ const StudentCourseList = () => {
                                 key={course.course_id}
                                 className="p-4 bg-gray-200 rounded-lg shadow hover:shadow-xl hover:bg-opacity-80 transition duration-300"
                             >
-                                <img src={courseImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
+                                <img src={bannerImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
                                 <h2 className="text-lg font-semibold my-5">{course.course_name}</h2>
                                 <div className='flex justify-between'>
                                     <div className='flex'>
@@ -579,14 +561,15 @@ const StudentCourseList = () => {
             ) : (
                 <>
                     {banner[0].courses.length !== 0 && (
-                        <div className="image-container relative ml-8 mt-5" onClick={() => handleBannerClick(banner[0])}>
-                            <img src={courseImg} alt="Course" className="w-[70%] rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" />
-                            <div className="text-overlay absolute left-0 top-0 p-4">
+                        <div className="image-container relative mx-8 my-5" onClick={() => handleBannerClick(banner[0])}>
+                            <img src={bannerImg2} alt="Banner" className="w-full h-[270px] object-cover object-center rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" />
+                            {/* <img src={bannerImg} alt="Course" className="w-[100%] h-[400px] rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" /> */}
+                            {/* <div className="text-overlay absolute left-0 top-0 p-4">
                                 <h2 className="text-2xl font-bold text-white md:text-4xl">{banner[0].name}</h2>
                                 <p className="mt-2 text-base text-white md:text-lg">
                                     {banner[0].description}
                                 </p>
-                            </div>
+                            </div> */}
                         </div>
                     )}
                     {/* <div className="w-full flex overflow-x-auto gap-2"> */}
