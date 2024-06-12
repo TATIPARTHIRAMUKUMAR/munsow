@@ -1677,7 +1677,7 @@ export const assignment_update = (data, callback) => {
 
         }
         else {
-          toast.update(toastId, { render: "Content Created", type: "success", autoClose: true })
+          toast.update(toastId, { render: "Assignment Created", type: "success", autoClose: true })
           callback(resp)
         }
       })
