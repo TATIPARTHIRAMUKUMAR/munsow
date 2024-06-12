@@ -82,7 +82,7 @@ export default function QuizPage({ setValue }) {
     setOpen(true);
     const payload = {
       "is_late": false,
-      assignment_id: id,
+      assignment_id: parseInt(id),
       content: questions?.map((o, idx) => ({
         question_id: idx + 1,
         selected_options: o?.selected_option,

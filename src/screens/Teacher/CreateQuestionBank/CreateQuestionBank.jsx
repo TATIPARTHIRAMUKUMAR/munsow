@@ -243,6 +243,7 @@ const QuestionBankForm = () => {
                                     value={question.marks}
                                     onChange={(e) => handleQuestionChange(index, e)}
                                     className="shadow-sm rounded"
+                                    inputProps={{ min: 0 }}
                                 />
                                 <TextField
                                     label="Number of Options"
