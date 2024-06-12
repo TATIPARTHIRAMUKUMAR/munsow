@@ -82,14 +82,14 @@ function Subtopic({ setTopics, topicIndex, subtopic, setShowModal,subIndex }) {
                     <label htmlFor='SubTopicDesc' className='font-semibold text-lg text-gray-500'>Sub Topic Desc</label>
 
                   </div>
-                  <div className="flex w-full items-start justify-between px-5">
+                  <div className="flex w-full items-start justify-between px-5" style={{zIndex:"999999"}}>
 
 
-                    <Editor
+                    {/* <Editor
                       apiKey='6uslfnqkm6qjxxn3v1cwgpc27eto4yqyjp5d7opih9vunxz7'
                       initialValue="<p>Start Writing ... </p>"
                       init={{
-                        height: 500,
+                        height: 200,
                         menubar: true,
                         branding: false,
                         plugins: [
@@ -138,6 +138,43 @@ function Subtopic({ setTopics, topicIndex, subtopic, setShowModal,subIndex }) {
                         }
                       }}
                       onEditorChange={(content, editor) => setSubTopicDesc(content)}
+                      /> */}
+                      <Editor
+                        apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
+                        init={{
+                          height:200,
+                          menu: {
+                            file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
+                            edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
+                            view: { title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments' },
+                            insert: { title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
+                            format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat' },
+                            tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount' },
+                            table: { title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' },
+                            help: { title: 'Help', items: 'help' }
+                          },
+                          // plugins: [
+                          //   'advlist', 'autolink', 'link', 'image', 'charmap', 'preview',
+                          //   'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                          //   'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                          // ],
+                          // toolbar: 'undo redo | blocks | ' +
+                          // 'bold italic backcolor | alignleft aligncenter ' +
+                          // 'alignright alignjustify | bullist numlist outdent indent | ' +
+                          // 'removeformat | help',
+                          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+                          plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+                          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                          tinycomments_mode: 'embedded',
+                          tinycomments_author: 'Author name',
+                          mergetags_list: [
+                            { value: 'First.Name', title: 'First Name' },
+                            { value: 'Email', title: 'Email' },
+                          ],
+                          ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+                        }}
+                        initialValue="Welcome to TinyMCE!"
+                        onEditorChange={(content, editor) => setSubTopicDesc(content)}
                       />
 
                   </div>
@@ -147,7 +184,7 @@ function Subtopic({ setTopics, topicIndex, subtopic, setShowModal,subIndex }) {
                       type="button"
                       onClick={() => setShowModal(false)}
                     >
-                      Cance
+                      Cancel
                     </button>
                     <button
                       className="bg-gray-500 text-gray-400 font-bold text-sm px-6 py-2 rounded-xl "

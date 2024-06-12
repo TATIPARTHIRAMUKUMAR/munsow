@@ -12,11 +12,15 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import CustomStepperComponent from './CourseStepper';
 
 const CourseCard = ({ course, onClick }) => {
     const dispatch = useDispatch();
     const controls = useAnimation();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [openEdit, handleOpenEdit] = useState(false);
 
     useEffect(() => {
         controls.start({ opacity: 1, scale: 1 });
@@ -26,6 +30,27 @@ const CourseCard = ({ course, onClick }) => {
         await controls.start({ opacity: 0.9, scale: 0.95 });
         onClick(course.course_id);
     };
+
+    // const handleEdit = () => {
+    //     console.log("start")
+    //     handleOpenEdit(true);
+    //     navigate("/courseList/edit");
+    //     <CustomStepperComponent
+    //     Edit = {true}
+    //     />
+    //     console.log("end")
+    // }
+
+    // const handleEdit = (courseId) => {
+    //     handleOpenEdit(true);
+    //     navigate(`/courseList/edit/${courseId}`);
+    // };
+
+    const handleEdit = (courseId) => {
+        navigate(`/courseList/edit/${courseId}`, { state: { course, step: 2 } });
+        console.log(courseId,"courseId")
+    };
+    
 
     const handleOpen = () => {
         setOpen(true);
@@ -50,15 +75,9 @@ const CourseCard = ({ course, onClick }) => {
             animate={controls}
         >
             <img src={courseImg} alt="Course" className="w-full h-44 object-cover" />
-            <div className="p-6">
-                <div className="flex justify-between mb-2">
+            <div className="p-4">
+                <div className="flex flex-col justify-between mb-2">
                     <h2 className="text-xl font-semibold mb-2">{course?.course_name}</h2>
-                    <IconButton
-                        variant="text"
-                        color="error"
-                    >
-                        <DeleteIcon onClick={handleOpen} />
-                    </IconButton>
                 </div>
 
                 <p className="text-gray-600 text-sm mb-4">{course?.description}</p>
@@ -67,10 +86,24 @@ const CourseCard = ({ course, onClick }) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleCardClick}
-                        className="bg-[#886CC0] text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                        className="bg-[#886CC0] text-white px-2 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                     >
                         Explore More
                     </motion.button>
+                    <div>
+                    <IconButton
+                    style={{padding:"2px"}}
+                    color="primary">
+                    
+                        <EditIcon onClick={() => handleEdit(course.course_id)}/>
+                    </IconButton>
+                    <IconButton
+                        style={{padding:"2px"}}
+                        variant="text"
+                        color="error">
+                        <DeleteIcon onClick={handleOpen}/>
+                    </IconButton>
+                    </div>
                 </div>
             </div>
 
