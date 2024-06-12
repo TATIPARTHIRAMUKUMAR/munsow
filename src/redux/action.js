@@ -386,7 +386,7 @@ export const deleteQuiz = (id, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    const note = toast.loading("Deleting Quiz ..")
+    const note = toast.loading("Deleting Assignment ..")
 
     axios
       .delete(`${GLOBAL_CONSTANTS.backend_url}assignment/delete/${id}`, {
@@ -394,7 +394,7 @@ export const deleteQuiz = (id, callback) => {
       })
       .then((resp) => {
         callback(resp?.data);
-        toast.update(note, { render: "Quiz deleted", type: "success", isLoading: false, autoClose: 2000, });
+        toast.update(note, { render: "Assignment deleted", type: "success", isLoading: false, autoClose: 2000, });
 
       })
       .catch((error) => {
@@ -1538,18 +1538,18 @@ export const create_assignment = (data, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("Creating Assignment .. please wait", { autoClose: false });
+    let toastId = toast.loading("Creating Assignment .. please wait");
     axios
       .post(`${GLOBAL_CONSTANTS.backend_url}assignment/create`, JSON.stringify(data), {
          headers,
       })
       .then((resp) => {
         if (resp?.data?.error) {
-          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+          toast.update(toastId, { render: resp?.data?.error, type: "error", isLoading: false, autoClose: true })
 
         }
         else {
-          toast.update(toastId, { render: "Assignment Created and now assign users", type: "success", autoClose: true })
+          toast.update(toastId, { render: "Assignment Created and now assign users", type: "success", isLoading: false, autoClose: true })
           callback(resp)
         }
       })
@@ -1602,18 +1602,18 @@ export const assign_assignment = (data, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("Assigning to users .. please wait", { autoClose: false });
+    let toastId = toast.loading("Assigning to users .. please wait");
     axios
       .post(`${GLOBAL_CONSTANTS.backend_url}assignment/assign`, JSON.stringify(data), {
          headers,
       })
       .then((resp) => {
         if (resp?.data?.error) {
-          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+          toast.update(toastId, { render: resp?.data?.error, type: "error", isLoading: false,autoClose: true })
 
         }
         else {
-          toast.update(toastId, { render: "Users Added and now create content", type: "success", autoClose: true })
+          toast.update(toastId, { render: "Users Added and now create content",isLoading: false, type: "success", autoClose: true })
           callback(resp)
         }
       })
@@ -1666,18 +1666,18 @@ export const assignment_update = (data, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("updating assignment .. please wait", { autoClose: false });
+    let toastId = toast.loading("updating assignment .. please wait");
     axios
       .post(`${GLOBAL_CONSTANTS.backend_url}assignment/update`, JSON.stringify(data), {
          headers,
       })
       .then((resp) => {
         if (resp?.data?.error) {
-          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+          toast.update(toastId, { render: resp?.data?.error,isLoading: false, type: "error", autoClose: true })
 
         }
         else {
-          toast.update(toastId, { render: "Assignment Created", type: "success", autoClose: true })
+          toast.update(toastId, { render: "Assignment Created",isLoading: false, type: "success", autoClose: true })
           callback(resp)
         }
       })

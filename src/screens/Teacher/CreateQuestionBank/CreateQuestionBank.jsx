@@ -66,9 +66,17 @@ const QuestionBankForm = () => {
     };
 
     const handleOptionCountChange = (index, e) => {
+        const value = Math.min(5, parseInt(e.target.value, 10));
         const updatedQuestions = [...questionBank.questions];
-        updatedQuestions[index].numberOfOptions = e.target.value;
-        updatedQuestions[index].options = Array(parseInt(e.target.value)).fill('');
+        updatedQuestions[index].numberOfOptions = value;
+        updatedQuestions[index].options = Array(value).fill('');
+        setQuestionBank({ ...questionBank, questions: updatedQuestions });
+    };
+
+    const handleMarksChange = (index, e) => {
+        const value = Math.max(0, parseInt(e.target.value, 10));
+        const updatedQuestions = [...questionBank.questions];
+        updatedQuestions[index].marks = value;
         setQuestionBank({ ...questionBank, questions: updatedQuestions });
     };
 
@@ -117,7 +125,6 @@ const QuestionBankForm = () => {
     const dispatch = useDispatch();
     const inputRefs = {
         question: useRef(null),
-
     };
 
     const handleSelectFiles = (e, key) => {
@@ -147,7 +154,6 @@ const QuestionBankForm = () => {
 
     const configurationOptions = [
         { label: 'QUESTION BANK', key: 'question' },
-
     ];
 
     const generateDownloadUrl = (mode) => {
@@ -200,16 +206,10 @@ const QuestionBankForm = () => {
                                         {/* <FormControlLabel value="generateAI" control={<Radio color="primary" />} label="Generate from AI" /> */}
                                     </RadioGroup>
                                 </FormControl>
-
-
                             </div>
                         </div>
                     </div>
                 </Paper>
-
-
-
-
 
                 {questionBank.method === 'addUI' && questionBank.questions.map((question, index) => (
                     <Paper key={index} className="overflow-hidden rounded-lg shadow mb-6 bg-gradient-to-br from-indigo-50 to-pink-50">
@@ -241,7 +241,7 @@ const QuestionBankForm = () => {
                                     variant="outlined"
                                     type="number"
                                     value={question.marks}
-                                    onChange={(e) => handleQuestionChange(index, e)}
+                                    onChange={(e) => handleMarksChange(index, e)}
                                     className="shadow-sm rounded"
                                     inputProps={{ min: 0 }}
                                 />
@@ -253,6 +253,7 @@ const QuestionBankForm = () => {
                                     value={question.numberOfOptions}
                                     onChange={(e) => handleOptionCountChange(index, e)}
                                     className="shadow-sm rounded"
+                                    inputProps={{ min: 0, max: 5 }}
                                 />
 
                                 {question.options.map((option, optionIndex) => (
@@ -304,7 +305,6 @@ const QuestionBankForm = () => {
                                             <div className='pt-3'>
                                                 <TextField
                                                     select
-                                                    // label="Correct Answer"
                                                     SelectProps={{ native: true }}
                                                     name="correctAnswer"
                                                     value={question.correctAnswer[0] || ''}
@@ -320,20 +320,17 @@ const QuestionBankForm = () => {
                                                     ))}
                                                 </TextField>
                                             </div>
-
                                         )}
                                     </FormControl>
-                                </div></div>
-
+                                </div>
+                            </div>
                         </div>
                         <Divider />
                     </Paper>
                 ))}
 
                 {questionBank?.method === 'uploadFile' && (
-                    <Box >
-
-
+                    <Box>
                         {configurationOptions.map(option => (
                             <Card key={option.key} mb={2} variant="outlined">
                                 <CardContent>
@@ -411,4 +408,3 @@ const QuestionBankForm = () => {
 };
 
 export default QuestionBankForm;
-
