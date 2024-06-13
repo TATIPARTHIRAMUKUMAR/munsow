@@ -31,7 +31,8 @@ import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 import Configurations from "./screens/Admin/Configurations/Configurations";
 import QuestionBankForm from "./screens/Teacher/CreateQuestionBank/CreateQuestionBank";
-import TopicandSubtopic from "./screens/Course/Topic/TopicandSubtopic";
+// import TopicandSubtopic from "./screens/Course/Topic/TopicandSubtopic";
+import TopicSubtopic from "./screens/Course/TopicSubtopic/TopicSubtopic";
 import CustomStepperComponent from "./screens/Course/CourseStepper";
 import TeacherLogin from "./screens/Login/TeacherLogin";
 import ComingSoonPage from "./screens/ComingSoon";
@@ -117,7 +118,8 @@ function Url_Routes() {
 
 
 
-        <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} />
+        {/* <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} /> */}
+        <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicSubtopic />} />} />
         <Route exact path="/courseList/create" element={<HeaderFooterLayout Component={<CustomStepperComponent />} />} />
         <Route exact path="/teacherLogin" element={<TeacherLogin />} />
         <Route exact path="/comingSoon"  element={<HeaderFooterLayout Component={<ComingSoonPage />} />} />
