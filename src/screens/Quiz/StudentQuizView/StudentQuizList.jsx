@@ -152,7 +152,7 @@ const QuizCard = ({ quiz, onClick, title }) => {
         ? colorTheme.dark.selectBackground
         : colorTheme.light.selectBackground;
 
-        
+
     const textColor = isDarkMode
         ? colorTheme.dark.textColor3
         : colorTheme.light.textColor3;
@@ -160,48 +160,40 @@ const QuizCard = ({ quiz, onClick, title }) => {
 
     return (
         <motion.div
-            className="w-full h-auto mx-auto inline-block rounded-lg overflow-hidden cursor-pointer 
-            shadow-md bg-[#F0F0F0] hover:shadow-2xl transition-shadow duration-300 transform hover:scale-130"
+            className={`w-full h-auto mx-auto inline-block rounded-lg overflow-hidden cursor-pointer 
+            shadow-md bg-[#F0F0F0] hover:shadow-2xl transition-shadow duration-300 transform ${quiz.is_locked ? 'opacity-50 pointer-events-none' : 'hover:scale-105'
+                }`}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
         >
-            <div className="p-6 flex flex-col justify-between h-full">
+            <div className="p-3 flex flex-col justify-between h-full">
                 <div className="justify-between mb-2">
-                    <h2 className="text-lg font-bold mb-2">{quiz?.name}</h2>
-                    {/* <IconButton
-                        variant="text"
-                        color="error"
-                    >
-                        <DeleteIcon onClick={handleOpen} />
-                    </IconButton> */}
+                    <h2 className="text-lg font-bold mb-2">{quiz.name}</h2>
+                    <p className="text-gray-600 text-md my-4">{quiz.description}</p>
+                    <p className="text-gray-600 text-md">Deadline : {quiz.deadline}</p>
+                    <p className="text-gray-600 text-md">Skills Required : {quiz?.skills_required}</p>
+                    <p className="text-gray-600 text-md">Minutes Allowed : {quiz.max_time_min}</p>
                 </div>
-
-                <p className="text-gray-600 text-md my-4 w-full whitespace-normal">{quiz?.description}</p>
-                <div className="flex justify-between items-center">
+                {quiz.is_locked && quiz.allows_late_submission && (
+                            <div className="text-red-500 text-sm mt-2 md:mt-0 md:ml-2">
+                                Late submission is allowed.
+                            </div>
+                        )}
+                <div className="flex flex-col justify-between items-center p-4 border rounded-lg shadow-md bg-white md:flex-row">
                     
-                        {quiz?.is_locked  ? (
-                            <>
-                                <div>
-                                    <CircularProgressbar value={quiz.percentage} />
-                                </div>
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={handleCardClick}
-                                    style={{
-                                        backgroundColor: linearGradientBackground,
-                                        color: textColor
-                                    }}
-                                    className="px-4 py-2 shadow-xl font-bold rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-                                >
-                                    Re-Take
-                                </motion.button>
-                            </>
-                            ) : (
+                    <div className="flex flex-col items-center mb-4 md:flex-row md:mb-0">
+                        <div className='flex text-md mr-4'>
+                            {quiz.questions?.length} Questions
+                        </div>
+                       
+                    </div>
+                    <div>
+                        {quiz.is_locked ? (
+                            quiz.allows_late_submission ? (
                                 <>
-                                    <div className='flex text-md'>
-                                        {quiz?.questions?.length} Questions
-                                    </div>
+                                    {/* <div className="text-red-500 text-sm mt-2 md:mt-0 md:ml-2">
+                                        Late submission is allowed.
+                                    </div> */}
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -210,13 +202,43 @@ const QuizCard = ({ quiz, onClick, title }) => {
                                             backgroundColor: linearGradientBackground,
                                             color: textColor
                                         }}
-                                        className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                                        className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 focus:outline-none focus:ring focus:ring-blue-300"
                                     >
                                         Start
                                     </motion.button>
                                 </>
-                            )}
+                            ) : (
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    style={{
+                                        backgroundColor: linearGradientBackground,
+                                        color: textColor,
+                                        cursor: 'not-allowed'
+                                    }}
+                                    className="px-4 py-2 shadow-xl font-bold rounded-md transition duration-300 focus:outline-none"
+                                    disabled
+                                >
+                                    Locked
+                                </motion.button>
+                            )
+                        ) : (
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={handleCardClick}
+                                style={{
+                                    backgroundColor: linearGradientBackground,
+                                    color: textColor
+                                }}
+                                className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 focus:outline-none focus:ring focus:ring-blue-300"
+                            >
+                                Start
+                            </motion.button>
+                        )}
+                    </div>
                 </div>
+
             </div>
 
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -237,7 +259,6 @@ const QuizCard = ({ quiz, onClick, title }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-
         </motion.div>
     );
 };
@@ -325,7 +346,7 @@ const ScrollableContainer = ({ title, quizzes, handleCardClick, textColor, visib
                     >
                         {quizzes.map((quiz) => (
                             <QuizCard key={quiz?.id} quiz={quiz} onClick={handleCardClick}
-                            title={title} />
+                                title={title} />
                         ))}
                     </motion.div>
                 </div>
@@ -362,7 +383,7 @@ const StudentQuizList = () => {
         ? colorTheme.dark.selectBackground
         : colorTheme.light.selectBackground;
 
-        
+
     const textColor = isDarkMode
         ? colorTheme.dark.textColor3
         : colorTheme.light.textColor3;
@@ -373,9 +394,9 @@ const StudentQuizList = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log("assignmentsList",assignmentsList)
+        console.log("assignmentsList", assignmentsList)
     }, [assignmentsList]);
-    
+
     const handleCardClick = (quizId) => {
         const path = `/studentQuizList/view/${quizId}`;
         navigate(path);
@@ -399,11 +420,11 @@ const StudentQuizList = () => {
                 </div>
             </div>
             <ScrollableContainer
-                title= {"To do Quizzes"}
+                title={"To do Quizzes"}
                 quizzes={assignmentsList}
                 handleCardClick={handleCardClick}
                 textColor="#242D36"
-                visibleCount={4}
+                visibleCount={10}
             />
             {/* <ScrollableContainer
                 title= {QuizList[1].name}

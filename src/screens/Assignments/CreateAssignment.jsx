@@ -289,7 +289,7 @@ const CreateAssignment = () => {
                         </Button>
                     )}
 
-                    {currentStep === steps.length - 1 && (
+                    {/* {currentStep === steps.length - 1 && (
                         <Button
                             variant="contained"
                             color="secondary"
@@ -299,7 +299,7 @@ const CreateAssignment = () => {
                         >
                             Submit
                         </Button>
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>

@@ -30,7 +30,7 @@ const AssignmentForm = ({ onSave, assignment_id }) => {
             always_open_submission,
             deadline: always_open_submission ? null : formattedDeadline,
             allows_late_submission: always_open_submission ? null : allows_late_submission,
-            attempts_allowed: always_open_submission ? null : parseInt(attempts_allowed, 10),
+            attempts_allowed: parseInt(attempts_allowed, 10),
             auto_reminders,
         };
         onSave(formData);
@@ -137,18 +137,19 @@ const AssignmentForm = ({ onSave, assignment_id }) => {
                             </label>
                         </div>
                     </div>
-                    <div className="mb-6">
-                        <label className="block text-gray-700 font-medium mb-2">Number of Attempts Allowed</label>
-                        <input
-                            type="number"
-                            value={attempts_allowed}
-                            onChange={(e) => setNumberOfAttempts(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-                            placeholder="Enter number of attempts"
-                        />
-                    </div>
+
                 </>
             )}
+            <div className="mb-6">
+                <label className="block text-gray-700 font-medium mb-2">Number of Attempts Allowed</label>
+                <input
+                    type="number"
+                    value={attempts_allowed}
+                    onChange={(e) => setNumberOfAttempts(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+                    placeholder="Enter number of attempts"
+                />
+            </div>
             <div className="mb-6">
                 <label className="block text-gray-700 font-medium mb-2">Auto Reminder</label>
                 <div className="flex items-center">
