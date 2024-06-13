@@ -21,6 +21,7 @@ import { RadioButtonUnchecked } from '@mui/icons-material';
 import { CheckCircle } from '@mui/icons-material';
 import bannerImg from '../../../assets/thumbnail.png';
 import bannerImg2 from '../../../assets/virginiaBannner.png';
+import noData from '../../../assets/NoData.jpeg'
 
 const CourseCard = ({ course, onClick, title }) => {
     const dispatch = useDispatch();
@@ -472,139 +473,148 @@ const StudentCourseList = () => {
 
     return (
         <div className="container mx-auto p-4">
-            {selectedBanner ? (
+            {courses ? (
                 <>
-                    <button
-                        onClick={() => setSelectedBanner(null)}
-                        className='rounded-full border-solid border-black border-2 p-1 shadow-lg hover:shadow-xl hover:bg-opacity-10'
-                        style={{
-                            backgroundColor: "transparent",
-                            color: textColor,
-                            marginLeft: '1rem',
-                            marginBottom: '30px'
-                        }}
-                    >
-                        <ArrowBackIosIcon className='pl-2' />
-                    </button>
-                    <h1 className="text-2xl font-bold ml-8 mb-8">{selectedBanner.name}</h1>
-                    <div className="grid grid-cols-4 gap-4 ml-8">
-                        {selectedBanner.courses.map((course) => (
-                            <div
-                                key={course.course_id}
-                                className="p-4 bg-gray-200 rounded-lg shadow hover:shadow-xl hover:bg-opacity-80 transition duration-300"
+                    {selectedBanner ? (
+                        <>
+                            <button
+                                onClick={() => setSelectedBanner(null)}
+                                className='rounded-full border-solid border-black border-2 p-1 shadow-lg hover:shadow-xl hover:bg-opacity-10'
+                                style={{
+                                    backgroundColor: "transparent",
+                                    color: textColor,
+                                    marginLeft: '1rem',
+                                    marginBottom: '30px'
+                                }}
                             >
-                                <img src={bannerImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
-                                <h2 className="text-lg font-semibold my-5">{course.course_name}</h2>
-                                <div className='flex justify-end'>
-                                    {/* <div className='flex'>
-                                        <TimerOutlinedIcon /><p className="text-gray-600">{course.course_time}</p>
-                                    </div> */}
-                                    <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        style={{
-                                            backgroundColor: linearGradientBackground,
-                                            color: textColor
-                                        }}
-                                        className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                                <ArrowBackIosIcon className='pl-2' />
+                            </button>
+                            <h1 className="text-2xl font-bold ml-8 mb-8">{selectedBanner.name}</h1>
+                            <div className="grid grid-cols-4 gap-4 ml-8">
+                                {selectedBanner.courses.map((course) => (
+                                    <div
+                                        key={course.course_id}
+                                        className="p-4 bg-gray-200 rounded-lg shadow hover:shadow-xl hover:bg-opacity-80 transition duration-300"
                                     >
-                                        Start
-                                    </motion.button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </>
-            ) : selectedCategory ? (
-                <>
-                    <button
-                        onClick={() => setSelectedCategory(null)}
-                        className='rounded-full border-solid border-black border-2 p-1 shadow-lg hover:shadow-xl hover:bg-opacity-10'
-                        style={{
-                            backgroundColor: "transparent",
-                            color: textColor,
-                            marginLeft: '1rem',
-                            marginBottom: '30px'
-                        }}
-                    >
-                        <ArrowBackIosIcon className='pl-2' />
-                    </button>
-                    <h1 className="text-2xl font-bold ml-8 mb-8">{selectedCategory.name}</h1>
-                    <div className="grid grid-cols-4 gap-4 ml-8">
-                        {selectedCategory.courses.map((course) => (
-                            <div
-                                key={course.course_id}
-                                className="p-4 bg-gray-200 rounded-lg shadow hover:shadow-xl hover:bg-opacity-80 transition duration-300"
-                            >
-                                <img src={bannerImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
-                                <h2 className="text-lg font-semibold my-5">{course.course_name}</h2>
-                                <div className='flex justify-between'>
-                                    <div className='flex'>
-                                        <TimerOutlinedIcon /><p className="text-gray-600">{course.course_time}</p>
+                                        <img src={bannerImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
+                                        <h2 className="text-lg font-semibold my-5">{course.course_name}</h2>
+                                        <div className='flex justify-end'>
+                                            {/* <div className='flex'>
+                                                <TimerOutlinedIcon /><p className="text-gray-600">{course.course_time}</p>
+                                            </div> */}
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                style={{
+                                                    backgroundColor: linearGradientBackground,
+                                                    color: textColor
+                                                }}
+                                                className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                                            >
+                                                Start
+                                            </motion.button>
+                                        </div>
                                     </div>
-                                    <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        style={{
-                                            backgroundColor: linearGradientBackground,
-                                            color: textColor
-                                        }}
-                                        className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                                ))}
+                            </div>
+                        </>
+                    ) : selectedCategory ? (
+                        <>
+                            <button
+                                onClick={() => setSelectedCategory(null)}
+                                className='rounded-full border-solid border-black border-2 p-1 shadow-lg hover:shadow-xl hover:bg-opacity-10'
+                                style={{
+                                    backgroundColor: "transparent",
+                                    color: textColor,
+                                    marginLeft: '1rem',
+                                    marginBottom: '30px'
+                                }}
+                            >
+                                <ArrowBackIosIcon className='pl-2' />
+                            </button>
+                            <h1 className="text-2xl font-bold ml-8 mb-8">{selectedCategory.name}</h1>
+                            <div className="grid grid-cols-4 gap-4 ml-8">
+                                {selectedCategory.courses.map((course) => (
+                                    <div
+                                        key={course.course_id}
+                                        className="p-4 bg-gray-200 rounded-lg shadow hover:shadow-xl hover:bg-opacity-80 transition duration-300"
                                     >
-                                        Start
-                                    </motion.button>
+                                        <img src={bannerImg} alt="Course" className={`w-[240px] max-w-full h-auto rounded-lg object-cover`} />
+                                        <h2 className="text-lg font-semibold my-5">{course.course_name}</h2>
+                                        <div className='flex justify-between'>
+                                            <div className='flex'>
+                                                <TimerOutlinedIcon /><p className="text-gray-600">{course.course_time}</p>
+                                            </div>
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                style={{
+                                                    backgroundColor: linearGradientBackground,
+                                                    color: textColor
+                                                }}
+                                                className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                                            >
+                                                Start
+                                            </motion.button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {banner[0].courses.length !== 0 && (
+                                <div className="image-container relative mx-8 my-5" onClick={() => handleBannerClick(banner[0])}>
+                                    <img src={bannerImg2} alt="Banner" className="w-full h-[270px] object-cover object-center rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" />
+                                    {/* <img src={bannerImg} alt="Course" className="w-[100%] h-[400px] rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" /> */}
+                                    {/* <div className="text-overlay absolute left-0 top-0 p-4">
+                                        <h2 className="text-2xl font-bold text-white md:text-4xl">{banner[0].name}</h2>
+                                        <p className="mt-2 text-base text-white md:text-lg">
+                                            {banner[0].description}
+                                        </p>
+                                    </div> */}
+                                </div>
+                            )}
+                            {/* <div className="w-full flex overflow-x-auto gap-2"> */}
+                                <ScrollableContainer
+                                    title="Continue Learning..."
+                                    courses={courses}
+                                    handleCardClick={handleCardClick}
+                                    textColor="#242D36"
+                                    visibleCount={4}
+                                />
+                                {/* <TaskManager /> */}
+                            {/* </div> */}
+                            <ScrollableContainer
+                                title="Suggested Courses"
+                                courses={courses}
+                                handleCardClick={handleCardClick}
+                                textColor="#242D36"
+                                visibleCount={4}
+                            />
+                            <div>
+                                <h1 className="text-2xl font-bold ml-8 mb-8">Categories</h1>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ml-8 mb-5">
+                                    {categories.map((category) => (
+                                        <div
+                                            key={category.name}
+                                            style={{ backgroundColor: textColor }}
+                                            className="w-[270px] rounded-3xl flex items-center justify-center mb-4 h-[50px] font-bold cursor-pointer hover:bg-opacity-80 shadow-md hover:shadow-xl transition"
+                                            onClick={() => handleCategoryClick(category)}
+                                        >
+                                            <h3 className="text-white">{category.name}</h3>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </>
+                    )}
                 </>
             ) : (
-                <>
-                    {banner[0].courses.length !== 0 && (
-                        <div className="image-container relative mx-8 my-5" onClick={() => handleBannerClick(banner[0])}>
-                            <img src={bannerImg2} alt="Banner" className="w-full h-[270px] object-cover object-center rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" />
-                            {/* <img src={bannerImg} alt="Course" className="w-[100%] h-[400px] rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" /> */}
-                            {/* <div className="text-overlay absolute left-0 top-0 p-4">
-                                <h2 className="text-2xl font-bold text-white md:text-4xl">{banner[0].name}</h2>
-                                <p className="mt-2 text-base text-white md:text-lg">
-                                    {banner[0].description}
-                                </p>
-                            </div> */}
-                        </div>
-                    )}
-                    {/* <div className="w-full flex overflow-x-auto gap-2"> */}
-                        <ScrollableContainer
-                            title="Continue Learning..."
-                            courses={courses}
-                            handleCardClick={handleCardClick}
-                            textColor="#242D36"
-                            visibleCount={4}
-                        />
-                        {/* <TaskManager /> */}
-                    {/* </div> */}
-                    <ScrollableContainer
-                        title="Suggested Courses"
-                        courses={courses}
-                        handleCardClick={handleCardClick}
-                        textColor="#242D36"
-                        visibleCount={4}
-                    />
-                    <div>
-                        <h1 className="text-2xl font-bold ml-8 mb-8">Categories</h1>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ml-8 mb-5">
-                            {categories.map((category) => (
-                                <div
-                                    key={category.name}
-                                    style={{ backgroundColor: textColor }}
-                                    className="w-[270px] rounded-3xl flex items-center justify-center mb-4 h-[50px] font-bold cursor-pointer hover:bg-opacity-80 shadow-md hover:shadow-xl transition"
-                                    onClick={() => handleCategoryClick(category)}
-                                >
-                                    <h3 className="text-white">{category.name}</h3>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </>
+                <div className='flex items-center justify-center flex-col'>
+                    <img src={noData} alt="No Data" className="object-cover  w-[45%] h-[45%] mt-8" />
+                    <h1 style={{ color: 'grey' }} className='font-bold text-4xl mt-8'>No Courses Available</h1>
+                </div>
             )}
         </div>
     );
