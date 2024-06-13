@@ -69,6 +69,7 @@ const initialState = {
       textColor: "#fafcfc",
       textColor2: "#8A8A8A",
       textColor3: "#252525",
+      cardColor: "F0F0F0"
     },
     dark: {
       background: "#242D36",
@@ -80,6 +81,7 @@ const initialState = {
       textColor: "#ABB2BA",
       textColor2: "#8A8A8A",
       textColor3: "#252525",
+      cardColor: "F0F0F0"
     },
   },  
 

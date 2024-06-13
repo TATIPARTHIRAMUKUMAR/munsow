@@ -73,7 +73,6 @@ const CourseCard = ({ course, onClick }) => {
                         <DeleteIcon onClick={handleOpen} />
                     </IconButton>
                 </div>
-
                 <p className="text-gray-600 text-sm mb-4">{course?.description}</p>
                 <div className="flex justify-between items-center">
                     <motion.button

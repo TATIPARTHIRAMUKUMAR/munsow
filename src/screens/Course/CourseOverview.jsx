@@ -1,74 +1,54 @@
 import React, { useState } from 'react';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router-dom';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
 import GLOBAL_CONSTANTS from '../../../GlobalConstants';
 
+import { useDarkMode } from "./../../Dark";
+import { useSelector } from 'react-redux';
+
 const CourseOverview = ({ course,show,text }) => {
     console.log("show",show)
     const navigate = useNavigate();
-    const [tooltipOpen, setTooltipOpen] = useState(false);
+    const { colorTheme } = useSelector((state) => state?.data);
+
+    const { isDarkMode } = useDarkMode();
+
+    const linearGradientBackground = isDarkMode
+        ? colorTheme.dark.selectBackground
+        : colorTheme.light.selectBackground;
+
+    const textColor = isDarkMode
+        ? colorTheme.dark.textColor3
+        : colorTheme.light.textColor3;
 
     const onBack = () => {
         navigate(-1);
     };
 
-    const calculateProgress = () => {
-        if (!course || !course.content_data) {
-            return 0;
-        }
-
-        const totalSubtopics = course.content_data.reduce((acc, topic) => acc + (topic.subtopics?.length || 0), 0);
-        const completedSubtopics = course.content_data.reduce((acc, topic) => {
-            return acc + (topic.subtopics?.filter(subtopic => subtopic.completed)?.length || 0);
-        }, 0);
-
-        return totalSubtopics === 0 ? 0 : Math.round((completedSubtopics / totalSubtopics) * 100);
-    };
-
-    const progress = calculateProgress();
-
-    const handleProgressClick = () => {
-        setTooltipOpen(true);
-    };
-
-    const handleCloseTooltip = () => {
-        setTooltipOpen(false);
-    };
-
-    const completedSubtopics = course?.content_data?.reduce((acc, topic) => {
-        return acc + (topic.subtopics?.filter(subtopic => subtopic.completed)?.length || 0);
-    }, 0);
-
-    const totalSubtopics = course?.content_data?.reduce((acc, topic) => acc + (topic.subtopics?.length || 0), 0);
-
-    const tooltipContent = `${completedSubtopics} out of ${totalSubtopics} subtasks completed`;
 
     return (
         <div className="bg-white rounded-lg p-6 mb-4 flex items-center">
             <div>
-                <Button
-                    startIcon={<ArrowBackIcon />}
+                <button
                     onClick={onBack}
-                    variant="contained"
-                    style={{
-                        marginLeft: '1rem',
-                        backgroundColor: '#886CC0',
-                        color: 'white',
-                        textTransform: 'none',
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                    }}
+                    className='rounded-full border-solid border-black border-2 p-1 shadow-lg hover:shadow-xl hover:bg-opacity-10'
+                        style={{
+                            backgroundColor: "transparent",
+                            color: textColor,
+                            marginLeft: '1rem',
+                            marginBottom: '30px'
+                        }}
                 >
-                    {text}
-                </Button>
+                    <ArrowBackIosIcon className='pl-2' />
+                </button>
             </div>
-            <div className='pl-20'>
-                <h1 className="text-4xl font-bold text-gray-800 mb-4">{course?.name}</h1>
+            <div className='flex justify-center pl-20 w-9/12 flex-col'>
+                <h1 className="flex text-3xl font-semibold text-gray-800 mb-4 items-center">{course?.name}</h1>
                 <p className="text-gray-600">{course?.description}</p>
             </div>
-            {GLOBAL_CONSTANTS?.user_cred?.role_name === "Student" && (
-                <div className="flex items-center ml-auto">
+            {/* {GLOBAL_CONSTANTS?.user_cred?.role_name === "Student" && (
+                <div className="flex items-center">
                     <Tooltip title={tooltipContent} open={tooltipOpen} onClose={handleCloseTooltip} arrow>
                         <div onClick={handleProgressClick}>
                             <CircularProgress
@@ -86,7 +66,7 @@ const CourseOverview = ({ course,show,text }) => {
                     </Tooltip>
                     <span>{`${progress}% Complete`}</span>
                 </div>
-            )}
+            )} */}
             {(GLOBAL_CONSTANTS?.user_cred?.role_name === "Teacher" && show==true) && (
                 <Button
                     variant="contained"
