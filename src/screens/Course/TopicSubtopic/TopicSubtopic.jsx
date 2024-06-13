@@ -16,7 +16,7 @@ function TopicSubtopic() {
         'subtopic' : 'Topic 1.1',
         'isHiddenSub' : false,
         // 'isDescHidden' : false,
-        'desc' : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
+        'desc' : ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do ei usmod tempor incididunt ut labore et dolore magna aliqua']
       }
     ]
   },
@@ -35,14 +35,12 @@ const [isSubDeleteModalOpen, setSubDeleteModalOpen] = useState(false);
 const [isSubEditModalOpen, setSubEditModalOpen] = useState(false);
 
 const [newTopic, setNewTopic] = useState({ topic: '' });
-const [newSubTopic, setNewSubTopic] = useState({ subtopic: '' , desc : ''});
+const [newSubTopic, setNewSubTopic] = useState({ subtopic: '' , desc : []});
 let [Topicdata, setData] = useState(data);
 
 const [inputClassName, setInputClassName] = useState('valid');
-const [descClassName, setDescClassName] = useState('validDesc')
 
 const [validationMessage, setValidationMessage] = useState('');
-const [validationDescMessage, setValidationDescMessage] = useState('')
 
 const openModal = () => {
   setValidationMessage('')
@@ -69,12 +67,10 @@ const openSubDeleteModal = (subTopicId, TopicIndex) => {
 
 const topicEditIndex = useRef(null);
 const subEditIndex = useRef(null);
-const [editSubTopic, setEditSubTopic] = useState({ subtopic: '' , desc : ''});
+const [editSubTopic, setEditSubTopic] = useState({ subtopic: '' , desc : []});
 
 const openSubEditModal = (topicIndex, subTopicIndex, editSubtopic) => {
-  setValidationDescMessage('')
   setValidationMessage('')
-  setDescClassName('validDesc') 
   setInputClassName('valid')
   topicEditIndex.current = topicIndex
   subEditIndex.current = subTopicIndex
@@ -85,9 +81,7 @@ const openSubEditModal = (topicIndex, subTopicIndex, editSubtopic) => {
 const iRef = useRef(0);
 
 const openSubModal = (index) => {
-  setValidationDescMessage('')
   setValidationMessage('')
-  setDescClassName('validDesc') 
   setInputClassName('valid')
   iRef.current = index;
   setSubModalOpen(true);
@@ -113,53 +107,64 @@ const closeSubModal = () => {
   setSubModalOpen(false);
 };
 
-const handleSubTopicInputChange = (e) => {
+let [subTopicDesc, setSubTopicDesc] = useState('');
 
+const handleSubTopicInputChange = (e) => {
   const { name, value } = e.target;
-  console.log(name,value,"desc value")
-  if(name === 'subtopic')
-  {
-    if(value.length > 0)
-    {
+
+  setNewSubTopic((prevSubTopic) => ({
+    ...prevSubTopic,
+    [name]: value,
+  }));
+
+  if (name === 'subtopic') {
+    if (value.length > 0) {
       setInputClassName('valid');
-      setValidationMessage('')
-      setNewSubTopic((prevSubTopic) => ({
-        ...prevSubTopic,
-        [name]: value,
-      }));
-    }
-    else
-    {
-      setValidationMessage('Please enter a valid Sub-Topic name')
-      setNewSubTopic((prevSubTopic) => ({
-        ...prevSubTopic,
-        [name]: '',
-      }));
+      setValidationMessage('');
+    } else {
+      setValidationMessage('Please enter a valid Sub-Topic name');
       setInputClassName('invalid');
     }
   }
-  else
-  {
-    if(value.length > 0)
-    {
-      setDescClassName('validDesc');
-      setValidationDescMessage('')
-      setNewSubTopic((prevSubTopic) => ({
-        ...prevSubTopic,
-        [name]: value,
-      }));
-    }
-    else
-    {
-      setValidationDescMessage('Please enter valid Description')
-      setNewSubTopic((prevSubTopic) => ({
-        ...prevSubTopic,
-        [name]: '',
-      }));
-      setDescClassName('invalidDesc');
-    }
-  }
 };
+
+const handleEditorChange = (content) => {
+  console.log("Content from editor: ", content);
+
+  // Update the `newSubTopic` state
+  setNewSubTopic((prevSubTopics) => {
+    // Ensure prevSubTopics is an array
+    const updatedSubTopics = Array.isArray(prevSubTopics) ? [...prevSubTopics] : [];
+
+    for (let i = 0; i < updatedSubTopics.length; i++) {
+      const topic = updatedSubTopics[i];
+
+      for (let j = 0; j < topic.subtopics.length; j++) {
+        const subtopic = topic.subtopics[j];
+
+        if (subtopic.subtopic === subTopic) {
+
+          console.log('//// : ', subTopic)
+
+          // Ensure desc is an array
+          subtopic.desc = Array.isArray(subtopic.desc) ? subtopic.desc : [];
+
+          // Update the desc array
+          subtopic.desc = [...subtopic.desc, content];
+          
+          // Break out once the subtopic is found and updated
+          break;
+        }
+      }
+    }
+
+    return updatedSubTopics;
+  });
+};
+
+
+
+
 
 const handleSubTopicEditInputChange = (e) => {
 
@@ -189,8 +194,6 @@ const handleSubTopicEditInputChange = (e) => {
   {
     if(value.length > 0)
     {
-      setDescClassName('validDesc');
-      setValidationDescMessage('')
       setEditSubTopic((prevSubTopic) => ({
         ...prevSubTopic,
         [name]: value,
@@ -198,12 +201,10 @@ const handleSubTopicEditInputChange = (e) => {
     }
     else
     {
-      setValidationDescMessage('Please enter valid Description')
       setEditSubTopic((prevSubTopic) => ({
         ...prevSubTopic,
         [name]: '',
       }));
-      setDescClassName('invalidDesc');
     }
   }
 };
@@ -254,37 +255,27 @@ const handleSubTopicSave = () => {
       currentTopic.subtopics = [];
     } 
     
-    if(newSubTopic.subtopic === '' && newSubTopic.desc === '')
+    if(newSubTopic.subtopic === '')
     {
       setInputClassName('invalid')
-      setDescClassName('invalidDesc')
       setValidationMessage('Please enter a valid Sub-Topic name')
-      setValidationDescMessage('Please enter valid Description')
-    }
-
-    else if(newSubTopic.subtopic === '')
-    {
-      setValidationMessage('Please enter a valid Sub-Topic name')
-      setInputClassName('invalid')
-    }
-    else if(newSubTopic.desc === '')
-    {
-      setValidationDescMessage('Please enter valid Description')
-      setDescClassName('invalidDesc')
     }
     else
     {
       setInputClassName('valid')
-      setDescClassName('validDesc')
-      setValidationDescMessage('')
-      setValidationDescMessage('')
-      const newSubtopicItem = { id: currentTopic.subtopics.length + 1, isHiddenSub : false, isDescHidden : false, ...newSubTopic };
+      const newSubtopicItem = { 
+        id: currentTopic.subtopics.length + 1, 
+        isHiddenSub : false, 
+        isDescHidden : false, 
+        subtopic : newSubTopic.subtopic,
+        desc : subTopicDesc
+       };
       currentTopic.subtopics.push(newSubtopicItem);
 
       setData([...Topicdata]);
       closeSubModal();
       iRef.current = 0;
-      setNewSubTopic({subtopic : '', desc : ''})
+      setNewSubTopic({subtopic : '', desc : []})
     }
   }
   else
@@ -348,28 +339,15 @@ const saveEditing = (index) => {
 // Update SubTopic
 
 const handleEdit = () => {
-  if(editSubTopic.subtopic === '' && editSubTopic.desc === '')
+  if(editSubTopic.subtopic === '')
     {
       setInputClassName('invalid')
-      setDescClassName('invalidDesc')
       setValidationMessage('Please enter a valid Sub-Topic name')
-      setValidationDescMessage('Please enter valid Description')
-    }
-
-    else if(editSubTopic.subtopic === '')
-    {
-      setValidationMessage('Please enter a valid Sub-Topic name')
-      setInputClassName('invalid')
-    }
-    else if(editSubTopic.desc === '')
-    {
-      setValidationDescMessage('Please enter valid Description')
-      setDescClassName('invalidDesc')
     }
     else
     {
       Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].subtopic = editSubTopic.subtopic;
-      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].desc = editSubTopic.desc;
+      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].desc = subTopicDesc;
 
       setData(Topicdata);
       closeSubEditModal();
@@ -417,7 +395,6 @@ const toggleVisibility = (index) => {
       subtopic.isHiddenSub = true;
     });
   }
-  console.log('???????', updatedTopicData)
   setData(updatedTopicData);
 
 };
@@ -440,7 +417,7 @@ const toggleVisibilitySubTopic = (topicIndex, subTopicIndex) => {
   const updatedTopicData = [...Topicdata];
   updatedTopicData[topicIndex].subtopics[subTopicIndex].isHiddenSub = true;
   
-  if(updatedTopicData[topicIndex].subtopics.length > 1)
+  if(updatedTopicData[topicIndex].subtopics.length > 0)
   {
     if(updatedTopicData[topicIndex].subtopics.every(subtopic => subtopic.isHiddenSub === true ))
     {
@@ -456,7 +433,7 @@ const visibleSubTopic = (topicIndex, subTopicIndex) => {
   const updatedTopicData = [...Topicdata];
   updatedTopicData[topicIndex].subtopics[subTopicIndex].isHiddenSub = false;
 
-  if(updatedTopicData[topicIndex].subtopics.length > 1)
+  if(updatedTopicData[topicIndex].subtopics.length > 0)
   {
     if(updatedTopicData[topicIndex].subtopics.some(subtopic => subtopic.isHiddenSub === false ))
     {
@@ -664,9 +641,8 @@ const topicNames = Topicdata.map((topic, index) =>
           </button>
           
           <div className={`panel ${Topicdata[index].subtopics[subIndex].isDescHidden ? 'active' : ''}`}>
-            <p className='subTopicDesc'>{subtopic.desc}</p>
-          </div>
-
+            <div dangerouslySetInnerHTML={{ __html: subtopic.desc}} />
+            </div>
           </td>
 
 
@@ -759,7 +735,7 @@ return (
             onChange={handleSubTopicInputChange}
             placeholder='e.g., Topic 3.1 - Heading'
             className={inputClassName}
-          /> 
+          />
           {validationMessage && (
             <p className='invalidMessage'>
               {validationMessage}
@@ -785,46 +761,44 @@ return (
             </p>
           )} */}
 
-          {/* //editor */}
+          {/* Editor */}
           <Editor
-                        apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
-                        init={{
-                          menu: {
-                            file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
-                            edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
-                            view: { title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments' },
-                            insert: { title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
-                            format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat' },
-                            tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount' },
-                            table: { title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' },
-                            help: { title: 'Help', items: 'help' }
-                          },
-                          // plugins: [
-                          //   'advlist', 'autolink', 'link', 'image', 'charmap', 'preview',
-                          //   'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                          //   'insertdatetime', 'media', 'table', 'help', 'wordcount'
-                          // ],
-                          // toolbar: 'undo redo | blocks | ' +
-                          // 'bold italic backcolor | alignleft aligncenter ' +
-                          // 'alignright alignjustify | bullist numlist outdent indent | ' +
-                          // 'removeformat | help',
-                          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-                          plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                          tinycomments_mode: 'embedded',
-                          tinycomments_author: 'Author name',
-                          mergetags_list: [
-                            { value: 'First.Name', title: 'First Name' },
-                            { value: 'Email', title: 'Email' },
-                          ],
-                          ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                        }}
-                        initialValue="Add your Subtopic Description"
-                        // onEditorChange={(content, editor) => handleSubTopicSave(content)}          
-                      />
+            apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
+            init={{
+              menu: {
+                file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
+                edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
+                view: { title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments' },
+                insert: { title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
+                format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat' },
+                tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount' },
+                table: { title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' },
+                help: { title: 'Help', items: 'help' }
+              },
+              plugins: [
+                'advlist', 'autolink', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+              ],
+              toolbar: 'undo redo | blocks | ' +
+              'bold italic backcolor | alignleft aligncenter ' +
+              'alignright alignjustify | bullist numlist outdent indent | ' +
+              'removeformat | help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+              // plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+              // toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+              tinycomments_mode: 'embedded',
+              tinycomments_author: 'Author name',
+              mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+              ],
+              ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+            }}
+            initialValue={newSubTopic.desc}
+            onEditorChange={(content, editor) => setSubTopicDesc(content)}
+          />
 
-
-          <br/><br/><br/>
           <div className='flex gap-4 items-center'>
             <button onClick={cancelEditing} className='cancelEditButton'>Cancel</button>
             <button onClick={handleSubTopicSave} className='saveEditButton'>Save</button>
@@ -842,7 +816,7 @@ return (
         </span>
         <h1 className='modalCreateHead'>Deletion Conformation</h1>
         <p className='deleteLabel'>Are You Sure You Want To Delete This Topic?</p><br/>
-        <button onClick={closeDeleteModal} className='cancelEditButton' style={{marginLeft:'290px'}}>Cancel</button>
+        <button onClick={closeDeleteModal} className='cancelEditButton mr-5' style={{marginLeft:'290px'}}>Cancel</button>
         <button onClick={handleDelete} className='saveEditButton'>Delete</button>
       </div>
     </div>
@@ -908,41 +882,41 @@ return (
           )} */}
           {/* //editor */}
           <Editor
-                        apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
-                        init={{
-                          menu: {
-                            file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
-                            edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
-                            view: { title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments' },
-                            insert: { title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
-                            format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat' },
-                            tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount' },
-                            table: { title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' },
-                            help: { title: 'Help', items: 'help' }
-                          },
-                          // plugins: [
-                          //   'advlist', 'autolink', 'link', 'image', 'charmap', 'preview',
-                          //   'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                          //   'insertdatetime', 'media', 'table', 'help', 'wordcount'
-                          // ],
-                          // toolbar: 'undo redo | blocks | ' +
-                          // 'bold italic backcolor | alignleft aligncenter ' +
-                          // 'alignright alignjustify | bullist numlist outdent indent | ' +
-                          // 'removeformat | help',
-                          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-                          plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                          tinycomments_mode: 'embedded',
-                          tinycomments_author: 'Author name',
-                          mergetags_list: [
-                            { value: 'First.Name', title: 'First Name' },
-                            { value: 'Email', title: 'Email' },
-                          ],
-                          ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                        }}
-                        initialValue={editSubTopic.desc}
-                        onEditorChange={(content, editor) => handleSubTopicSave(content)}          
-                      />
+            apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
+            init={{
+              menu: {
+                file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
+                edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
+                view: { title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments' },
+                insert: { title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
+                format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat' },
+                tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount' },
+                table: { title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' },
+                help: { title: 'Help', items: 'help' }
+              },
+              plugins: [
+                'advlist', 'autolink', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+              ],
+              toolbar: 'undo redo | blocks | ' +
+              'bold italic backcolor | alignleft aligncenter ' +
+              'alignright alignjustify | bullist numlist outdent indent | ' +
+              'removeformat | help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+              // plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+              // toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+              tinycomments_mode: 'embedded',
+              tinycomments_author: 'Author name',
+              mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+              ],
+              ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+            }}
+            initialValue={editSubTopic.desc}
+            onEditorChange={(content, editor) => setSubTopicDesc(content)}
+          />
           <br/><br/>
           <div className='flex gap-4 items-center'>
             <button onClick={cancelEditing} className='cancelEditButton'>Cancel</button>
