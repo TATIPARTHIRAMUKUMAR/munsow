@@ -161,6 +161,21 @@ const QuestionBankForm = () => {
         return downloadUrl;
     };
 
+    // Validation function to check if all required fields are filled
+    const isFormValid = () => {
+        if (!questionBank.name || !questionBank.description) {
+            return false;
+        }
+        if (questionBank.method === 'addUI') {
+            for (const question of questionBank.questions) {
+                if (!question.question || question.marks === '' || question.numberOfOptions === 0 || question.options.includes('')) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
     return (
         <div className="min-h-screen pt-5 pb-20">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -398,6 +413,7 @@ const QuestionBankForm = () => {
                         onClick={handleSubmit}
                         style={{ marginLeft: "15px" }}
                         className="pl-10"
+                        disabled={!isFormValid()} // Disable button if form is not valid
                     >
                         Submit Question Bank
                     </Button>
