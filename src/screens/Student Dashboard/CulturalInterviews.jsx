@@ -67,11 +67,11 @@ const CulturalInterviews = ({ interviewData }) => {
 
   return (
     <div>
-      <p className="text-lg font-bold p-1 ml-3">JD Interview Summary</p>
+      <p className="text-lg font-bold p-1 ml-3 text-center my-2">Cultural Interview Summary</p>
       <div className="flex justify-start mt-1 mb-4 ml-5">
         <FormControl 
         sx={{
-          width: '150px',
+          width: '310px',
           backgroundColor: '#F0F0F0',
           borderRadius: '8px',
           '& .MuiOutlinedInput-root': {
