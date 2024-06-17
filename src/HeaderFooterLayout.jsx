@@ -38,9 +38,12 @@ import {
   FaChalkboardTeacher,
   FaCode,
   FaUserSecret,
+  FaChartBar,
 } from 'react-icons/fa';
 
 import {
+  FaChartColumn,
+  FaChartGantt,
   FaHeartPulse, FaSection,
 } from 'react-icons/fa6';
 
@@ -147,10 +150,20 @@ export default function HeaderFooterLayout({ Component }) {
             //   icon: <FaBrain size={20} className="" />,
             //   route: "/behaviourAnalysis",
             // },
+            // {
+            //   label: "KS Analysis",
+            //   icon: <FaChartLine size={20} className="" />,
+            //   route: "/ksanalysis",
+            // },
             {
-              label: "KS Analysis",
-              icon: <FaChartLine size={20} className="" />,
-              route: "/ksanalysis",
+              label: "Hard Skills",
+              icon: <FaChartGantt size={20} className="" />,
+              route: "/hardskills",
+            },
+            {
+              label: "Soft Skills",
+              icon: <FaChartColumn size={20} className="" />,
+              route: "/softskills",
             },
             {
               label: "Practical thinking A",
