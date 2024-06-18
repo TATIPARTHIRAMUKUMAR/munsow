@@ -55,6 +55,8 @@ import StudentQuizList from "./screens/Quiz/StudentQuizView/StudentQuizList";
 import QuizPage from "./screens/Quiz/QuizPage";
 import AssignmentList from "./screens/Assignments/AssignmentsList";
 import CreateAssignment from "./screens/Assignments/CreateAssignment";
+import HardSkills from "./screens/Admin/Analysis/HardSkills";
+import SoftSkills from "./screens/Admin/Analysis/SoftSkills";
 
 
 function Url_Routes() {
@@ -76,7 +78,9 @@ function Url_Routes() {
                 <Route exact path="/addTeacher" element={<HeaderFooterLayout Component={<AddTeachers />} />} />
                 <Route exact path="/summary" element={<HeaderFooterLayout Component={<Summary />} />} />
                 <Route exact path="/emotionSensing" element={<HeaderFooterLayout Component={<EmotionSensing />} />} />
-                <Route exact path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} />
+                {/* <Route exact path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} /> */}
+                <Route exact path="/hardskills" element={<HeaderFooterLayout Component={<HardSkills />} />} />
+                <Route exact path="/softskills" element={<HeaderFooterLayout Component={<SoftSkills />} />} />
                 <Route exact path="/skills" element={<HeaderFooterLayout Component={<Skills />} />} />
                 <Route exact path="/behaviourAnalysis" element={<HeaderFooterLayout Component={<BehaviourAnalysis />} />} />
                 <Route exact path="/practicalThinking" element={<HeaderFooterLayout Component={<PracticalThinking />} />} />
