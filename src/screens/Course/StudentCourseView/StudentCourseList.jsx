@@ -104,9 +104,9 @@ const CourseCard = ({ course, onClick, title }) => {
                             </>
                             ) : (
                                 <>
-                                    <div className='flex'>
+                                    {/* <div className='flex'>
                                         <TimerOutlinedIcon /> 2hr 14mins
-                                    </div>
+                                    </div> */}
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -147,7 +147,7 @@ const CourseCard = ({ course, onClick, title }) => {
     );
 };
 
-const ScrollableContainer = ({ title, courses, handleCardClick, textColor, visibleCount }) => {
+const ScrollableContainer = ({ title, courses, handleCardClick, handleBannerClick, textColor, visibleCount }) => {
     const [visibleStartIndex, setVisibleStartIndex] = useState(0);
     const [showAll, setShowAll] = useState(false);
 
@@ -171,85 +171,160 @@ const ScrollableContainer = ({ title, courses, handleCardClick, textColor, visib
         );
     };
 
+    const { colorTheme } = useSelector((state) => state?.data);
+    const { isDarkMode } = useDarkMode();
+
+    const linearGradientBackground = isDarkMode
+        ? colorTheme.dark.selectBackground
+        : colorTheme.light.selectBackground;
+
+    const handleEnrollClick = (course) => {
+        if (handleBannerClick) {
+            handleBannerClick({
+                name: course.course_name,
+                description: course.course_description,
+                courses: [course]
+            });
+        }
+    };
+
     return (
         <div className="max-w-7xl p-8">
             <div className="mb-6 flex items-center justify-between">
                 <div className='flex'>
                     <h1 className="text-2xl font-bold">{title}</h1>
-                    {!showAll && (
-                        <a
-                            className="ml-3 mt-2 cursor-pointer underline"
-                            onClick={handleSeeAllClick}
-                        >
-                            See All
-                        </a>
-                    )}
-                    {showAll && (
-                        <a
-                            className="ml-3 mt-2 cursor-pointer underline"
-                            onClick={handleBackClick}
-                        >
-                            Go Back
-                        </a>
-                    )}
-                </div>
-                <div className="flex space-x-2">
-                    {!showAll && (
+                    {(courses.length > 4 && title !== 'Suggested Courses') && (
                         <>
-                            <IconButton
-                                className={`group ${visibleStartIndex === 0 ? 'cursor-not-allowed' : ''} 
-                                w-7 h-7 flex items-center justify-center `}
-                                onClick={handlePrev}
-                                disabled={visibleStartIndex === 0}
-                                style={{ backgroundColor: textColor }}
-                            >
-                                <ArrowBackIosIcon className="pl-[5px] text-gray-300" />
-                            </IconButton>
-                            <IconButton
-                                className={`group ${visibleStartIndex >= courses.length - visibleCount ? 'cursor-not-allowed' : ''} 
-                                w-7 h-7 flex items-center justify-center`}
-                                onClick={handleNext}
-                                disabled={visibleStartIndex >= courses.length - visibleCount}
-                                style={{ backgroundColor: textColor }}
-                            >
-                                <ArrowForwardIosIcon className="pl-[5px] text-gray-300" />
-                            </IconButton>
+                            {!showAll && (
+                                <a
+                                    className="ml-3 mt-2 cursor-pointer underline"
+                                    onClick={handleSeeAllClick}
+                                >
+                                    See All
+                                </a>
+                            )}
+                            {showAll && (
+                                <a
+                                    className="ml-3 mt-2 cursor-pointer underline"
+                                    onClick={handleBackClick}
+                                >
+                                    Go Back
+                                </a>
+                            )}
                         </>
                     )}
                 </div>
+                {(courses.length > 4 && title !== 'Suggested Courses') && (
+                    <div className="flex space-x-2">
+                        {!showAll && (
+                            <>
+                                <IconButton
+                                    className={`group ${visibleStartIndex === 0 ? 'cursor-not-allowed' : ''} 
+                                        w-7 h-7 flex items-center justify-center `}
+                                    onClick={handlePrev}
+                                    disabled={visibleStartIndex === 0}
+                                    style={{ backgroundColor: textColor }}
+                                >
+                                    <ArrowBackIosIcon className="pl-[5px] text-gray-300" />
+                                </IconButton>
+                                <IconButton
+                                    className={`group ${visibleStartIndex >= courses.length - visibleCount ? 'cursor-not-allowed' : ''} 
+                                        w-7 h-7 flex items-center justify-center`}
+                                    onClick={handleNext}
+                                    disabled={visibleStartIndex >= courses.length - visibleCount}
+                                    style={{ backgroundColor: textColor }}
+                                >
+                                    <ArrowForwardIosIcon className="pl-[5px] text-gray-300" />
+                                </IconButton>
+                            </>
+                        )}
+                    </div>
+                )}
             </div>
             {showAll ? (
-                <div className="relative overflow-x-auto overflow-hidden">
-                    <motion.div
-                        key={visibleStartIndex}
-                        initial={{ x: 100, opacity: 1 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -100, opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className={`grid ${title === "Continue Learning..." ? 'grid-cols-4' : 'grid-cols-4'} gap-8`}
-                    >
-                        {courses.map((course) => (
-                            <CourseCard key={course?.id} course={course} onClick={handleCardClick}
-                            title={title} />
-                        ))}
-                    </motion.div>
-                </div>
+                <>
+                    {title === 'Continue Learning...' && (
+                        <div className="relative overflow-x-auto overflow-hidden">
+                            <motion.div
+                                key={visibleStartIndex}
+                                initial={{ x: 100, opacity: 1 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -100, opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className={`grid grid-cols-4 gap-8`}
+                            >
+                                {courses.map((course) => (
+                                    <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
+                                ))}
+                            </motion.div>
+                        </div>
+                    )}
+                </>
             ) : (
-                <div className="relative overflow-x-auto overflow-hidden">
-                    <motion.div
-                        key={visibleStartIndex}
-                        initial={{ x: 100, opacity: 1 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -100, opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className={`grid ${title === "Continue Learning..." ? 'grid-cols-4' : 'grid-cols-4'} gap-8
-                        overflow-x-scroll overflow-y-hidden whitespace-nowrap `}
-                    >
-                        {courses.slice(visibleStartIndex, visibleStartIndex + visibleCount).map((course) => (
-                            <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
-                        ))}
-                    </motion.div>
-                </div>
+                <>
+                    {title === 'Suggested Courses' ? (
+                        <div className="relative overflow-x-auto overflow-hidden">
+                            <motion.div
+                                key={visibleStartIndex}
+                                initial={{ x: 100, opacity: 1 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -100, opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className={`grid grid-cols-4 gap-8`}
+                            >
+                                {/* {courses.slice(visibleStartIndex, visibleStartIndex + visibleCount).map((course) => (
+                                    <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
+                                ))} */}
+                                <motion.div
+                                    className="w-full h-auto mx-auto inline-block rounded-lg overflow-hidden cursor-pointer 
+                                            shadow-md bg-[#F0F0F0] hover:shadow-2xl transition-shadow duration-300 transform hover:scale-130"
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                >
+                                    <img src={bannerImg} alt="Course" className='w-[228px] max-w-full h-auto m-3 rounded-lg object-cover' />
+                                    <div className="p-6">
+                                        <div className="flex flex-col justify-between mb-2">
+                                            <h2 className="text-xl mb-2">Virginia Tech</h2>
+                                            <p className="text-gray-600 text-sm mb-4 ">
+                                                Become A DECA, Govt of India certified Drone Pilot Course
+                                            </p>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={() => handleEnrollClick({ course_name: 'Virginia Tech', course_description: 'This program is designed for students to specialize in drones technology.' })}
+                                                style={{
+                                                    backgroundColor: linearGradientBackground,
+                                                    color: textColor
+                                                }}
+                                                className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                                            >
+                                                Enroll
+                                            </motion.button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        </div>
+                    ) : (
+                        <div className="relative overflow-x-auto overflow-hidden">
+                            <motion.div
+                                key={visibleStartIndex}
+                                initial={{ x: 100, opacity: 1 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -100, opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className={`grid ${title === "Continue Learning..." ? 'grid-cols-4' : 'grid-cols-4'} gap-8
+                                overflow-x-scroll overflow-y-hidden whitespace-nowrap `}
+                            >
+                                {courses.slice(visibleStartIndex, visibleStartIndex + visibleCount).map((course) => (
+                                    <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
+                                ))}
+                            </motion.div>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
@@ -431,17 +506,10 @@ const TaskManager = () => {
 const StudentCourseList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const controls = useAnimation();
     const { courses } = useSelector((state) => state?.data);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedBanner, setSelectedBanner] = useState(null);
-
-    const banner = [
-        {
-            name: "Virginia Tech",
-            description: "This program is designed for students to specialize in drones technology.",
-            courses: courses
-        }
-    ]
 
     useEffect(() => {
         dispatch(loadcourses());
@@ -451,6 +519,12 @@ const StudentCourseList = () => {
         const path = `/studentCourseList/view/${courseId}`;
         navigate(path);
     };
+    
+    const handleCardClick2 = async (course) => {
+        await controls.start({ opacity: 0.9, scale: 0.95 });
+        handleCardClick(course.course_id);
+    };
+    
 
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
@@ -470,6 +544,14 @@ const StudentCourseList = () => {
     const textColor = isDarkMode
         ? colorTheme.dark.textColor3
         : colorTheme.light.textColor3;
+
+    const banner = [
+        {
+            name: "Virginia Tech",
+            description: "This program is designed for students to specialize in drones technology.",
+            courses: courses
+        }
+    ]
 
     return (
         <div className="container mx-auto p-4">
@@ -509,6 +591,7 @@ const StudentCourseList = () => {
                                                     backgroundColor: linearGradientBackground,
                                                     color: textColor
                                                 }}
+                                                onClick={() => handleCardClick2(course)}
                                                 className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                                             >
                                                 Start
@@ -566,32 +649,45 @@ const StudentCourseList = () => {
                             {banner[0].courses.length !== 0 && (
                                 <div className="image-container relative mx-8 my-5" onClick={() => handleBannerClick(banner[0])}>
                                     <img src={bannerImg2} alt="Banner" className="w-full h-[270px] object-cover object-center rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" />
-                                    {/* <img src={bannerImg} alt="Course" className="w-[100%] h-[400px] rounded-lg shadow-lg hover:shadow-2xl cursor-pointer" /> */}
-                                    {/* <div className="text-overlay absolute left-0 top-0 p-4">
-                                        <h2 className="text-2xl font-bold text-white md:text-4xl">{banner[0].name}</h2>
-                                        <p className="mt-2 text-base text-white md:text-lg">
-                                            {banner[0].description}
-                                        </p>
-                                    </div> */}
                                 </div>
                             )}
                             {/* <div className="w-full flex overflow-x-auto gap-2"> */}
-                                <ScrollableContainer
+                                {/* <ScrollableContainer
                                     title="Continue Learning..."
                                     courses={courses}
                                     handleCardClick={handleCardClick}
                                     textColor="#242D36"
                                     visibleCount={4}
+                                /> */}
+                                <ScrollableContainer
+                                    title="Continue Learning..."
+                                    courses={courses}
+                                    handleCardClick={handleCardClick}
+                                    handleBannerClick={handleBannerClick}
+                                    textColor="#242D36"
+                                    visibleCount={4}
                                 />
                                 {/* <TaskManager /> */}
                             {/* </div> */}
-                            <ScrollableContainer
-                                title="Suggested Courses"
-                                courses={courses}
-                                handleCardClick={handleCardClick}
-                                textColor="#242D36"
-                                visibleCount={4}
-                            />
+                            {/* {courses && (
+                                <ScrollableContainer
+                                    title="Suggested Courses"
+                                    courses={courses}
+                                    handleCardClick={handleCardClick}
+                                    textColor="#242D36"
+                                    visibleCount={4}
+                                />
+                            )} */}
+                            {courses && (
+                                <ScrollableContainer
+                                    title="Suggested Courses"
+                                    courses={courses}
+                                    handleCardClick={handleCardClick}
+                                    handleBannerClick={() => handleBannerClick(banner[0])}
+                                    textColor="#242D36"
+                                    visibleCount={4}
+                                />
+                            )}
                             <div>
                                 <h1 className="text-2xl font-bold ml-8 mb-8">Categories</h1>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ml-8 mb-5">
