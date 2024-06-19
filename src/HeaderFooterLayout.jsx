@@ -41,7 +41,7 @@ import {
   FaBook,
 } from "react-icons/fa";
 
-import { FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
+import { FaChartColumn, FaChartGantt, FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
@@ -181,10 +181,20 @@ export default function HeaderFooterLayout({ Component }) {
             //   icon: <FaBrain size={20} className="" />,
             //   route: "/behaviourAnalysis",
             // },
+            // {
+            //   label: "KS Analysis",
+            //   icon: <FaChartLine size={20} className="" />,
+            //   route: "/ksanalysis",
+            // },
             {
-              label: "KS Analysis",
-              icon: <FaChartLine size={20} className="" />,
-              route: "/ksanalysis",
+              label: "Hard Skills",
+              icon: <FaChartColumn size={20} className="" />,
+              route: "/hardskills",
+            },
+            {
+              label: "Soft Skills",
+              icon: <FaChartGantt size={20} className="" />,
+              route: "/softskills",
             },
             {
               label: "Practical thinking A",
