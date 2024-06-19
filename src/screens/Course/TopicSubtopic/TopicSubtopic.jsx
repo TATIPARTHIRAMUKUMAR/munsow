@@ -5,7 +5,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import './TopicSubtopic.css';
 import { Editor } from '@tinymce/tinymce-react';
 
-function TopicSubtopic() {
+function TopicSubtopic({ setTopics }) {
   let data = [{
     'id' : 1,
     'topic' : "Topic 1 - Heading",
@@ -127,44 +127,6 @@ const handleSubTopicInputChange = (e) => {
     }
   }
 };
-
-const handleEditorChange = (content) => {
-  console.log("Content from editor: ", content);
-
-  // Update the `newSubTopic` state
-  setNewSubTopic((prevSubTopics) => {
-    // Ensure prevSubTopics is an array
-    const updatedSubTopics = Array.isArray(prevSubTopics) ? [...prevSubTopics] : [];
-
-    for (let i = 0; i < updatedSubTopics.length; i++) {
-      const topic = updatedSubTopics[i];
-
-      for (let j = 0; j < topic.subtopics.length; j++) {
-        const subtopic = topic.subtopics[j];
-
-        if (subtopic.subtopic === subTopic) {
-
-          console.log('//// : ', subTopic)
-
-          // Ensure desc is an array
-          subtopic.desc = Array.isArray(subtopic.desc) ? subtopic.desc : [];
-
-          // Update the desc array
-          subtopic.desc = [...subtopic.desc, content];
-          
-          // Break out once the subtopic is found and updated
-          break;
-        }
-      }
-    }
-
-    return updatedSubTopics;
-  });
-};
-
-
-
-
 
 const handleSubTopicEditInputChange = (e) => {
 
@@ -307,9 +269,12 @@ const handleSubDelete = () => {
 
 // ------------------------------------------------------ Modal to Create Topic ----------------------------------------------------------
 
+// useEffect(() => {
+//   console.log('Updated Data:', Topicdata);
+// }, [Topicdata]);
 useEffect(() => {
-  console.log('Updated Data:', Topicdata);
-}, [Topicdata]);
+  setTopics(Topicdata);
+}, [Topicdata, setTopics]);
 
 
 // ----------------------------------------------------------- Update Topic ---------------------------------------------------------------

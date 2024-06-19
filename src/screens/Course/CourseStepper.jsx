@@ -8,6 +8,7 @@ import TopicandSubtopic from './Topic/TopicandSubtopic';
 import GLOBAL_CONSTANTS from '../../../GlobalConstants';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import TopicSubtopic from './TopicSubtopic/TopicSubtopic';
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -56,18 +57,18 @@ const CustomStepperComponent = ({ Edit }) => {
         dispatch(loadStudentList(params));
     }, [dispatch, params]);
 
-    useEffect(() => {
-        if (id && step === 2) {
-            console.log("Making API call:", id);
-            dispatch(track_course(id, (resp) => {
-                if (resp?.data) {
-                    setCoursedata(resp.data);
-                    setTopics(resp.data.topics);
-                    // console.log(resp?.data,"dataa")
-                }
-            }));
-        }
-    }, [id, step, dispatch]);
+    // useEffect(() => {
+    //     if (id && step === 2) {
+    //         console.log("Making API call:", id);
+    //         dispatch(track_course(id, (resp) => {
+    //             if (resp?.data) {
+    //                 setCoursedata(resp.data);
+    //                 setTopics(resp.data.topics);
+    //                 // console.log(resp?.data,"dataa")
+    //             }
+    //         }));
+    //     }
+    // }, [id, step, dispatch]);
 
     const handleNext = () => {
         if (currentStep === 0) {
@@ -88,6 +89,7 @@ const CustomStepperComponent = ({ Edit }) => {
                 "course_id": courseData?.course_id,
                 "content": topics
             };
+            console.log("paylod data", payload);
             dispatch(course_content(payload, (resp) => {
                 navigate("/courseList");
             }));
@@ -187,7 +189,8 @@ const CustomStepperComponent = ({ Edit }) => {
                         <AssignUsers selectedRows={selectedRows} setSelectedRows={setSelectedRows} courseData={courseData} setCoursedata={setCoursedata} />
                     )}
                     {currentStep === 2 && (
-                        <TopicandSubtopic topics={topics} setTopics={setTopics} />
+                        // <TopicandSubtopic topics={topics} setTopics={setTopics} />
+                        <TopicSubtopic setTopics={setTopics} />
                     )}
                 </div>
 

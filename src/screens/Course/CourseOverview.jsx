@@ -5,7 +5,9 @@ import { Button, CircularProgress, Tooltip } from '@mui/material';
 import GLOBAL_CONSTANTS from '../../../GlobalConstants';
 
 const CourseOverview = ({ course,show,text }) => {
-    console.log("show",show)
+    // console.log("show",show)
+    // console.log("course",course)
+    // console.log("text",text)
     const navigate = useNavigate();
     const [tooltipOpen, setTooltipOpen] = useState(false);
 
