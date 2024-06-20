@@ -15,6 +15,7 @@ import { IconButton } from '@mui/material';
 import { useDarkMode } from '../../Dark';
 
 const CourseCard = ({ course, onClick }) => {
+    // console.log("course",course)
     const dispatch = useDispatch();
     const controls = useAnimation();
     const [open, setOpen] = useState(false);

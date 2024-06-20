@@ -8,7 +8,9 @@ import { useDarkMode } from "./../../Dark";
 import { useSelector } from 'react-redux';
 
 const CourseOverview = ({ course,show,text }) => {
-    console.log("show",show)
+    // console.log("show",show)
+    // console.log("course",course)
+    // console.log("text",text)
     const navigate = useNavigate();
     const { colorTheme } = useSelector((state) => state?.data);
 
