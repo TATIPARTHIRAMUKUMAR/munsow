@@ -1,0 +1,159 @@
+.quiz-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 25px;
+  }
+  
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .quiz-actions {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .quiz-content {
+    display: flex;
+    gap: 16px;
+    flex-direction: column; /* Adjusted for viewing mode */
+  }
+  
+  .quiz-question-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    width: 100%;
+  }
+  
+  .question-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .question-text {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+  
+  .options-group {
+    width: 100%;
+  }
+  
+  .question-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .quiz-sidebar {
+    background-color: #e0e7ff;
+    padding: 16px;
+    border-radius: 16px;
+    width: 100%;
+  }
+  
+  .question-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .question-item {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #d1d5db;
+    color: #000;
+  }
+  
+  .question-item.active {
+    border: 2px solid #4c51bf;
+    background-color: #fff;
+  }
+  
+  .question-item.attempted {
+    border: 2px solid #48bb78;
+    background-color: #48bb78;
+    color: #fff;
+  }
+  
+  .question-status {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .status.attempted::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background-color: #48bb78;
+    border-radius: 50%;
+  }
+  
+  .status.skipped::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background-color: #f56565;
+    border-radius: 50%;
+  }
+  
+  .status.not-attempted::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background-color: #a0aec0;
+    border-radius: 50%;
+  }
+  
+  .modal-box {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    position: relative;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: calc(min(600px, 100%));
+    min-height: 60vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .modal-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .modal-content.pass {
+    background-color: #48bb78;
+  }
+  
+  .modal-content.fail {
+    background-color: #f56565;
+  }
+  

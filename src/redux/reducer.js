@@ -47,6 +47,8 @@ const initialState = {
 
   practicalThinking:[],
   practicalFilters:{},
+  quizAssignmentView:{},
+
   placementTracker:{},
   statusList:[],
   assignmentsList:[],
@@ -101,6 +103,11 @@ const DataReducers = (state = initialState, action) => {
         ...state,
         quizList: action?.payload
       }
+      case types.DETAILED_ASSIGNMENT:
+        return {
+          ...state,
+          quizAssignmentView: action?.payload?.data
+        }
     case types.LESSON_LIST:
       {
         return {

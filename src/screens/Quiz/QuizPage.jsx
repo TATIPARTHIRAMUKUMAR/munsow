@@ -23,7 +23,7 @@ import "./QuizPage.css";
 import { useDarkMode } from "../../Dark";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const linearGradientBackground = 'linear-gradient(90deg, #4b6cb7 0%, #182848 100%)'; // example gradient
+const linearGradientBackground = 'linear-gradient(90deg, #4b6cb7 0%, #182848 100%)';
 const textColor = '#ffffff';
 
 export default function QuizPage({ setValue }) {

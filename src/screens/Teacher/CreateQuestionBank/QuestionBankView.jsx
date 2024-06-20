@@ -52,7 +52,10 @@ const QuestionBankView = () => {
                 </Typography>
               </Box>
               <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 2 }}>
-                Created on: {new Date(detailedQuestionBank?.created_date).toLocaleDateString()}
+                Description : {(detailedQuestionBank?.description)}
+              </Typography>
+              <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 2 }}>
+                Created on : {new Date(detailedQuestionBank?.created_date).toLocaleDateString()}
               </Typography>
               <Typography variant="body1" paragraph>
                 {detailedQuestionBank?.description}
