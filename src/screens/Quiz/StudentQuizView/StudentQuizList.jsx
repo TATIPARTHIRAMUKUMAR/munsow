@@ -19,7 +19,7 @@ import { deleteQuiz, loadAssignments, loadQuestionBanks } from '../../../redux/a
 import { useDarkMode } from "./../../../Dark";
 
 
-const QuizCard = ({ quiz, onClick, title }) => {
+const QuizCard = ({ quiz, onClick,onClick1, title }) => {
     const dispatch = useDispatch();
     const controls = useAnimation();
     const [open, setOpen] = useState(false);
@@ -31,6 +31,11 @@ const QuizCard = ({ quiz, onClick, title }) => {
     const handleCardClick = async () => {
         await controls.start({ opacity: 0.9, scale: 0.95 });
         onClick(quiz.id);
+    };
+
+    const handleResultsClick = async () => {
+        await controls.start({ opacity: 0.9, scale: 0.95 });
+        onClick1(quiz.id);
     };
 
     const handleOpen = () => {
@@ -93,7 +98,7 @@ const QuizCard = ({ quiz, onClick, title }) => {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            // onClick={handleResultsClick} // Handle results button click
+                             onClick={handleResultsClick} // Handle results button click
                             style={{
                                 backgroundColor: linearGradientBackground,
                                 color: textColor
@@ -172,7 +177,7 @@ const QuizCard = ({ quiz, onClick, title }) => {
     );
 };
 
-const ScrollableContainer = ({ title, quizzes, handleCardClick, textColor, visibleCount }) => {
+const ScrollableContainer = ({ title, quizzes, handleCardClick,handleResultsClick, textColor, visibleCount }) => {
     const [visibleStartIndex, setVisibleStartIndex] = useState(0);
     const [showAll, setShowAll] = useState(false);
 
@@ -254,7 +259,7 @@ const ScrollableContainer = ({ title, quizzes, handleCardClick, textColor, visib
                         className={`grid ${title === "Continue Learning..." ? 'grid-cols-4' : 'grid-cols-4'} gap-8`}
                     >
                         {quizzes.map((quiz) => (
-                            <QuizCard key={quiz?.id} quiz={quiz} onClick={handleCardClick}
+                            <QuizCard key={quiz?.id} quiz={quiz} onClick={handleCardClick} onClick1={handleResultsClick} 
                                 title={title} />
                         ))}
                     </motion.div>
@@ -271,7 +276,7 @@ const ScrollableContainer = ({ title, quizzes, handleCardClick, textColor, visib
                         overflow-x-scroll overflow-y-hidden whitespace-nowrap `}
                     >
                         {quizzes.slice(visibleStartIndex, visibleStartIndex + visibleCount).map((quiz) => (
-                            <QuizCard key={quiz?.id} quiz={quiz} onClick={handleCardClick} title={title} />
+                            <QuizCard key={quiz?.id} quiz={quiz} onClick={handleCardClick} title={title} onClick1={handleResultsClick} />
                         ))}
                     </motion.div>
                 </div>
@@ -311,6 +316,11 @@ const StudentQuizList = () => {
         navigate(path);
     };
 
+    const handleResultsClick = (quizId) => {
+        const path = `/assignments/view/${quizId}`;
+        navigate(path);
+    };
+
     return (
         <div className="max-w-7xl mx-auto p-8">
             <div className='flex justify-end'>
@@ -332,8 +342,9 @@ const StudentQuizList = () => {
                 title={"To do Quizzes"}
                 quizzes={assignmentsList}
                 handleCardClick={handleCardClick}
+                handleResultsClick={handleResultsClick}
                 textColor="#242D36"
-                visibleCount={10}
+                visibleCount={100}
             />
             {/* <ScrollableContainer
                 title= {QuizList[1].name}

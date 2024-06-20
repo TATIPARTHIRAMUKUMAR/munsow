@@ -1461,6 +1461,26 @@ export const loadDetailedQuestionBanks = (id) => {
   };
 };
 
+
+const getAssignmentDetails = (data) => ({
+  type: types.DETAILED_ASSIGNMENT,
+  payload: data,
+});
+
+export const loadDetailedAssignment = (id) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}assignment/get/${id}`, {  headers })
+      .then((resp) => {
+        dispatch(getAssignmentDetails(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 const getAssignedUsers = (data) => ({
   type: types.ASSIGNED_USERS,
   payload: data,
