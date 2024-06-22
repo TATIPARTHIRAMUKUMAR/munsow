@@ -3,7 +3,7 @@ import MunsowLogo from "./../../assets/MunsowLogo.png";
 
 const Intro = (props) => {
 
-  const { user, report_data } = props;
+  const { user, report_data, interview_type } = props;
 
   const formatSkills = (skills) => {
     if (!Array.isArray(skills) || skills.length === 0) {
@@ -35,7 +35,7 @@ const Intro = (props) => {
         {report_data?.report_type === "skill based report" ? (
           <div className="mt-40 mb-48">
           <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
-            <h1>{report_data?.report_type}</h1>
+            <h1>Skill based Report</h1>
           </div>
           <div className="flex justify-center items-center mb-5">
             <div className="munsow-light-bg px-6 py-4 rounded-full">
@@ -47,7 +47,31 @@ const Intro = (props) => {
         ) : report_data?.report_type === "role based report" ? (
           <div className="mt-40 mb-48">
           <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
-            <h1>{report_data?.report_type}</h1>
+            <h1>Role based Report</h1>
+          </div>
+          <div className="flex justify-center items-center mb-5">
+            <div className="munsow-light-bg px-6 py-4 rounded-full">
+              <p className="text-lg">Position: {report_data?.interview_position}</p>
+              <p className="text-lg">Company: {report_data?.interview_company}</p>
+            </div>
+          </div>
+          </div>
+        ) : report_data?.interview_type === "jd_interview" ? (
+          <div className="mt-40 mb-48">
+          <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
+            <h1>JD based Report</h1>
+          </div>
+          <div className="flex justify-center items-center mb-5">
+            <div className="munsow-light-bg px-6 py-4 rounded-full">
+              <p className="text-lg">Position: {report_data?.interview_position}</p>
+              <p className="text-lg">Company: {report_data?.interview_company}</p>
+            </div>
+          </div>
+          </div>
+        ) : interview_type === "cultural_interview" ? (
+          <div className="mt-40 mb-48">
+          <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
+            <h1>Cultural Fit Report</h1>
           </div>
           <div className="flex justify-center items-center mb-5">
             <div className="munsow-light-bg px-6 py-4 rounded-full">

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Stepper, Step, StepLabel, StepConnector, TextField, Button, Divider, stepConnectorClasses } from '@mui/material';
+import { Stepper, Step, StepLabel, StepConnector, Button, Divider, stepConnectorClasses, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import ComputerRoundedIcon from '@mui/icons-material/ComputerRounded';
 import { useDispatch } from 'react-redux';
-import { assign_users, course_content, create_course, loadStudentList } from '../../redux/action';
+import { assign_users, course_content, create_course, loadStudentList, track_course } from '../../redux/action';
 import AssignUsers from './AssignUsers';
 import TopicandSubtopic from './Topic/TopicandSubtopic';
 import GLOBAL_CONSTANTS from '../../../GlobalConstants';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import TopicSubtopic from './TopicSubtopic/TopicSubtopic';
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -33,18 +33,17 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
     },
 }));
 
-const CustomStepperComponent = () => {
+const CustomStepperComponent = ({ Edit }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [currentStep, setCurrentStep] = useState(0);
-    const [courseDetails, setCourseDetails] = useState({ name: '', description: '' });
-
+    const location = useLocation();
+    const { id } = useParams();
+    const { course, step } = location.state || {};
+    const [currentStep, setCurrentStep] = useState(step || 0);
+    const [courseDetails, setCourseDetails] = useState(course || { name: '', description: '', image: '' });
     const [selectedRows, setSelectedRows] = useState([]);
-    const [courseData, setCoursedata] = useState({});
-
-    const [topics, setTopics] = useState([]);
-
-
+    const [courseData, setCoursedata] = useState(course || {});
+    const [topics, setTopics] = useState(course?.topics || []);
 
     const steps = ['Course Details', 'Assign Users', 'Create Course Content'];
 
@@ -52,41 +51,49 @@ const CustomStepperComponent = () => {
         limit: 100,
         mode: "Student",
         branch_name: GLOBAL_CONSTANTS?.user_cred?.branch_name
-    })
+    });
 
     useEffect(() => {
-        dispatch(loadStudentList(params))
-    }, [dispatch, params])
+        dispatch(loadStudentList(params));
+    }, [dispatch, params]);
+
+    // useEffect(() => {
+    //     if (id && step === 2) {
+    //         console.log("Making API call:", id);
+    //         dispatch(track_course(id, (resp) => {
+    //             if (resp?.data) {
+    //                 setCoursedata(resp.data);
+    //                 setTopics(resp.data.topics);
+    //                 // console.log(resp?.data,"dataa")
+    //             }
+    //         }));
+    //     }
+    // }, [id, step, dispatch]);
 
     const handleNext = () => {
         if (currentStep === 0) {
             dispatch(create_course(courseDetails, (resp) => {
-                console.log("resp", resp)
-                setCoursedata(resp?.data)
+                setCoursedata(resp?.data);
                 setCurrentStep(prevStep => prevStep + 1);
-            }))
-        }
-        else if (currentStep == 1) {
-            console.log("selectedRows", selectedRows)
+            }));
+        } else if (currentStep === 1) {
             const payload = {
                 "course_id": courseData?.course_id,
                 "user_ids": selectedRows
-            }
+            };
             dispatch(assign_users(payload, (resp) => {
                 setCurrentStep(prevStep => prevStep + 1);
-            }))
-        }
-        else if (currentStep == 2) {
-            console.log("selectedRows", selectedRows)
+            }));
+        } else if (currentStep === 2) {
             const payload = {
                 "course_id": courseData?.course_id,
                 "content": topics
-            }
+            };
+            console.log("paylod data", payload);
             dispatch(course_content(payload, (resp) => {
-                navigate("/courseList")
-            }))
+                navigate("/courseList");
+            }));
         }
-
     };
 
     const handleChange = (event) => {
@@ -94,8 +101,14 @@ const CustomStepperComponent = () => {
     };
 
     const onBack = () => {
-        navigate("/courseList")
-    }
+        navigate("/courseList");
+    };
+
+    //for add image functionality. work and handle after backend is build.
+    // const [file, setFile] = useState();
+    // function handleImageChange(e) {
+    //     setFile(URL.createObjectURL(e.target.files[0]));
+    // }
 
     return (
         <div className="p-5">
@@ -121,8 +134,6 @@ const CustomStepperComponent = () => {
                             >
                                 Course List
                             </Button>
-                       
-                        {/* <p className="text-xl font-semibold mt-5 mx-5 ">Course Creation</p> */}
                         </div>
                     </div>
                     <div className='w-4/5'>
@@ -131,7 +142,6 @@ const CustomStepperComponent = () => {
                                 <Step key={label}>
                                     <StepLabel
                                         style={{
-                                            // color:"#886CC0",
                                             color: index <= currentStep ? '#886CC0' : 'inherit',
                                             fontSize: "2.5rem"
                                         }}
@@ -143,10 +153,6 @@ const CustomStepperComponent = () => {
                         </Stepper>
                     </div>
                 </div>
-
-                {/* <Divider /> */}
-
-
 
                 <Divider style={{ marginTop: "1rem" }} />
 
@@ -174,14 +180,17 @@ const CustomStepperComponent = () => {
                                 value={courseDetails.description}
                                 onChange={handleChange}
                             />
+                            {/* <h2 className='mb-3'>Add Image:</h2>
+                            <input className='mb-5' type='file' name='image' onChange={handleImageChange} />
+                            <img src={file} style={{ height: "200px" }} alt='preview' /> */}
                         </div>
-
                     )}
                     {currentStep === 1 && (
                         <AssignUsers selectedRows={selectedRows} setSelectedRows={setSelectedRows} courseData={courseData} setCoursedata={setCoursedata} />
                     )}
                     {currentStep === 2 && (
-                        <TopicandSubtopic topics={topics} setTopics={setTopics} />
+                        // <TopicandSubtopic topics={topics} setTopics={setTopics} />
+                        <TopicSubtopic setTopics={setTopics} />
                     )}
                 </div>
 
@@ -189,8 +198,7 @@ const CustomStepperComponent = () => {
                     {currentStep < steps.length - 1 && (
                         <Button
                             variant="contained"
-                            // color="primary"
-                            style={{backgroundColor:"#886CC0"}}
+                            style={{ backgroundColor: "#886CC0" }}
                             onClick={handleNext}
                             className="next-button bg-[#886CC0]"
                         >
@@ -203,7 +211,6 @@ const CustomStepperComponent = () => {
                             variant="contained"
                             color="secondary"
                             onClick={handleNext}
-                            // onClick={() => console.log('Submit Data:', courseDetails)}
                             className="submit-button"
                         >
                             Submit

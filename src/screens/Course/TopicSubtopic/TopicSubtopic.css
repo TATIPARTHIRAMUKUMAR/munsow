@@ -1,0 +1,333 @@
+.Main {
+    background-color: rgb(234, 231, 231);
+  }
+  
+  /* html
+  {
+    background: rgb(234, 231, 231);
+  } */
+  
+  .header
+  {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-left: 100px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: white;
+  }
+  
+  .topHeading
+  {
+      background-color: white;
+      margin: 0;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      font-size: 30px;
+  }
+  
+  .createButton
+  {
+    border: transparent;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 25px;
+    padding: 10px;
+    margin-right: 30px;
+    cursor: pointer;
+  }
+  
+  .modalCreateHead
+  {
+    width: 500px;
+    background-color: white;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .functionButton
+  {
+    border: transparent;
+    background-color: transparent;
+    cursor: pointer;
+    margin-top: -5px;
+  }
+  
+  .topicList
+  {
+    margin-bottom: 20%;
+  }
+  
+  .accordion {
+    border: none;
+    border-bottom: 0.13cm solid white;
+    border-color: white;
+    background-color: white;
+    cursor: pointer;
+    transition: 0.4s;
+    font-size: 17px;
+    text-align: left;
+    margin-left: -7px;
+  }
+  
+  .accordion.active,
+  .accordion:hover {
+    background-color: white;
+  }
+  
+  .panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+  }
+  
+  .accordion.active + .panel {
+    display: block;
+    background-color: white;
+  }
+  
+  .downButton
+  {
+    background-color: white;
+    font-size: 23px;
+    overflow: hidden;
+  }
+  
+  .rotateDownButton
+  {
+    background-color: white;
+    font-size: 23px;
+    overflow: hidden;
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .subTopicDesc
+  {
+    background-color: white;
+    border: 2px solid white;
+  }
+  
+  .topic
+  {
+    background-color: white;
+    font-size: large;
+    margin: 10px;
+    /* padding-top: 13px;
+    padding-bottom: 13px;
+    padding-left: 20px; */
+    padding: 16px 18px;
+    border-radius: 18px;
+    list-style-type: none;
+    cursor: grab;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .topic.dragged {
+    opacity: 0.3;
+  }
+  
+  
+  .topic.drop-target {
+    border: 2px dashed #10e4d4;
+    cursor: pointer;
+    transition: background-color 3s ease-in-out;
+  }
+  
+  .subTopic
+  {
+    background-color: white;
+    font-size: large;
+    margin: 10px;
+    margin-left: 200px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    list-style-type: none;
+  }
+  
+  .subTopic.dragged {
+    opacity: 0.3;
+  }
+  
+  
+  .subTopic.drop-target {
+    border: 2px dashed #10e4d4;
+    cursor: pointer;
+    transition: background-color 3s ease-in-out;
+  }
+  
+  .modal
+  {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content
+  {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    display: block!important; 
+    height: 60vh!important;
+    overflow: scroll!important;
+    /* width: 60vw!important; */
+  }
+  
+  .modals-content
+  {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+  }
+  
+  .modal-content label
+  {
+    background-color: white;
+    color: grey;
+    font-weight: bolder;
+    font-size: large;
+  }
+
+  .modal-content input{
+    border-radius: 8px;
+  }
+  
+  .deleteLabel
+  {
+    background-color: white;
+    color: rgb(101, 99, 99);
+    font-weight: bolder;
+    font-size: large;
+    margin-bottom: 20px;
+  }
+  
+  .hide
+  {
+    background-color: #d9d9d9;
+    color: #a6a6a6;
+    cursor: no-drop;
+  }
+  
+  .invalid {
+    margin-top: 10px;
+    background-color: white;
+    font-size: medium;
+    padding: 10px;
+    border-radius: 3px;
+    border: 2px solid #cf0e17;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  }
+  
+  .valid
+  {
+    margin-top: 10px;
+    background-color: white;
+    border: solid lightgray 2px;
+    font-size: medium;
+    padding: 10px;
+    border-radius: 3px;
+  }
+  
+  .draggable-item.dragging
+  {
+    cursor: grabbing;
+  }
+  
+  .blurred span
+  {
+    margin: 0;
+  }
+  
+  /* .modal-content input
+  {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    background-color: white;
+    border: solid lightgray 2px;
+    font-size: medium;
+    padding: 10px;
+    border-radius: 3px;
+  } */
+  
+  .validDesc
+  {
+    margin-top: 10px;
+    background-color: white;
+    border: solid lightgray 4px;
+    font-size: large;
+    padding: 10px;
+    border-radius: 3px;  
+  }
+  
+  .invalidDesc
+  {
+    margin-top: 10px;
+    background-color: white;
+    font-size: large;
+    padding: 10px;
+    border-radius: 3px;
+    border: 2px solid #cf0e17;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  }
+  
+  .invalidMessage
+  {
+    color: #cf0e17;
+    background-color: white;
+    margin-top: 3px;
+  }
+  
+  .close
+  {
+    background-color: white;
+    font-weight: bolder;
+    font-size: 40px;
+    float: right;
+    margin-top: -10px;
+    cursor: pointer;
+  }
+  
+  .editText
+  {
+    background-color: white;
+    font-size: large;
+    border: none;
+  }
+  
+  .cancelEditButton
+  {
+    color : #dc2626;
+    background-color: #fca5a5;
+    border: none;
+    /* text-decoration: underline; */
+    /* margin-left: 60px; */
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  
+  .saveEditButton
+  {
+    color: black;
+    background-color: #5eead4;
+    border: transparent;
+    border-radius: 8px;
+    font-weight: 700;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  
+  /* ------------------------------------------------------------------------------------------------------------------------------------- */
+  

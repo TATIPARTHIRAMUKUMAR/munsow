@@ -134,6 +134,13 @@ const AddStudents = () => {
         required:true,
         type: "select"
       },
+      {
+        label: "Student Id",
+        key: "student_id",
+        value: mainData?.student_id ?? "",
+        type: "text",
+        required:true
+      },
     ]
 
   const handleInputChange = (key, value) => {
@@ -194,7 +201,8 @@ const AddStudents = () => {
       "department_id": mainData?.department?.value,
       "address": mainData?.address,
       "course_id": mainData?.course?.value,
-      "password": mainData?.password
+      "password": mainData?.password,
+      "student_id":mainData?.student_id,
     }
     dispatch(user_create(payload, { mode: "student" }, () => { setMainData({}) }))
   }
