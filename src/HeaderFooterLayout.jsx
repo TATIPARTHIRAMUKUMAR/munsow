@@ -38,10 +38,10 @@ import {
   FaUserGraduate,
   FaChalkboardTeacher,
   FaCode,
-  FaUserSecret,
+  FaBook,
 } from "react-icons/fa";
 
-import { FaHeartPulse, FaSection } from "react-icons/fa6";
+import { FaChartColumn, FaChartGantt, FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
@@ -181,10 +181,20 @@ export default function HeaderFooterLayout({ Component }) {
             //   icon: <FaBrain size={20} className="" />,
             //   route: "/behaviourAnalysis",
             // },
+            // {
+            //   label: "KS Analysis",
+            //   icon: <FaChartLine size={20} className="" />,
+            //   route: "/ksanalysis",
+            // },
             {
-              label: "KS Analysis",
-              icon: <FaChartLine size={20} className="" />,
-              route: "/ksanalysis",
+              label: "Hard Skills",
+              icon: <FaChartColumn size={20} className="" />,
+              route: "/hardskills",
+            },
+            {
+              label: "Soft Skills",
+              icon: <FaChartGantt size={20} className="" />,
+              route: "/softskills",
             },
             {
               label: "Practical thinking A",
@@ -234,6 +244,12 @@ export default function HeaderFooterLayout({ Component }) {
           label: "Configurations",
           icon: <FaCode size={20} className="" />,
           route: "/configurations",
+          subItems: [],
+        },
+        {
+          label: "Placements",
+          icon: <FaCode size={20} className="" />,
+          route: "/placements",
           subItems: [],
         },
         {
@@ -318,7 +334,7 @@ export default function HeaderFooterLayout({ Component }) {
         {
           label: "Assignments",
           icon: <FaUser size={20} className="" />,
-          route: "/comingSoon",
+          route: "/assignments",
           subItems: [],
         },
         // {
@@ -356,8 +372,14 @@ export default function HeaderFooterLayout({ Component }) {
         },
         {
           label: "My Courses",
-          icon: <FaChartLine size={20} className="" />,
+          icon: <FaBook size={20} className="" />,
           route: "/studentCourseList",
+          subItems: [],
+        },
+        {
+          label: "My Assignments",
+          icon: <FaFileCircleCheck size={20} className="" />,
+          route: "/studentQuizList",
           subItems: [],
         },
         // {

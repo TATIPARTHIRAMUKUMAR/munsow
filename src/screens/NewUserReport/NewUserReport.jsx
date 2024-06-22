@@ -50,7 +50,7 @@ const NewUserReport = () => {
           </button>
           <button
                 type="button"
-                className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 w-[300px] sm:w-[200px] mx-4 sm:self-start"
+                className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full h-[40px] mt-5 mx-4 sm:self-start"
                 onClick={handleGeneratePdf}
               >
                 DOWNLOAD AS PDF{" "}
@@ -74,6 +74,7 @@ const NewUserReport = () => {
             <Intro
               user={userReport?.user_name}
               report_data={userReport}
+              interview_type={userReport?.interview_type}
             />
           </div>
 
@@ -83,6 +84,8 @@ const NewUserReport = () => {
               behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
               readiness_score={userReport?.readiness_score}
+              report_data={userReport}
+              interview_type={userReport?.interview_type}
             />
           </div> 
     
@@ -92,9 +95,9 @@ const NewUserReport = () => {
               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
             />
           </div>
-        
-          
-            {userReport?.interview_score_by_category?.data?.map((category, index) => (
+
+            {/* don't want overview pages for report  */}
+            {/* {userReport?.interview_score_by_category?.data?.map((category, index) => (
               <div className="page-break">
               <ReportOverview
               key={index} 
@@ -109,7 +112,7 @@ const NewUserReport = () => {
               }))}
               />
             </div>
-            ))}
+            ))} */}
           
           {userReport?.interview_score_by_category?.data?.map((category, index) => (
           <>
@@ -118,8 +121,9 @@ const NewUserReport = () => {
             <DeepDive
               key={qIndex}
               head={category.main_title}
-              
+              report_data={userReport}
               ques={question.question}
+              queScore={question.score}
               candidateAns={question.answer}
               sampleAns={question.suggested_answer}
               gotRight={question.Insights.what_you_got_right}
@@ -131,13 +135,35 @@ const NewUserReport = () => {
           </>
           ))}
 
-        <div className="page-break">
+        {/* <div className="page-break">
           <CuratedSummary
             report_type={userReport?.report_type}
             skillSuggestions={userReport?.skill_based_suggestions}
             report_data={userReport}
           /> 
-        </div>
+        </div> */}
+        {userReport?.report_type === "skill based report" ? (
+          <div className="page-break">
+          <CuratedSummary
+            report_type={userReport?.report_type}
+            skillSuggestions={userReport?.skill_based_suggestions}
+            report_data={userReport}
+          /> 
+          </div>
+        ) : userReport?.report_type === "role based report" ? (
+          <div className="page-break">
+          <CuratedSummary
+            report_type={userReport?.report_type}
+            skillSuggestions={userReport?.skill_based_suggestions}
+            report_data={userReport}
+          /> 
+          </div>
+        ) : userReport?.interview_type === "jd_interview" ? (
+          <></>
+        ) : userReport?.interview_type === "cultural_interview" ? (
+          <></>
+        ) : null
+        }
 
         <div className="page-break">
           <Extro/>

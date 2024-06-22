@@ -3,7 +3,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 // import { delete_course, loadcourses } from '../../redux/action';
 import { useNavigate } from 'react-router-dom';
-// import courseImg from "../../assets/course-bg.webp";
+import courseImg from "../../../assets/Question-Bank.png";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,7 +12,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
-import { delete_course, loadQuestionBanks, loadcourses } from '../../../redux/action';
+import { delete_course, delete_question_bank, loadQuestionBanks, loadcourses } from '../../../redux/action';
+import { useDarkMode } from '../../../Dark';
 
 const QuestionCard = ({ course, onClick }) => {
     const dispatch = useDispatch();
@@ -37,11 +38,24 @@ const QuestionCard = ({ course, onClick }) => {
     };
 
     const handleDeleteConfirm = () => {
-        dispatch(delete_course(course.id, (resp) => {
+        dispatch(delete_question_bank(course.id, (resp) => {
             dispatch(loadQuestionBanks());
         }))
         setOpen(false);
     };
+
+    
+  const { colorTheme } = useSelector((state) => state?.data);
+  const { isDarkMode } = useDarkMode();
+
+  const linearGradientBackground = isDarkMode
+    ? colorTheme.dark.selectBackground
+    : colorTheme.light.selectBackground;
+
+
+  const textColor = isDarkMode
+    ? colorTheme.dark.textColor3
+    : colorTheme.light.textColor3;
 
     return (
         <motion.div
@@ -50,7 +64,7 @@ const QuestionCard = ({ course, onClick }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={controls}
         >
-            {/* <img src={courseImg} alt="Course" className="w-full h-44 object-cover" /> */}
+            <img src={courseImg} alt="Course" className="w-full h-44 object-cover" />
             <div className="p-6">
                 <div className="flex justify-between mb-2">
                     <h2 className="text-xl font-semibold mb-2">{course?.name}</h2>
@@ -68,7 +82,11 @@ const QuestionCard = ({ course, onClick }) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleCardClick}
-                        className="bg-[#886CC0] text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                        style={{
+                            backgroundColor: linearGradientBackground,
+                            color: textColor
+                        }}
+                        className=" text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                     >
                         Explore More
                     </motion.button>
@@ -81,7 +99,7 @@ const QuestionCard = ({ course, onClick }) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText style={{ margin: '20px', fontSize: '16px', textAlign: 'center' }}>
-                        Are you sure you want to delete this course?
+                        Are you sure you want to delete this Question Bank?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions style={{ justifyContent: 'center' }}>
@@ -112,13 +130,30 @@ const QuestionBanksList = () => {
         navigate(path);
     };
 
+
+    const { colorTheme } = useSelector((state) => state?.data);
+    const { isDarkMode } = useDarkMode();
+  
+    const linearGradientBackground = isDarkMode
+      ? colorTheme.dark.selectBackground
+      : colorTheme.light.selectBackground;
+  
+  
+    const textColor = isDarkMode
+      ? colorTheme.dark.textColor3
+      : colorTheme.light.textColor3;
+
     return (
         <div className="max-w-7xl mx-auto p-8">
             <div className="mb-6 flex justify-between items-center">
                 <h1 className="text-3xl font-bold">QuestionBanks List</h1>
                 <button
                     onClick={() => navigate("/questionBanksList/questionBank")}
-                    className="bg-[#886CC0] text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                    style={{
+                        backgroundColor: linearGradientBackground,
+                        color: textColor
+                    }}
+                    className=" text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                 >
                     Create Question Bank
                 </button>

@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Radio, RadioGroup, FormControlLabel, Button, FormControl, FormLabel, Checkbox, FormGroup, Paper, Divider } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material';
 import GLOBAL_CONSTANTS from '../../../../GlobalConstants';
+import { useDispatch } from 'react-redux';
+import { Typography, Box, Card, CardContent, CardActions } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
+import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
+import UploadImage from '../../../assets/file-upload.png';
+import { uploadConfigurations } from '../../../redux/action';
+import { useNavigate } from 'react-router-dom';
 
 const CustomTextField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
-            borderColor: 'transparent', 
+            borderColor: 'transparent',
         },
         '&:hover fieldset': {
-            borderColor: 'transparent', 
+            borderColor: 'transparent',
         },
         '&.Mui-focused fieldset': {
             borderColor: 'transparent',
@@ -20,6 +27,7 @@ const CustomTextField = styled(TextField)({
 });
 
 const QuestionBankForm = () => {
+    const navigate = useNavigate();
     const [questionBank, setQuestionBank] = useState({
         name: '',
         description: '',
@@ -58,9 +66,17 @@ const QuestionBankForm = () => {
     };
 
     const handleOptionCountChange = (index, e) => {
+        const value = Math.min(5, parseInt(e.target.value, 10));
         const updatedQuestions = [...questionBank.questions];
-        updatedQuestions[index].numberOfOptions = e.target.value;
-        updatedQuestions[index].options = Array(parseInt(e.target.value)).fill('');
+        updatedQuestions[index].numberOfOptions = value;
+        updatedQuestions[index].options = Array(value).fill('');
+        setQuestionBank({ ...questionBank, questions: updatedQuestions });
+    };
+
+    const handleMarksChange = (index, e) => {
+        const value = Math.max(0, parseInt(e.target.value, 10));
+        const updatedQuestions = [...questionBank.questions];
+        updatedQuestions[index].marks = value;
         setQuestionBank({ ...questionBank, questions: updatedQuestions });
     };
 
@@ -84,14 +100,14 @@ const QuestionBankForm = () => {
     };
 
     const handleSubmit = async () => {
-        const apiUrl =`${GLOBAL_CONSTANTS.backend_url}question_bank/create`; // Change this to your actual API URL
+        const apiUrl = `${GLOBAL_CONSTANTS.backend_url}question_bank/create`; // Change this to your actual API URL
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
-                 headers : {
+                headers: {
                     "Content-type": "application/json",
                     "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
-                  },
+                },
                 body: JSON.stringify(questionBank),
             });
             if (!response.ok) {
@@ -99,14 +115,66 @@ const QuestionBankForm = () => {
             }
             const result = await response.json();
             console.log('Question bank submitted successfully:', result);
-            alert('Question bank submitted successfully!');
+            navigate(-1)
         } catch (error) {
             console.error('Error submitting question bank:', error);
             alert('Error submitting question bank. Please try again.');
         }
     };
 
+    const dispatch = useDispatch();
+    const inputRefs = {
+        question: useRef(null),
+    };
 
+    const handleSelectFiles = (e, key) => {
+        const file = e.currentTarget.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            let base64Data = event.target.result.split(",")[1];
+
+            const mimeRegex = /^data:.+;base64,/;
+            if (mimeRegex.test(base64Data)) {
+                base64Data = base64Data.replace(mimeRegex, '');
+            }
+            while (base64Data.length % 4 !== 0) {
+                base64Data += '=';
+            }
+
+            const payload = {
+                mode: key,
+                base64: base64Data
+            };
+            dispatch(uploadConfigurations(payload));
+        };
+
+        reader.readAsDataURL(file);
+    };
+
+    const configurationOptions = [
+        { label: 'QUESTION BANK', key: 'question' },
+    ];
+
+    const generateDownloadUrl = (mode) => {
+        const downloadUrl = `${GLOBAL_CONSTANTS.backend_url}institution/download_configurations?mode=${mode}&access_token=${GLOBAL_CONSTANTS?.token}`;
+        return downloadUrl;
+    };
+
+    // Validation function to check if all required fields are filled
+    const isFormValid = () => {
+        if (!questionBank.name || !questionBank.description) {
+            return false;
+        }
+        if (questionBank.method === 'addUI') {
+            for (const question of questionBank.questions) {
+                if (!question.question || question.marks === '' || question.numberOfOptions === 0 || question.options.includes('')) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
 
     return (
         <div className="min-h-screen pt-5 pb-20">
@@ -150,19 +218,13 @@ const QuestionBankForm = () => {
                                     >
                                         <FormControlLabel value="uploadFile" control={<Radio color="primary" />} label="Upload File" />
                                         <FormControlLabel value="addUI" control={<Radio color="primary" />} label="Add from UI" />
-                                        <FormControlLabel value="generateAI" control={<Radio color="primary" />} label="Generate from AI" />
+                                        {/* <FormControlLabel value="generateAI" control={<Radio color="primary" />} label="Generate from AI" /> */}
                                     </RadioGroup>
                                 </FormControl>
-
-
                             </div>
                         </div>
                     </div>
                 </Paper>
-
-
-
-
 
                 {questionBank.method === 'addUI' && questionBank.questions.map((question, index) => (
                     <Paper key={index} className="overflow-hidden rounded-lg shadow mb-6 bg-gradient-to-br from-indigo-50 to-pink-50">
@@ -172,7 +234,7 @@ const QuestionBankForm = () => {
                                 <Button
                                     startIcon={<DeleteIcon />}
                                     variant="contained"
-                                    color="secondary"
+                                    // color="secondary"
                                     onClick={() => deleteQuestion(index)}
                                     className="mt-4"
                                 >
@@ -194,8 +256,9 @@ const QuestionBankForm = () => {
                                     variant="outlined"
                                     type="number"
                                     value={question.marks}
-                                    onChange={(e) => handleQuestionChange(index, e)}
+                                    onChange={(e) => handleMarksChange(index, e)}
                                     className="shadow-sm rounded"
+                                    inputProps={{ min: 0 }}
                                 />
                                 <TextField
                                     label="Number of Options"
@@ -205,6 +268,7 @@ const QuestionBankForm = () => {
                                     value={question.numberOfOptions}
                                     onChange={(e) => handleOptionCountChange(index, e)}
                                     className="shadow-sm rounded"
+                                    inputProps={{ min: 0, max: 5 }}
                                 />
 
                                 {question.options.map((option, optionIndex) => (
@@ -256,7 +320,6 @@ const QuestionBankForm = () => {
                                             <div className='pt-3'>
                                                 <TextField
                                                     select
-                                                    // label="Correct Answer"
                                                     SelectProps={{ native: true }}
                                                     name="correctAnswer"
                                                     value={question.correctAnswer[0] || ''}
@@ -272,17 +335,66 @@ const QuestionBankForm = () => {
                                                     ))}
                                                 </TextField>
                                             </div>
-
                                         )}
                                     </FormControl>
-                                </div></div>
-
+                                </div>
+                            </div>
                         </div>
                         <Divider />
                     </Paper>
                 ))}
 
-
+                {questionBank?.method === 'uploadFile' && (
+                    <Box>
+                        {configurationOptions.map(option => (
+                            <Card key={option.key} mb={2} variant="outlined">
+                                <CardContent>
+                                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                                        <Typography variant="h6">{option.label}</Typography>
+                                        <Button
+                                            href={generateDownloadUrl(option.key)}
+                                            style={{ backgroundColor: '#2BE2D0', color: '#252525' }}
+                                            endIcon={<CloudDownloadOutlinedIcon />}
+                                            variant="outlined"
+                                            size="small"
+                                        >
+                                            Download Template
+                                        </Button>
+                                    </Box>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        border="2px dashed"
+                                        borderColor="gray.300"
+                                        borderRadius="borderRadius"
+                                        p={2}
+                                        onClick={() => inputRefs[option.key].current.click()}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <input
+                                            ref={inputRefs[option.key]}
+                                            type="file"
+                                            className="hidden"
+                                            accept=".csv, .xlsx"
+                                            onChange={(e) => handleSelectFiles(e, option.key)}
+                                            onClick={(e) => { e.target.value = null; }}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <Box textAlign="center">
+                                            <img
+                                                src={UploadImage}
+                                                alt="Upload Icon"
+                                                style={{ width: '100px', margin: 'auto' }}
+                                            />
+                                            <Typography variant="body2" color="textSecondary">Upload {option.label} File</Typography>
+                                        </Box>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </Box>
+                )}
                 {questionBank?.method === 'addUI' && (
                     <Button
                         startIcon={<AddCircleOutlineIcon />}
@@ -294,12 +406,14 @@ const QuestionBankForm = () => {
                         Add Question
                     </Button>
                 )}
-                 {questionBank?.questions?.length > 0 && (
+                {(questionBank?.questions?.length > 0 && questionBank?.method === 'addUI') && (
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={handleSubmit}
-                        className="mt-4"
+                        style={{ marginLeft: "15px" }}
+                        className="pl-10"
+                        disabled={!isFormValid()} // Disable button if form is not valid
                     >
                         Submit Question Bank
                     </Button>
@@ -310,4 +424,3 @@ const QuestionBankForm = () => {
 };
 
 export default QuestionBankForm;
-
