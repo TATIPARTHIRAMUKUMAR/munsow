@@ -11,6 +11,8 @@ import image from "../../assets/h.jpeg";
 import InterviewOver from "./InterviewOver";
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { useDarkMode } from "./../../Dark";
+import './Practice.css';
+import { Height } from "@mui/icons-material";
 
 let mediaRecorder;
 
@@ -20,7 +22,7 @@ function formatTime(seconds) {
   const secs = seconds - hrs * 3600 - mins * 60;
   return (
     <div className="flex items-center gap-1">
-      <TimerOutlinedIcon />
+      {/* <TimerOutlinedIcon /> */} 
       {`${hrs < 10 ? "0" + hrs : hrs}:${mins < 10 ? "0" + mins : mins}:${
         secs < 10 ? "0" + secs : secs
       }`}
@@ -244,6 +246,16 @@ export default function NewGridLayout({ questions }) {
     }
   }, [isLoading]);
 
+  const skipQuestion = () => {
+    if (questionIndex < questions.length - 1) {
+      stopRecording();
+      setRecordedChunks([]);
+      setQuestionIndex((prevIndex) => prevIndex + 1);
+      setQuestionTimeLeft(questions[questionIndex + 1].duration);
+      startStreamAndRecording();
+    }
+  };
+
   return (
     <>
       {questions?.length > 0 && (
@@ -254,14 +266,23 @@ export default function NewGridLayout({ questions }) {
             </>
           ) : (
             <>
-              <div className="p-5">
+              <div className="bg-teal-100 h-[25px] progressBar relative">
+                <div
+                  key={questionIndex}
+                  className="bg-teal-500 h-[25px] progressFill"
+                  style={{
+                    animation: `progress-bar-animation ${questions[questionIndex]?.duration}s linear`,
+                    width: `${(questionTimeLeft / questions[questionIndex]?.duration) * 100}%`,
+                  }}
+                />
+                <span className="absolute inset-0 flex items-center justify-center text-black py-3 font-bold">
+                  Time Left: {formatTime(questionTimeLeft)}
+                </span>
+              </div>
+              <div className="p-[40px]">
                 <div className="flex justify-end">
-                  <button
-                    className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
-                    onClick={handleFinishInterview}
-                  >
-                    Finish Interview
-                  </button>
+                
+                 
                 </div>
                 <div>
                   {/* <LinearProgress
@@ -272,105 +293,89 @@ export default function NewGridLayout({ questions }) {
                       ((questionIndex + 1) / questions.length) * 100
                     } 
                   /> */}
-                  <Stepper activeStep={questionIndex} alternativeLabel>
-              {questions.map((question, index) => (
-                <Step key={index} completed={index < questionIndex}>
-                  <StepLabel>{index + 1}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+                  {/* <Stepper activeStep={questionIndex} alternativeLabel>
+                    {questions.map((question, index) => (
+                      <Step key={index} completed={index < questionIndex}>
+                        <StepLabel>{index + 1}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper> */}
             
-                  <div className="grid grid-cols-3  gap-4 ">
+                  <div className="grid grid-cols-4  gap-4 ">
                     {/* Left Top Cell */}
                     <div className="col-span-2 flex flex-col">
-                      <div className="flex-grow">
-                        <img src={image} className="w-full h-full" alt="User" />
+                      <div className="text-lg font-bold py-9">
+                        {questionIndex + 1}
+                        {". "}
+                        {questions[questionIndex]?.question}
+                      </div>
+                      <div className="relative w-[600px] h-full rounded-lg overflow-hidden">
+                        <img
+                          src={image}
+                          className="w-full h-full object-cover"
+                          alt="User"
+                        />
+                        <div
+                          className="absolute top-2 right-2 cursor-pointer p-2 bg-white bg-opacity-0 rounded-full"
+                          onClick={() => setIsSpeakerOn(!isSpeakerOn)}
+                        >
+                          {isSpeakerOn ? (
+                            <VolumeUpIcon className="text-white text-2xl" />
+                          ) : (
+                            <VolumeOffIcon className="text-white text-2xl" />
+                          )}
+                        </div>
                       </div>
 
-                      <div className="col-span-2 bg-white p-3 ">
-                        <div className="flex justify-between leading-6 text-sm py-2">
-                          <div className="text-xl font-bold">Question Duration</div>
-                          <div className="text-xl font-bold">
-                            {formatTime(questionTimeLeft)}
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setIsSpeakerOn(!isSpeakerOn)}
-                          >
-                            {isSpeakerOn ? (
-                              <VolumeUpIcon />
-                            ) : (
-                              <VolumeOffIcon />
-                            )}
-                          </div>
-                        </div>
-                        <div className="text-2xl py-5">
-                          {questionIndex + 1}
-                          {". "}
-                          {questions[questionIndex]?.question}
-                        </div>
+                      {/* <div className="col-span-2 bg-white p-3 ">
                         <div className="flex w-full justify-between items-center">
-                          <div></div>
-                          <div className="flex items-center gap-4">
-                            <button
-                              onClick={nextQuestion}
-                              style={{
-                                cursor: "pointer",
-                                fontSize: "18px",
-                                borderRadius: "8px",
-                                padding: "10px",
-                                background: linearGradientBackground,
-                                color: textColor,
-                                visibility:
-                                  questionIndex < questions?.length - 1
-                                    ? ""
-                                    : "hidden",
-                              }}
-                              className="text-secondary"
-                            >
-                              Next Question
-                            </button>
-                            <div 
-                              className="flex justify-end"
-                              style={{
-                                visibility:
-                                  questionIndex === questions?.length - 1
-                                    ? ""
-                                    : "hidden",
-                              }}   
-                            >
-                              <button
-                                className="bg-red-500  text-white font-bold py-2 px-4 rounded m-2"
-                                onClick={handleFinishInterview}
-                              >
-                                Finish Interview
-                              </button>
-                            </div>
-                          </div>
+                          <div className="font-bold text-lg">Question {questionIndex + 1} of {questions.length}</div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
 
                     {/* Right Vertical Cell */}
-                    <div className="col-span-1 bg-white p-4 rounded-xl">
-                      <div>
-                        <div className="text-xl font-bold">
-                          Total Interview Duration
-                        </div>
-                        <div className="py-5 text-xl">
-                          {formatTime(totalTimeLeft)}
-                        </div>
+                    <div className="col-span-2 bg-white p-4 rounded-xl mt-3">
+                      <div className="flex gap-4 mb-[5%] justify-end">
+                        <button     
+                          onClick={skipQuestion}
+                          className="border w-[130px] h-[45px] bg-gray-300 border-gray-300 rounded-lg flex justify-center items-center"
+                        >
+                          Skip
+                        </button>
+                        <button
+                        onClick={nextQuestion}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "18px",
+                          borderRadius: "8px",
+                          width: '200px',
+                          height: '45px',
+                          marginBottom: '33px',
+                          background: linearGradientBackground,
+                          color: textColor,
+                          visibility:
+                            questionIndex < questions?.length - 1
+                              ? ""
+                              : "hidden",
+                        }}
+                        className="text-secondary"
+                      >
+                        Next Question
+                        </button>
                       </div>
-                      <div className="relative">
+                      <div className="relative ml-[45px]">
+                      <div className="relative w-[520px]  flex justify-center items-center">
                         <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
                           REC
                         </div>
                         <video
                           id="vid"
-                          className="rounded-md"
+                          className="rounded-md bg-black"
                           muted
                           autoPlay
                         ></video>
+                      </div>
                       </div>
                     </div>
                   </div>
@@ -420,6 +425,17 @@ export default function NewGridLayout({ questions }) {
                 )}
                 </div>
               </div>
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={handleFinishInterview}
+                  className="fixed bottom-[115px] bg-red-500 text-white right-11 px-6 py-3 rounded-lg flex justify-center gap-2 items-center"
+                >
+                  Finish Interview
+                </button>
+                <div className="relative bottom-[-70px] ml-9 text-xl font-bold">
+                  Question {questionIndex + 1} of {questions.length}
+                </div>
+              </div>
             </>
           )}
         </>
@@ -427,3 +443,4 @@ export default function NewGridLayout({ questions }) {
     </>
   );
 }
+
