@@ -13,7 +13,6 @@ import {
   loadSoftSkillsList,
   prepare_interview,
 } from "../../redux/action";
-import "./Practice.css";
 
 import StepConnector, {
   stepConnectorClasses,
@@ -28,6 +27,7 @@ import { useDarkMode } from "./../../Dark";
 import interview from "../../assets/interview.jpeg";
 // import JobDescriptionInput from "./JobDescription";
 import JobDescriptionForm from "./JobDescription";
+import { useLoader } from '../../Components/LoaderContext';
 
 
 const QontoConnector = styled(StepConnector)(({ theme, linearGradientBackground }) => ({
@@ -87,6 +87,8 @@ const StepperComponent = () => {
   const [cultcompany, setCultcompany] = useState('');
   const [cultrole, setCultrole] = useState('');
 
+  const { showLoader, hideLoader, setQuestions } = useLoader();
+
   const payload = {
    
     specifications: {
@@ -141,7 +143,19 @@ const StepperComponent = () => {
     colorTheme,
   } = useSelector((state) => state?.data);
 
-  const handleNext = () => {
+  useEffect(() => {
+    if (questionsList?.questions?.length > 0) {
+      setQuestions(questionsList);
+      // setTimeout(() => {
+      //     hideLoader();
+      // }, 3000);
+    }
+  }, [questionsList, setQuestions, hideLoader]);
+
+
+
+  const handleNext = async () => {
+
     payload.specifications.level = experienceLevel ? experienceLevel : "";
     payload.specifications.role = selectedRole ? selectedRole?.label : "";
     payload.specifications.company = selectedCompany
@@ -174,33 +188,30 @@ const StepperComponent = () => {
         delete payload?.specifications?.level
 
       }
-    console.log("currentStep", payload);
+
     if (currentStep == 1) {
-      console.log('currentStep == 1 : ', questionsList)
+      showLoader('splash');
       dispatch(loadQuestions(payload));
     }
     else if (currentStep == 2) {
       console.log('currentStep == 2 : ', questionsList)
-      setShowAcknowledgement(true);
+      // setShowAcknowledgement(true);
 
-      // let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
-      // toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
-      // if (questionsList?.questions?.length > 0) {
-      //     setTimeout(() => {
-      //         navigate("/interview")
-      //     }, 3000);
-      // }
+      let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
+      toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
+      if (questionsList?.questions?.length > 0) {
+          setTimeout(() => {
+              navigate("/interview")
+          }, 3000);
+      }
     }
-    else if ((showAcknowledgement) && (currentStepModal === 0)) {
-      console.log('currentStepModal == 0 : ', questionsList)
-      setCurrentStepModal(currentStepModal + 1);
-    }
+    //else if ((showAcknowledgement) && (currentStepModal === 0)) {
+      //setCurrentStepModal(currentStepModal + 1);
+    //}
     else if (currentStepModal === 1) {
-      console.log('currentStepModal == 1 : ', questionsList)
       setCurrentStepModal(currentStepModal + 1);
     }
     else if (currentStepModal === 2) {
-      console.log('currentStepModal == 2 : ', questionsList)
       let toastId = toast("Wait .. redirecting to Interview Section", {
         autoClose: false,
       });
