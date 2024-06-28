@@ -21,7 +21,7 @@ const CourseView = () => {
 
     useEffect(() => {
         // dispatch(loadDetailedCourse(id));
-        const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic.subtopics).find(subtopic => !subtopic.completed);
+        const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic.subtopics).find(subtopic => !subtopic?.completed);
         setSelectedSubtopic(firstUncompletedSubtopic);
     }, [detailedCourse]);
 
@@ -40,7 +40,7 @@ const CourseView = () => {
 
                 <div className="w-2/6">
                     {detailedCourse?.content_data?.map((topic) => {
-                        const isDefaultOpen = topic.subtopics.some(sub => sub === selectedSubtopic && !sub.completed);
+                        const isDefaultOpen = topic.subtopics?.some(sub => sub === selectedSubtopic && !sub.completed);
                         return (
                             <TopicAccordion
                                 key={topic.id}

@@ -29,7 +29,7 @@ const TopicAccordion = ({ topic, onSelectSubtopic, selectedSubtopic, defaultOpen
                 <h3 className="font-semibold">{topic.name}</h3>
             </AccordionSummary>
             <AccordionDetails className="flex flex-col">
-                {topic.subtopics.map(subtopic => (
+                {topic.subtopics?.map(subtopic => (
                     <div
                         key={subtopic.name}
                         className={`flex items-center justify-between hover:bg-gray-300 ${selectedSubtopic?.name === subtopic.name ? 'bg-gray-300' : ''}`}
