@@ -75,7 +75,7 @@ const JDCult = () => {
                         </div>
                     </div>
                     <div className='text-lg font-bold'>
-                       {data[0]?.value}
+                       {data[2]?.value}
                     </div>
                 </div>
                 <div className='flex justify-between items-center mt-7'>
@@ -89,7 +89,7 @@ const JDCult = () => {
                         </div>
                     </div>
                     <div className='text-lg font-bold'>
-                       {data[1]?.value}
+                       {data[3]?.value}
                     </div>
                 </div>
             </div>
