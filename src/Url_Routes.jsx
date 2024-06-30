@@ -31,7 +31,8 @@ import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
 import Configurations from "./screens/Admin/Configurations/Configurations";
 import QuestionBankForm from "./screens/Teacher/CreateQuestionBank/CreateQuestionBank";
-import TopicandSubtopic from "./screens/Course/Topic/TopicandSubtopic";
+// import TopicandSubtopic from "./screens/Course/Topic/TopicandSubtopic";
+import TopicSubtopic from "./screens/Course/TopicSubtopic/TopicSubtopic";
 import CustomStepperComponent from "./screens/Course/CourseStepper";
 import TeacherLogin from "./screens/Login/TeacherLogin";
 import ComingSoonPage from "./screens/ComingSoon";
@@ -51,6 +52,15 @@ import QuestionBanksList from "./screens/Teacher/CreateQuestionBank/QuestionBank
 import QuestionBankView from "./screens/Teacher/CreateQuestionBank/QuestionBankView";
 import EnhancedTable from "./screens/Admin/Placements";
 import Placements from "./screens/Admin/Placements";
+import StudentQuizList from "./screens/Quiz/StudentQuizView/StudentQuizList";
+import QuizPage from "./screens/Quiz/QuizPage";
+import AssignmentList from "./screens/Assignments/AssignmentsList";
+import CreateAssignment from "./screens/Assignments/CreateAssignment";
+
+import AssignmentView from "./screens/Quiz/ResultsView";
+
+import HardSkills from "./screens/Admin/Analysis/HardSkills";
+import SoftSkills from "./screens/Admin/Analysis/SoftSkills";
 
 
 function Url_Routes() {
@@ -72,7 +82,9 @@ function Url_Routes() {
                 <Route exact path="/addTeacher" element={<HeaderFooterLayout Component={<AddTeachers />} />} />
                 <Route exact path="/summary" element={<HeaderFooterLayout Component={<Summary />} />} />
                 <Route exact path="/emotionSensing" element={<HeaderFooterLayout Component={<EmotionSensing />} />} />
-                <Route exact path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} />
+                {/* <Route exact path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} /> */}
+                <Route exact path="/hardskills" element={<HeaderFooterLayout Component={<HardSkills />} />} />
+                <Route exact path="/softskills" element={<HeaderFooterLayout Component={<SoftSkills />} />} />
                 <Route exact path="/skills" element={<HeaderFooterLayout Component={<Skills />} />} />
                 <Route exact path="/behaviourAnalysis" element={<HeaderFooterLayout Component={<BehaviourAnalysis />} />} />
                 <Route exact path="/practicalThinking" element={<HeaderFooterLayout Component={<PracticalThinking />} />} />
@@ -113,7 +125,8 @@ function Url_Routes() {
 
 
 
-        <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} />
+        {/* <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} /> */}
+        <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicSubtopic />} />} />
         <Route exact path="/courseList/create" element={<HeaderFooterLayout Component={<CustomStepperComponent />} />} />
         <Route exact path="/teacherLogin" element={<TeacherLogin />} />
         <Route exact path="/comingSoon"  element={<HeaderFooterLayout Component={<ComingSoonPage />} />} />
@@ -123,6 +136,12 @@ function Url_Routes() {
         <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />
         <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
         <Route exact path="/studentCourseList/edit/:id" element={<HeaderFooterLayout Component={<CourseEdit />} />} />
+        <Route exact path="/assignments"  element={<HeaderFooterLayout Component={<AssignmentList />} />} />
+        <Route exact path="/assignments/createAssignment"  element={<HeaderFooterLayout Component={<CreateAssignment />} />} />
+        <Route exact path="/assignments/view/:id" element={<HeaderFooterLayout Component={<AssignmentView />} />} />
+
+        <Route exact path="/studentQuizList"  element={<HeaderFooterLayout Component={<StudentQuizList />} />} />
+        <Route exact path="/studentQuizList/view/:id"  element={<HeaderFooterLayout Component={<QuizPage />} />} />
 
       </Routes>
     </BrowserRouter>

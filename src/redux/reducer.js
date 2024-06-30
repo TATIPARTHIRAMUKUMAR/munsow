@@ -47,8 +47,11 @@ const initialState = {
 
   practicalThinking:[],
   practicalFilters:{},
+  quizAssignmentView:{},
+
   placementTracker:{},
   statusList:[],
+  assignmentsList:[],
   colorTheme: {
     light: {
       // primaryBg-black
@@ -68,6 +71,7 @@ const initialState = {
       textColor: "#fafcfc",
       textColor2: "#8A8A8A",
       textColor3: "#252525",
+      cardColor: "F0F0F0"
     },
     dark: {
       background: "#242D36",
@@ -79,6 +83,7 @@ const initialState = {
       textColor: "#ABB2BA",
       textColor2: "#8A8A8A",
       textColor3: "#252525",
+      cardColor: "F0F0F0"
     },
   },  
 
@@ -98,6 +103,11 @@ const DataReducers = (state = initialState, action) => {
         ...state,
         quizList: action?.payload
       }
+      case types.DETAILED_ASSIGNMENT:
+        return {
+          ...state,
+          quizAssignmentView: action?.payload?.data
+        }
     case types.LESSON_LIST:
       {
         return {
@@ -116,7 +126,7 @@ const DataReducers = (state = initialState, action) => {
       {
         return {
           ...state,
-          quizView: action?.payload
+          quizView: action?.payload?.data
         }
       }
     case types.USERS_LIST:
@@ -160,6 +170,11 @@ const DataReducers = (state = initialState, action) => {
     case types.STUDENTS_LIST: return{
       ...state,
       studentsList:action.payload,
+      loading:false
+    }
+    case types.ASSIGNMENTS: return{
+      ...state,
+      assignmentsList:action.payload.data,
       loading:false
     }
     case types.TEACHERS_LIST: return{
