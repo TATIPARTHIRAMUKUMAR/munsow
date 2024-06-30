@@ -57,3 +57,52 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]:hover {
   cursor: pointer;
 }
+
+/* 
+.progressBar {
+  background: rgba(255,255,255,0.1);
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.progressBar-value {
+  animation: load 60s normal forwards;
+  box-shadow: 0 10px 40px -10px #fff;
+  background: #fff;
+  width: 0;
+}
+
+@keyframes load {
+  0% { width: 0; }
+  100% { width: 100%; }
+} */
+
+
+@keyframes progress-bar-animation {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.progressBar {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  background-color: #e5e5e5;
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #38b2ac;
+  animation: progress-bar-animation 0s linear forwards;
+}
