@@ -728,7 +728,7 @@ return (
 
           {/* Editor */}
           <Editor
-            apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
+            apiKey='yt4psixdarlldji11wwxwqlnkky6wk0zvsnwscxf8en1a30h'
             init={{
               menu: {
                 file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
