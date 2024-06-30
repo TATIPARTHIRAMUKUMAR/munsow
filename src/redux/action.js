@@ -389,7 +389,7 @@ export const deleteQuiz = (id, callback) => {
     const note = toast.loading("Deleting Assignment ..")
 
     axios
-      .delete(`${GLOBAL_CONSTANTS.backend_url}assignment/delete/${id}`, {
+      .get(`${GLOBAL_CONSTANTS.backend_url}assignment/delete/${id}`, {
         headers,
       })
       .then((resp) => {
@@ -1720,7 +1720,7 @@ export const delete_course = (id, callback) => {
     };
     let toastId = toast("Deleting Course .. please wait", { autoClose: false });
     axios
-      .delete(`${GLOBAL_CONSTANTS.backend_url}course/delete/${id}`, {
+      .get(`${GLOBAL_CONSTANTS.backend_url}course/delete/${id}`, {
          headers,
       })
       .then((resp) => {
