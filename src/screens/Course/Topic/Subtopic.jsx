@@ -86,7 +86,7 @@ function Subtopic({ setTopics, topicIndex, subtopic, setShowModal,subIndex }) {
 
 
                     <Editor
-                      apiKey='6uslfnqkm6qjxxn3v1cwgpc27eto4yqyjp5d7opih9vunxz7'
+                      apiKey='yt4psixdarlldji11wwxwqlnkky6wk0zvsnwscxf8en1a30h'
                       initialValue="<p>Start Writing ... </p>"
                       init={{
                         height: 500,
