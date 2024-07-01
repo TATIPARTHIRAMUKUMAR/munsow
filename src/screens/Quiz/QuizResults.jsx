@@ -29,22 +29,28 @@ export default function QuizResults({ questions, answers, pass, total_score, tot
       </div>
       <div className="space-y-4">
         {questions?.map((question, index) => {
-          const answer = answers.find(a => a.question_id === question.id);
+          const answer = answers.find((a) => a.question_id === question.id);
           return (
             <div key={question.id} className="p-4 rounded-lg bg-white shadow-md">
-              <div
-                className={`flex items-center gap-2 font-semibold ${
-                  answer?.is_correct ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {index + 1}. {question.question}
-                <span>
-                  {answer?.is_correct ? (
-                    <CorrectIcon className="text-green-500" />
-                  ) : (
-                    <IncorrectIcon color="error" />
-                  )}
-                </span>
+              <div className="flex justify-between ">
+                <div
+                  className={`flex w-11/12
+                     gap-2 font-semibold ${
+                    answer?.is_correct ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {index + 1}. {question.question}
+                  {/* <span>
+                    {answer?.is_correct ? (
+                      <CorrectIcon className="text-green-500" />
+                    ) : (
+                      <IncorrectIcon color="error" />
+                    )}
+                  </span> */}
+                </div>
+                <div className="text-md font-semibold w-1/12 text-gray-500">
+                  Marks: <span className="font-bold">{question.marks}</span>
+                </div>
               </div>
               <div className="grid md:grid-cols-2 gap-2 mt-2">
                 {question.options.map((option, ind) => {
@@ -71,8 +77,8 @@ export default function QuizResults({ questions, answers, pass, total_score, tot
       </div>
       <Button
         color="secondary"
-        className="w-full mt-6 "
-        style={{ fontWeight: "semi-bold", fontSize: "16px",marginTop:"20px" }}
+        className="w-full mt-6"
+        style={{ fontWeight: "semi-bold", fontSize: "16px", marginTop: "20px" }}
         variant="contained"
         onClick={handleChangeClose}
       >
@@ -83,8 +89,22 @@ export default function QuizResults({ questions, answers, pass, total_score, tot
 }
 
 QuizResults.propTypes = {
-  questions: PropTypes.array.isRequired,
-  answers: PropTypes.array.isRequired,
+  questions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      question: PropTypes.string.isRequired,
+      options: PropTypes.arrayOf(PropTypes.string).isRequired,
+      marks: PropTypes.number.isRequired,  // Include marks in the question prop types
+    })
+  ).isRequired,
+  answers: PropTypes.arrayOf(
+    PropTypes.shape({
+      question_id: PropTypes.number.isRequired,
+      selected_options: PropTypes.arrayOf(PropTypes.number).isRequired,
+      correct_answers: PropTypes.arrayOf(PropTypes.string).isRequired,
+      is_correct: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
   pass: PropTypes.bool.isRequired,
   total_score: PropTypes.number.isRequired,
   total_marks: PropTypes.number.isRequired,
