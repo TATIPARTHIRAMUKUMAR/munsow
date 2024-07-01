@@ -1,11 +1,20 @@
-import { defineConfig } from 'vite'
-// import react from '@vitejs/plugin-react-swc'
-import ReactRefresh from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
+import { defineConfig } from 'vite';
+import reactRefresh from '@vitejs/plugin-react';
+
 export default defineConfig({
-  plugins: [ReactRefresh()],  assetsInclude: ['**/*.avi'],
+  plugins: [reactRefresh()],
+  assetsInclude: ['**/*.avi'],
   optimizeDeps: {
     include: ['@mui/material/Tooltip', '@emotion/styled', '@mui/material/Unstable_Grid2'],
   },
-})
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://munsow-stg-e77188fb3b91.herokuapp.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+});

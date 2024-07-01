@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "https://munsow-stg-e77188fb3b91.herokuapp.com",
   "scripts": {
     "start": "vite",
     "build": "vite build",
