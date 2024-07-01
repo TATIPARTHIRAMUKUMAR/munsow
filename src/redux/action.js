@@ -1720,10 +1720,9 @@ export const delete_course = (id, callback) => {
     };
     let toastId = toast("Deleting Course .. please wait", { autoClose: false });
     axios
-      // .delete(`${GLOBAL_CONSTANTS.backend_url}course/delete/${id}`, {
-      //    headers,
-      // })
-      .delete(`/api/course/delete/${id}`, { headers })
+      .delete(`${GLOBAL_CONSTANTS.backend_url}course/delete/${id}`, {
+         headers,
+      })
       .then((resp) => {
         if (resp?.data?.error) {
           toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
