@@ -1752,7 +1752,7 @@ export const delete_question_bank = (id, callback) => {
     };
     let toastId = toast("Deleting Question Bank .. please wait", { autoClose: false });
     axios
-      .delete(`${GLOBAL_CONSTANTS.backend_url}question_bank/delete/${id}`, {
+      .get(`${GLOBAL_CONSTANTS.backend_url}question_bank/delete/${id}`, {
          headers,
       })
       .then((resp) => {
