@@ -6,26 +6,27 @@ import './TopicSubtopic.css';
 import { Editor } from '@tinymce/tinymce-react';
 
 function TopicSubtopic({ setTopics }) {
-  let data = [{
-    'id' : 1,
-    'topic' : "Topic 1 - Heading",
-    'isHidden' : false,
-    'subtopics' : [
-      {
-        'id' : 1,
-        'subtopic' : 'Topic 1.1',
-        'isHiddenSub' : false,
-        // 'isDescHidden' : false,
-        'desc' : ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do ei usmod tempor incididunt ut labore et dolore magna aliqua']
-      }
-    ]
-  },
-  {
-    'id' : 2,
-    'topic' : "Topic 2 - Heading",
-    'isHidden' : false,
-  }
-]
+//   let data = [{
+//     'id' : 1,
+//     'name' : "Topic 1 - Heading",
+//     'isHidden' : false,
+//     'subtopics' : [
+//       {
+//         'id' : 1,
+//         'name' : 'Topic 1.1',
+//         'isHiddenSub' : false,
+//         // 'isDescHidden' : false,
+//         'content' : ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do ei usmod tempor incididunt ut labore et dolore magna aliqua']
+//       }
+//     ]
+//   },
+//   {
+//     'id' : 2,
+//     'name' : "Topic 2 - Heading",
+//     'isHidden' : false,
+//   }
+// ]
+let data = [];
 
 const [isModalOpen, setModalOpen] = useState(false);
 const [isSubModalOpen, setSubModalOpen] = useState(false);
@@ -34,8 +35,8 @@ const [isSubDeleteModalOpen, setSubDeleteModalOpen] = useState(false);
 
 const [isSubEditModalOpen, setSubEditModalOpen] = useState(false);
 
-const [newTopic, setNewTopic] = useState({ topic: '' });
-const [newSubTopic, setNewSubTopic] = useState({ subtopic: '' , desc : []});
+const [newTopic, setNewTopic] = useState({ name: '' });
+const [newSubTopic, setNewSubTopic] = useState({ name: '' , content : []});
 let [Topicdata, setData] = useState(data);
 
 const [inputClassName, setInputClassName] = useState('valid');
@@ -45,7 +46,7 @@ const [validationMessage, setValidationMessage] = useState('');
 const openModal = () => {
   setValidationMessage('')
   setInputClassName('valid')
-  setNewTopic({topic:''})
+  setNewTopic({name:''})
   setModalOpen(true);
 };
 
@@ -67,7 +68,7 @@ const openSubDeleteModal = (subTopicId, TopicIndex) => {
 
 const topicEditIndex = useRef(null);
 const subEditIndex = useRef(null);
-const [editSubTopic, setEditSubTopic] = useState({ subtopic: '' , desc : []});
+const [editSubTopic, setEditSubTopic] = useState({ name: '' , content : []});
 
 const openSubEditModal = (topicIndex, subTopicIndex, editSubtopic) => {
   setValidationMessage('')
@@ -117,7 +118,7 @@ const handleSubTopicInputChange = (e) => {
     [name]: value,
   }));
 
-  if (name === 'subtopic') {
+  if (name === 'name') {
     if (value.length > 0) {
       setInputClassName('valid');
       setValidationMessage('');
@@ -131,7 +132,7 @@ const handleSubTopicInputChange = (e) => {
 const handleSubTopicEditInputChange = (e) => {
 
   const { name, value } = e.target;
-  if(name === 'subtopic')
+  if(name === 'name')
   {
     if(value.length > 0)
     {
@@ -194,7 +195,7 @@ const handleInputChange = (e) => {
 };
 
 const handleSave = () => {
-    if(newTopic.topic === '')
+    if(newTopic.name === '')
     {
       setInputClassName('invalid')
       setValidationMessage('Please enter a valid Topic name')
@@ -203,7 +204,7 @@ const handleSave = () => {
     {
       setInputClassName('valid')
       setValidationMessage('')
-      setData((prevData) => [...prevData, {id : prevData.length + 1, topic : newTopic.topic, isHidden : false}]);
+      setData((prevData) => [...prevData, {id : prevData.length + 1, name : newTopic.name, isHidden : false}]);
       closeModal();
     }
 };
@@ -217,7 +218,7 @@ const handleSubTopicSave = () => {
       currentTopic.subtopics = [];
     } 
     
-    if(newSubTopic.subtopic === '')
+    if(newSubTopic.name === '')
     {
       setInputClassName('invalid')
       setValidationMessage('Please enter a valid Sub-Topic name')
@@ -229,15 +230,15 @@ const handleSubTopicSave = () => {
         id: currentTopic.subtopics.length + 1, 
         isHiddenSub : false, 
         isDescHidden : false, 
-        subtopic : newSubTopic.subtopic,
-        desc : subTopicDesc
+        name : newSubTopic.name,
+        content : subTopicDesc
        };
       currentTopic.subtopics.push(newSubtopicItem);
 
       setData([...Topicdata]);
       closeSubModal();
       iRef.current = 0;
-      setNewSubTopic({subtopic : '', desc : []})
+      setNewSubTopic({name : '', content : []})
     }
   }
   else
@@ -247,14 +248,14 @@ const handleSubTopicSave = () => {
 }
 
 const handleDelete = () => {
-  const topicIndex = Topicdata.findIndex((topic) => topic.id === deleteId.current)
+  const topicIndex = Topicdata.findIndex((name) => name.id === deleteId.current)
   Topicdata = [...Topicdata.slice(0, topicIndex), ...Topicdata.slice(topicIndex + 1)];
   setData(Topicdata)
   closeDeleteModal();
 };
 
 const handleSubDelete = () => {
-  const subTopicIndex = Topicdata[topicIndex.current].subtopics.findIndex((subtopic) => subtopic.id === subDeleteId.current)
+  const subTopicIndex = Topicdata[topicIndex.current].subtopics.findIndex((name) => name.id === subDeleteId.current)
 
   let updatedSubtopics = [...Topicdata[topicIndex.current].subtopics.slice(0, subTopicIndex), ...Topicdata[topicIndex.current].subtopics.slice(subTopicIndex + 1)];
   const updatedTopic = { ...Topicdata[topicIndex.current], subtopics: updatedSubtopics };
@@ -282,18 +283,22 @@ useEffect(() => {
 const [editingIndex, setEditingIndex] = useState(null);
 const [editedTopic, setEditedTopic] = useState('');
 
-const startEditing = (index, topic) => {
+const startEditing = (index, name) => {
   setEditingIndex(index);
-  setEditedTopic(topic);
+  setEditedTopic(name);
 };
 
 const cancelEditing = () => {
   setEditingIndex(null);
   setEditedTopic('');
+  //to delete modal from cancel button
+  closeModal();
+  closeSubModal();
+  closeSubEditModal();
 };
 
 const saveEditing = (index) => {
-  Topicdata[index].topic = editedTopic;
+  Topicdata[index].name = editedTopic;
 
   setEditingIndex(null);
   setEditedTopic('');
@@ -304,15 +309,15 @@ const saveEditing = (index) => {
 // Update SubTopic
 
 const handleEdit = () => {
-  if(editSubTopic.subtopic === '')
+  if(editSubTopic.name === '')
     {
       setInputClassName('invalid')
       setValidationMessage('Please enter a valid Sub-Topic name')
     }
     else
     {
-      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].subtopic = editSubTopic.subtopic;
-      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].desc = subTopicDesc;
+      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].name = editSubTopic.name;
+      Topicdata[topicEditIndex.current].subtopics[subEditIndex.current].content = subTopicDesc;
 
       setData(Topicdata);
       closeSubEditModal();
@@ -352,12 +357,12 @@ const handleEdit = () => {
 const toggleVisibility = (index) => {
 
   const updatedTopicData = [...Topicdata];
-  const topic = updatedTopicData[index];
+  const name = updatedTopicData[index];
   
-  topic.isHidden = true;
-  if (topic.subtopics) {
-    topic.subtopics.forEach(subtopic => {
-      subtopic.isHiddenSub = true;
+  name.isHidden = true;
+  if (name.subtopics) {
+    name.subtopics.forEach(name => {
+      name.isHiddenSub = true;
     });
   }
   setData(updatedTopicData);
@@ -366,12 +371,12 @@ const toggleVisibility = (index) => {
 
 const visible = (index) => {
   const updatedTopicData = [...Topicdata];
-  const topic = updatedTopicData[index];
+  const name = updatedTopicData[index];
 
-  topic.isHidden = false;
-  if (topic.subtopics) {
-    topic.subtopics.forEach(subtopic => {
-      subtopic.isHiddenSub = false;
+  name.isHidden = false;
+  if (name.subtopics) {
+    name.subtopics.forEach(name => {
+      name.isHiddenSub = false;
     });
   }
 
@@ -384,7 +389,7 @@ const toggleVisibilitySubTopic = (topicIndex, subTopicIndex) => {
   
   if(updatedTopicData[topicIndex].subtopics.length > 0)
   {
-    if(updatedTopicData[topicIndex].subtopics.every(subtopic => subtopic.isHiddenSub === true ))
+    if(updatedTopicData[topicIndex].subtopics.every(name => name.isHiddenSub === true ))
     {
       updatedTopicData[topicIndex].isHidden = true;
     }
@@ -400,7 +405,7 @@ const visibleSubTopic = (topicIndex, subTopicIndex) => {
 
   if(updatedTopicData[topicIndex].subtopics.length > 0)
   {
-    if(updatedTopicData[topicIndex].subtopics.some(subtopic => subtopic.isHiddenSub === false ))
+    if(updatedTopicData[topicIndex].subtopics.some(name => name.isHiddenSub === false ))
     {
       updatedTopicData[topicIndex].isHidden = false;
     } 
@@ -474,11 +479,11 @@ const toggleAccordion = (index, subIndex) => {
 // ---------------------------------------------------------- Display List -------------------------------------------------------------
 
 
-const topicNames = Topicdata.map((topic, index) => 
+const topicNames = Topicdata.map((name, index) => 
 <>
   <li 
-  className={`topic ${topic.isHidden ? 'hide' : ''}`} 
-  key={topic.id} 
+  className={`topic ${name.isHidden ? 'hide' : ''}`} 
+  key={name.id} 
   draggable
   onDragStart={(e) => onDragStart(e, index, false)}
   onDragOver={(e) => onDragOver(e)}
@@ -487,7 +492,7 @@ const topicNames = Topicdata.map((topic, index) =>
   onDragLeave={(e) => onDragLeave(e)}>
         {editingIndex === index ? (
         <>
-          <tr style={{display:"flex", justifyContent:"space-between"}}>
+          <tr className='flex flex-col md:flex-row justify-between'>
             <td style={{backgroundColor: 'white', display:"flex", alignItems:"center"}}>
               <FontAwesomeIcon style={{backgroundColor:'white', marginRight:'15px', color:'gray'}} icon={faBars} />
               <input
@@ -513,7 +518,7 @@ const topicNames = Topicdata.map((topic, index) =>
               </td>
 
               <td style={{width:'1200px'}}>
-                <span>{topic.topic}</span>
+                <span>{name.name}</span>
               </td>
 
               <td style={{width:'15%', paddingLeft:'95px'}}>
@@ -526,17 +531,17 @@ const topicNames = Topicdata.map((topic, index) =>
           </div>
       ) : (
           <div style={{backgroundColor: 'white'}}>
-            <tr style={{display:"flex", justifyContent:"space-between"}}>
+            <tr className='flex flex-col md:flex-row justify-between'>
               <td style={{backgroundColor: 'white', display:"flex", alignItems:"center"}}>
                 <FontAwesomeIcon style={{backgroundColor:'white', marginRight:'15px', color:'gray'}} icon={faBars} />
-                {topic.topic}
+                {name.name}
               </td>
               <td style={{backgroundColor: 'white', display:"flex", alignItems:"center"}}>
                 <button className='functionButton' onClick={() => openSubModal(index)}>
                   <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px'}} icon={faPlusCircle}/>
                 </button>
 
-                <button onClick={() => startEditing(index, topic.topic)} className='functionButton'>
+                <button onClick={() => startEditing(index, name.name)} className='functionButton'>
                   <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px'}} icon={faPencil}/>
                 </button>
 
@@ -544,7 +549,7 @@ const topicNames = Topicdata.map((topic, index) =>
                   <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px'}} icon={faEyeSlash}/>
                 </button>
                 
-                <button onClick={() => openDeleteModal(topic.id)} className='functionButton'>
+                <button onClick={() => openDeleteModal(name.id)} className='functionButton'>
                   <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', color:'red', fontSize:'20px'}} icon={faTrashCan}/>
                 </button>
               </td>
@@ -558,9 +563,9 @@ const topicNames = Topicdata.map((topic, index) =>
 
 {/* ------------------------------------------------------ SubTopic Display ------------------------------------------------------- */}
 
-    {topic.subtopics && topic.subtopics.map((subtopic, subIndex) => (
+    {name.subtopics && name.subtopics.map((name, subIndex) => (
       <li 
-      className={`subTopic ${subtopic.isHiddenSub ? 'hide' : ''}`} 
+      className={`subTopic ${name.isHiddenSub ? 'hide' : ''}`} 
       key={subIndex}
       draggable
       onDragStart={(e) => onDragStart(e, subIndex, true)}
@@ -578,7 +583,7 @@ const topicNames = Topicdata.map((topic, index) =>
               </td>
 
               <td className='hide' style={{width:'1200px'}}>
-                <span className='hide'>{subtopic.subtopic}</span>
+                <span className='hide'>{name.name}</span>
               </td>
 
               <td className='hide' style={{width:'15%', paddingLeft:'74px'}}>
@@ -596,7 +601,7 @@ const topicNames = Topicdata.map((topic, index) =>
           onClick={() => toggleAccordion(index, subIndex)}>
             <td style={{backgroundColor: 'white',}}>
               <FontAwesomeIcon style={{backgroundColor:'white', marginRight:'15px', color:'gray', marginLeft:'7px'}} icon={faBars} />
-              {subtopic.subtopic}
+              {name.name}
 
             </td>
             
@@ -606,14 +611,14 @@ const topicNames = Topicdata.map((topic, index) =>
           </button>
           
           <div className={`panel ${Topicdata[index].subtopics[subIndex].isDescHidden ? 'active' : ''}`}>
-            <div dangerouslySetInnerHTML={{ __html: subtopic.desc}} />
+            <div dangerouslySetInnerHTML={{ __html: name.content}} />
             </div>
           </td>
 
 
           <td style={{backgroundColor: 'white',borderRadius:'20px', display:"flex", alignItems:"center"}}>
 
-            <button onClick={() => openSubEditModal(index, subIndex, {'subtopic' : subtopic.subtopic, 'desc' : subtopic.desc})} className='functionButton'>
+            <button onClick={() => openSubEditModal(index, subIndex, {'name' : name.name, 'content' : name.content})} className='functionButton'>
               <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px', marginTop:'-5px'}} icon={faPencil}/>
             </button>
 
@@ -621,7 +626,7 @@ const topicNames = Topicdata.map((topic, index) =>
               <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', fontSize:'20px'}} icon={faEyeSlash}/>
             </button>
             
-            <button onClick={() => openSubDeleteModal(subtopic.id, index)} className='functionButton' style={{}}>
+            <button onClick={() => openSubDeleteModal(name.id, index)} className='functionButton' style={{}}>
               <FontAwesomeIcon style={{backgroundColor:'white', marginLeft:'20px', color:'red', fontSize:'20px'}} icon={faTrashCan}/>
             </button>
           </td>
@@ -641,10 +646,9 @@ return (
   <div className="Main">
 
     <div className='header'>
-      <h1 className='topHeading'>Topic & SubTopic Creation</h1>
-      <button type='button' className='createButton' onClick={openModal} style={{backgroundColor:'#10e4d4'}}>
-        Create Topic
-        <FontAwesomeIcon style={{backgroundColor:'transparent', marginLeft:'20px'}} icon={faPlusCircle}/>
+      <h1 className='text-lg md:text-3xl  topHeading'>Topic & SubTopic Creation</h1>
+      <button type='button' className='text-lg md:text-xl createButton' onClick={openModal} style={{backgroundColor:'#10e4d4'}}>
+        Create Topic<FontAwesomeIcon style={{backgroundColor:'transparent', marginLeft:'20px'}} icon={faPlusCircle}/>
       </button>
     </div>
 
@@ -657,14 +661,14 @@ return (
           <span className="close" onClick={closeModal}>
             &times;
           </span>
-          <h1 className='modalCreateHead'>Add Topic Details</h1>
-          <div className='inline-flex flex-col'>
+          <h1 className='text-xl md:text-3xl font-bold py-3 mb-3'>Add Topic Details</h1>
+          <div className='inline-flex flex-col mb-5'>
           <label htmlFor="topicName">Topic Name</label>
           <input
             className={inputClassName}
             type="text"
             id="topicName"
-            name="topic"
+            name="name"
             value={newTopic.name}
             onChange={handleInputChange}
             placeholder='e.g., Topic 3 - Heading'
@@ -675,7 +679,7 @@ return (
             </p>
           )}
           </div>
-          <div className='flex gap-4 items-center mt-5'>
+          <div className='flex gap-4 items-center'>
             <button onClick={cancelEditing} className='cancelEditButton'>Cancel</button>
             <button onClick={handleSave} className='saveEditButton'>Save</button>
           </div>
@@ -690,13 +694,14 @@ return (
           <span className="close" onClick={closeSubModal}>
             &times;
           </span>
-          <h1 className='text-2xl font-bold py-4'>Add Sub-Topic Details</h1>
-          <label htmlFor="topicName">Sub-Topic Name</label><br/>
+          <h1 className='text-xl md:text-3xl font-bold py-3 mb-3'>Add Sub-Topic Details</h1>
+          <div className='inline-flex flex-col mb-5'>
+          <label htmlFor="topicName">Sub-Topic Name</label>
           <input
             type="text"
             id="topicName"
-            name="subtopic"
-            value={newSubTopic.subtopic}
+            name="name"
+            value={newSubTopic.name}
             onChange={handleSubTopicInputChange}
             placeholder='e.g., Topic 3.1 - Heading'
             className={inputClassName}
@@ -706,9 +711,7 @@ return (
               {validationMessage}
             </p>
           )}
-          <br/><br/>
-
-          <label htmlFor="topicName">Sub-Topic Description</label>
+          <label className='my-3' htmlFor="topicName">Sub-Topic Description</label>
           {/* <p style={{backgroundColor:'white', float:'right', marginTop:'0px'}}>{`${newSubTopic.desc.length}/300`}</p></label><br/> */}
           {/* <textarea
             id="topicName"
@@ -728,7 +731,7 @@ return (
 
           {/* Editor */}
           <Editor
-            apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
+            apiKey='yt4psixdarlldji11wwxwqlnkky6wk0zvsnwscxf8en1a30h'
             init={{
               menu: {
                 file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
@@ -760,10 +763,10 @@ return (
               ],
               ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
             }}
-            initialValue={newSubTopic.desc}
+            initialValue={newSubTopic.content}
             onEditorChange={(content, editor) => setSubTopicDesc(content)}
           />
-
+          </div>
           <div className='flex gap-4 items-center'>
             <button onClick={cancelEditing} className='cancelEditButton'>Cancel</button>
             <button onClick={handleSubTopicSave} className='saveEditButton'>Save</button>
@@ -811,13 +814,14 @@ return (
           <span className="close" onClick={closeSubEditModal}>
             &times;
           </span>
-          <h1 className='modalCreateHead'>Edit Sub-Topic Details</h1>
-          <label htmlFor="topicName">Sub-Topic Name</label><br/>
+          <h1 className='text-xl md:text-3xl font-bold py-3 mb-3'>Edit Sub-Topic Details</h1>
+          <div className='inline-flex flex-col mb-5'>
+          <label htmlFor="topicName">Sub-Topic Name</label>
           <input
             type="text"
             id="topicName"
-            name="subtopic"
-            value={editSubTopic.subtopic}
+            name="name"
+            value={editSubTopic.name}
             onChange={handleSubTopicEditInputChange}
             placeholder='e.g., Topic 3.1 - Heading'
             className={inputClassName}
@@ -826,9 +830,9 @@ return (
             <p className='invalidMessage'>
               {validationMessage}
             </p>
-          )}<br/>
+          )}
 
-          <label htmlFor="topicName">Sub-Topic Description</label><br/>
+          <label className='my-3' htmlFor="topicName">Sub-Topic Description</label>
           {/* <p style={{backgroundColor:'white', float:'right', marginTop:'0px'}}>{`${newSubTopic.desc.length}/300`}</p></label><br/> */}
           {/* <textarea
             id="topicName"
@@ -847,7 +851,7 @@ return (
           )} */}
           {/* //editor */}
           <Editor
-            apiKey='v3p3slquhsr94j0hcp7okhz2p39x9dslnf2uwtgrfh9yqep7'
+            apiKey='yt4psixdarlldji11wwxwqlnkky6wk0zvsnwscxf8en1a30h'
             init={{
               menu: {
                 file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
@@ -879,10 +883,11 @@ return (
               ],
               ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
             }}
-            initialValue={editSubTopic.desc}
+            initialValue={editSubTopic.content}
             onEditorChange={(content, editor) => setSubTopicDesc(content)}
           />
-          <br/><br/>
+          </div>
+         
           <div className='flex gap-4 items-center'>
             <button onClick={cancelEditing} className='cancelEditButton'>Cancel</button>
             <button onClick={handleEdit} className='saveEditButton'>Save</button>

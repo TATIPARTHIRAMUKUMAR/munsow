@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadDetailedAssignment } from "../../redux/action";
+import { loadResultAssignment } from "../../redux/action";
 import { Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -8,14 +8,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function QuizAssignmentView({ setValue }) {
+export default function QuizResultView({ setValue }) {
   const { id } = useParams();
-  const { quizAssignmentView } = useSelector((state) => state.data);
+  const { resultAssignment } = useSelector((state) => state.data);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadDetailedAssignment(id));
+    dispatch(loadResultAssignment(id));
   }, [dispatch, id]);
 
   const handleBack = () => {
@@ -23,65 +23,78 @@ export default function QuizAssignmentView({ setValue }) {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-6 bg-gray-100 min-h-screen">
-      <div className="flex items-center justify-between p-4 bg-white shadow-lg rounded-lg">
-        <Button
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-          className="bg-gray-100 text-gray-700 hover:bg-gray-200"
-          onClick={handleBack}
-        >
-          Back
-        </Button>
-        <h2 className="text-xl font-semibold">{quizAssignmentView?.name}</h2>
-       
-      </div>
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1 bg-white shadow-lg rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">Quiz Details</h3>
-          <p><strong>Name:</strong> {quizAssignmentView?.name}</p>
-          <p><strong>Description:</strong> {quizAssignmentView?.description}</p>
-          <p><strong>Status:</strong> {quizAssignmentView?.status}</p>
-          <p><strong>Max Time:</strong> {quizAssignmentView?.max_time_min} minutes</p>
-          <p><strong>Number of Reattempts:</strong> {quizAssignmentView?.number_of_reattempt}</p>
-          <p><strong>Auto Assignment Notification:</strong> {quizAssignmentView?.auto_assignment_notification ? "Yes" : "No"}</p>
-          <p><strong>Auto Reminders:</strong> {quizAssignmentView?.auto_reminders ? "Yes" : "No"}</p>
+    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            variant="outlined"
+            startIcon={<ArrowBackIcon />}
+            className="bg-gray-100 text-gray-700 hover:bg-gray-200"
+            onClick={handleBack}
+          >
+            Back
+          </Button>
+          <h2 className="text-2xl font-semibold">{`Quiz Result - Assignment ID: ${resultAssignment?.assignment_id}`}</h2>
         </div>
-        <div className="flex-1 bg-white shadow-lg rounded-lg p-6">
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold mb-2">Quiz Details</h3>
+          <div className="grid grid-cols-2 gap-4 text-gray-700">
+            <p><strong>Status:</strong> {resultAssignment?.status}</p>
+            <p><strong>Marks Obtained:</strong> {resultAssignment?.marks}</p>
+            <p><strong>Qualified:</strong> {resultAssignment?.is_qualified ? "Yes" : "No"}</p>
+            <p><strong>Attempt Number:</strong> {resultAssignment?.attempt_number}</p>
+            <p><strong>Submitted Date:</strong> {new Date(resultAssignment?.created_date).toLocaleString()}</p>
+            <p><strong>Updated Date:</strong> {new Date(resultAssignment?.updated_date).toLocaleString()}</p>
+          </div>
+          <div className={`mt-4 py-2 px-4 border-2 rounded-full text-center ${resultAssignment?.is_qualified ? "border-green-500 text-green-500" : "border-red-500 text-red-500"}`}>
+            <strong>Overall Score:</strong> {resultAssignment?.marks} {resultAssignment?.is_qualified ? "(Qualified)" : "(Not Qualified)"}
+          </div>
+        </div>
+        <div>
           <h3 className="text-lg font-semibold mb-4">Quiz Questions and Answers</h3>
-          <ul>
-            {quizAssignmentView?.questions?.map((question, index) => (
-              <li key={index} className="mb-4">
-                <p className="font-semibold">Q{index + 1}: {question.question} <span className="font-normal text-sm">({question.marks} marks)</span></p>
-                <ul className="mt-2">
-                  {question.options.map((option, idx) => {
-                    const isSelected = question?.selected_option?.includes(idx + 1);
-                    const isCorrect = question?.correctAnswer.includes(option);
+          <div className="space-y-4">
+            {resultAssignment?.evaluation_data?.map((question, index) => (
+              <div key={index} className="p-4 bg-gray-50 rounded-lg shadow-md">
+                <div className={`flex items-center gap-2 font-semibold ${question.is_correct ? "text-green-500" : "text-red-500"}`}>
+                  {index + 1}. Question ID: {question.question_id}
+                  <span>
+                    {question.is_correct ? (
+                      <CheckCircleIcon className="text-green-500" />
+                    ) : (
+                      <CancelIcon className="text-red-500" />
+                    )}
+                  </span>
+                </div>
+                <div className="grid md:grid-cols-2 gap-2 mt-2">
+                  {question.all_options.map((option, idx) => {
+                    const isCorrect = question.correct_answers.includes(option);
+                    const isSelected = question.selected_options.includes(idx + 1);
                     return (
-                      <li key={idx} className={`py-1 px-2 rounded-md flex items-center gap-2 ${isSelected ? (isCorrect ? 'bg-green-200' : 'bg-red-200') : ''}`}>
-                        {String.fromCharCode(65 + idx)}. {option}
-                        {isSelected && (
-                          isCorrect ? <CheckCircleIcon className="text-green-700 ml-2" /> : <CancelIcon className="text-red-700 ml-2" />
-                        )}
-                        {isCorrect && !isSelected && (
-                          <CheckCircleIcon className="text-green-700 ml-2" />
-                        )}
-                      </li>
+                      <div key={idx} className={`flex items-center gap-2 p-2 rounded-md ${isSelected ? (isCorrect ? "bg-green-100" : "bg-red-100") : ""}`}>
+                        <span className={`flex items-center ${isCorrect ? "text-green-500" : isSelected ? "text-red-500" : "text-gray-700"}`}>
+                          {String.fromCharCode(65 + idx)}. {option}
+                          {isCorrect && <CheckCircleIcon className="ml-2" fontSize="small" />}
+                          {isSelected && !isCorrect && <CancelIcon className="ml-2" fontSize="small" />}
+                        </span>
+                      </div>
                     );
                   })}
-                  {!question?.selected_option?.some((option) => question.correctAnswer.includes(question.options[option - 1])) && (
-                    <p className="text-sm text-gray-600 mt-2">Correct Answer: {question.correctAnswer.join(', ')}</p>
+                  {!question.selected_options.some(option => question.correct_answers.includes(question.all_options[option - 1])) && (
+                    <p className="text-sm text-gray-600 mt-2">Correct Answer: {question.correct_answers.join(', ')}</p>
                   )}
-                </ul>
-              </li>
+                </div>
+                <p className="text-sm mt-2"><strong>Marks:</strong> {question.marks}</p>
+                <p className="text-sm mt-2"><strong>Is Correct:</strong> {question.is_correct ? "Yes" : "No"}</p>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
+       
       </div>
     </div>
   );
 }
 
-QuizAssignmentView.propTypes = {
+QuizResultView.propTypes = {
   setValue: PropTypes.func.isRequired,
 };

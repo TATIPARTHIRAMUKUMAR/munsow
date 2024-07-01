@@ -26,6 +26,94 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const linearGradientBackground = 'linear-gradient(90deg, #4b6cb7 0%, #182848 100%)';
 const textColor = '#ffffff';
 
+
+const dummyquestions=[
+  {
+      "id": 1,
+      "question": "Who developed Java?",
+      "options": [
+          "Newton",
+          "Matt Lab",
+          "James Gosling",
+          "Ada Lovelace"
+      ],
+      "marks": 1,
+      "correct_option": [],
+      "selected_option": [
+          3
+      ],
+      "answerType": "single"
+  },
+  {
+      "id": 2,
+      "question": "What is it called when the child object also gets killed when the parent object is killed in the program?",
+      "options": [
+          "Encapsulation",
+          "Association",
+          "Aggregation",
+          "Composition"
+      ],
+      "marks": 0,
+      "correct_option": [],
+      "selected_option": [
+          4
+      ],
+      "answerType": "single"
+  },
+  {
+      "id": 3,
+      "question": "Which of these components are used in a Java program for compilation, debugging, and execution?",
+      "options": [
+          "JVM",
+          "JDK",
+          "JRE",
+          "JIT"
+      ],
+      "marks": 1,
+      "correct_option": [],
+      "selected_option": [
+          2
+      ],
+      "answerType": "single"
+  }
+]
+
+const dummyanswers=[
+  {
+    "all_options": [
+      "Newton",
+      "Matt Lab",
+      "James Gosling",
+      "Ada Lovelace"
+    ],
+    "correct_answers": [
+      "James Gosling"
+    ],
+    "is_correct": true,
+    "marks": 1,
+    "question_id": 1,
+    "selected_options": [
+      3
+    ]
+  },
+  {
+    "all_options": [
+      "Encapsulation",
+      "Association",
+      "Aggregation",
+      "Composition"
+    ],
+    "correct_answers": [
+      "Composition"
+    ],
+    "is_correct": true,
+    "marks": 0,
+    "question_id": 2,
+    "selected_options": [
+      4
+    ]
+  }
+]
 export default function QuizPage({ setValue }) {
   const { id } = useParams();
   const { quizView } = useSelector((state) => state.data);
@@ -37,6 +125,8 @@ export default function QuizPage({ setValue }) {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState({});
   const [questions, setQuestions] = useState([]);
+  const [evaluatedQuestions, setEvaluatedQuestions] = useState([]);
+
   const [viewResults, setViewResults] = useState(false);
   const dispatch = useDispatch();
 
@@ -75,7 +165,7 @@ export default function QuizPage({ setValue }) {
 
   const handleChangeClose = () => {
     setOpen(false);
-    navigate("/lessons");
+    navigate("/studentQuizList");
   };
 
   const onSubmit = () => {
@@ -90,9 +180,11 @@ export default function QuizPage({ setValue }) {
     };
     dispatch(
       quizSubmit(payload, (resp) => {
-        setResults(() => resp?.is_qualified);
-        setTotalScore(() => resp?.score);
-        setTotalMarks(() => resp?.total_marks);
+        console.log("heher",questions,evaluatedQuestions)
+        setEvaluatedQuestions(() => resp?.data?.evaluated_answers);
+        setResults(() => resp?.data?.is_qulified);
+        setTotalScore(() => resp?.data?.marks);
+        setTotalMarks(() => resp?.data?.total_marks);
       })
     );
   };
@@ -125,6 +217,7 @@ export default function QuizPage({ setValue }) {
 
   return viewResults ? (
     <QuizResults
+      answers={evaluatedQuestions}
       questions={questions}
       pass={results}
       total_score={totalScore}
@@ -140,7 +233,7 @@ export default function QuizPage({ setValue }) {
         backgroundColor: "#f5f5f5",
         color: "#333"
       }}
-      onClick={() => window.history.back()} // or any other back navigation logic
+      onClick={() => window.history.back()} 
     >
       Back
     </Button>
@@ -285,8 +378,11 @@ export default function QuizPage({ setValue }) {
               <div className="modal-content pass">
                 <Lottie loop animationData={PassAnimation} play />
                 <div className="modal-text">Your hard work and perseverance have paid off. Congratulations!</div>
-                <Button variant="contained" color="secondary" onClick={handleChangeClose}>
+                {/* <Button variant="contained" color="secondary" onClick={handleChangeClose}>
                   Continue
+                </Button> */}
+                <Button variant="contained" color="secondary" onClick={() => setViewResults(true)}>
+                  View Results
                 </Button>
               </div>
             ) : (

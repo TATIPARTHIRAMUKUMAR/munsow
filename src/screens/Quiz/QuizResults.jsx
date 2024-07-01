@@ -1,91 +1,103 @@
 import PropTypes from "prop-types";
-import { Check } from "@mui/icons-material";
-import ReportGmailerrorredOutlinedIcon from "@mui/icons-material/ReportGmailerrorredOutlined";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
-import CircleIcon from "@mui/icons-material/Circle";
+import {
+  CheckCircleOutlineOutlined as CorrectIcon,
+  ReportGmailerrorredOutlined as IncorrectIcon,
+  ClearOutlined as ClearIcon,
+  Circle as CircleIcon,
+} from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-export default function QuizResults({ questions ,pass ,total_score,total_marks}) {
-    
-    const navigate = useNavigate()
 
-    const handleChangeClose = () => {
-        navigate("/lessons")
-      }
+export default function QuizResults({ questions, answers, pass, total_score, total_marks }) {
+  const navigate = useNavigate();
+
+  const handleChangeClose = () => {
+    navigate("/studentQuizList");
+  };
 
   return (
-    <div className="grid gap-2 mb-4">
-     <div className="text-purple-800 text-2xl font-semibold flex items-center justify-between gap-4 " >
-     Quiz Results 
-     <span className={`  border-2  border-dashed py-1 text-xl px-2 min-w-[100px] text-center rounded-3xl ${ pass ? "border-green-500 text-green-500 ": "border-red-500 text-red-500 "}`} >
-    {total_score}/{total_marks} { pass ? " Pass " : " Fail " }
-     </span>
-     </div>
-    <div className="grid gap-2 ">
-      {questions?.map((o,index) => {
-        return (
-            <>
-          <div className="p-2  rounded text-xl text-gray-500 grid gap-1 bg-purple-200" key={o?.id}>
-            <div className={`${o?.selected_option?.length &&
-                o?.selected_option[0] === o?.correct_option[0] ? "text-green-500" : "text-red-500" } flex items-center gap-2 font-semibold text-gray-600`}>
-                {index+1}{"."} {o?.question}
-              <span>
-                {o?.selected_option?.length &&
-                o?.selected_option[0] === o?.correct_option[0] ? (
-                  <CheckCircleOutlineOutlinedIcon className="text-green-500" />
-                ) : (
-                  <ReportGmailerrorredOutlinedIcon color="error" />
-                )}
-              </span>
+    <div className="p-6 bg-gray-100 rounded-lg shadow-md max-w-4xl mx-auto m-10">
+      <div className="text-purple-800 text-2xl font-semibold flex items-center justify-between mb-4">
+        Quiz Results
+        <span
+          className={`border-2 border-dashed py-1 text-xl px-2 min-w-[100px] text-center rounded-3xl ${
+            pass ? "border-green-500 text-green-500" : "border-red-500 text-red-500"
+          }`}
+        >
+          Total Score: {total_score}/{total_marks} {pass ? "Pass" : "Fail"}
+        </span>
+      </div>
+      <div className="space-y-4">
+        {questions?.map((question, index) => {
+          const answer = answers.find((a) => a.question_id === question.id);
+          return (
+            <div key={question.id} className="p-4 rounded-lg bg-white shadow-md">
+              <div className="flex justify-between ">
+                <div
+                  className={`flex w-11/12 gap-2 font-semibold ${
+                    answer?.is_correct ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {index + 1}. {question.question}
+                </div>
+                <div className="text-md font-semibold w-1/12 text-gray-500">
+                  Marks: <span className="font-bold">{question.marks}</span>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-2 mt-2">
+                {question.options.map((option, ind) => {
+                  const isCorrect = answer?.correct_answers.includes(option);
+                  const isSelected = answer?.selected_options.includes(ind + 1);
+                  return (
+                    <div key={ind} className={`flex items-center gap-2 p-2 ${isSelected ? "bg-gray-200 rounded-lg" : ""}`}>
+                      <CircleIcon
+                        fontSize="small"
+                        className={`${
+                          isCorrect ? "text-green-500" : isSelected ? "text-red-500" : "text-gray-400"
+                        }`}
+                      />
+                      {option}
+                      {isCorrect && <CorrectIcon className="text-green-500" fontSize="small" />}
+                      {isSelected && !isCorrect && <ClearIcon className="text-red-500" fontSize="small" />}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="grid md:grid-cols-2 items-center ">
-              {o?.options?.map((x, ind) => {
-                return (
-                  <div key={ind} className="col-span-1">
-                    {o?.correct_option[0] === ind + 1 ? (
-                      <div className="text-green-500 flex items-center gap-2">
-                        <CircleIcon
-                          fontSize="small"
-                          style={{ fontSize: "small" }}
-                        />
-                        {x} <Check />
-                      </div>
-                    ) : (o?.selected_option?.length && o?.selected_option[0] !== o?.correct_option[0] && o?.selected_option[0] === ind+1 )  ? (
-                      <div className="text-red-600 flex items-center gap-2">
-                        <CircleIcon
-                          fontSize="small"
-                          style={{ fontSize: "small" }}
-                        />
-                        {x} <ClearOutlinedIcon fontSize="small" />
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <CircleIcon
-                          style={{ color: "gray", fontSize: "small" }}
-                        />
-                        {x}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          </>
-        );
-      })}
-      
+          );
+        })}
+      </div>
+      <Button
+        color="secondary"
+        className="w-full mt-6"
+        style={{ fontWeight: "semi-bold", fontSize: "16px", marginTop: "20px" }}
+        variant="contained"
+        onClick={handleChangeClose}
+      >
+        Close
+      </Button>
     </div>
-      <Button color="secondary" className="justify-self-center w-[50vw] my-10 " style={{fontWeight:"semi-bold",fontSize:"16px"}} variant="contained" onClick={()=>{
-        handleChangeClose()
-      }} >
-                Close
-          </Button>
-  </div>
   );
 }
+
 QuizResults.propTypes = {
-  questions: PropTypes.object.isRequired,
-  pass : PropTypes.bool.isRequired
+  questions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      question: PropTypes.string.isRequired,
+      options: PropTypes.arrayOf(PropTypes.string).isRequired,
+      marks: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  answers: PropTypes.arrayOf(
+    PropTypes.shape({
+      question_id: PropTypes.number.isRequired,
+      selected_options: PropTypes.arrayOf(PropTypes.number).isRequired,
+      correct_answers: PropTypes.arrayOf(PropTypes.string).isRequired,
+      is_correct: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  pass: PropTypes.bool.isRequired,
+  total_score: PropTypes.number.isRequired,
+  total_marks: PropTypes.number.isRequired,
 };
