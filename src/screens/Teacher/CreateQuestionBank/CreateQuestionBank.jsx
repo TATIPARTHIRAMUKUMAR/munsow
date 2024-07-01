@@ -168,7 +168,7 @@ const QuestionBankForm = () => {
         }
         if (questionBank.method === 'addUI') {
             for (const question of questionBank.questions) {
-                if (!question.question || question.marks === '' || question.numberOfOptions === 0 || question.options.includes('')) {
+                if (!question.question || question.marks === '' || question.numberOfOptions === 0 || question.options.includes('') || question.correctAnswer.length === 0) {
                     return false;
                 }
             }
@@ -330,6 +330,7 @@ const QuestionBankForm = () => {
                                                         className: "text-sm"
                                                     }}
                                                 >
+                                                    <option value="" disabled>Select Correct Answer</option>
                                                     {question.options.map((option, optionIndex) => (
                                                         <option key={optionIndex} value={option}>{`Option ${optionIndex + 1}`}</option>
                                                     ))}

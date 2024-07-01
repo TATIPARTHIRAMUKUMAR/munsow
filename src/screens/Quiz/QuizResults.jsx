@@ -24,7 +24,7 @@ export default function QuizResults({ questions, answers, pass, total_score, tot
             pass ? "border-green-500 text-green-500" : "border-red-500 text-red-500"
           }`}
         >
-          {total_score}/{total_marks} {pass ? "Pass" : "Fail"}
+          Total Score: {total_score}/{total_marks} {pass ? "Pass" : "Fail"}
         </span>
       </div>
       <div className="space-y-4">
@@ -34,19 +34,11 @@ export default function QuizResults({ questions, answers, pass, total_score, tot
             <div key={question.id} className="p-4 rounded-lg bg-white shadow-md">
               <div className="flex justify-between ">
                 <div
-                  className={`flex w-11/12
-                     gap-2 font-semibold ${
+                  className={`flex w-11/12 gap-2 font-semibold ${
                     answer?.is_correct ? "text-green-500" : "text-red-500"
                   }`}
                 >
                   {index + 1}. {question.question}
-                  {/* <span>
-                    {answer?.is_correct ? (
-                      <CorrectIcon className="text-green-500" />
-                    ) : (
-                      <IncorrectIcon color="error" />
-                    )}
-                  </span> */}
                 </div>
                 <div className="text-md font-semibold w-1/12 text-gray-500">
                   Marks: <span className="font-bold">{question.marks}</span>
@@ -94,7 +86,7 @@ QuizResults.propTypes = {
       id: PropTypes.number.isRequired,
       question: PropTypes.string.isRequired,
       options: PropTypes.arrayOf(PropTypes.string).isRequired,
-      marks: PropTypes.number.isRequired,  // Include marks in the question prop types
+      marks: PropTypes.number.isRequired,
     })
   ).isRequired,
   answers: PropTypes.arrayOf(
