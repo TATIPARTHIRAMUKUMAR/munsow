@@ -98,7 +98,7 @@ const QuizCard = ({ quiz, onClick,onClick1, title }) => {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                             onClick={handleResultsClick} // Handle results button click
+                             onClick={handleResultsClick}
                             style={{
                                 backgroundColor: linearGradientBackground,
                                 color: textColor
@@ -119,7 +119,7 @@ const QuizCard = ({ quiz, onClick,onClick1, title }) => {
                                 }}
                                 className="px-4 py-2 font-bold shadow-xl rounded-md transition duration-300 focus:outline-none focus:ring focus:ring-blue-300"
                             >
-                                Start
+                                Startj
                             </motion.button>
                         ) : (
                             <motion.button
