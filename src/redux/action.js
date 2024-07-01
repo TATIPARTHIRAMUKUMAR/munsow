@@ -1481,6 +1481,25 @@ export const loadDetailedAssignment = (id) => {
   };
 };
 
+const getAssignmentResult = (data) => ({
+  type: types.RESULT_ASSIGNMENT,
+  payload: data,
+});
+
+export const loadResultAssignment = (id) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}assignment/result/${id}`, {  headers })
+      .then((resp) => {
+        dispatch(getAssignmentResult(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 const getAssignedUsers = (data) => ({
   type: types.ASSIGNED_USERS,
   payload: data,

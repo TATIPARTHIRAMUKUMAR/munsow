@@ -52,6 +52,7 @@ const initialState = {
   placementTracker:{},
   statusList:[],
   assignmentsList:[],
+  resultAssignment:{},
   colorTheme: {
     light: {
       // primaryBg-black
@@ -97,6 +98,11 @@ const DataReducers = (state = initialState, action) => {
         ...state,
         loggedIn: action?.payload?.userId && true,
         userCred: action?.payload,
+      };
+      case types.RESULT_ASSIGNMENT:
+      return {
+        ...state,
+        resultAssignment: action?.payload?.data,
       };
     case types.QUIZ_LIST:
       return {
