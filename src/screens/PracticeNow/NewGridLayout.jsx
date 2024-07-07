@@ -93,8 +93,25 @@ export default function NewGridLayout({ questions }) {
     }
   };
 
+  useEffect(() => {
+    if (interviewCompleted) {
+      stopRecording();
+    }
+  }, [interviewCompleted]);
+
   const confirmEndInterview = () => {
-    setTotalTimeLeft(0);
+    setInterviewCompleted(true);
+    // stopRecording();
+    const videoElement = document.getElementById("vid");
+    const stream = videoElement.srcObject;
+    if (stream) {
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => {
+        track.stop();
+      });
+      videoElement.srcObject = null;
+    }
+    // setTotalTimeLeft(0);
     setShowConfirmationPopup(false);
   };
 
@@ -141,8 +158,9 @@ export default function NewGridLayout({ questions }) {
         const reader = new FileReader();
         reader.onloadend = function () {
           let base64data = reader.result;
-          const status =
-            questionIndex === questions.length - 1 ? "Completed" : "Inprogress";
+          const status = 
+            interviewCompleted ? "Completed" : "Inprogress";
+            // questionIndex === questions.length - 1 ? "Completed" : "Inprogress";
           const mimeRegex = /^data:.+;base64,/;
           if (mimeRegex.test(base64data)) {
             base64data = base64data.replace(mimeRegex, "");
