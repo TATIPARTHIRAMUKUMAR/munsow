@@ -246,6 +246,16 @@ export default function NewGridLayout({ questions }) {
     }
   }, [isLoading]);
 
+  useEffect(() => {
+    if (interviewCompleted) {
+      const timer = setTimeout(() => {
+        window.location.href = "./report";
+      }, 6000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [interviewCompleted]);
+
   const skipQuestion = () => {
     if (questionIndex < questions.length - 1) {
       stopRecording();
@@ -262,7 +272,7 @@ export default function NewGridLayout({ questions }) {
         <>
           {interviewCompleted ? (
             <>
-              <InterviewOver />
+              {/* <InterviewOver /> */}
             </>
           ) : (
             <>
