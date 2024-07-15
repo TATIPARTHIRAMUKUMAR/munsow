@@ -667,26 +667,19 @@ const StepperComponent = () => {
               <JobDescriptionForm selectedCategory={selectedCategory} jdcompany={jdcompany} jdrole={jdrole} cultcompany={cultcompany} cultrole={cultrole} selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}/>)}
 
               {(selectedCategory == "skills" || selectedCategory == "role") && (
-                <div className="relative overflow-auto max-w-full h-auto "
-                >
+                <div className="relative max-w-full h-auto p-4">
                   <h2
-                    className="relative overflow-auto max-w-full h-auto"
-                    style={{
-                      textAlign: "center",
-                      fontSize: "1.5rem",
-                      fontWeight: "bold",
-                      marginBottom: "2px",
-                      color: grayColors,
-                    }}
+                    className="text-center text-2xl font-bold mb-4"
+                    style={{ color: grayColors }}
                   >
                     Level
                   </h2>
                   <div
-                    className="w-[14rem] lg:w-[35rem] md:w-[27rem] relative overflow-auto sm:w-[20rem] h-auto"
+                    className="relative mx-auto p-4"
                     style={{
+                      maxWidth: "35rem",
                       border: `3.5px solid ${textColors}`,
                       borderRadius: "20px",
-                      padding: "2rem 2.5rem"
                     }}
                   >
                     <input
@@ -696,16 +689,15 @@ const StepperComponent = () => {
                       value={level}
                       onChange={(e) => setLevel(e.target.value)}
                       className="w-full mb-4 appearance-none h-2 rounded-lg"
-                      style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%) ` }}
+                      style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
                     />
-
-                    <div className="flex flex-col sm:flex-row justify-evenly text-md relative overflow-auto max-w-full h-auto">
+                    <div className="flex flex-col sm:flex-row justify-evenly items-center space-y-2 sm:space-y-0 sm:space-x-2">
                       <button
                         onClick={() => {
                           setLevel(0);
                           setExperienceLevel("low");
                         }}
-                        className="bg-green-500 hover:bg-green-600 text-white text-white mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md w-full sm:w-auto"
                       >
                         Beginner
                       </button>
@@ -714,7 +706,7 @@ const StepperComponent = () => {
                           setLevel(50);
                           setExperienceLevel("medium");
                         }}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 mb-2 sm:mb-0 sm:w-[30%] lg:w-[7rem] rounded-md relative overflow-auto max-w-full h-auto"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md w-full sm:w-auto"
                       >
                         Intermediate
                       </button>
@@ -723,7 +715,7 @@ const StepperComponent = () => {
                           setLevel(100);
                           setExperienceLevel("high");
                         }}
-                        className="bg-red-500 hover:bg-red-600 text-white text-white py-1 px-3 rounded-md relative overflow-auto max-w-full h-auto"
+                        className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md w-full sm:w-auto"
                       >
                         Advanced
                       </button>
