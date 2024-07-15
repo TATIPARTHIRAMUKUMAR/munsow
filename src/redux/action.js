@@ -1248,8 +1248,37 @@ export const prepare_interview = (data, callback) => {
 
 
 
-export const submit_interview = (data) => {
-  // console.log("submit_interview",data);
+// export const submit_interview = (data) => {
+//   // console.log("submit_interview",data);
+//   return function (dispatch) {
+//     var headers = {
+//       "Content-type": "application/json",
+//       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+//     };
+//     axios
+//       .post(`${GLOBAL_CONSTANTS.backend_url}user/submit_answer`, JSON.stringify(data), {
+//         headers,
+//       })
+//       .then((resp) => {
+
+//         if (!resp?.data?.status) {
+//           toast.error(resp?.data?.message);
+//         }
+
+//       })
+//       .catch((error) => {
+
+//         toast.error(
+//           error ?? "Something went wrong",
+//           {
+//             autoClose: 2000,
+//           }
+//         );
+//       });
+//   };
+// };
+
+export const submit_interview = (data, callback) => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1263,6 +1292,10 @@ export const submit_interview = (data) => {
 
         if (!resp?.data?.status) {
           toast.error(resp?.data?.message);
+        }
+        else {
+          // toast.success("Redirecting to Reports Page");
+          callback(resp?.data);
         }
 
       })

@@ -22,10 +22,9 @@ function formatTime(seconds) {
   const secs = seconds - hrs * 3600 - mins * 60;
   return (
     <div className="flex items-center gap-1">
-      {/* <TimerOutlinedIcon /> */} 
-      {`${hrs < 10 ? "0" + hrs : hrs}:${mins < 10 ? "0" + mins : mins}:${
-        secs < 10 ? "0" + secs : secs
-      }`}
+      {/* <TimerOutlinedIcon /> */}
+      {`${hrs < 10 ? "0" + hrs : hrs}:${mins < 10 ? "0" + mins : mins}:${secs < 10 ? "0" + secs : secs
+        }`}
     </div>
   );
 }
@@ -70,11 +69,11 @@ export default function NewGridLayout({ questions }) {
     ? reduxColorTheme.dark.textColor2
     : reduxColorTheme.light.textColor2;
 
-    const backgroundColor = isDarkMode
+  const backgroundColor = isDarkMode
     ? reduxColorTheme.dark.foreground
     : reduxColorTheme.light.foreground;
 
-    const textColor = isDarkMode
+  const textColor = isDarkMode
     ? reduxColorTheme.dark.textColor3
     : reduxColorTheme.light.textColor3;
 
@@ -158,9 +157,9 @@ export default function NewGridLayout({ questions }) {
         const reader = new FileReader();
         reader.onloadend = function () {
           let base64data = reader.result;
-          const status = 
+          const status =
             interviewCompleted ? "Completed" : "Inprogress";
-            // questionIndex === questions.length - 1 ? "Completed" : "Inprogress";
+          // questionIndex === questions.length - 1 ? "Completed" : "Inprogress";
           const mimeRegex = /^data:.+;base64,/;
           if (mimeRegex.test(base64data)) {
             base64data = base64data.replace(mimeRegex, "");
@@ -179,7 +178,15 @@ export default function NewGridLayout({ questions }) {
             tag: questions[questionIndex]?.tag ? questions[questionIndex]?.tag : "",
           };
           console.log("payload", payload);
-          dispatch(submit_interview(payload));
+          // dispatch(submit_interview(payload));
+
+          dispatch(submit_interview(payload, (resp) => {
+            console.log("result-resp", resp)
+            if (interviewCompleted) {
+              window.location.href = "./report";
+            }
+          }));
+
           if (status === "completed") {
             const videoElement = document.getElementById("vid");
             const stream = videoElement.srcObject;
@@ -267,9 +274,9 @@ export default function NewGridLayout({ questions }) {
   useEffect(() => {
     if (interviewCompleted) {
       const timer = setTimeout(() => {
-        window.location.href = "./report";
-      }, 6000);
-      
+        // window.location.href = "./report";
+      }, 10000);
+
       return () => clearTimeout(timer);
     }
   }, [interviewCompleted]);
@@ -290,7 +297,7 @@ export default function NewGridLayout({ questions }) {
         <>
           {interviewCompleted ? (
             <>
-              {/* <InterviewOver /> */}
+              <InterviewOver />
             </>
           ) : (
             <>
@@ -309,8 +316,8 @@ export default function NewGridLayout({ questions }) {
               </div>
               <div className="p-[40px]">
                 <div className="flex justify-end">
-                
-                 
+
+
                 </div>
                 <div>
                   {/* <LinearProgress
@@ -328,7 +335,7 @@ export default function NewGridLayout({ questions }) {
                       </Step>
                     ))}
                   </Stepper> */}
-            
+
                   <div className="grid grid-cols-4  gap-4 ">
                     {/* Left Top Cell */}
                     <div className="col-span-2 flex flex-col">
@@ -365,92 +372,92 @@ export default function NewGridLayout({ questions }) {
                     {/* Right Vertical Cell */}
                     <div className="col-span-2 bg-white p-4 rounded-xl mt-3">
                       <div className="flex gap-4 mb-[5%] justify-end">
-                        <button     
+                        <button
                           onClick={skipQuestion}
                           className="border w-[130px] h-[45px] bg-gray-300 border-gray-300 rounded-lg flex justify-center items-center"
                         >
                           Skip
                         </button>
                         <button
-                        onClick={nextQuestion}
-                        style={{
-                          cursor: "pointer",
-                          fontSize: "18px",
-                          borderRadius: "8px",
-                          width: '200px',
-                          height: '45px',
-                          marginBottom: '33px',
-                          background: linearGradientBackground,
-                          color: textColor,
-                          visibility:
-                            questionIndex < questions?.length - 1
-                              ? ""
-                              : "hidden",
-                        }}
-                        className="text-secondary"
-                      >
-                        Next Question
+                          onClick={nextQuestion}
+                          style={{
+                            cursor: "pointer",
+                            fontSize: "18px",
+                            borderRadius: "8px",
+                            width: '200px',
+                            height: '45px',
+                            marginBottom: '33px',
+                            background: linearGradientBackground,
+                            color: textColor,
+                            visibility:
+                              questionIndex < questions?.length - 1
+                                ? ""
+                                : "hidden",
+                          }}
+                          className="text-secondary"
+                        >
+                          Next Question
                         </button>
                       </div>
                       <div className="relative ml-[45px]">
-                      <div className="relative w-[520px]  flex justify-center items-center">
-                        <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
-                          REC
+                        <div className="relative w-[520px]  flex justify-center items-center">
+                          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
+                            REC
+                          </div>
+                          <video
+                            id="vid"
+                            className="rounded-md bg-black"
+                            muted
+                            autoPlay
+                          ></video>
                         </div>
-                        <video
-                          id="vid"
-                          className="rounded-md bg-black"
-                          muted
-                          autoPlay
-                        ></video>
-                      </div>
                       </div>
                     </div>
                   </div>
                   {showConfirmationPopup && (
-                  <div className="fixed z-99999999999999999 inset-0 overflow-y-auto">
-                    {/* Rest of the modal code */}
-                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                      <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                      </div>
+                    <div className="fixed z-99999999999999999 inset-0 overflow-y-auto">
+                      {/* Rest of the modal code */}
+                      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
 
-                      <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                      <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                        <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                          <div className="sm:flex sm:items-start">
-                            <div className="mt-3 text-center sm:mt-0 sm:text-left">
-                              <h3 className="text-2xl leading-6 font-medium text-gray-900">
-                                Finish Interview
-                              </h3>
-                              <div className="mt-6">
-                                <p className="text-xl text-gray-500">
-                                  Are you sure you want to end the interview?
-                                </p>
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div className="sm:flex sm:items-start">
+                              <div className="mt-3 text-center sm:mt-0 sm:text-left">
+                                <h3 className="text-2xl leading-6 font-medium text-gray-900">
+                                  Finish Interview
+                                </h3>
+                                <div className="mt-6">
+                                  <p className="text-xl text-gray-500">
+                                    Are you sure you want to end the interview?
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                          <button
-                            type="button"
-                            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                            onClick={confirmEndInterview}
-                          >
-                            Confirm
-                          </button>
-                          <button
-                            type="button"
-                            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                            onClick={() => setShowConfirmationPopup(false)}
-                          >
-                            Cancel
-                          </button>
+                          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <button
+                              type="button"
+                              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                              onClick={confirmEndInterview}
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              type="button"
+                              className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                              onClick={() => setShowConfirmationPopup(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
                 </div>
               </div>
               <div className="flex justify-between items-center">
