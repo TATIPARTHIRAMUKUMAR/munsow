@@ -67,8 +67,9 @@ export default function ReportIndex() {
     };
 
     const renderSkillsSection = (skills) => {
-        const hardSkills = Object.keys(skills?.hard_skill || {});
-        const softSkills = Object.keys(skills?.soft_skill || {});
+        // console.log("huhu",skills)
+        const hardSkills = Object.values(skills?.hard_skill || {});
+        const softSkills = Object.values(skills?.soft_skill || {});
 
         return (
             <>
@@ -336,7 +337,7 @@ export default function ReportIndex() {
                         <AllReports />
                         <div className="p-5 gap-8 pt-5" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
                             {filteredLessonsList.map((o, index) => (
-                                <ReportCards key={index} id={o.id} report_type={o.interview_type} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.report_json?.hard_and_soft_skill_dic} level={o.level} generated={o.updated_date} company={o.specifications?.company} jdSkills={o.specifications?.jd_skill} cultSkills={o.specifications?.cultural_skill} />
+                                <ReportCards key={index} id={o.id} report_type={o.interview_type} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.specifications} level={o.level} generated={o.updated_date} company={o.specifications?.company} jdSkills={o.specifications?.jd_skill} cultSkills={o.specifications?.cultural_skill} />
                             ))}
                         </div>
                         </>

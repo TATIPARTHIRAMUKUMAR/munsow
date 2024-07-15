@@ -125,7 +125,7 @@ const StepperComponent = () => {
     }
     if ((selectedCategory == "jd"||selectedCategory == "cult")&&currentStep==1) {
       // console.log("selectedOptions",typeof (selectedOptions),currentStep)
-      if (Object.keys(selectedOptions).length>=3) {
+      if (Object.keys(selectedOptions).length>=1) {
         console.log("hehe")
         return false;
       } else {
