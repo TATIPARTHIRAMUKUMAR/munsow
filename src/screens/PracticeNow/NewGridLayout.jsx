@@ -179,7 +179,12 @@ export default function NewGridLayout({ questions }) {
             tag: questions[questionIndex]?.tag ? questions[questionIndex]?.tag : "",
           };
           console.log("payload", payload);
-          dispatch(submit_interview(payload));
+          // dispatch(submit_interview(payload));
+
+          dispatch(submit_interview(payload, (resp) => {
+            // window.location.href = "./report";
+          }));
+
           if (status === "completed") {
             const videoElement = document.getElementById("vid");
             const stream = videoElement.srcObject;
@@ -268,7 +273,7 @@ export default function NewGridLayout({ questions }) {
     if (interviewCompleted) {
       const timer = setTimeout(() => {
         window.location.href = "./report";
-      }, 6000);
+      }, 10000);
       
       return () => clearTimeout(timer);
     }
@@ -290,7 +295,7 @@ export default function NewGridLayout({ questions }) {
         <>
           {interviewCompleted ? (
             <>
-              {/* <InterviewOver /> */}
+              <InterviewOver /> 
             </>
           ) : (
             <>

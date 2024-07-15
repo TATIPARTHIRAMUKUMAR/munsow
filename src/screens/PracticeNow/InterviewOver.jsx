@@ -89,8 +89,8 @@ const InterviewOver = () => {
                 <p className="text-xl mb-8 font-medium">Thank you for your time. Your effort is much appreciated!</p>
 
                 {/* Guidance or description */}
-                <p className="mb-10 font-medium text-gray-600">Your report is underway. You'll be notified once it's ready. Meanwhile, monitor its progress under "My Interviews".</p>
-                <div className='flex justify-center gap-10'>
+                <p className="mb-10 font-medium text-gray-600">Your report is underway. Redirecting you to Reports Page</p>
+                {/* <div className='flex justify-center gap-10'>
                     <button
                         className="font-bold py-2 px-6 rounded-full flex items-center justify-center shadow-md transform transition-transform duration-200 hover:scale-110 hover-mouse cursor-pointer"
                         onClick={goToDashboard}
@@ -99,9 +99,7 @@ const InterviewOver = () => {
                             color: textColor
                         }}
                     >
-                        {/* <svg className="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                        </svg> */}
+                        
                         Dashboard
                     </button>
                     <button
@@ -112,12 +110,10 @@ const InterviewOver = () => {
                             color: textColor
                         }}
                     >
-                        {/* <svg className="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                        </svg> */}
+                       
                         My Interview Reports
                     </button>
-                </div>
+                </div> */}
             </div>
             )}
         </div>
