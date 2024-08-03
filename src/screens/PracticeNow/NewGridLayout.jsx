@@ -58,7 +58,6 @@ export default function NewGridLayout({ questions }) {
   const [interviewCompleted, setInterviewCompleted] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [spokenQuestions, setSpokenQuestions] = useState([]);
-  const [skipped, setSkipped] = useState(false);
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
@@ -85,9 +84,18 @@ export default function NewGridLayout({ questions }) {
 
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
-      setSkipped(false);
-      stopRecording();
+      stopRecording(false);
       setRecordedChunks([]); // Reset the recordedChunks array here
+      setQuestionIndex((prevIndex) => prevIndex + 1);
+      setQuestionTimeLeft(questions[questionIndex + 1].duration);
+      startStreamAndRecording();
+    }
+  };
+
+  const skipQuestion = () => {
+    if (questionIndex < questions.length - 1) {
+      stopRecording(true);
+      setRecordedChunks([]);
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       startStreamAndRecording();
@@ -96,15 +104,9 @@ export default function NewGridLayout({ questions }) {
 
   useEffect(() => {
     if (interviewCompleted) {
-      stopRecording();
+      stopRecording(false);
     }
   }, [interviewCompleted]);
-
-  // useEffect(() => {
-  //   if (skipped) {
-  //     stopRecording();
-  //   }
-  // }, [skipped]);
 
   const confirmEndInterview = () => {
     setInterviewCompleted(true);
@@ -157,7 +159,7 @@ export default function NewGridLayout({ questions }) {
       });
   }
 
-  function stopRecording() {
+  function stopRecording(skipped) {
     if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
       mediaRecorder.onstop = function () {
@@ -175,7 +177,6 @@ export default function NewGridLayout({ questions }) {
           while (base64data.length % 4 !== 0) {
             base64data += "=";
           }
-          const skip = skipped ? 1 : 0;
           const payload = {
             question: questions[questionIndex]?.question,
             interview_id: questionsList?.interview_id,
@@ -185,7 +186,7 @@ export default function NewGridLayout({ questions }) {
             category: questions[questionIndex]?.category,
             sub_category: questions[questionIndex]?.sub_category,
             tag: questions[questionIndex]?.tag ? questions[questionIndex]?.tag : "",
-            // skipped: skip
+            skipped: skipped ? 1 : 0
           };
           console.log("payload", payload);
           // dispatch(submit_interview(payload));
@@ -254,7 +255,7 @@ export default function NewGridLayout({ questions }) {
       if (totalTimeLeft > 0) {
         setTotalTimeLeft((prevTime) => prevTime - 1);
       } else {
-        stopRecording();
+        stopRecording(false);
         setInterviewCompleted(true);
         const videoElement = document.getElementById("vid");
         const stream = videoElement.srcObject;
@@ -290,17 +291,6 @@ export default function NewGridLayout({ questions }) {
       return () => clearTimeout(timer);
     }
   }, [interviewCompleted]);
-
-  const skipQuestion = () => {
-    if (questionIndex < questions.length - 1) {
-      setSkipped(true);
-      // stopRecording();
-      setRecordedChunks([]);
-      setQuestionIndex((prevIndex) => prevIndex + 1);
-      setQuestionTimeLeft(questions[questionIndex + 1].duration);
-      startStreamAndRecording();
-    }
-  };
 
   return (
     <>
