@@ -119,7 +119,7 @@ const SummarySnapshot = (props) => {
           <h2 className="text-center font-bold">Munsow Interview Classification Highlights</h2>
         </div>
 
-        {report_data?.report_type === "skill based report" ? (
+        {report_data?.interview_type === "skill_interview" ? (
           <div>
           {interview_score_by_category?.data?.map((category, index) => (
             <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
@@ -145,7 +145,7 @@ const SummarySnapshot = (props) => {
             </div>
           ))}
           </div>
-        ) : report_data?.report_type === "role based report" ? (
+        ) : report_data?.interview_type === "company_role_interview" ? (
           <div>
           {interview_score_by_category?.data?.map((category, index) => (
             <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>

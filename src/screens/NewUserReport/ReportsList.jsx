@@ -52,7 +52,7 @@ export default function ReportIndex() {
 
     const handleFilterChange = (event) => {
         setFilterType(event.target.value);
-        const filteredReports = userReportList.filter(report => report.report_type.includes(event.target.value));
+        const filteredReports = userReportList.filter(report => report.interview_type.includes(event.target.value));
         setLessonsList(filteredReports);
     };
 
@@ -236,7 +236,7 @@ export default function ReportIndex() {
     };
 
 
-    const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company, report_type, jdSkills, cultSkills}) => {
+    const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company, interview_type, jdSkills, cultSkills}) => {
         const viewReport = (data) => {
             localStorage.setItem('reportData', JSON.stringify(data));
             navigate('/reportView');
@@ -248,18 +248,18 @@ export default function ReportIndex() {
             <div className="transition-transform duration-300 hover:scale-105 shadow-lg bg-white" style={{borderRadius:"18px",border:"2px solid #d9dde3"}}>
                     <div className="flex flex-col h-full p-1.5" style={{borderRadius:"18px"}}>
                         <div className={`flex-grow p-3 flex flex-col gap-y-2`}style={{borderRadius:"18px"}}>
-                            {report_type == "skill_interview" ? 
+                            {interview_type == "skill_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(interview_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">Skill based Report</h1>
                             </div>
                             {renderSkillsSection(skills_list)}
                             </> : <></>}
-                            {report_type == "company_role_interview" ? 
+                            {interview_type == "company_role_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(interview_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">Role based Report</h1>
                             </div>
                             <div className="font-medium flex flex-wrap items-center gap-2">
@@ -268,27 +268,27 @@ export default function ReportIndex() {
                             </div>
                             <div className="font-medium"><span className="font-bold">Company:&nbsp;</span>{company}</div>
                             </> : <></>}
-                            {report_type == "jd_interview" ? 
+                            {interview_type == "jd_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(interview_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">JD based Report</h1>
                             </div>
                             <div className="font-medium flex flex-wrap items-center gap-2">
                                 <span className="font-bold">Role:</span>
-                                <span className="bg-purple-100 px-1.5 py-1 rounded-xl break-words" style={{maxWidth:"220px"}}>{role}</span>
+                                <span className="bg-orange-100 px-1.5 py-1 rounded-xl break-words" style={{maxWidth:"220px"}}>{role}</span>
                             </div>
                             <div className="font-medium"><span className="font-bold">Company:&nbsp;</span>{company}</div>
                             </> : <></>}
-                            {report_type == "cultural_interview" ? 
+                            {interview_type == "cultural_interview" ? 
                             <>
                             <div className="flex gap-3 items-center">
-                                <span className={`${getDarkBgColor(report_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
+                                <span className={`${getDarkBgColor(interview_type)} rounded-md`} style={{width:"8px",height:"24px"}}>&nbsp;</span>
                                 <h1 className="text-xl text-black font-bold">Cultural Fit Report</h1>
                             </div>
                             <div className="font-medium flex flex-wrap items-center gap-2">
                                 <span className="font-bold">Role:</span>
-                                <span className="bg-purple-100 px-1.5 py-1 rounded-xl break-words" style={{maxWidth:"220px"}}>{role}</span>
+                                <span className="bg-blue-100 px-1.5 py-1 rounded-xl break-words" style={{maxWidth:"220px"}}>{role}</span>
                             </div>
                             <div className="font-medium"><span className="font-bold">Company:&nbsp;</span>{company}</div>
                             </> : <></>}
@@ -337,7 +337,7 @@ export default function ReportIndex() {
                         <AllReports />
                         <div className="p-5 gap-8 pt-5" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
                             {filteredLessonsList.map((o, index) => (
-                                <ReportCards key={index} id={o.id} report_type={o.interview_type} role={o.specifications?.role} skill_type={o.report_json?.report_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.specifications} level={o.level} generated={o.updated_date} company={o.specifications?.company} jdSkills={o.specifications?.jd_skill} cultSkills={o.specifications?.cultural_skill} />
+                                <ReportCards key={index} id={o.id} interview_type={o.interview_type} role={o.specifications?.role} skill_type={o.report_json?.interview_type} report_data={o.report_json || {}} result_data={o.result_json || {}} report_ready={o.report_json ? "true" : "false"} skills_list={o.specifications} level={o.level} generated={o.updated_date} company={o.specifications?.company} jdSkills={o.specifications?.jd_skill} cultSkills={o.specifications?.cultural_skill} />
                             ))}
                         </div>
                         </>

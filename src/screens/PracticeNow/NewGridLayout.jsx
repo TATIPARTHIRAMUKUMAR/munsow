@@ -7,7 +7,7 @@ import { submit_interview } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import image from "../../assets/h.jpeg";
+import image from "../../assets/Interviewer.png";
 import InterviewOver from "./InterviewOver";
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { useDarkMode } from "./../../Dark";
@@ -58,6 +58,7 @@ export default function NewGridLayout({ questions }) {
   const [interviewCompleted, setInterviewCompleted] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [spokenQuestions, setSpokenQuestions] = useState([]);
+  const [skipped, setSkipped] = useState(false);
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
@@ -84,6 +85,7 @@ export default function NewGridLayout({ questions }) {
 
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
+      setSkipped(false);
       stopRecording();
       setRecordedChunks([]); // Reset the recordedChunks array here
       setQuestionIndex((prevIndex) => prevIndex + 1);
@@ -97,6 +99,12 @@ export default function NewGridLayout({ questions }) {
       stopRecording();
     }
   }, [interviewCompleted]);
+
+  // useEffect(() => {
+  //   if (skipped) {
+  //     stopRecording();
+  //   }
+  // }, [skipped]);
 
   const confirmEndInterview = () => {
     setInterviewCompleted(true);
@@ -167,6 +175,7 @@ export default function NewGridLayout({ questions }) {
           while (base64data.length % 4 !== 0) {
             base64data += "=";
           }
+          const skip = skipped ? 1 : 0;
           const payload = {
             question: questions[questionIndex]?.question,
             interview_id: questionsList?.interview_id,
@@ -176,6 +185,7 @@ export default function NewGridLayout({ questions }) {
             category: questions[questionIndex]?.category,
             sub_category: questions[questionIndex]?.sub_category,
             tag: questions[questionIndex]?.tag ? questions[questionIndex]?.tag : "",
+            // skipped: skip
           };
           console.log("payload", payload);
           // dispatch(submit_interview(payload));
@@ -283,7 +293,8 @@ export default function NewGridLayout({ questions }) {
 
   const skipQuestion = () => {
     if (questionIndex < questions.length - 1) {
-      stopRecording();
+      setSkipped(true);
+      // stopRecording();
       setRecordedChunks([]);
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);

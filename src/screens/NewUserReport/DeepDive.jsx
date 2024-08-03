@@ -55,7 +55,7 @@ const DeepDive = (props) => {
 
     <>
     <div className="mx-3 my-3 md:mx-6 md:my-6">
-    {report_data?.report_type === "skill based report" ? (
+    {report_data?.interview_type === "skill_interview" ? (
       <>
         <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 ${bgColor}`}>
           <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>{head}&nbsp;Deep&nbsp;Dive</h1>
@@ -68,7 +68,7 @@ const DeepDive = (props) => {
           <h1 className="text-lg lg:text-xl font-semibold text-purple p-5">{ques}</h1>
         </div>
       </>
-    ) : report_data?.report_type === "role based report" ? (
+    ) : report_data?.interview_type === "company_role_interview" ? (
       <>
         <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 ${bgColor}`}>
           <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>{head}&nbsp;Deep&nbsp;Dive</h1>
