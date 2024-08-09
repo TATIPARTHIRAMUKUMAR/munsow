@@ -302,6 +302,9 @@ export default function NewGridLayout({ questions }) {
             </>
           ) : (
             <>
+              <div className="h-screen overflow-y-hidden">
+
+              {/* timer progress bar */}
               <div className="bg-teal-100 h-[25px] progressBar relative">
                 <div
                   key={questionIndex}
@@ -315,11 +318,8 @@ export default function NewGridLayout({ questions }) {
                   Time Left: {formatTime(questionTimeLeft)}
                 </span>
               </div>
-              <div className="p-[40px]">
-                <div className="flex justify-end">
 
-
-                </div>
+              <div className="p-[32px]">
                 <div>
                   {/* <LinearProgress
                   className="my-2"
@@ -337,42 +337,14 @@ export default function NewGridLayout({ questions }) {
                     ))}
                   </Stepper> */}
 
-                  <div className="grid grid-cols-4  gap-4 ">
-                    {/* Left Top Cell */}
-                    <div className="col-span-2 flex flex-col">
-                      <div className="text-lg font-bold py-9">
-                        {questionIndex + 1}
-                        {". "}
-                        {questions[questionIndex]?.question}
-                      </div>
-                      <div className="relative w-[600px] h-full rounded-lg overflow-hidden">
-                        <img
-                          src={image}
-                          className="w-full h-full object-cover"
-                          alt="User"
-                        />
-                        <div
-                          className="absolute top-2 right-2 cursor-pointer p-2 bg-white bg-opacity-0 rounded-full"
-                          onClick={() => setIsSpeakerOn(!isSpeakerOn)}
-                        >
-                          {isSpeakerOn ? (
-                            <VolumeUpIcon className="text-white text-2xl" />
-                          ) : (
-                            <VolumeOffIcon className="text-white text-2xl" />
-                          )}
-                        </div>
-                      </div>
-
-                      {/* <div className="col-span-2 bg-white p-3 ">
-                        <div className="flex w-full justify-between items-center">
-                          <div className="font-bold text-lg">Question {questionIndex + 1} of {questions.length}</div>
-                        </div>
-                      </div> */}
+                  {/* question and skip/next buttons */}
+                  <div className="flex justify-between items-center">
+                    <div className="text-lg font-bold">
+                      {questionIndex + 1}
+                      {". "}
+                      {questions[questionIndex]?.question}
                     </div>
-
-                    {/* Right Vertical Cell */}
-                    <div className="col-span-2 bg-white p-4 rounded-xl mt-3">
-                      <div className="flex gap-4 mb-[5%] justify-end">
+                    <div className="flex gap-4 justify-end">
                         <button
                           onClick={skipQuestion}
                           className="border w-[130px] h-[45px] bg-gray-300 border-gray-300 rounded-lg flex justify-center items-center"
@@ -387,7 +359,6 @@ export default function NewGridLayout({ questions }) {
                             borderRadius: "8px",
                             width: '200px',
                             height: '45px',
-                            marginBottom: '33px',
                             background: linearGradientBackground,
                             color: textColor,
                             visibility:
@@ -399,25 +370,59 @@ export default function NewGridLayout({ questions }) {
                         >
                           Next Question
                         </button>
-                      </div>
-                      <div className="relative ml-[45px]">
-                        <div className="relative w-[520px]  flex justify-center items-center">
+                    </div>
+                  </div>
+
+                  {/* screens */}
+                  <div className="flex gap-6 mt-8">
+                    <div className="relative rounded-lg w-2/3">
+                        <img
+                          src={image}
+                          className="rounded-lg"
+                          alt="User"
+                        />
+                        <div
+                          className="absolute top-2 right-2 cursor-pointer p-2 bg-white bg-opacity-0 rounded-full"
+                          onClick={() => setIsSpeakerOn(!isSpeakerOn)}
+                        >
+                          {isSpeakerOn ? (
+                            <VolumeUpIcon className="text-white text-2xl" />
+                          ) : (
+                            <VolumeOffIcon className="text-white text-2xl" />
+                          )}
+                        </div>
+                    </div>
+                    <div className="w-1/2">
+                        <div className="relative flex justify-center items-center h-full">
                           <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
                             REC
                           </div>
                           <video
                             id="vid"
-                            className="rounded-md bg-black"
+                            className="rounded-lg"
                             muted
                             autoPlay
                           ></video>
                         </div>
-                      </div>
                     </div>
                   </div>
+
+                  {/* last row of question number and Finish button */}
+                  <div className="flex justify-between items-center mt-8">
+                    <div className="text-xl font-bold">
+                      Question {questionIndex + 1} of {questions.length}
+                    </div>
+                    <button
+                      onClick={handleFinishInterview}
+                      className="bg-red-500 text-white px-6 py-3 rounded-lg"
+                      >
+                      Finish Interview
+                    </button>
+                  </div>
+                  
+                  {/* finish interview confirmation modal code */}
                   {showConfirmationPopup && (
                     <div className="fixed z-99999999999999999 inset-0 overflow-y-auto">
-                      {/* Rest of the modal code */}
                       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
                           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -459,18 +464,10 @@ export default function NewGridLayout({ questions }) {
                       </div>
                     </div>
                   )}
+
                 </div>
               </div>
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={handleFinishInterview}
-                  className="fixed bottom-[115px] bg-red-500 text-white right-11 px-6 py-3 rounded-lg flex justify-center gap-2 items-center"
-                >
-                  Finish Interview
-                </button>
-                <div className="relative bottom-[-70px] ml-9 text-xl font-bold">
-                  Question {questionIndex + 1} of {questions.length}
-                </div>
+
               </div>
             </>
           )}

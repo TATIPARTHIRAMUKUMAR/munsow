@@ -58,10 +58,10 @@ const StepperComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [steps] = useState([
-    { title: "Skill Specific" },
+    { title: "Step 1" },
     // { title: "Role Specific" },
-    { title: "Level" },
-    { title: "Summary" },
+    { title: "Step 2" },
+    { title: "Step 3" },
   ]);
   const [stepsModal] = useState(3);
   const [currentStep, setCurrentStep] = useState(0);

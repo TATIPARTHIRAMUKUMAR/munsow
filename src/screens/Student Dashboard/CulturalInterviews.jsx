@@ -34,8 +34,8 @@ const CulturalInterviews = ({ interviewData, type }) => {
   };
 
   const getColorClass = (score) => {
-    if (score <= 40) return '#ef4444';
-    if (score <= 70) return '#f97316';
+    if (score <= 4) return '#ef4444';
+    if (score <= 7) return '#f97316';
     return '#22c55e';
   };
 
