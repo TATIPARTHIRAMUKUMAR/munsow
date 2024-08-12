@@ -84,7 +84,7 @@ export default function ReportIndex() {
             navigate('/reportView');
             console.log("Report Data:", data);
         };
-        const formattedDate = moment(generated).tz("Asia/Kolkata").format('MMMM DD, YYYY HH:mm:ss');
+        const formattedDate = moment(generated).add(5, 'hours').add(30, 'minutes').format('MMMM DD, YYYY HH:mm:ss');
 
 
 
