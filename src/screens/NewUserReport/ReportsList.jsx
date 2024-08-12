@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { loadReportsList, loadUserReport } from "../../redux/action";
 import NoDataPage from "./NoData";
-import moment from "moment";
+import moment from "moment-timezone";
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -242,6 +242,7 @@ export default function ReportIndex() {
             navigate('/reportView');
             console.log("Report Data:", data);
         };
+        const formattedDate = moment(generated).tz("Asia/Kolkata").format('MMMM DD, YYYY HH:mm:ss');
 
         // console.log(skill_type,"skill_type")
         return (
@@ -293,7 +294,7 @@ export default function ReportIndex() {
                             <div className="font-medium"><span className="font-bold">Company:&nbsp;</span>{company}</div>
                             </> : <></>}
                             <div className="font-medium"><span className="font-bold">Level:&nbsp;</span>{level}</div>
-                            <div className="font-medium"><span className="font-bold">Date:&nbsp;</span>{moment(generated)?.format('MMMM DD, YYYY HH:mm:ss')}</div>
+                            <div className="font-medium"><span className="font-bold">Date:&nbsp;</span>{formattedDate} IST</div>
 
                         </div>
                         
