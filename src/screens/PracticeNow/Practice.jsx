@@ -289,7 +289,7 @@ const StepperComponent = () => {
   };
 
   return (
-    <div className=" ">
+    <div className="">
       <div className="w-full mx-auto rounded-xl">
         {/* <p className="p-5 text-xl font-semibold">Practice</p>
         <Divider /> */}
@@ -839,7 +839,7 @@ const StepperComponent = () => {
                 <Tooltip title="Please finish system checks before submitting">
                   <button
                     onClick={handleNext}
-                    disabled={!chosenCompany}
+                    disabled={true}
                     className="shadow-md bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md opacity-50 cursor-not-allowed"
                     style={{
                       backgroundColor: linearGradientBackground,

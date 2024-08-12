@@ -302,7 +302,7 @@ export default function NewGridLayout({ questions }) {
             </>
           ) : (
             <>
-              <div className="h-screen overflow-y-hidden">
+              <div className="">
 
               {/* timer progress bar */}
               <div className="bg-teal-100 h-[25px] progressBar relative">
@@ -338,7 +338,7 @@ export default function NewGridLayout({ questions }) {
                   </Stepper> */}
 
                   {/* question and skip/next buttons */}
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 justify-between items-center">
                     <div className="text-lg font-bold">
                       {questionIndex + 1}
                       {". "}
@@ -347,17 +347,15 @@ export default function NewGridLayout({ questions }) {
                     <div className="flex gap-4 justify-end">
                         <button
                           onClick={skipQuestion}
-                          className="border w-[130px] h-[45px] bg-gray-300 border-gray-300 rounded-lg flex justify-center items-center"
+                          className="border px-8 h-[45px] bg-gray-300 border-gray-300 rounded-lg flex justify-center items-center"
                         >
                           Skip
                         </button>
                         <button
                           onClick={nextQuestion}
                           style={{
-                            cursor: "pointer",
-                            fontSize: "18px",
+                            cursor: "pointer",                           
                             borderRadius: "8px",
-                            width: '200px',
                             height: '45px',
                             background: linearGradientBackground,
                             color: textColor,
@@ -366,7 +364,7 @@ export default function NewGridLayout({ questions }) {
                                 ? ""
                                 : "hidden",
                           }}
-                          className="text-secondary"
+                          className="text-secondary px-8"
                         >
                           Next Question
                         </button>
@@ -374,8 +372,8 @@ export default function NewGridLayout({ questions }) {
                   </div>
 
                   {/* screens */}
-                  <div className="flex gap-6 mt-8">
-                    <div className="relative rounded-lg w-2/3">
+                  <div className="flex flex-col md:flex-row gap-6 mt-8">
+                    <div className="relative rounded-lg w-full md:w-2/3">
                         <img
                           src={image}
                           className="rounded-lg"
@@ -392,7 +390,7 @@ export default function NewGridLayout({ questions }) {
                           )}
                         </div>
                     </div>
-                    <div className="w-1/2">
+                    <div className="w-full md:w-1/2">
                         <div className="relative flex justify-center items-center h-full">
                           <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
                             REC
@@ -408,7 +406,7 @@ export default function NewGridLayout({ questions }) {
                   </div>
 
                   {/* last row of question number and Finish button */}
-                  <div className="flex justify-between items-center mt-8">
+                  <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center mt-8">
                     <div className="text-xl font-bold">
                       Question {questionIndex + 1} of {questions.length}
                     </div>
