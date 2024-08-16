@@ -41,7 +41,7 @@ import {
   FaBook,
 } from "react-icons/fa";
 
-import { FaChartColumn, FaChartGantt, FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
+import { FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
@@ -799,7 +799,7 @@ export default function HeaderFooterLayout({ Component }) {
       />
 
       <div
-        className={`mt-[60px] overflow-auto ${backgroundColorClass}`}
+        className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`}
         style={{ flexGrow: 1 }}
       >
         {Component}

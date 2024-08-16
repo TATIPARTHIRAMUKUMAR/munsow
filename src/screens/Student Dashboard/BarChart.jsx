@@ -11,85 +11,21 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { loadUserStats } from '../../redux/action';
 import { SentimentDissatisfied } from '@mui/icons-material';
 import "./Carousel.css";
 
-
-const interviewData = [
-  {
-    "Knowledge/Skills": 18,
-    "Mindset/Attitude": 15,
-    "Practical Thinking": 10,
-    "name": "1"
-  },
-  {
-    "Knowledge/Skills": 10,
-    "Mindset/Attitude": 30,
-    "Practical Thinking": 15,
-    "name": "2"
-  },
-  {
-    "Knowledge/Skills": 24,
-    "Mindset/Attitude": 30,
-    "Practical Thinking": 26,
-    "name": "3"
-  },
-  {
-    "Knowledge/Skills": 44,
-    "Mindset/Attitude": 40,
-    "Practical Thinking": 16,
-    "name": "4"
-  },
-  {
-    "Knowledge/Skills": 54,
-    "Mindset/Attitude": 40,
-    "Practical Thinking": 16,
-    "name": "5"
-  }
-  // Add more interview data as needed
-];
-
 const LineChartComponent = () => {
-  // Add serial numbers to the data
-
   const { userStats } = useSelector((state) => state.data);
 
   const [data, setData] = useState([]);
-  const [dataWithSerialNumbers, setdataWithSerialNumbers] = useState([])
-
-  // const dataWithSerialNumbers = data;
-
-  useEffect(() => {
-    setData(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : []);
-    setdataWithSerialNumbers(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : []);
-  }, [userStats]);
-
-
-
-
-  console.log("data", data, userStats)
-  const [sortBy, setSortBy] = useState('serialNumber'); // Initial sort by serialNumber
-  const [filterBy, setFilterBy] = useState('');
+  const [dataWithSerialNumbers, setDataWithSerialNumbers] = useState([]);
   const [showLast, setShowLast] = useState(10); // Default to show last 10 data points
 
-  const handleSortChange = (e) => {
-    const newSortBy = e.target.value;
-    setSortBy(newSortBy);
-    const sortedData = [...data].sort((a, b) => {
-      return newSortBy === 'score' ? b.score - a.score : a.serialNumber - b.serialNumber;
-    });
-    setData(sortedData);
-  };
-
-  // const handleFilterChange = (e) => {
-  //   const newFilterBy = e.target.value;
-  //   setFilterBy(newFilterBy);
-  //   const filteredData = dataWithSerialNumbers.filter((item) =>
-  //     item.score.toString().includes(newFilterBy)
-  //   );
-  //   setData(filteredData);
-  // };
+  useEffect(() => {
+    const initialData = userStats?.graphs?.length > 0 ? userStats.graphs[0].data : [];
+    setData(initialData);
+    setDataWithSerialNumbers(initialData);
+  }, [userStats]);
 
   const handleShowLastChange = (e) => {
     const newShowLast = parseInt(e.target.value, 10);
@@ -110,26 +46,9 @@ const LineChartComponent = () => {
   return (
     <div>
       <div className="flex justify-between filter-sort p-3">
-        <div className='text-lg font-semibold'>My Interview Score Trend</div>
+        <div className='text-lg font-semibold'>My Readiness Score Trend</div>
+        {console.log("data", data)}
         <div className='flex'>
-          {/* <div className='pr-3'>
-            <label className='text-gray-600 text-lg font-semibold text-opacity-80'>Sort by: </label>
-            <select value={sortBy} onChange={handleSortChange} className='rounded-lg height-10'>
-              <option value="serialNumber">S.No</option>
-              <option value="score">Score</option>
-            </select>
-          </div> */}
-
-          {/* <div className='pr-3'>
-            <label className='text-gray-600 text-lg font-semibold text-opacity-80'>Filter by Score: </label>
-            <input
-              type="text"
-              placeholder=""
-              value={filterBy}
-              onChange={handleFilterChange}
-              style={{ width: '50px',borderRadius:"8px",height:"35px"  }}
-            />
-          </div>*/}
           {data.length > 0 && (
             <div>
               <label className='text-gray-600 text-lg font-semibold text-opacity-80'>Show last : </label>
@@ -147,20 +66,18 @@ const LineChartComponent = () => {
       </div>
       <Divider style={{ opacity: "0.4", marginBottom: "25px" }} />
       <ResponsiveContainer width="100%" height={300}>
-      {data.length === 0 ? noDataComponent :  (
+        {data.length === 0 ? noDataComponent : (
           <LineChart
             data={data}
             margin={{ top: 0, right: 30, left: 20, bottom: 20 }}
             padding={{ top: 50 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" label={{ value: 'Number of Interviews', angle: -0, position: 'middle', dy: 20 }} />
-            <YAxis dataKey="Knowledge/Skills" label={{ value: 'Interview Scores', angle: -90, position: 'middle',dx:-10 }} />
+            <XAxis dataKey="name" label={{ value: 'Number of Interviews', angle: 0, position: 'middle', dy: 20 }} />
+            <YAxis dataKey="readiness_score" label={{ value: 'Readiness Score', angle: -90, position: 'middle', dx: -10 }} />
             <Tooltip />
             <Legend verticalAlign="top" height={36}/>
-            <Line type="monotone" dataKey="Knowledge/Skills" name="Knowledge/Skills" stroke="#8884d8"/>
-            <Line type="monotone" dataKey="Mindset/Attitude" name="Mindset/Attitude" stroke="#87CEEB" />
-            <Line type="monotone" dataKey="Practical Thinking" name="Practical Thinking" stroke="#E97451" />
+            <Line type="monotone" dataKey="readiness_score" name="Readiness Score" stroke="#8884d8" />
           </LineChart>
         )}
       </ResponsiveContainer>
