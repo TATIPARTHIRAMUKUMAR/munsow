@@ -36,15 +36,12 @@ const JDInterviews = ({ interviewData }) => {
 
   const handleChange = (event) => {
     const selectedLabel = event.target.value;
-    console.log("Selected Label:", selectedLabel);  // Debugging line
     setSelectedInterview(selectedLabel);
   };
 
   const selectedInterviewDetails = combinedInterviews.find(
     (interview) => interview.label === selectedInterview
   );
-
-  console.log("Selected Interview Details:", selectedInterviewDetails);  // Debugging line
 
   return (
     <div>

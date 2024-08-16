@@ -29,13 +29,14 @@ const CulturalInterviews = ({ interviewData }) => {
   const [selectedInterview, setSelectedInterview] = useState('');
 
   useEffect(() => {
-    if (latestInterview) {
+    if (latestInterview && !selectedInterview) {
       setSelectedInterview(latestInterview.label);
     }
-  }, []); // Empty dependency array to run only once on mount
+  }, [latestInterview, selectedInterview]);
 
   const handleChange = (event) => {
-    setSelectedInterview(event.target.value);
+    const selectedLabel = event.target.value;
+    setSelectedInterview(selectedLabel);
   };
 
   const selectedInterviewDetails = combinedInterviews.find(
