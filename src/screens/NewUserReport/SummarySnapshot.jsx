@@ -115,11 +115,13 @@ const SummarySnapshot = (props) => {
             <h3 className="max-[375px]:text-base text-xl font-bold text-purple">Presentation and Grooming</h3>
           </div>
         </div>
-        <div className="munsow-dark-bg text-white py-1">
+        {/* //temporary commented (Not to be Removed) */}
+        {/* <div className="munsow-dark-bg text-white py-1">
           <h2 className="text-center font-bold">Munsow Interview Classification Highlights</h2>
-        </div>
+        </div> */}
 
-        {report_data?.interview_type === "skill_interview" ? (
+        {/* //temporary commented (Not to be Removed) */}
+        {/* {report_data?.interview_type === "skill_interview" ? (  
           <div>
           {interview_score_by_category?.data?.map((category, index) => (
             <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
@@ -194,7 +196,6 @@ const SummarySnapshot = (props) => {
           </div>
         ) : report_data?.interview_type === "cultural_interview" ? (
           <div>
-
           <h3 className="uppercase text-zinc-500 px-8 pt-5">Cultural Skills Evaluated</h3>
           <div className="mx-4 md:mx-6 my-8 rounded-3xl py-6 bg-white">
             {report_data?.graph_data?.map((cultural) => (
@@ -215,7 +216,7 @@ const SummarySnapshot = (props) => {
           </div>
           </div>
         ) : null
-        }
+        } */}
 
       </div>
     </>

@@ -799,7 +799,7 @@ export default function HeaderFooterLayout({ Component }) {
       />
 
       <div
-        className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`}
+        className={`mt-[60px] overflow-auto ${backgroundColorClass}`}
         style={{ flexGrow: 1 }}
       >
         {Component}

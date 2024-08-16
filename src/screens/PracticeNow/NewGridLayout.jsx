@@ -337,37 +337,12 @@ export default function NewGridLayout({ questions }) {
                     ))}
                   </Stepper> */}
 
-                  {/* question and skip/next buttons */}
-                  <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 justify-between items-center">
+                  {/* question */}
+                  <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 items-center">
                     <div className="text-lg font-bold">
                       {questionIndex + 1}
                       {". "}
                       {questions[questionIndex]?.question}
-                    </div>
-                    <div className="flex gap-4 justify-end">
-                        <button
-                          onClick={skipQuestion}
-                          className="border px-8 h-[45px] bg-gray-300 border-gray-300 rounded-lg flex justify-center items-center"
-                        >
-                          Skip
-                        </button>
-                        <button
-                          onClick={nextQuestion}
-                          style={{
-                            cursor: "pointer",                           
-                            borderRadius: "8px",
-                            height: '45px',
-                            background: linearGradientBackground,
-                            color: textColor,
-                            visibility:
-                              questionIndex < questions?.length - 1
-                                ? ""
-                                : "hidden",
-                          }}
-                          className="text-secondary px-8"
-                        >
-                          Next Question
-                        </button>
                     </div>
                   </div>
 
@@ -405,17 +380,42 @@ export default function NewGridLayout({ questions }) {
                     </div>
                   </div>
 
-                  {/* last row of question number and Finish button */}
+                  {/* last row of question number and buttons */}
                   <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center mt-8">
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <button
+                      onClick={handleFinishInterview}
+                      className="bg-red-500 text-white h-[45px] px-8 rounded-lg"
+                      >
+                      Finish Interview
+                      </button>
+                      <button
+                          onClick={skipQuestion}
+                          className="px-8 h-[45px] bg-gray-300 rounded-lg"
+                        >
+                          Skip
+                      </button>
+                      <button
+                          onClick={nextQuestion}
+                          style={{
+                            cursor: "pointer",                           
+                            borderRadius: "8px",
+                            height: '45px',
+                            background: linearGradientBackground,
+                            color: textColor,
+                            visibility:
+                              questionIndex < questions?.length - 1
+                                ? ""
+                                : "hidden",
+                          }}
+                          className="text-secondary px-8"
+                        >
+                          Next Question
+                      </button>
+                    </div>
                     <div className="text-xl font-bold">
                       Question {questionIndex + 1} of {questions.length}
                     </div>
-                    <button
-                      onClick={handleFinishInterview}
-                      className="bg-red-500 text-white px-6 py-3 rounded-lg"
-                      >
-                      Finish Interview
-                    </button>
                   </div>
                   
                   {/* finish interview confirmation modal code */}
