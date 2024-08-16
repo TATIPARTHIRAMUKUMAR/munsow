@@ -120,59 +120,62 @@ const SummarySnapshot = (props) => {
           <h2 className="text-center font-bold">Munsow Interview Classification Highlights</h2>
         </div> */}
 
-        {/* //temporary commented (Not to be Removed) */}
-        {/* {report_data?.interview_type === "skill_interview" ? (  
-          <div>
-          {interview_score_by_category?.data?.map((category, index) => (
-            <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
-              <div className="flex flex-col lg:flex-row lg:justify-around items-center">
-                <div>
-                  <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
-                </div>
-                <div className="rounded-full bg-white w-48 p-4">
-                  <div className="relative pt-1">
-                    <div className="flex mb-2 items-center justify-start">
-                      <div className="w-full bg-gray-300 rounded-full">
-                        <div
-                          style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
-                          className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
-                        >
-                          &nbsp;
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-          </div>
+        {report_data?.interview_type === "skill_interview" ? (  
+          <></>
+          //temporary commented (Not to be Removed) 
+          // <div>
+          // {interview_score_by_category?.data?.map((category, index) => (
+          //   <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
+          //     <div className="flex flex-col lg:flex-row lg:justify-around items-center">
+          //       <div>
+          //         <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
+          //       </div>
+          //       <div className="rounded-full bg-white w-48 p-4">
+          //         <div className="relative pt-1">
+          //           <div className="flex mb-2 items-center justify-start">
+          //             <div className="w-full bg-gray-300 rounded-full">
+          //               <div
+          //                 style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
+          //                 className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
+          //               >
+          //                 &nbsp;
+          //               </div>
+          //             </div>
+          //           </div>
+          //         </div>
+          //       </div>
+          //     </div>
+          //   </div>
+          // ))}
+          // </div>
         ) : report_data?.interview_type === "company_role_interview" ? (
-          <div>
-          {interview_score_by_category?.data?.map((category, index) => (
-            <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
-              <div className="flex flex-col lg:flex-row lg:justify-around items-center">
-                <div>
-                  <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
-                </div>
-                <div className="rounded-full bg-white w-48 p-4">
-                  <div className="relative pt-1">
-                    <div className="flex mb-2 items-center justify-start">
-                      <div className="w-full bg-gray-300 rounded-full">
-                        <div
-                          style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
-                          className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
-                        >
-                          &nbsp;
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-          </div>
+          <></>
+          //temporary commented (Not to be Removed)
+          // <div>
+          // {interview_score_by_category?.data?.map((category, index) => (
+          //   <div key={index} className={`mx-4 md:mx-8 my-8 rounded-3xl py-6 ${getBackgroundColor(category?.main_title)}`}>
+          //     <div className="flex flex-col lg:flex-row lg:justify-around items-center">
+          //       <div>
+          //         <h1 className="text-xl font-bold text-purple p-3 text-center">{category?.main_title}</h1>
+          //       </div>
+          //       <div className="rounded-full bg-white w-48 p-4">
+          //         <div className="relative pt-1">
+          //           <div className="flex mb-2 items-center justify-start">
+          //             <div className="w-full bg-gray-300 rounded-full">
+          //               <div
+          //                 style={{ width: `${(category?.secured_marks / 10) * 100}%` }}
+          //                 className={`text-center text-xs text-white ${progressBarColor(category?.secured_marks)} rounded-full`}
+          //               >
+          //                 &nbsp;
+          //               </div>
+          //             </div>
+          //           </div>
+          //         </div>
+          //       </div>
+          //     </div>
+          //   </div>
+          // ))}
+          // </div>
         ) : report_data?.interview_type === "jd_interview" ? (
           <div>
           <h3 className="uppercase text-zinc-500 px-8 pt-5">JD Skills Evaluated</h3>
@@ -216,7 +219,7 @@ const SummarySnapshot = (props) => {
           </div>
           </div>
         ) : null
-        } */}
+        }
 
       </div>
     </>
