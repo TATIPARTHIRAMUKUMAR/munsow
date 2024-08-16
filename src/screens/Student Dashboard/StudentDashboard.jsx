@@ -120,8 +120,9 @@ export default function StudentDashboard() {
               className="relative overflow-visible z-50 max-w-full h-auto p-10 flex justify-between rounded-lg"
             >
               <div className="text-white relative overflow-visible max-w-full h-auto">
-                <div className="text-3xl font-bold relative overflow-visible max-w-full h-auto" style={{ color: textColor }}>
-                  Welcome Back, {GLOBAL_CONSTANTS?.user_cred?.first_name} {GLOBAL_CONSTANTS?.user_cred?.last_name}
+                <div className="font-bold relative overflow-visible max-w-full h-auto" style={{ color: textColor, fontSize: "28px" }}>
+                  Welcome Back, {GLOBAL_CONSTANTS?.user_cred?.first_name} 
+                  {/* {GLOBAL_CONSTANTS?.user_cred?.last_name} */}
                 </div>
                 <p className="text-lg py-3 relative overflow-visible max-w-full h-auto" style={{ color: textColor }}>
                   Are you ready for your next interview?

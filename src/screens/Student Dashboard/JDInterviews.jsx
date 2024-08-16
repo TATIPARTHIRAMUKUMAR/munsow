@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormControl, InputLabel, Select, MenuItem, CircularProgress, Box, Typography, useTheme } from '@mui/material';
+import { FormControl, Select, MenuItem, CircularProgress, Box, Typography, useTheme } from '@mui/material';
 import { SentimentDissatisfied } from '@mui/icons-material';
 
 const getColor = (score, theme) => {
@@ -26,21 +26,25 @@ const JDInterviews = ({ interviewData }) => {
 
   const latestInterview = combinedInterviews.length > 0 ? combinedInterviews[combinedInterviews.length - 1] : null;
 
-  const [selectedInterview, setSelectedInterview] = useState(latestInterview ? latestInterview.label : '');
+  const [selectedInterview, setSelectedInterview] = useState('');
 
   useEffect(() => {
-    if (latestInterview) {
+    if (latestInterview && !selectedInterview) {
       setSelectedInterview(latestInterview.label);
     }
-  }, [latestInterview]);
+  }, [latestInterview, selectedInterview]);
 
   const handleChange = (event) => {
-    setSelectedInterview(event.target.value);
+    const selectedLabel = event.target.value;
+    console.log("Selected Label:", selectedLabel);  // Debugging line
+    setSelectedInterview(selectedLabel);
   };
 
   const selectedInterviewDetails = combinedInterviews.find(
     (interview) => interview.label === selectedInterview
   );
+
+  console.log("Selected Interview Details:", selectedInterviewDetails);  // Debugging line
 
   return (
     <div>
@@ -48,19 +52,19 @@ const JDInterviews = ({ interviewData }) => {
       {combinedInterviews?.length > 0 ? (
         <>
           <div className="flex justify-start mt-1 mb-4 ml-5">
-          <FormControl 
-            sx={{
-              width: '310px',
-              backgroundColor: '#F0F0F0',
-              borderRadius: '8px',
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  border: 'none',
-                  borderRadius: '8px',
+            <FormControl
+              sx={{
+                width: '310px',
+                backgroundColor: '#F0F0F0',
+                borderRadius: '8px',
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    border: 'none',
+                    borderRadius: '8px',
+                  },
                 },
-              },
-            }}
-            size="small"
+              }}
+              size="small"
             >
               <Select
                 value={selectedInterview}

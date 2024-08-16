@@ -41,7 +41,7 @@ import {
   FaBook,
 } from "react-icons/fa";
 
-import { FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
+import { FaFileCircleCheck, FaChartColumn, FaChartGantt, FaHeartPulse } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";

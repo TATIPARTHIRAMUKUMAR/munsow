@@ -1,29 +1,5 @@
-
-// const interviewData = [
-//   {
-//     "company_name": "Cognizant",
-//     "role": "Software Developer",
-//     "data": [
-//       { "skill_name": "Python", "scored": 70, "total": 100 },
-//       { "skill_name": "Java", "scored": 60, "total": 100 },
-//       { "skill_name": "C++", "scored": 50, "total": 100 },
-//       { "skill_name": "C", "scored": 40, "total": 100 }
-//     ]
-//   },
-//   {
-//     "company_name": "Cognizant",
-//     "role": "Senior Software Developer",
-//     "data": [
-//       { "skill_name": "Python", "scored": 70, "total": 100 },
-//       { "skill_name": "Java", "scored": 60, "total": 100 },
-//       { "skill_name": "C++", "scored": 50, "total": 100 },
-//       { "skill_name": "C1", "scored": 30, "total": 100 }
-//     ]
-//   }
-// ];
-
 import React, { useState, useEffect } from 'react';
-import { FormControl, InputLabel, Select, MenuItem, CircularProgress, Box, Typography, useTheme } from '@mui/material';
+import { FormControl, Select, MenuItem, CircularProgress, Box, Typography, useTheme } from '@mui/material';
 import { SentimentDissatisfied } from '@mui/icons-material';
 
 const getColor = (score, theme) => {
@@ -50,13 +26,13 @@ const CulturalInterviews = ({ interviewData }) => {
 
   const latestInterview = combinedInterviews.length > 0 ? combinedInterviews[combinedInterviews.length - 1] : null;
 
-  const [selectedInterview, setSelectedInterview] = useState(latestInterview ? latestInterview.label : '');
+  const [selectedInterview, setSelectedInterview] = useState('');
 
   useEffect(() => {
     if (latestInterview) {
       setSelectedInterview(latestInterview.label);
     }
-  }, [latestInterview]);
+  }, []); // Empty dependency array to run only once on mount
 
   const handleChange = (event) => {
     setSelectedInterview(event.target.value);
