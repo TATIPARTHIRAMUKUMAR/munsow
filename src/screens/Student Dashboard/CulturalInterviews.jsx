@@ -88,7 +88,7 @@ const CulturalInterviews = ({ interviewData }) => {
 
           <div className="mt-5 mx-5 mb-3">
             {selectedInterviewDetails &&
-              selectedInterviewDetails.data.map((skill, index) => (
+              selectedInterviewDetails?.data?.map((skill, index) => (
                 <div key={index} className="flex flex-col items-center mb-9">
                   <Box position="relative" display="inline-flex" sx={{ width: 70, height: 70 }}>
                     <CircularProgress
