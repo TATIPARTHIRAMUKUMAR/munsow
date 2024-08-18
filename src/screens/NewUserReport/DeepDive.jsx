@@ -49,8 +49,21 @@ const DeepDive = (props) => {
             {index < lines.length - 1 && <br/>}
         </React.Fragment>
     ));
-};
+  };
 
+  // const formatScore = (score) => {
+  //   return score <= 10 ? score : (score % 10) + (Math.floor(score / 10) / 10);
+  // };
+
+  const formatScore = (score) => {
+    if (score <= 10) {
+      return score;
+    }
+    const decimalScore = (score % 10) + (Math.floor(score / 10) / 10);
+    return Math.floor(decimalScore);
+  };
+  
+  
   return (
 
     <>
@@ -60,7 +73,7 @@ const DeepDive = (props) => {
         <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 ${bgColor}`}>
           <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>{head}&nbsp;Deep&nbsp;Dive</h1>
           <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
-            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${Math.min(queScore, 10)}/10` : "0/10"}</h1>
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(formatScore(queScore))}`}>{queScore ? `${formatScore(queScore)}/10` : "0/10"}</h1>
             <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
           </div>
         </div>
@@ -73,7 +86,7 @@ const DeepDive = (props) => {
         <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 ${bgColor}`}>
           <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>{head}&nbsp;Deep&nbsp;Dive</h1>
           <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
-            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${Math.min(queScore, 10)}/10` : "0/10"}</h1>
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(formatScore(queScore))}`}>{queScore ? `${formatScore(queScore)}/10` : "0/10"}</h1>
             <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
           </div>
         </div>
@@ -86,7 +99,7 @@ const DeepDive = (props) => {
         <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 bg-green`}>
           <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>JD Interview Deep Dive</h1>
           <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
-            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${Math.min(queScore, 10)}/10` : "0/10"}</h1>
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(formatScore(queScore))}`}>{queScore ? `${formatScore(queScore)}/10` : "0/10"}</h1>
             <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
           </div>
         </div>
@@ -99,7 +112,7 @@ const DeepDive = (props) => {
         <div className={`flex justify-around max-[425px]:items-start items-center pb-4 lg:pb-8 mb-8 bg-purple`}>
           <h1 className={`mx-2 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-purple`}>Cultural Interview Deep Dive</h1>
           <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
-            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(queScore)}`}>{queScore ? `${Math.min(queScore, 10)}/10` : "0/10"}</h1>
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(formatScore(queScore))}`}>{queScore ? `${formatScore(queScore)}/10` : "0/10"}</h1>
             <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
           </div>
         </div>

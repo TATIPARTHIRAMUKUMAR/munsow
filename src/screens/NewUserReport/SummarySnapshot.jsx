@@ -101,17 +101,35 @@ const SummarySnapshot = (props) => {
     }
   };
 
+  const formatScore = (score) => {
+    if (score <= 10) {
+        return score;
+    } else {
+        const decimalScore = score / 10;
+        return Math.floor(decimalScore);
+    }
+  };
+
+  // const formatScore = (score) => {
+  //   if (score <= 10) {
+  //       return score;
+  //   } else {
+  //       const roundedScore = (score / 10).toFixed(1);
+  //       return parseFloat(roundedScore);
+  //   }
+  // };
+
   return (
     <>
       <div className="py-10 mx-3 my-3 md:mx-6 md:my-6 bg-grey">
         <h1 className="mx-8 font-bold text-2xl">Summary Snapshot</h1>
         <div className="mx-4 my-8 md:mx-6 md:my-12 rounded-3xl py-6 bg-white flex justify-around ">
           <div className="text-center">
-            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(readinessScore)} mb-4`}>{readinessScore}/10</h1>
+            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(formatScore(readinessScore))} mb-4`}>{readinessScore ? `${formatScore(readinessScore)}/10` : "0/10"}</h1>
             <h3 className="max-[375px]:text-base text-xl font-bold text-purple">Overall Readiness Score</h3>
           </div>
           <div className="text-center">
-            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(presentationScore)} mb-4`}>{presentationScore}/10</h1>
+            <h1 className={`text-2xl md:text-4xl font-bold ${getScoreColor(formatScore(presentationScore))} mb-4`}>{presentationScore ? `${formatScore(presentationScore)}/10` : "0/10"}</h1>
             <h3 className="max-[375px]:text-base text-xl font-bold text-purple">Presentation and Grooming</h3>
           </div>
         </div>
