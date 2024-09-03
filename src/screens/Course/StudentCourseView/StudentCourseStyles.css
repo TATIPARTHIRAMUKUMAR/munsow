@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+  .gallery-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* min-height: 100vh; */
+    background-color: #dcdcdc;
+    border-radius: 18px;
+  }
+  
+  .navigation-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .gallery-track {
+    /* width: 300px;
+    height: 200px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    border-radius: 18px;
+    aspect-ratio: 168/100;
+    /* position: relative; */
+    width: 100%;
+    /* overflow: hidden; */
+  }
+  
+  .slide-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  
+  .flip-card-inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  
+  .slide-card.flipped .flip-card-inner {
+    transform: rotateY(-180deg);
+  }
+  
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 18px;
+    padding: 0px 20px;
+  }
+  
+  .flip-card-front {
+    background-color: #f0f0f0;
+    border-left: 18px solid #2BE2D0;
+  }
+  
+  .flip-card-back {
+    background-color: #f0f0f0;
+    transform: rotateY(-180deg);
+  }
+  
+  /* Card counter styles */
+  .card-counters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .counter-outer {
+    display: inline-block;
+    margin: 0 5px;
+    cursor: pointer;
+    color: grey;
+}
+
+.counter-outer.active {
+    color: black;
+    font-weight: bold;
+}
+  
+  .counter-inner {
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  .button-prev,
+  .button-next {
+  font-family:"Material Icons";
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+  background-color: #2BE2D0;
+  border-radius: 100%;
+  height: 46px;
+  width: 46px;
+  text-align: center;
+  }

@@ -17,6 +17,11 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { PDFExport } from "@progress/kendo-react-pdf";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import "./StudentCourseStyles.css"
+
 
 const StudentCourseView = () => {
     const { id } = useParams();
@@ -29,6 +34,9 @@ const StudentCourseView = () => {
     const { isDarkMode } = useDarkMode();
     const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
     const [currentSubtopicIndex, setCurrentSubtopicIndex] = useState(0);
+    const [openFlashcard, setOpenFlashcard] = useState(false);
+    const [currentCard, setCurrentCard] = useState(0);
+    const [isFlipped, setIsFlipped] = useState(false);
 
     const linearGradientBackground = isDarkMode
         ? colorTheme.dark.selectBackground
@@ -42,9 +50,58 @@ const StudentCourseView = () => {
         ? colorTheme.dark.cardColor
         : colorTheme.light.cardColor;
 
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        bgcolor: 'background.paper',
+        boxShadow: 8,
+        p: 5,
+        borderRadius: 4,
+        width: '50%',
+    };
     // Maintain a reference to the latest utterance
     const latestUtteranceRef = useRef(null);
-
+    
+    //flashcards
+    const handleOpenFlashcard = () => {
+        setOpenFlashcard(true);
+        setCurrentCard(0);
+        setIsFlipped(false);
+    };
+    const handleCloseFlashcard = () => {
+        setOpenFlashcard(false); 
+    }
+    
+    const [cards] = useState([
+        { id: 1, frontContent: "What is Robotics?", backContent: "Robotics is a field that combines engineering and technology to create machines called robots that can perform tasks in place of or to assist humans." },
+        { id: 2, frontContent: "What is Cloud Computing?", backContent: "Cloud computing is the delivery of computing services over the internet, or cloud. It allows users to access computing resources, such as storage, databases, networking, and software, on demand and pay for them as they use them." },
+        { id: 3, frontContent: "What is Database?", backContent: "A database is a collection of data that is organized and stored electronically, typically in a computer system. Databases can store any type of data, including numbers, words, images, videos, and files." },
+        { id: 4, frontContent: "What is Object Oriented Programming?", backContent: "Object-oriented programming (OOP) is a computer programming model that organizes software design around data, or objects, rather than functions and logic. An object can be defined as a data field that has unique attributes and behavior." },
+      ]);
+    
+      const handleFlip = () => {
+        setIsFlipped(!isFlipped);
+      };
+    
+      const handleCardChange = (index) => {
+        setCurrentCard(index);
+        setIsFlipped(false);
+      };
+    
+      const handleNextCard = () => {
+        if (currentCard < cards.length - 1) {
+          handleCardChange(currentCard + 1);
+        }
+      };
+    
+      const handlePrevCard = () => {
+        if (currentCard > 0) {
+          handleCardChange(currentCard - 1);
+        }
+      };
+   
     useEffect(() => {
         dispatch(loadDetailedCourse(id));
     }, [dispatch, id]);
@@ -265,6 +322,19 @@ const StudentCourseView = () => {
                 </div>
 
                 <div className={`w-2/6 `} >
+                    <div className="flex items-center justify-center mb-4">
+                        {!isSpeaking ? (
+                            <VolumeOffIcon
+                                style={{ cursor: 'pointer', fontSize: '3rem', color: textColor }}
+                                onClick={() => handleSpeak(selectedSubtopic?.content)}
+                            />
+                            ) : (
+                            <VolumeUpIcon
+                                style={{ cursor: 'pointer', fontSize: '3rem', color: linearGradientBackground }}
+                                onClick={handleStop}
+                            />
+                        )}
+                    </div>
                     <div className={`p-5 bg-[#${cardColor}] rounded-xl`}>
                         {GLOBAL_CONSTANTS?.user_cred?.role_name === "Student" && (
                             <div className="flex flex-col bg-white p-3 rounded-xl shadow-lg">
@@ -300,19 +370,6 @@ const StudentCourseView = () => {
 
                             </div>
                         )}
-                        {/* <div className="flex items-center justify-end mb-4">
-                            {!isSpeaking ? (
-                                <VolumeOffIcon
-                                    style={{ cursor: 'pointer', fontSize: '3rem', color: textColor }}
-                                    onClick={() => handleSpeak(selectedSubtopic?.content)}
-                                />
-                            ) : (
-                                <VolumeUpIcon
-                                    style={{ cursor: 'pointer', fontSize: '3rem', color: linearGradientBackground }}
-                                    onClick={handleStop}
-                                />
-                            )}
-                        </div> */}
 
                         <div className='mt-5'>
                             <div className="flex justify-end mb-3">
@@ -334,6 +391,75 @@ const StudentCourseView = () => {
                                 );
                             })}
                         </div>
+                    </div>
+                    <div className='flex items-center justify-center mt-3'>
+                        <Button
+                            variant="contained"
+                            style={{ margin: '10px', backgroundColor: linearGradientBackground, color: textColor, borderRadius: '10px', textTransform: 'none', fontWeight: "bold" }}
+                            onClick={handleOpenFlashcard}
+                        >
+                        Generate Flashcards
+                        </Button>
+                        <Modal
+                            open={openFlashcard}
+                            onClose={handleCloseFlashcard}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={style}>
+                                <div className="card-counters mb-5">
+                                    {cards.map((_, index) => (
+                                        <div
+                                            key={index}
+                                            className={`counter-outer ${currentCard === index ? 'active' : ''}`}
+                                            onClick={() => handleCardChange(index)}
+                                        >
+                                        <span className="counter-inner">{index + 1}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="gallery-container mb-5">
+                                    <div className="gallery-track">
+                                        <div
+                                            className={`slide-card ${isFlipped ? "flipped" : ""}`}
+                                            onClick={handleFlip}
+                                        >
+                                            <div className="flip-card-inner">
+                                                <div className="flip-card-front text-xl md:text-3xl font-bold">
+                                                    {cards[currentCard].frontContent}
+                                                </div>
+                                                <div className="flip-card-back text-xl font-bold">
+                                                    {cards[currentCard].backContent}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex justify-between items-center gap-3 mb-5'>
+                                    <Button
+                                        variant="contained"
+                                        style={{backgroundColor: "#D5D5D5", color: textColor, borderRadius: '24px', textTransform: 'none', fontWeight: "bold", padding: "12px 28px" }}
+                                    >
+                                    I learned now
+                                    </Button>
+                                    <div className="navigation-buttons">
+                                        <button onClick={handlePrevCard} className="button-prev" disabled={currentCard === 0}>
+                                            chevron_left
+                                        </button>
+                                        <button onClick={handleNextCard} className="button-next" disabled={currentCard === cards.length - 1}>
+                                            chevron_right
+                                        </button>
+                                    </div>
+                                    <Button
+                                        variant="contained"
+                                        style={{backgroundColor: "#D5D5D5", color: textColor, borderRadius: '24px', textTransform: 'none', fontWeight: "bold", padding: "12px 28px" }}
+                                    >
+                                    I knew this
+                                    </Button>
+                                </div>
+                                <h1 className='text-center'>Click on the card to flip it</h1>
+                            </Box>
+                        </Modal>
                     </div>
                 </div>
             </div>
