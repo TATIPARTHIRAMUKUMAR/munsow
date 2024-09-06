@@ -113,8 +113,8 @@ function Url_Routes() {
         <Route exact path="/screeningUsers/createLink" element={<HeaderFooterLayout Component={<CreateLink />} />} />
         <Route exact path="/placements" element={<HeaderFooterLayout Component={<Placements />} />} />
 
-        <Route exact path="/" element={<StudentLogin />} />
-        <Route exact path="/institutionLogin" element={<Login />} />
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/studentLogin" element={<StudentLogin />} />
         <Route exact path="/studentRegister" element={<StudentRegister />} />
         <Route exact path="/studentRegistration/:id" element={<ScreeningUserRegister />} />
         <Route exact path="/registration" element={<Register />} />
