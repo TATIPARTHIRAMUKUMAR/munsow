@@ -87,7 +87,6 @@ const StudentLogin = () => {
       email: universityId,
       password: password,
       role: "student"
-
     }
     dispatch(user_login(payload, (resp) => {
       if(resp?.data?.role_id==5){

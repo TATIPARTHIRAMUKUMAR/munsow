@@ -42,7 +42,6 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => 
     width: '24px',
     height: '24px',
     borderRadius: '50%',
-    
     color: checked ? '#fff' : '#ddd',
   },
   '& .MuiTypography-root': {
