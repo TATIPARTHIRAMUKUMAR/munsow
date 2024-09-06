@@ -19,22 +19,8 @@ import AdminLoginHero from "./../../assets/admin-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: 'row',
-  // justifyContent: 'flex-start',
-  // justifyContent: 'center',
   marginBottom: '30px',
 });
-
-// const StyledFormControlLabel = styled(FormControlLabel)({
-//   fontSize: "50px",
-//   '& .MuiSvgIcon-root': {
-//     color: '#4A90E2',
-//   },
-//   '& .MuiTypography-root': {
-//     color: '#333',
-//     fontSize: "20px",
-//     paddingRight: "30px"
-//   }
-// });
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => ({
   border: '2px solid',
@@ -78,7 +64,6 @@ const style = {
   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
-  // boxShadow: 24,
   p: 4,
 };
 
@@ -147,10 +132,10 @@ const LoginPage = () => {
     // Add more conditions for other types if necessary
   };
 
-  // Click handler for the span
   const handleStudentClick = () => {
     navigate('/');
   };
+  
   return (
     <div className="bg-[#F1F8F8] h-screen overflow-auto">
 

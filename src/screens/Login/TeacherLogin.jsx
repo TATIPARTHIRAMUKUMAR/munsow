@@ -63,7 +63,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  // border: "2px solid #000",
   borderRadius: "0.4rem",
   boxShadow: 24,
   p: 4,
@@ -126,10 +125,11 @@ const TeacherLogin = () => {
     }
     // Add more conditions for other types if necessary
   };
-  // Click handler for the span
+
   const handleStudentClick = () => {
     navigate('/');
   };
+  
   return (
     <div className="bg-[#F1F8F8] h-screen overflow-auto">
       <div className="flex flex-col md:flex-row items-center">
