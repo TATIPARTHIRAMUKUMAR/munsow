@@ -74,12 +74,18 @@ const columns = [
     align: 'start',
     numeric: false,
   },
+  // {
+  //   id: 'action',
+  //   label: 'Actions',
+  //   // minWidth: 170,
+  //   align: 'start',
+  //   numeric: false,
+  // },
   {
-    id: 'action',
-    label: 'Actions',
-    // minWidth: 170,
-    align: 'start',
-    numeric: false,
+    label: "Status",
+    id: "actions",
+    cellRenderer: ActionButtonCellRenderer,
+    flex: 1,
   },
 ];
 
@@ -236,14 +242,10 @@ const Teachers = () => {
                       <TableCell>{row.branch_name}</TableCell>
                       <TableCell>{row.course_name}</TableCell>
                       <TableCell>{row.department_name}</TableCell>
-                      <TableCell padding="none">
-                        {/* <Tooltip title="Edit">
-                    <IconButton onClick={() => handleOpenEdit(row)}>
-                        <EditIcon sx={{ color: '#006db5' }} />
-                        
-                    </IconButton>
-                </Tooltip>
-                 */}
+                      <TableCell>
+                        <ActionButtonCellRenderer deleteHandler={deleteHandler} node={{ data: row }} />
+                      </TableCell>
+                      {/* <TableCell padding="none">
                         <Stack direction="row" spacing={0}>
                           <EditTeachersModal
                             teacherId={index}
@@ -279,7 +281,7 @@ const Teachers = () => {
                             </Stack>
                           </Box>
                         </Modal>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))
               ) : (

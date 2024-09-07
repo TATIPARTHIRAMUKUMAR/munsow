@@ -89,20 +89,19 @@ const columns = [
     align: 'start',
     numeric: true,
   },
-  {
-    id: 'action',
-    label: 'Stauts',
-    // minWidth: 170,
-    align: 'start',
-    numeric: false,
-  },
   // {
   //   id: 'action',
-  //   label: 'Actions',
+  //   label: 'Stauts',
   //   // minWidth: 170,
   //   align: 'start',
   //   numeric: false,
   // },
+  {
+    label: "Status",
+    id: "actions",
+    cellRenderer: ActionButtonCellRenderer,
+    flex: 1,
+  },
 ];
 
 const Students = () => {
@@ -255,7 +254,10 @@ const Students = () => {
                       <TableCell>{row.department_name}</TableCell>
                       <TableCell>{row.no_of_interviews}</TableCell>
                       <TableCell>{row.avg_score}</TableCell>
-                      <TableCell padding="none">
+                      <TableCell>
+                        <ActionButtonCellRenderer deleteHandler={deleteHandler} node={{ data: row }} />
+                      </TableCell>
+                      {/* <TableCell padding="none">
                         
                         <Stack direction="row" spacing={0}>
                           <EditStudentsModal
@@ -292,7 +294,7 @@ const Students = () => {
                             </Stack>
                           </Box>
                         </Modal>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))
               ) : (
