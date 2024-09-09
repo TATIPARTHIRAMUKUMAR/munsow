@@ -8,28 +8,53 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { user_login } from "../../redux/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ForgotPassword from "./ForgotPassword";
 import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useDarkMode } from "./../../Dark";
+import TeacherIcon from "./../../assets/icons/teacher.png";
+import AdminIcon from "./../../assets/icons/admin-login-icon.svg";
+import AdminLoginHero from "./../../assets/admin-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: 'row',
-  justifyContent: 'center',
   marginBottom: '30px',
 });
 
-const StyledFormControlLabel = styled(FormControlLabel)({
-  fontSize: "50px",
+const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => ({
+  border: '2px solid',
+  borderRadius: '20px',
+  padding: '10px 15px 10px 0px',
+  margin: '0 0px',
+  width: '250px',
+  transition: 'border-color 0.3s, background-color 0.3s',
+  borderColor: checked ? '#2BE2D0' : '#ddd',
+  backgroundColor: checked ? '#F0FCFF' : '#fff',
   '& .MuiSvgIcon-root': {
-    color: '#4A90E2',
+    display: 'block', 
+    color: '#2BE2D0',
+  },
+  '& .custom-icon': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    borderRadius: '50%',
+    
+    color: checked ? '#fff' : '#ddd',
   },
   '& .MuiTypography-root': {
-    color: '#333',
-    fontSize: "20px",
-    paddingRight:"30px"
-  }
-});
+    fontWeight: checked ? 'bold' : 'normal',
+    color: checked ? '#333' : '#333',
+    fontSize: '16px',
+  },
+  '&:hover': {
+    cursor: 'pointer',
+    borderColor: '#2BE2D0',
+  },
+}));
 
 const style = {
   position: "absolute",
@@ -53,6 +78,13 @@ const TeacherLogin = () => {
   const [password, setPassword] = useState("");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+
+  const { isDarkMode, colorTheme } = useDarkMode();
+
+  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const BackgroundColor = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -88,68 +120,97 @@ const TeacherLogin = () => {
     const selectedType = event.target.value;
     setLoginType(selectedType);
     if (selectedType === 'institution') {
-      navigate("/");
+      navigate("/institutionLogin");
     } else if (selectedType === 'student') {
-      navigate("/studentLogin");
+      navigate("/");
     }
     // Add more conditions for other types if necessary
   };
-
+  // Click handler for the span
+  const handleStudentClick = () => {
+    navigate('/');
+  };
   return (
-    <div className="p-4">
-      <div className="flex flex-col md:flex-row">
-        <div className="w-full md:w-3/6 p-5 md:p-20">
-          <div className="bg-white   rounded-lg p-6">
+    <div className="bg-[#F1F8F8] h-screen overflow-auto">
+      <div className="flex flex-col md:flex-row items-center">
+        <div className="hidden md:flex justify-center items-center w-3/6">
+          <img
+            src={AdminLoginHero}
+            className=""
+            alt="Login"
+          />
+        </div>
+        <div className="w-full md:w-3/6 p-5 md:p-20 ">
+          <div className="rounded-lg p-6">
 
-          <FormControl component="fieldset">
-              {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
-              <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
-                <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
-                <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
-                <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" />
+          <div className="mb-4">
+            <h2 className="text-3xl font-semibold mb-4">Professor Login</h2>
+            <FormControl component="fieldset">
+              <StyledRadioGroup row value={loginType} onChange={handleRadioChange} className="flex justify-start gap-3">
+              <StyledFormControlLabel
+                value="institution"
+                className="justify-center"
+                label={
+                  <div className="flex flex-col justify-center items-center">
+                    <span className="custom-icon"><img src={AdminIcon}  alt="Login"/></span>
+                    Organisation Admin
+                  </div>
+                }
+                control={<Radio />}
+                checked={loginType === 'institution'}
+              />
+              <StyledFormControlLabel
+                value="teacher"
+                className="justify-center"
+                label={
+                  <div className="flex flex-col justify-center items-center">
+                    <span className="custom-icon"><img src={TeacherIcon}  alt="Login"/></span>
+                    Department’s Professor 
+                  </div>
+                }
+                control={<Radio />}
+                checked={loginType === 'teacher'}
+              />
               </StyledRadioGroup>
-            </FormControl>
-
-            <h2 className="text-2xl font-semibold mb-4">Teacher Login</h2>
-            {/* <p className="text-base text-gray-600 mb-4">
-              Get personalized insights on your interview skills, strengths, and areas for improvement.
-            </p> */}
+              </FormControl>
+          </div>
              <form onSubmit={handleSubmit}>
               <div>
-            <div className="space-y-4">
+              <div className="space-y-4">
               <div className="mb-2">
-                <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
-                  Email ID
+                <label htmlFor="universityId" className="text-sm font-bold text-black">
+                  Email Address
                 </label>
                 <input
                   type="text"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                  className="mt-2 w-full border border-gray-400 bg-[#EDEDED] rounded-lg py-2 px-3 focus:outline-none focus:border-blue-400"
                   id="universityId"
                   name="universityId"
-                  placeholder=""
+                  placeholder="Enter Email Address"
                   value={universityId}
                   onChange={loginInputHandler}
                 />
               </div>
               <div className="mb-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-600">
+                <label htmlFor="password" className="text-sm font-bold text-black">
                   Password
                 </label>
                 <input
                   type="password"
-                  className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                  className="mt-2 w-full border border-gray-400 bg-[#EDEDED] rounded-lg py-2 px-3 focus:outline-none focus:border-stone-300"
                   id="password"
                   name="password"
-                  placeholder=""
+                  placeholder="Enter Password"
                   value={password}
                   onChange={loginInputHandler}
                 />
               </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-8">
             <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                    className="w-full text-black rounded-lg py-2 px-4"
+                    style={{ background: BackgroundColor }}
                   >
                     Login
                   </button>
@@ -216,28 +277,19 @@ const TeacherLogin = () => {
                 </Link>
               </div>
             </div> */}
-
-            
-            <div className="mt-10 text-center text-gray-600">
+            <div className="mt-5 text-black">
               <span>
-                By continuing, you agree to our
+                Not Registered?&nbsp;
               </span>
-              <a href=" https://www.munsow.com/terms-and-conditions" target="_blank"><span className="font-semibold text-blue-500">  Terms of Service  </span></a>
-
-              {/* <span className="font-semibold"> Terms of Service </span> */}
-              <span>and</span>
-              <a href=" https://www.munsow.com/privacy-policy" target="_blank"><span className="font-semibold text-blue-500">  Privacy Policy  </span></a>
-
-              {/* <span className="font-semibold"> Privacy Policy</span> */}
+              <a href="https://www.munsow.com/contact" target="_blank"><span className="underline text-[#81007F]">Contact Us</span></a>              
+            </div>
+            <div className="mt-16 text-center text-black">
+              <span>
+                Not an Organisation?&nbsp;Jobseeker Login&nbsp;
+              </span>
+              <span className="underline cursor-pointer text-[#81007F]" onClick={handleStudentClick}>Here</span>            
             </div>
           </div>
-        </div>
-        <div className="hidden md:inline w-3/6">
-          <img
-            src={interview}
-            className="w-full p-5 md:p-20"
-            alt="Login"
-          />
         </div>
       </div>
     </div>

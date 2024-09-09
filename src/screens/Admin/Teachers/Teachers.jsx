@@ -74,18 +74,18 @@ const columns = [
     align: 'start',
     numeric: false,
   },
-  // {
-  //   id: 'action',
-  //   label: 'Actions',
-  //   // minWidth: 170,
-  //   align: 'start',
-  //   numeric: false,
-  // },
   {
     label: "Status",
-    id: "actions",
+    id: "status",
     cellRenderer: ActionButtonCellRenderer,
     flex: 1,
+  },
+  {
+    id: 'action',
+    label: 'Actions',
+    // minWidth: 170,
+    align: 'start',
+    numeric: false,
   },
 ];
 
@@ -245,7 +245,7 @@ const Teachers = () => {
                       <TableCell>
                         <ActionButtonCellRenderer deleteHandler={deleteHandler} node={{ data: row }} />
                       </TableCell>
-                      {/* <TableCell padding="none">
+                      <TableCell padding="none">
                         <Stack direction="row" spacing={0}>
                           <EditTeachersModal
                             teacherId={index}
@@ -281,7 +281,7 @@ const Teachers = () => {
                             </Stack>
                           </Box>
                         </Modal>
-                      </TableCell> */}
+                      </TableCell>
                     </TableRow>
                   ))
               ) : (
