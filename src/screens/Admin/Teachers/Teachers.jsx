@@ -184,10 +184,11 @@ const Teachers = () => {
       row.branch_name,
       row.course_name,
       row.department_name,
+      row.is_active,
     ]);
   
     // Adding headers to the data
-    const headers = ['Name', 'Branch', 'Course', 'Department'];
+    const headers = ['Name', 'Branch', 'Course', 'Department', 'Status'];
     data.unshift(headers);
   
     // Convert the data to Excel sheet
