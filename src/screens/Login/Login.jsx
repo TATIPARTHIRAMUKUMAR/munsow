@@ -19,22 +19,8 @@ import AdminLoginHero from "./../../assets/admin-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: 'row',
-  // justifyContent: 'flex-start',
-  // justifyContent: 'center',
   marginBottom: '30px',
 });
-
-// const StyledFormControlLabel = styled(FormControlLabel)({
-//   fontSize: "50px",
-//   '& .MuiSvgIcon-root': {
-//     color: '#4A90E2',
-//   },
-//   '& .MuiTypography-root': {
-//     color: '#333',
-//     fontSize: "20px",
-//     paddingRight: "30px"
-//   }
-// });
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => ({
   border: '2px solid',

@@ -42,7 +42,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  // border: "2px solid #000",
   borderRadius: "0.4rem",
   // boxShadow: 24,
   p: 4,
@@ -135,9 +134,6 @@ const StudentLogin = () => {
             </div>
             <h2 className="text-3xl font-semibold mb-2 text-white">Student Login</h2>
             <p className="mb-8 text-white">Enter Your Details Below To Login Into Your Account</p>
-            {/* <p className="text-base text-gray-600 mb-4">
-              Get personalized insights on your interview skills, strengths, and areas for improvement.
-            </p> */}
             <form onSubmit={handleSubmit}>
               <div>
                 <div className="space-y-4">
