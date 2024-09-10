@@ -14,7 +14,7 @@ import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mu
 import { styled } from "@mui/material/styles";
 import { useDarkMode } from "./../../Dark";
 import "./Login.css";
-import MunsowLogo from "./../../assets/munsow-logo-transparent.svg";
+import MunsowLogo from "./../../assets/Munsow-logo-Transparent.svg";
 import StudentLoginHero from "./../../assets/student-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
