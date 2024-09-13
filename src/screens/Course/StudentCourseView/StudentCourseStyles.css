@@ -75,13 +75,40 @@
   }
   
   /* Card counter styles */
-  .card-counters {
+  /* .card-counters {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
+  } */
+  .card-counters-container {
+    width: 100%;
+    overflow-x: auto; 
+    white-space: nowrap; 
   }
-  
+
+  .card-counters {
+    display: flex; 
+    gap: 10px; 
+    padding: 10px;
+  }
+  .card-counters-container::-webkit-scrollbar {
+    height: 8px!important;
+}
+
+.card-counters-container::-webkit-scrollbar-track {
+    background: #D5D5D5 !important;
+    border-radius: 12px;
+}
+
+.card-counters-container::-webkit-scrollbar-thumb {
+    background: #888 !important;
+}
+
+.card-counters-container::-webkit-scrollbar-thumb:hover {
+    background: #555 !important;
+}
+
   .counter-outer {
     display: inline-block;
     margin: 0 5px;

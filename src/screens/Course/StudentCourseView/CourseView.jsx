@@ -20,7 +20,8 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import "./StudentCourseStyles.css"
+import "./StudentCourseStyles.css";
+import noData from '../../../assets/NoData.jpeg';
 
 
 const StudentCourseView = () => {
@@ -37,6 +38,7 @@ const StudentCourseView = () => {
     const [openFlashcard, setOpenFlashcard] = useState(false);
     const [currentCard, setCurrentCard] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [cards, setCards] = useState(null);
 
     const linearGradientBackground = isDarkMode
         ? colorTheme.dark.selectBackground
@@ -74,13 +76,18 @@ const StudentCourseView = () => {
         setOpenFlashcard(false); 
     }
     
-    const [cards] = useState([
-        { id: 1, frontContent: "What is Robotics?", backContent: "Robotics is a field that combines engineering and technology to create machines called robots that can perform tasks in place of or to assist humans." },
-        { id: 2, frontContent: "What is Cloud Computing?", backContent: "Cloud computing is the delivery of computing services over the internet, or cloud. It allows users to access computing resources, such as storage, databases, networking, and software, on demand and pay for them as they use them." },
-        { id: 3, frontContent: "What is Database?", backContent: "A database is a collection of data that is organized and stored electronically, typically in a computer system. Databases can store any type of data, including numbers, words, images, videos, and files." },
-        { id: 4, frontContent: "What is Object Oriented Programming?", backContent: "Object-oriented programming (OOP) is a computer programming model that organizes software design around data, or objects, rather than functions and logic. An object can be defined as a data field that has unique attributes and behavior." },
-      ]);
+    //   const [cards] = useState([
+    //     { id: 1, frontContent: "What is Robotics?", backContent: "Robotics is a field that combines engineering and technology to create machines called robots that can perform tasks in place of or to assist humans." },
+    //     { id: 2, frontContent: "What is Cloud Computing?", backContent: "Cloud computing is the delivery of computing services over the internet, or cloud. It allows users to access computing resources, such as storage, databases, networking, and software, on demand and pay for them as they use them." },
+    //     { id: 3, frontContent: "What is Database?", backContent: "A database is a collection of data that is organized and stored electronically, typically in a computer system. Databases can store any type of data, including numbers, words, images, videos, and files." },
+    //     { id: 4, frontContent: "What is Object Oriented Programming?", backContent: "Object-oriented programming (OOP) is a computer programming model that organizes software design around data, or objects, rather than functions and logic. An object can be defined as a data field that has unique attributes and behavior." },
+    //   ]);
     
+    useEffect(() => {
+        const flashcardsData = detailedCourse?.flashcards;
+        setCards(flashcardsData || []);  
+    }, [detailedCourse]);
+
       const handleFlip = () => {
         setIsFlipped(!isFlipped);
       };
@@ -407,57 +414,69 @@ const StudentCourseView = () => {
                             aria-describedby="modal-modal-description"
                         >
                             <Box sx={style}>
-                                <div className="card-counters mb-5">
-                                    {cards.map((_, index) => (
-                                        <div
-                                            key={index}
-                                            className={`counter-outer ${currentCard === index ? 'active' : ''}`}
-                                            onClick={() => handleCardChange(index)}
-                                        >
-                                        <span className="counter-inner">{index + 1}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="gallery-container mb-5">
-                                    <div className="gallery-track">
-                                        <div
-                                            className={`slide-card ${isFlipped ? "flipped" : ""}`}
-                                            onClick={handleFlip}
-                                        >
-                                            <div className="flip-card-inner">
-                                                <div className="flip-card-front text-xl md:text-3xl font-bold">
-                                                    {cards[currentCard].frontContent}
+                                {cards && cards.length > 0 ? (
+                                <>
+                                    <div className="card-counters-container mb-5">
+                                        <div className="card-counters mb-2">
+                                            {cards?.map((_, index) => (
+                                                <div
+                                                    key={index}
+                                                    className={`counter-outer ${currentCard === index ? 'active' : ''}`}
+                                                    onClick={() => handleCardChange(index)}
+                                                >
+                                                <span className="counter-inner">{index + 1}</span>
                                                 </div>
-                                                <div className="flip-card-back text-xl font-bold">
-                                                    {cards[currentCard].backContent}
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="gallery-container mb-5">
+                                        <div className="gallery-track">
+                                            <div
+                                                className={`slide-card ${isFlipped ? "flipped" : ""}`}
+                                                onClick={handleFlip}
+                                            >
+                                                <div className="flip-card-inner">
+                                                    <div className="flip-card-front text-xl md:text-3xl font-bold">
+                                                        {cards?.[currentCard]?.question}
+                                                    </div>
+                                                    <div className="flip-card-back text-xl font-bold">
+                                                        {cards?.[currentCard]?.answer}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className='flex justify-between items-center gap-3 mb-5'>
-                                    <Button
-                                        variant="contained"
-                                        style={{backgroundColor: "#D5D5D5", color: textColor, borderRadius: '24px', textTransform: 'none', fontWeight: "bold", padding: "12px 28px" }}
-                                    >
-                                    I learned now
-                                    </Button>
-                                    <div className="navigation-buttons">
-                                        <button onClick={handlePrevCard} className="button-prev" disabled={currentCard === 0}>
-                                            chevron_left
-                                        </button>
-                                        <button onClick={handleNextCard} className="button-next" disabled={currentCard === cards.length - 1}>
-                                            chevron_right
-                                        </button>
+                                    <div className='flex justify-between items-center gap-3 mb-5'>
+                                        <Button
+                                            variant="contained"
+                                            style={{backgroundColor: "#D5D5D5", color: textColor, borderRadius: '24px', textTransform: 'none', fontWeight: "bold", padding: "12px 28px" }}
+                                        >
+                                        I learned now
+                                        </Button>
+                                        <div className="navigation-buttons">
+                                            <button onClick={handlePrevCard} className="button-prev" disabled={currentCard === 0}>
+                                                chevron_left
+                                            </button>
+                                            <button onClick={handleNextCard} className="button-next" disabled={currentCard === cards?.length - 1}>
+                                                chevron_right
+                                            </button>
+                                        </div>
+                                        <Button
+                                            variant="contained"
+                                            style={{backgroundColor: "#D5D5D5", color: textColor, borderRadius: '24px', textTransform: 'none', fontWeight: "bold", padding: "12px 28px" }}
+                                        >
+                                        I knew this
+                                        </Button>
                                     </div>
-                                    <Button
-                                        variant="contained"
-                                        style={{backgroundColor: "#D5D5D5", color: textColor, borderRadius: '24px', textTransform: 'none', fontWeight: "bold", padding: "12px 28px" }}
-                                    >
-                                    I knew this
-                                    </Button>
-                                </div>
-                                <h1 className='text-center'>Click on the card to flip it</h1>
+                                    <h1 className='text-center'>Click on the card to flip it</h1>
+                                </>
+                                ) : (
+                                    <div className='flex flex-col items-center'>
+                                        <img src={noData} alt='noData-img' style={{height:"300px"}}/>
+                                        <h2 className="text-center text-2xl font-bold text-red mt-5">"No flashcards found for the specified course."</h2>
+                                    </div>
+                                )}
                             </Box>
                         </Modal>
                     </div>
