@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, IconButton, Paper, InputAdornment } from '@mui/material';
+import { TextField, Button, IconButton, Paper, InputAdornment, FormControl, FormLabel, Radio, RadioGroup, FormControlLabel, } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -18,7 +18,8 @@ const CreateLink = () => {
         max_capacity: '',
         description: '',
         activation_date: '',
-        expiry_date: ''
+        expiry_date: '',
+        entity_type: ''
     });
     const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ const CreateLink = () => {
             [name]: name === 'max_capacity' ? parseInt(value, 10) || '' : value
         });
     };
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(createLink(linkData, () => {
@@ -128,6 +129,21 @@ const CreateLink = () => {
                             }}
                         />
                     </div>
+                    <div>
+                        <FormControl component="fieldset" className="mb-4">
+                            <FormLabel component="legend" className="text-lg font-bold text-gray-700">Select Entity Type</FormLabel>
+                            <RadioGroup
+                                
+                                name="entity_type"                
+                                onChange={handleChange}
+                                className="mt-2 flex flex-col"
+                            >
+                                <FormControlLabel value="institution" control={<Radio style={{ color: '#2BE2D0' }} />} label="I am Institution" />
+                                <FormControlLabel value="corporate" control={<Radio style={{ color: '#2BE2D0' }} />} label="I am Corporate/Others" />
+                            </RadioGroup>
+                        </FormControl>              
+                    </div>
+                    
                     <Button
                         type="submit"
                         fullWidth

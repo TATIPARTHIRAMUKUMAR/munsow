@@ -13,6 +13,7 @@ import { Step, StepLabel, Stepper } from '@mui/material';
 import { useDarkMode } from "./../../Dark";
 import './Practice.css';
 import { Height } from "@mui/icons-material";
+import GLOBAL_CONSTANTS from "../../../GlobalConstants";
 
 let mediaRecorder;
 
@@ -194,7 +195,11 @@ export default function NewGridLayout({ questions }) {
           dispatch(submit_interview(payload, (resp) => {
             console.log("result-resp", resp)
             if (interviewCompleted) {
-              window.location.href = "./report";
+              if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
+                window.location.href = "./studentDashboardScreening";
+              }else{
+                window.location.href = "./report";
+              }
             }
           }));
 
@@ -215,6 +220,59 @@ export default function NewGridLayout({ questions }) {
     }
   }
 
+  //WORKING CODE FOR CHROME 
+  // const speakOut = (text) => {
+  //   if (
+  //     "speechSynthesis" in window &&
+  //     isSpeakerOn &&
+  //     !spokenQuestions.includes(text)
+  //   ) {
+  //     let allVoices = window.speechSynthesis.getVoices();
+  //     // console.log(window.speechSynthesis.getVoices());
+  //     if (!allVoices.length) {
+  //       window.speechSynthesis.onvoiceschanged = function () {
+  //         allVoices = window.speechSynthesis.getVoices();
+  //         let femaleVoice = allVoices.find((voice) => voice.name === "Google हिन्दी" && voice.lang === "hi-IN");
+
+  //         // fallback to en-GB 
+  //         if (!femaleVoice) {
+  //           femaleVoice = allVoices.find((voice) => voice.lang === "en-GB" && /female/i.test(voice.name));
+  //         }
+  //         // If not found, fallback to Tessa (available in Safari)
+  //         if (!femaleVoice) {
+  //           femaleVoice = allVoices.find((voice) => voice.name === "Tessa" && voice.lang === "en-US");
+  //         }
+
+  //       speak(text, femaleVoice || allVoices[0]);
+  //       };
+  //       window.speechSynthesis.getVoices();
+  //     } else {
+  //       let femaleVoice = allVoices.find((voice) => voice.name === "Google हिन्दी" && voice.lang === "hi-IN");
+
+  //       // fallback to en-GB 
+  //       if (!femaleVoice) {
+  //         femaleVoice = allVoices.find((voice) => voice.lang === "en-GB" && /female/i.test(voice.name));
+  //       }
+  //       // If not found, fallback to Tessa (available in Safari)
+  //       if (!femaleVoice) {
+  //         femaleVoice = allVoices.find((voice) => voice.name === "Tessa" && voice.lang === "en-US");
+  //       }
+
+  //       speak(text, femaleVoice || allVoices[0]);
+  //     }
+  //   }
+  // };
+
+  // const speak = (text, voice) => {
+  //   const utterance = new SpeechSynthesisUtterance(text);
+  //   if (voice) {
+  //     utterance.voice = voice;
+  //   }
+  //   window.speechSynthesis.speak(utterance);
+  //   setSpokenQuestions((prev) => [...prev, text]);
+  // };
+
+  //WORKING CODE FOR CHROME AND SAFARI
   const speakOut = (text) => {
     if (
       "speechSynthesis" in window &&
@@ -222,28 +280,51 @@ export default function NewGridLayout({ questions }) {
       !spokenQuestions.includes(text)
     ) {
       let allVoices = window.speechSynthesis.getVoices();
+      
       if (!allVoices.length) {
+        // Safari may not have voices available immediately
         window.speechSynthesis.onvoiceschanged = function () {
           allVoices = window.speechSynthesis.getVoices();
-          const femaleVoice = allVoices.find((voice) => /female/i.test(voice.name));
-          speak(text, femaleVoice);
+          handleSpeak(text, allVoices);
         };
-        window.speechSynthesis.getVoices();
+        window.speechSynthesis.getVoices(); // Trigger loading of voices
       } else {
-        const femaleVoice = allVoices.find((voice) => /female/i.test(voice.name));
-        speak(text, femaleVoice);
+        handleSpeak(text, allVoices); // Voices are already loaded in Chrome
       }
     }
   };
+  
+  const handleSpeak = (text, allVoices) => {
+    let femaleVoice = allVoices.find((voice) => voice.name === "Google हिन्दी" && voice.lang === "hi-IN");
+  
+    // fallback to en-GB (typically available)
+    if (!femaleVoice) {
+      femaleVoice = allVoices.find((voice) => voice.lang === "en-GB" && /female/i.test(voice.name));
+    }
+  
+    // Fallback to Tessa (commonly available on Safari for en-US)
+    if (!femaleVoice) {
+      femaleVoice = allVoices.find((voice) => voice.name === "Tessa" && voice.lang === "en-US");
+    }
 
+
+  // Log the selected voice for debugging
+  console.log('Selected voice:', femaleVoice ? femaleVoice.name : 'None');
+  
+    // Fallback to any first voice if no match is found
+    speak(text, femaleVoice || allVoices[0]);
+  };
+  
   const speak = (text, voice) => {
     const utterance = new SpeechSynthesisUtterance(text);
     if (voice) {
       utterance.voice = voice;
+      utterance.voiceURI = voice.voiceURI;
     }
     window.speechSynthesis.speak(utterance);
     setSpokenQuestions((prev) => [...prev, text]);
   };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -452,7 +533,7 @@ export default function NewGridLayout({ questions }) {
                             </button>
                             <button
                               type="button"
-                              className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                              className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                               onClick={() => setShowConfirmationPopup(false)}
                             >
                               Cancel
