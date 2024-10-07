@@ -10,6 +10,7 @@ import {
   loadInstitutionList,
   screeining_user_signup,
   user_signup,
+  loadLinks,
 } from "../../redux/action";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -23,6 +24,8 @@ const ScreeningUserRegister = () => {
 
   const [mainData, setMainData] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
+  const [entityType, setEntityType] = useState(""); 
+  const { linksList } = useSelector((state) => state?.data);
 
   const userFeilds = [
     {
@@ -74,26 +77,51 @@ const ScreeningUserRegister = () => {
     //   type: "text",
     //   required:true,
     // },
+    // {
+    //   label: "Branch",
+    //   key: "branch",
+    //   value: mainData?.branch ?? "",
+    //   type: "text",
+    //   required:true
+    // },
+    // {
+    //   label: "Course",
+    //   key: "course",
+    //   value: mainData?.course ?? "",
+    //   type: "text",
+    //   required:true,
+    // },
+    // {
+    //   label: "Department",
+    //   key: "department",
+    //   value: mainData?.department ?? "",
+    //   required:true,
+    //   type: "text"
+    // },
+  ];
+
+  // Fields for Institution users
+  const institutionFields = [
     {
       label: "Branch",
       key: "branch",
       value: mainData?.branch ?? "",
       type: "text",
-      required:true
+      required: entityType === "institution",
     },
     {
       label: "Course",
       key: "course",
       value: mainData?.course ?? "",
       type: "text",
-      required:true,
+      required: entityType === "institution",
     },
     {
       label: "Department",
       key: "department",
       value: mainData?.department ?? "",
-      required:true,
-      type: "text"
+      required: entityType === "institution",
+      type: "text",
     },
   ];
 
@@ -170,25 +198,41 @@ const ScreeningUserRegister = () => {
     // dispatch(loadCourseList());
     // dispatch(loadDepartmentList());
     dispatch(loadInstitutionList());
+    dispatch(loadLinks());
   }, [dispatch]);
 
+  // Set entityType based on the link from linksList
+  useEffect(() => {
+    if (linksList && id) {
+      const selectedLink = linksList.find((link) => link.unique_code === id);
+      if (selectedLink) {
+        setEntityType(selectedLink.entity_type); // Set entityType based on the selected link
+      }
+    }
+  }, [linksList, id]);
+  
   const onHandleCreate = () => {
     const payload = {
       first_name: mainData?.first_name,
       last_name: mainData?.last_name,
       email: mainData?.email,
       phone_number: mainData?.mobile_number,
-      branch_name: mainData?.branch,
-      department_name: mainData?.department,
+      // branch_name: mainData?.branch,
+      // department_name: mainData?.department,
       address: mainData?.address,
       unique_code: id,
       password: mainData?.password,
-      course_name: mainData?.course,
+      // course_name: mainData?.course,
+      // Pass null values for branch, department, and course if entityType is corporate
+      branch_name: entityType === "corporate" ? "Not Required" : mainData?.branch,
+      department_name: entityType === "corporate" ? "Not Required" : mainData?.department,
+      course_name: entityType === "corporate" ? "Not Required" : mainData?.course,
     };
+
     dispatch(screeining_user_signup(payload, (test) => {
       setMainData({});
       console.log("test", test);
-      navigate("../studentLogin", { replace: true });
+      navigate("../", { replace: true });
     }));
 
   };
@@ -200,101 +244,54 @@ const ScreeningUserRegister = () => {
     setIsFormValid(isValid);
   }, [mainData]);
 
-  return (
-    <div
-      className="p-4 bg-[#f5f5f5] h-[100vh] flex flex-col justify-center  items-center"
-      style={{ backdropFilter: "" }}
-    >
-      <div className="bg-white  flex flex-col justify-center p-4 rounded-xl shadow-2xl min-w-[70%] max-w-[80%]">
+   return (
+    <div className="p-4 bg-[#f5f5f5] h-[100vh] flex flex-col justify-center items-center">
+      <div className="bg-white flex flex-col justify-center p-4 rounded-xl shadow-2xl min-w-[70%] max-w-[80%]">
         <div className="p-4 font-medium text-2xl">
           {" "}
-          Student Registration Form{" "}
+          Screening User Registration Form{" "}
         </div>
         <div className="grid grid-cols-2 gap-8 bg-white p-4">
           {userFeilds?.map((o) => (
-            <>
-              {o?.type === "select" ? (
-                <>
-                  <Autocomplete
-                    size="small"
-                    fullWidth
-                    disablePortal
-                    value={o?.value || null}  
-                    // value={o?.value}
-                    defaultValue={o?.value}
-                    id="combo-box-demo"
-                    options={o?.options ?? []}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={(
-                          <div>
-                            {o?.label}
-                            {o?.required && (
-                              <span style={{ color: 'red' }}>*</span>
-                            )}
-                          </div>
-                        )}
-                        InputProps={{
-                          ...params.InputProps,
-                          style: {
-                            borderRadius: "0.4rem",
-                          },
-                        }}
-                      />
-                    )}
-                    onChange={(e, value) => {
-                      handleInputChange(o?.key, value);
-                    }}
-                    onClickCapture={(e, value) => {
-                      handleSelectionError(o?.key, value);
-                    }}
-                  />
-                </>
-              ) : (
-                <TextField
-                  key={o?.key}
-                  type={o?.type}
-                  label={(
-                    <div>
-                      {o?.label}
-                      {o?.required && (
-                        <span style={{ color: 'red' }}>*</span>
-                      )}
-                    </div>
-                  )}
-                  value={o?.value}
-                  size="small"
-                  onChange={(e) => {
-                    handleInputChange(o?.key, e.target.value);
-                  }}
-                  InputProps={{
-                    style: {
-                      borderRadius: "0.4rem",
-                    },
-                  }}
-
-                />
-              )}
-            </>
+            <TextField
+              key={o?.key}
+              type={o?.type}
+              label={o?.label}
+              value={o?.value}
+              size="small"
+              onChange={(e) => handleInputChange(o?.key, e.target.value)}
+              InputProps={{
+                style: {
+                  borderRadius: "0.4rem",
+                },
+              }}
+            />
           ))}
+
+          {/* Conditionally render the fields for institution */}
+          {entityType === "institution" &&
+            institutionFields?.map((o) => (
+              <TextField
+                key={o?.key}
+                type={o?.type}
+                label={o?.label}
+                value={o?.value}
+                size="small"
+                onChange={(e) => handleInputChange(o?.key, e.target.value)}
+                InputProps={{
+                  style: {
+                    borderRadius: "0.4rem",
+                  },
+                }}
+              />
+            ))}
         </div>
+
         <div className="flex justify-end gap-6 p-4">
-          <Button
-            variant="outlined"
-            onClick={() => {
-              navigate(-1)
-            }}
-          >
+          <Button variant="outlined" onClick={() => navigate(-1)}>
             Back
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              onHandleCreate();
-            }}
-            disabled={!isFormValid}
-          >
+          <Button variant="contained" onClick={onHandleCreate} disabled={!isFormValid}>
             Register
           </Button>
         </div>

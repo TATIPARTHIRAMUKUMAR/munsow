@@ -18,7 +18,7 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Audio_Video from "../../Components/Audio_Video";
 import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
@@ -57,6 +57,9 @@ const QontoConnector = styled(StepConnector)(({ theme, linearGradientBackground 
 const StepperComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { entity_type } = location.state || {};  // Access the entity_type from state
+
   const [steps] = useState([
     { title: "Step 1" },
     // { title: "Role Specific" },
@@ -324,10 +327,169 @@ const StepperComponent = () => {
         <div className="flex  p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
           
           {currentStep === 0 && (
-            <div className="grid grid-cols-2 grid-rows-2 gap-8 h-auto p-8">
+            <>
+
+            {/* Render based on the entity_type */}
+            {entity_type === "institution" ? (
+              <div>
+                <div
+                className={`bg-${selectedCategory === "skills" ? "gray-200" : "gray-100"
+                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
+                onClick={() => {
+                  setSelectedCategory("skills");
+                  setSelectedRole(null);
+                  setSelectedCompany(null);
+                  setJdcompany("");
+                  setJdrole("");
+                  setCultcompany("");
+                  setCultrole("");
+                }}
+              >
+                <div className="flex relative overflow-auto ">
+                  <input
+                    type="radio"
+                    name="selectionCategory"
+                    value="skills"
+                    checked={selectedCategory === "skills"}
+                    onChange={() => setSelectedCategory("skills")}
+                    className="p-1 m-2 relative overflow-auto"
+                    style={{
+                      color: linearGradientBackground,
+                      outlineColor: linearGradientBackground
+                    }}
+                  />
+                  <h2
+                    className="relative overflow-auto"
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "600",
+                      marginBottom: "0.5rem",
+                      color: grayColors,
+                    }}
+                  >
+                    Skill Specific
+                  </h2>
+                </div>
+                <div
+                  className={
+                    selectedCategory !== "skills"
+                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
+
+                  }
+                >
+                  <label className="flex items-center space-x-2 my-3 relative overflow-auto">
+
+                    <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
+                  </label>
+                  <MutiSelect
+                    options={hardSkillsList?.map((o) => {
+                      return {
+                        label: o.name,
+                        id: o.id,
+                      };
+                    })}
+                    label="Hard Skills"
+                    selectedItems={selectedHardskill}
+                    onSelectionChange={setSelectedHardskill}
+                  />
+                  <div>
+                    <label className="flex items-center space-x-2 my-3">
+                      <span className="font-bold pr-2">Soft Skills</span>
+                    </label>
+                    <MutiSelect
+                      options={(softSkillsList || []).map((o) => ({
+                        label: o.name,
+                        id: o.id,
+                      }))}
+                      // onSelectionChange={(e) => testselection(e)}
+                      selectedItems={selectedSoftskill}
+                      onSelectionChange={setSelectedSoftskill}
+                      label="Soft Skills"
+                    />
+                  </div>
+                </div>
+                </div>
+              </div>
+            ) : entity_type === "corporate" ? (
+              <div>
+                <div
+                className={`bg-${selectedCategory === "jd" ? "gray-200" : "gray-100"
+                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
+                onClick={() => {
+                  setSelectedCategory("jd");
+                  setSelectedRole(null);
+                  setSelectedCompany(null);
+                  setSelectedSoftskill(null);
+                  setSelectedHardskill(null);
+
+                  setCultcompany("");
+                  setCultrole("");
+                }}
+              >
+                <div className="flex relative overflow-auto ">
+                  <input
+                    type="radio"
+                    name="selectionCategory"
+                    value="jd"
+                    checked={selectedCategory === "jd"}
+                    onChange={() => setSelectedCategory("jd")}
+                    className="p-1 m-2 relative overflow-auto"
+                    style={{
+                      color: linearGradientBackground,
+                      outlineColor: linearGradientBackground
+                    }}
+                  />
+                  <h2
+                    className="relative overflow-auto"
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "600",
+                      marginBottom: "0.5rem",
+                      color: grayColors,
+                    }}
+                  >
+                    Job Description Specific
+                  </h2>
+                </div>
+                <div
+                  className={
+                    selectedCategory !== "jd"
+                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
+                  }
+                >
+                  <div className="my-3">
+                    <label className="font-bold block mb-2">
+                      Company Name:
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter company name"
+                      className="w-full p-2 border border-gray-300 rounded"
+                      onChange={e => setJdcompany(e.target.value)}
+                      value={jdcompany}
+                    />
+                  </div>
+                  <div className="my-3">
+                    <label className="font-bold block mb-2">
+                      Role:
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter role"
+                      className="w-full p-2 border border-gray-300 rounded"
+                      onChange={e => setJdrole(e.target.value)}
+                      value={jdrole}
+                    />
+                  </div>
+                </div>
+                </div>
+              </div>
+            ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-auto p-2 md:p-8">
+
               <div
                 className={`bg-${selectedCategory === "skills" ? "gray-200" : "gray-100"
-                  } p-7 rounded-xl  text-right ml-auto`}
+                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
                 onClick={() => {
                   setSelectedCategory("skills");
                   setSelectedRole(null);
@@ -403,10 +565,9 @@ const StepperComponent = () => {
                 </div>
               </div>
 
-
               <div
                 className={`bg-${selectedCategory === "role" ? "gray-300" : "gray-100"
-                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
+                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
                 onClick={() => {
                   setSelectedCategory("role");
                   setSelectedSoftskill(null);
@@ -513,7 +674,7 @@ const StepperComponent = () => {
 
               <div
                 className={`bg-${selectedCategory === "jd" ? "gray-200" : "gray-100"
-                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
+                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
                 onClick={() => {
                   setSelectedCategory("jd");
                   setSelectedRole(null);
@@ -583,10 +744,9 @@ const StepperComponent = () => {
                 </div>
               </div>
 
-
               <div
                 className={`bg-${selectedCategory === "cult" ? "gray-200" : "gray-100"
-                  } p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
+                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
                 onClick={() => {
                   setSelectedCategory("cult");
                   setSelectedRole(null);
@@ -656,8 +816,9 @@ const StepperComponent = () => {
                 </div>
               </div>
 
-
             </div>
+            )}
+            </>
           )}
 
           {currentStep === 1 && (

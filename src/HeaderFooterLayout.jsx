@@ -233,12 +233,13 @@ export default function HeaderFooterLayout({ Component }) {
               icon: <FaChalkboardTeacher size={20} className="" />,
               route: "/teachersList",
             },
-            {
-              label: "Screening Users",
-              icon: <FaChalkboardTeacher size={20} className="" />,
-              route: "/screeningUsers",
-            },
           ],
+        },
+        {
+          label: "Screening Users",
+          icon: <FaChalkboardTeacher size={20} className="" />,
+          route: "/screeningUsers",
+          subItems: [],
         },
         {
           label: "Configurations",

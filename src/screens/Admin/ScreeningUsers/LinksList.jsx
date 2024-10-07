@@ -13,6 +13,8 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import TablePagination from '@mui/material/TablePagination';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import GLOBAL_CONSTANTS from '../../../../GlobalConstants';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const LinksList = () => {
 
@@ -50,7 +52,7 @@ const LinksList = () => {
   const [screeningUsers, setScreeningUsers] = useState(null);
   const { linksList } = useSelector((state) => state?.data)
 
-
+  const navigate = useNavigate();
 
 
   const handleClickOpen = async (item) => {
@@ -102,7 +104,7 @@ const LinksList = () => {
 
   const [copiedRows, setCopiedRows] = useState({});
 
-  const handleCopyToClipboard = (text, rowId) => {
+  const handleCopyToClipboard = (text, rowId, uniqueCode) => {
     navigator.clipboard.writeText(text);
     setCopiedRows(prevState => ({ ...prevState, [rowId]: true }));
     setTimeout(() => {
@@ -110,46 +112,23 @@ const LinksList = () => {
     }, 10000);
   };
 
-  console.log(linksList, "listt")
+  // console.log(linksList, "listt")
   const LinksCount = linksList ? linksList.length : 0;
-  console.log(LinksCount, 'LinksCount')
-
-
-  // const exportToExcel = () => {
-  //   const table = document.getElementById('links-list-table');
-
-  //   // Create a copy of the table data
-  //   const copiedTableData = Array.from(table.rows).map(row =>
-  //     Array.from(row.cells).map(cell => cell.textContent)
-  //   );
-
-  //   // Remove the last column from the copied table data
-  //   const modifiedTableData = copiedTableData.map(row => row.slice(0, -1));
-
-  //   // Convert the modified table data to Excel sheet
-  //   const worksheet = XLSX.utils.aoa_to_sheet(modifiedTableData);
-
-  //   // Create workbook and append the worksheet
-  //   const workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'LinksList');
-
-  //   // Save the workbook as an Excel file
-  //   XLSX.writeFile(workbook, 'LinksList.xlsx');
-  // };
 
   const exportToExcel = () => {
     // Extracting data from the linksList array
-    const data = linksList.map(row => [
+    const data = linksList?.map(row => [
       row.name,
       row.description,
       row.max_capacity,
       new Date(row.activation_date).toLocaleDateString(),
       new Date(row.expiry_date).toLocaleDateString(),
-      row.is_active ? "Active" : "Inactive"
+      row.is_active ? "Active" : "Inactive",
+      `https://munsow.vercel.app/studentRegistration/${row.unique_code}`,
     ]);
 
     // Adding headers to the data
-    const headers = ['Name', 'Description', 'Max Capacity', 'Activation Date', 'Expiry Date', 'Status'];
+    const headers = ['Name', 'Description', 'Max Capacity', 'Activation Date', 'Expiry Date', 'Status', 'Link'];
     data.unshift(headers);
 
     // Convert the data to Excel sheet
@@ -163,22 +142,41 @@ const LinksList = () => {
     XLSX.writeFile(workbook, 'LinksList.xlsx');
   };
 
+  const exportDetailsToExcel = () => {
+    const data = screeningUsers?.data?.map(row => [
+      row.name,
+      row.email,
+      row.phone_number,
+      row.address,
+      row.branch_name,
+      row.course_name,
+      row.department_name,
+      row.avg_score,
+    ]);
+
+    const headers = ['Name', 'Email', 'Phone Number', 'Address', 'Branch Name', 'Course Name', 'Department Name', 'Average Score'];
+    data.unshift(headers);
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'LinkUsersDetails');
+    XLSX.writeFile(workbook, 'LinkUsersDetails.xlsx');
+  };
+
 
   return (
     <div className="p-6">
-
-      <div className="flex flex-row justify-between items-center mb-2">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-3 md:gap-0 mt-3 mb-8">
         <span className="text-2xl font-semibold">Generated Links List</span>
         {/* <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded">
           Export as Excel
         </button> */}
-        <div>
+        <div className='flex flex-col md:flex-row gap-3 md:gap-6'>
           <Button
             variant="contained"
             color="primary"
             style={{ background: '#2BE2D0', color: "#252525" }}
             onClick={exportToExcel}
-            className="top-0 right-0 m-4"
+            className="top-0 right-0"
           >
             Export as Excel
 
@@ -191,7 +189,7 @@ const LinksList = () => {
             color="primary"
             style={{ background: '#2BE2D0', color: "#252525" }}
             onClick={handleCreateLink}
-            className="top-0 right-0 m-4"
+            className="top-0 right-0"
           >
             Create Link
           </Button>
@@ -210,10 +208,11 @@ const LinksList = () => {
               <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Expiry Date</TableCell>
               <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Status</TableCell>
               <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Get Link</TableCell>
+              <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Details</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {linksList.length > 0 ? (
+            {linksList?.length > 0 ? (
               linksList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
@@ -243,16 +242,24 @@ const LinksList = () => {
                     <TableCell>
                       Copy
                       <Tooltip title={copiedRows[row.id] ? "Copied!" : "Copy to clipboard"}>
-                        <IconButton onClick={() => handleCopyToClipboard(`https://munsow.vercel.app/studentRegistration/${row.unique_code}`, row.id)}>
+                        <IconButton onClick={() => handleCopyToClipboard(`https://munsow.vercel.app/studentRegistration/${row.unique_code}`, row.id, row.unique_code)}>
                           {copiedRows[row.id] ? <FileCopyIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
                         </IconButton>
+                        {/* <IconButton onClick={() => navigate(`/studentRegistration/${row.unique_code}`, row.id)}>
+                          {copiedRows[row.id] ? <FileCopyIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
+                        </IconButton> */}
                       </Tooltip>
+                    </TableCell>
+                    <TableCell className="cursor-pointer text-blue-600 hover:text-blue-800" onClick={() => handleClickOpen(row)}>
+                      <IconButton >
+                          {open ? <VisibilityOffIcon sx={{ fontSize: 30 }} /> : <VisibilityIcon sx={{ fontSize: 30 }} />}
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} align="center">
+                <TableCell colSpan={8} align="center">
                   No data to show here yet.
                 </TableCell>
               </TableRow>
@@ -275,11 +282,26 @@ const LinksList = () => {
             BackdropProps={{ style: { backgroundColor: 'rgba(0, 0, 0, 0.7)' } }} 
 
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold">Link : <span style={{ color: "#2BE2D0" }}>{selectedItem?.name}</span> Users</h2>
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border-b border-gray-200">
+          <div>
+            <h2 className="text-lg font-semibold">Link : <span style={{ color: "#2BE2D0" }}>{selectedItem?.name}</span> Users</h2>       
+          </div>
+          <div className='flex items-center gap-10'>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ background: '#2BE2D0', color: "#252525" }}
+              onClick={exportDetailsToExcel}
+              className="top-0 right-0 my-0"
+            >
+              Export as Excel
+              <DownloadForOfflineIcon fontSize="medium" style={{ marginLeft: "4px" }} />
+            </Button>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+          
         </div>
         <div className="p-4">
           <TableContainer component={Paper} >
@@ -291,9 +313,14 @@ const LinksList = () => {
                   <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Email</TableCell>
                   <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Phone Number</TableCell>
                   <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Address</TableCell>
-                  <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Branch Name</TableCell>
-                  <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Course Name</TableCell>
-                  <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Department Name</TableCell>
+                  {/* Conditionally render Branch, Course, and Department fields based on entityType */}
+                  {selectedItem?.entity_type === 'institution' && (
+                    <>
+                      <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Branch Name</TableCell>
+                      <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Course Name</TableCell>
+                      <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Department Name</TableCell>
+                    </>
+                  )}                 
                   <TableCell style={{ fontWeight: "bold", backgroundColor: '#F0F0F0', color: 'black' }}>Average Score</TableCell>
 
                 </TableRow>
@@ -307,9 +334,14 @@ const LinksList = () => {
                     <TableCell >{row.email}</TableCell>
                     <TableCell >{row.phone_number}</TableCell>
                     <TableCell >{row.address}</TableCell>
-                    <TableCell >{row.branch_name}</TableCell>
-                    <TableCell >{row.course_name}</TableCell>
-                    <TableCell >{row.department_name}</TableCell>
+                    {/* Conditionally render Branch, Course, and Department data based on entityType */}
+                    {selectedItem?.entity_type === 'institution' && (
+                      <>
+                        <TableCell >{row.branch_name}</TableCell>
+                        <TableCell >{row.course_name}</TableCell>
+                        <TableCell >{row.department_name}</TableCell>
+                      </>
+                    )}
                     <TableCell >{row.avg_score}</TableCell>
 
                   </TableRow>
