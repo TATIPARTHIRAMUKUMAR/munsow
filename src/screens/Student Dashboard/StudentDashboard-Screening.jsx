@@ -9,7 +9,7 @@ export default function StudentDashboardScreenig() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isDarkMode, colorTheme } = useDarkMode();
-  const { colorTheme: reduxColorTheme,userStats } = useSelector((state) => state?.data);
+  const { colorTheme: reduxColorTheme, userStats } = useSelector((state) => state?.data);
 
   const linearGradientBackground = isDarkMode
     ? reduxColorTheme.dark.selectBackground
@@ -25,13 +25,28 @@ export default function StudentDashboardScreenig() {
     dispatch(loadUserStats());
   }, []);
 
+  // const navigateUser = () => {
+  //   if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
+  //     dispatch(interviewAllowed(1, (resp) => {
+  //       if (resp) {
+  //         navigate("/practice");
+  //       }
+  //     }));
+  //   } else {
+  //     navigate("/practice");
+  //   }
+  // };
+
   const navigateUser = () => {
     if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
-      dispatch(interviewAllowed(1, (resp) => {
-        if (resp) {
-          navigate("/practice");
-        }
-      }));
+      const entityType = userStats?.entity_type;
+      if (entityType) {
+        dispatch(interviewAllowed(1, (resp) => {
+          if (resp) {
+            navigate("/practice", { state: { entity_type: entityType } });
+          }
+        }));
+      }
     } else {
       navigate("/practice");
     }
@@ -47,7 +62,7 @@ export default function StudentDashboardScreenig() {
                 Hello {GLOBAL_CONSTANTS?.user_cred?.first_name} {GLOBAL_CONSTANTS?.user_cred?.last_name} !!!
               </div>
               <p className="text-lg py-3" style={{ color: textColor }}>
-                Are you ready for your next interview?
+                Are you ready for your interview?
               </p>
               <div className="flex space-x-4 pt-5 overflow-auto flex-col sm:flex-row">
                 <button className="mb-4 sm:mb-0 ml-4 sm:ml-0" style={{
@@ -60,7 +75,7 @@ export default function StudentDashboardScreenig() {
                   borderRadius: "8px",
                   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
                 }} onClick={navigateUser}>
-                  Practice Now
+                  Start Screening
                 </button>
               </div>
             </div>

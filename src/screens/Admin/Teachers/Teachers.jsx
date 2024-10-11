@@ -75,6 +75,12 @@ const columns = [
     numeric: false,
   },
   {
+    label: "Status",
+    id: "status",
+    cellRenderer: ActionButtonCellRenderer,
+    flex: 1,
+  },
+  {
     id: 'action',
     label: 'Actions',
     // minWidth: 170,
@@ -178,10 +184,11 @@ const Teachers = () => {
       row.branch_name,
       row.course_name,
       row.department_name,
+      row.is_active,
     ]);
   
     // Adding headers to the data
-    const headers = ['Name', 'Branch', 'Course', 'Department'];
+    const headers = ['Name', 'Branch', 'Course', 'Department', 'Status'];
     data.unshift(headers);
   
     // Convert the data to Excel sheet
@@ -236,14 +243,10 @@ const Teachers = () => {
                       <TableCell>{row.branch_name}</TableCell>
                       <TableCell>{row.course_name}</TableCell>
                       <TableCell>{row.department_name}</TableCell>
+                      <TableCell>
+                        <ActionButtonCellRenderer deleteHandler={deleteHandler} node={{ data: row }} />
+                      </TableCell>
                       <TableCell padding="none">
-                        {/* <Tooltip title="Edit">
-                    <IconButton onClick={() => handleOpenEdit(row)}>
-                        <EditIcon sx={{ color: '#006db5' }} />
-                        
-                    </IconButton>
-                </Tooltip>
-                 */}
                         <Stack direction="row" spacing={0}>
                           <EditTeachersModal
                             teacherId={index}

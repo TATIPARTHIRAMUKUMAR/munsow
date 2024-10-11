@@ -791,7 +791,8 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="lg:w-4/12 pr-4">
+          {/* Temporary commented charts, not to be removed */}
+          {/* <div className="lg:w-4/12 pr-4">
             <div className={classNames("p-4 mb-4")}>
               <div className="mb-6">
                 <span className="text-lg font-normal">Department wise Improvement Rate</span>
@@ -813,9 +814,9 @@ const AdminDashboard = () => {
                 </ResponsiveContainer>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="lg:w-4/12 pr-4">
+          {/* <div className="lg:w-4/12 pr-4">
             <div className={classNames("p-4 mb-4")}>
               <div className="mb-6">
                 <span className="text-lg font-normal">Critical Improvement Areas</span>
@@ -848,7 +849,8 @@ const AdminDashboard = () => {
                 </ResponsiveContainer>
               </div>
             </div>
-          </div>
+          </div> */}
+
         </div>
 
         <Dialog open={barChartFullScreen} onClose={handleCloseFullScreen} fullScreen>

@@ -29,7 +29,8 @@ const StudentCourseView = () => {
     const { isDarkMode } = useDarkMode();
     const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
     const [currentSubtopicIndex, setCurrentSubtopicIndex] = useState(0);
-
+    const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+    
     const linearGradientBackground = isDarkMode
         ? colorTheme.dark.selectBackground
         : colorTheme.light.selectBackground;
@@ -52,11 +53,11 @@ const StudentCourseView = () => {
     useEffect(() => {
         const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic?.subtopics).find(subtopic => !subtopic?.completed);
         setSelectedSubtopic(firstUncompletedSubtopic);
-        handleSpeak(firstUncompletedSubtopic?.content);
+        // handleSpeak(firstUncompletedSubtopic?.content);
     }, [detailedCourse]);
 
     useEffect(() => {
-        handleSpeak(selectedSubtopic?.content);
+        // handleSpeak(selectedSubtopic?.content);
     }, [selectedSubtopic]);
 
     useEffect(() => {
@@ -73,49 +74,109 @@ const StudentCourseView = () => {
         return unlisten;
     }, [navigate]);
 
+    const ensureVoicesLoaded = (callback) => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length !== 0) {
+            callback(); // Voices are loaded, proceed with the callback
+        } else {
+            window.speechSynthesis.onvoiceschanged = () => {
+                callback(); // Voices are loaded after the event
+            };
+        }
+    };
+    
+
+    const parseHTMLContent = (htmlString) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlString, 'text/html');
+        const textContent = doc.body.textContent || ""; // Get text content from the HTML
+        return textContent.split(' '); // Split the text into words
+    };
+
     const handleSpeak = (text) => {
         const description = text || selectedSubtopic?.content;
         if (description) {
-            // Cancel any ongoing speech synthesis
-            window.speechSynthesis.cancel();
-
-            const sanitizedDescription = description.replace(/<[^>]*>/g, '');
-            const chunks = sanitizedDescription.match(/.{1,200}/g) || [];
-
-            let chunkIndex = 0;
-
-            const speakNextChunk = () => {
-                if (chunkIndex < chunks.length) {
-                    const chunk = chunks[chunkIndex++];
-                    const utterance = new SpeechSynthesisUtterance(chunk);
-                    utterance.rate = 1.0;
-                    setVoiceAndSpeak(utterance);
-                    utterance.onend = speakNextChunk;
-
-                    latestUtteranceRef.current = utterance;
-                } else {
+            ensureVoicesLoaded(() => {
+                // Cancel any ongoing speech synthesis
+                window.speechSynthesis.cancel();
+    
+                const parsedWords = parseHTMLContent(description); // Parse HTML and get words
+                setCurrentWordIndex(0); // Reset word index for highlighting
+    
+                const utterance = new SpeechSynthesisUtterance(parsedWords.join(' ')); // Speak the whole content fluently
+                utterance.rate = 1.0; // Set speech rate
+    
+                // Event listener to detect word boundaries and update the index for highlighting
+                utterance.addEventListener('boundary', (event) => {
+                    if (event.name === 'word') {
+                        const charIndex = event.charIndex; // Character index where the word starts
+                        const currentWordIndex = utterance.text.substring(0, charIndex).split(' ').length - 1;
+                        setCurrentWordIndex(currentWordIndex); // Update the current word index to trigger the highlight
+                    }
+                });
+    
+                // Once speaking starts, set `isSpeaking` to true
+                utterance.onstart = () => {
+                    setIsSpeaking(true);
+                };
+    
+                // Once speaking ends, reset the state
+                utterance.onend = () => {
                     setIsSpeaking(false);
-                    setSpokenContent('');
-                }
-            };
-
-            const setVoiceAndSpeak = (utterance) => {
-                const voices = window.speechSynthesis.getVoices();
-                const femaleVoice = voices.find(voice => voice.gender === 'female' || voice.name.toLowerCase().includes('female'));
-                if (femaleVoice) {
-                    utterance.voice = femaleVoice;
-                } else {
-                    setTimeout(() => setVoiceAndSpeak(utterance), 50);
-                    return;
-                }
-
+                    setCurrentWordIndex(-1); // Reset word index after speaking ends
+                };
+    
                 window.speechSynthesis.speak(utterance);
                 setIsSpeaking(true);
-            };
-
-            speakNextChunk();
+            });
         }
     };
+    
+    
+
+    // const handleSpeak = (text) => {
+    //     const description = text || selectedSubtopic?.content;
+    //     if (description) {
+    //         // Cancel any ongoing speech synthesis
+    //         window.speechSynthesis.cancel();
+
+    //         const sanitizedDescription = description.replace(/<[^>]*>/g, '');
+    //         const chunks = sanitizedDescription.match(/.{1,200}/g) || [];
+
+    //         let chunkIndex = 0;
+
+    //         const speakNextChunk = () => {
+    //             if (chunkIndex < chunks.length) {
+    //                 const chunk = chunks[chunkIndex++];
+    //                 const utterance = new SpeechSynthesisUtterance(chunk);
+    //                 utterance.rate = 1.0;
+    //                 setVoiceAndSpeak(utterance);
+    //                 utterance.onend = speakNextChunk;
+
+    //                 latestUtteranceRef.current = utterance;
+    //             } else {
+    //                 setIsSpeaking(false);
+    //                 setSpokenContent('');
+    //             }
+    //         };
+
+    //         const setVoiceAndSpeak = (utterance) => {
+    //             const voices = window.speechSynthesis.getVoices();
+    //             const femaleVoice = voices.find(voice => voice.gender === 'female' || voice.name.toLowerCase().includes('female'));
+    //             if (femaleVoice) {
+    //                 utterance.voice = femaleVoice;
+    //             } else {
+    //                 setTimeout(() => setVoiceAndSpeak(utterance), 50);
+    //                 return;
+    //             }
+
+    //             window.speechSynthesis.speak(utterance);
+    //             setIsSpeaking(true);
+    //         };
+
+    //         speakNextChunk();
+    //     }
+    // };
 
     const handleSelectSubtopic = (subtopic) => {
         if (subtopic !== selectedSubtopic) {
@@ -224,8 +285,23 @@ const StudentCourseView = () => {
 
             <div className="flex w-full">
                 <div className="w-4/6 p-4 overflow-y-auto rounded-lg mr-4">
-                    {selectedSubtopic && (
+                    {/* {selectedSubtopic && (
                         <div dangerouslySetInnerHTML={{ __html: selectedSubtopic.content }} />
+                    )} */}
+                    {selectedSubtopic && (
+                        <div>
+                            {parseHTMLContent(selectedSubtopic.content).map((word, index) => (
+                            <span
+                                key={index}
+                                style={{
+                                backgroundColor: index === currentWordIndex ? linearGradientBackground : 'transparent', 
+                                transition: 'background-color 0.1s ease-in-out'
+                                }}
+                            >   
+                                {word}{' '}
+                            </span>
+                            ))}
+                        </div>
                     )}
 
                     <div className='flex justify-between mt-9'>
@@ -265,6 +341,19 @@ const StudentCourseView = () => {
                 </div>
 
                 <div className={`w-2/6 `} >
+                    <div className="flex items-center justify-center mb-4">
+                            {!isSpeaking ? (
+                                <VolumeOffIcon
+                                    style={{ cursor: 'pointer', fontSize: '3rem', color: textColor }}
+                                    onClick={() => handleSpeak(selectedSubtopic?.content)}
+                                />
+                            ) : (
+                                <VolumeUpIcon
+                                    style={{ cursor: 'pointer', fontSize: '3rem', color: linearGradientBackground }}
+                                    onClick={handleStop}
+                                />
+                            )}
+                    </div>
                     <div className={`p-5 bg-[#${cardColor}] rounded-xl`}>
                         {GLOBAL_CONSTANTS?.user_cred?.role_name === "Student" && (
                             <div className="flex flex-col bg-white p-3 rounded-xl shadow-lg">
@@ -300,19 +389,6 @@ const StudentCourseView = () => {
 
                             </div>
                         )}
-                        {/* <div className="flex items-center justify-end mb-4">
-                            {!isSpeaking ? (
-                                <VolumeOffIcon
-                                    style={{ cursor: 'pointer', fontSize: '3rem', color: textColor }}
-                                    onClick={() => handleSpeak(selectedSubtopic?.content)}
-                                />
-                            ) : (
-                                <VolumeUpIcon
-                                    style={{ cursor: 'pointer', fontSize: '3rem', color: linearGradientBackground }}
-                                    onClick={handleStop}
-                                />
-                            )}
-                        </div> */}
 
                         <div className='mt-5'>
                             <div className="flex justify-end mb-3">

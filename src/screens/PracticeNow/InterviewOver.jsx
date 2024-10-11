@@ -89,7 +89,7 @@ const InterviewOver = () => {
                 <p className="text-xl mb-8 font-medium">Thank you for your time. Your effort is much appreciated!</p>
 
                 {/* Guidance or description */}
-                <p className="mb-10 font-medium text-gray-600">Your report is underway. Redirecting you to Reports Page</p>
+                <p className="mb-10 font-medium text-gray-600">Your report is being generated and will be ready shortly.</p>
                 {/* <div className='flex justify-center gap-10'>
                     <button
                         className="font-bold py-2 px-6 rounded-full flex items-center justify-center shadow-md transform transition-transform duration-200 hover:scale-110 hover-mouse cursor-pointer"
