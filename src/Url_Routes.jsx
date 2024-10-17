@@ -61,6 +61,7 @@ import AssignmentView from "./screens/Quiz/ResultsView";
 
 import HardSkills from "./screens/Admin/Analysis/HardSkills";
 import SoftSkills from "./screens/Admin/Analysis/SoftSkills";
+import SunburstChart from "./screens/Course/StudentCourseView/SunburstChart";
 
 
 function Url_Routes() {
@@ -135,6 +136,7 @@ function Url_Routes() {
 
         <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />
         <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
+        <Route exact path="/studentCourseList/chart/:id" element={<HeaderFooterLayout Component={<SunburstChart />} />} />
         <Route exact path="/studentCourseList/edit/:id" element={<HeaderFooterLayout Component={<CourseEdit />} />} />
         <Route exact path="/assignments"  element={<HeaderFooterLayout Component={<AssignmentList />} />} />
         <Route exact path="/assignments/createAssignment"  element={<HeaderFooterLayout Component={<CreateAssignment />} />} />

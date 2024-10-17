@@ -23,13 +23,6 @@ import bannerImg from '../../../assets/thumbnail.png';
 import bannerImg2 from '../../../assets/virginiaBannner.png';
 import bannerImg3 from '../../../assets/banner.jpeg';
 import noData from '../../../assets/NoData.jpeg';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import highchartsMore from 'highcharts/highcharts-more';
-import sunburst from 'highcharts/modules/sunburst';
-
-highchartsMore(Highcharts);
-sunburst(Highcharts);
 
 const CourseCard = ({ course, onClick, title }) => {
     const dispatch = useDispatch();
@@ -524,7 +517,7 @@ const StudentCourseList = () => {
     }, [dispatch]);
 
     const handleCardClick = (courseId) => {
-        const path = `/studentCourseList/view/${courseId}`;
+        const path = `/studentCourseList/chart/${courseId}`;
         navigate(path);
     };
     
@@ -541,71 +534,6 @@ const StudentCourseList = () => {
     const handleBannerClick = (banner) => {
         setSelectedBanner(banner);
     }
-
-    const data = [
-        { id: 'Course', parent: '', name: 'Course', color: 'white' },
-        { id: 'Topic 1', parent: 'Course', name: 'Topic 1' },
-        { id: 'Topic 2', parent: 'Course', name: 'Topic 2' },
-        { id: 'Topic 3', parent: 'Course', name: 'Topic 3' },
-        { id: 'Topic 4', parent: 'Course', name: 'Topic 4' },
-        { id: 'Topic 5', parent: 'Course', name: 'Topic 5' },
-        { id: 'Topic 6', parent: 'Course', name: 'Topic 6' },
-        { id: 'Topic 7', parent: 'Course', name: 'Topic 7' },
-        { id: 'Topic 8', parent: 'Course', name: 'Topic 8' },
-        { id: 'Topic 9', parent: 'Course', name: 'Topic 9' },
-        { parent: 'Topic 1', name: 'SubTopic 1.1', value: 1 },
-        { parent: 'Topic 1', name: 'SubTopic 1.2', value: 1 },
-        { parent: 'Topic 2', name: 'SubTopic 2.1', value: 1 },
-        { parent: 'Topic 2', name: 'SubTopic 2.2', value: 1 },
-        { parent: 'Topic 3', name: 'SubTopic 3.1', value: 1 },
-        { parent: 'Topic 3', name: 'SubTopic 3.2', value: 1 },
-        { parent: 'Topic 4', name: 'SubTopic 4.1', value: 1 },
-        { parent: 'Topic 4', name: 'SubTopic 4.2', value: 1 },
-        { parent: 'Topic 5', name: 'SubTopic 5.1', value: 1 },
-        { parent: 'Topic 5', name: 'SubTopic 5.2', value: 1 },
-        { parent: 'Topic 6', name: 'SubTopic 6.1', value: 1 },
-        { parent: 'Topic 6', name: 'SubTopic 6.2', value: 1 },
-        { parent: 'Topic 7', name: 'SubTopic 7.1', value: 1 },
-        { parent: 'Topic 7', name: 'SubTopic 7.2', value: 1 },
-        { parent: 'Topic 8', name: 'SubTopic 8.1', value: 1 },
-        { parent: 'Topic 8', name: 'SubTopic 8.2', value: 1 },
-        { parent: 'Topic 9', name: 'SubTopic 9.1', value: 1 },
-        { parent: 'Topic 9', name: 'SubTopic 9.2', value: 1 }
-      ];
-
-      const chartOptions = {
-        chart: {
-            height: '100%'
-        },
-        title: {
-            text: 'The Topics Wheel'
-        },
-        subtitle: {
-            text: 'Source <a href="https://www.munsow.com/">Munsow</a>'
-        },
-        series: [
-            {
-                type: 'sunburst',
-                data: data,
-                allowDrillToNode: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    format: '{point.name}',
-                    rotationMode: 'circular'
-                },
-                levels: [
-                    { level: 1, levelIsConstant: false },
-                    { level: 2, colorByPoint: true },
-                    { level: 3, colorVariation: { key: 'brightness', to: -0.5 } },
-                    { level: 4, colorVariation: { key: 'brightness', to: 0.5 } }
-                ]
-            }
-        ],
-        tooltip: {
-            headerFormat: '',
-            pointFormat: '<b>{point.options.name}</b>'
-        }
-    };
 
     const { colorTheme } = useSelector((state) => state?.data);
     const isDarkMode = false;
@@ -761,13 +689,6 @@ const StudentCourseList = () => {
                                     visibleCount={4}
                                 />
                             )}
-                            <div className='p-8'>
-                                {/* <h1 className='text-2xl font-bold'>Sunburst Chart</h1> */}
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={chartOptions}
-                                />
-                            </div>
                             <div>
                                 <h1 className="text-2xl font-bold ml-8 mb-8">Categories</h1>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ml-8 mb-5">
