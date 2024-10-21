@@ -30,6 +30,9 @@ const StudentCourseView = () => {
     const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
     const [currentSubtopicIndex, setCurrentSubtopicIndex] = useState(0);
     const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+    const [selectedLanguage, setSelectedLanguage] = useState('en'); 
+    const [translatedContent, setTranslatedContent] = useState('');
+
     
     const linearGradientBackground = isDarkMode
         ? colorTheme.dark.selectBackground
@@ -94,36 +97,29 @@ const StudentCourseView = () => {
     };
 
     const handleSpeak = (text) => {
-        const description = text || selectedSubtopic?.content;
+        const description = text || translatedContent || selectedSubtopic?.content;
         if (description) {
             ensureVoicesLoaded(() => {
-                // Cancel any ongoing speech synthesis
                 window.speechSynthesis.cancel();
     
-                const parsedWords = parseHTMLContent(description); // Parse HTML and get words
-                setCurrentWordIndex(0); // Reset word index for highlighting
+                const parsedWords = parseHTMLContent(description);
+                setCurrentWordIndex(0);
     
-                const utterance = new SpeechSynthesisUtterance(parsedWords.join(' ')); // Speak the whole content fluently
-                utterance.rate = 1.0; // Set speech rate
+                const utterance = new SpeechSynthesisUtterance(parsedWords.join(' '));
+                utterance.rate = 1.0;
     
-                // Event listener to detect word boundaries and update the index for highlighting
                 utterance.addEventListener('boundary', (event) => {
                     if (event.name === 'word') {
-                        const charIndex = event.charIndex; // Character index where the word starts
+                        const charIndex = event.charIndex;
                         const currentWordIndex = utterance.text.substring(0, charIndex).split(' ').length - 1;
-                        setCurrentWordIndex(currentWordIndex); // Update the current word index to trigger the highlight
+                        setCurrentWordIndex(currentWordIndex);
                     }
                 });
     
-                // Once speaking starts, set `isSpeaking` to true
-                utterance.onstart = () => {
-                    setIsSpeaking(true);
-                };
-    
-                // Once speaking ends, reset the state
+                utterance.onstart = () => setIsSpeaking(true);
                 utterance.onend = () => {
                     setIsSpeaking(false);
-                    setCurrentWordIndex(-1); // Reset word index after speaking ends
+                    setCurrentWordIndex(-1);
                 };
     
                 window.speechSynthesis.speak(utterance);
@@ -131,6 +127,7 @@ const StudentCourseView = () => {
             });
         }
     };
+    
     
     
 
@@ -180,19 +177,13 @@ const StudentCourseView = () => {
 
     const handleSelectSubtopic = (subtopic) => {
         if (subtopic !== selectedSubtopic) {
-            // Stop any current speech synthesis
             handleStop();
             setSelectedSubtopic(subtopic);
-            handleSpeak(subtopic.content);
-
-            // Find the new indices
-            const newTopicIndex = detailedCourse?.content_data?.findIndex(topic =>
-                topic.subtopics?.some(sub => sub.id === subtopic.id)
-            );
-            const newSubtopicIndex = detailedCourse?.content_data?.[newTopicIndex]?.subtopics?.findIndex(sub => sub.id === subtopic.id);
-
-            setCurrentTopicIndex(newTopicIndex);
-            setCurrentSubtopicIndex(newSubtopicIndex);
+    
+            // Translate the content if needed
+            translateText(subtopic.content, selectedLanguage).then((translatedText) => {
+                setTranslatedContent(translatedText);
+            });
         }
     };
 
@@ -279,8 +270,42 @@ const StudentCourseView = () => {
         pdfExportComponent.current.save();
     };
 
+    const translateText = async (text, targetLang) => {
+        if (targetLang === "en") {
+            return text;
+        }
+        const chunkSize = 500;
+        const chunks = text.match(new RegExp(`.{1,${chunkSize}}`, 'g')) || [];
+    
+        const translatedChunks = await Promise.all(
+            chunks.map(async (chunk) => {
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|${targetLang}`);
+                const data = await response.json();
+                return data.responseData.translatedText;
+            })
+        );
+    
+        return translatedChunks.join(' ');
+    };
+    
+    const handleLanguageChange = (event) => {
+        const selectedLang = event.target.value;
+        setSelectedLanguage(selectedLang);
+        if (selectedSubtopic) {
+            translateText(selectedSubtopic.content, selectedLang).then((translatedText) => {
+                setTranslatedContent(translatedText);
+            });
+        }
+    };    
+    
+
     return (
         <div className="p-4">
+            <select value={selectedLanguage} onChange={handleLanguageChange}>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="te">Telugu</option>
+            </select>
             <CourseOverview course={detailedCourse} show={true} text={"Back"} />
 
             <div className="flex w-full">
@@ -290,8 +315,8 @@ const StudentCourseView = () => {
                     )} */}
                     {selectedSubtopic && (
                         <div>
-                            {parseHTMLContent(selectedSubtopic.content).map((word, index) => (
-                            <span
+                            {parseHTMLContent(translatedContent || selectedSubtopic.content).map((word, index) => (
+                                <span
                                 key={index}
                                 style={{
                                 backgroundColor: index === currentWordIndex ? linearGradientBackground : 'transparent', 
