@@ -1604,6 +1604,38 @@ export const create_course = (data, callback) => {
   };
 };
 
+export const create_mrclm_course = (data, callback) => {
+  return function () {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    let toastId = toast("Creating Tree .. please wait", { autoClose: false });
+    axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}course_tree/create_course`, JSON.stringify(data), {
+         headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+        }
+        else {
+          toast.update(toastId, { render: "Tree Created and now assign users", type: "success", autoClose: true })
+          callback(resp)
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error ?? "Something went wrong",
+          {
+            autoClose: 2000,
+          }
+        );
+      });
+  };
+};
+
 export const create_assignment = (data, callback) => {
   return function () {
     var headers = {

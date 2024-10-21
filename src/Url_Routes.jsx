@@ -62,6 +62,8 @@ import AssignmentView from "./screens/Quiz/ResultsView";
 import HardSkills from "./screens/Admin/Analysis/HardSkills";
 import SoftSkills from "./screens/Admin/Analysis/SoftSkills";
 
+import StudentMRCLM from "./screens/MRCLM/StudentMRCLM";
+
 
 function Url_Routes() {
   return (
@@ -103,6 +105,7 @@ function Url_Routes() {
                 <Route exact path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
                 <Route exact path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
                 <Route exact path="/studentDashboardScreening" element={<HeaderFooterLayout Component={<StudentDashboardScreenig />} />} />
+                <Route exact path="/studentMRCLM" element={<HeaderFooterLayout Component={<StudentMRCLM />} />} />
 
               </>
             }
