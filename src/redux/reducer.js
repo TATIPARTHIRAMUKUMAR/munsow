@@ -18,6 +18,7 @@ const initialState = {
   institutionFilters:{},
   studentsList:{},
   teachersList:{},
+  treeList:[],
   courseList:[],
   departmentList:[],
   branchList:[],
@@ -38,6 +39,7 @@ const initialState = {
   userListByDepartment:[],
   summaryData:{},
   detailedCourse:{},
+  detailedTree:{},
   detailedQuestionBank:{},
   courses:[],
   assignedUsers:[],
@@ -193,9 +195,19 @@ const DataReducers = (state = initialState, action) => {
       detailedCourse:action.payload.data,
       loading:false
     }
+    case types.DETAILED_TREE: return{
+      ...state,
+      detailedTree: action.payload,
+      loading:false
+    }
     case types.DETAILED_QUESTIONBANK: return{
       ...state,
       detailedQuestionBank:action.payload.data,
+      loading:false
+    }
+    case types.TREE_LIST: return{
+      ...state,
+      treeList:action.payload,
       loading:false
     }
     case types.COURSE_LIST: return{

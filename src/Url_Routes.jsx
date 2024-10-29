@@ -63,6 +63,7 @@ import HardSkills from "./screens/Admin/Analysis/HardSkills";
 import SoftSkills from "./screens/Admin/Analysis/SoftSkills";
 
 import StudentMRCLM from "./screens/MRCLM/StudentMRCLM";
+import TopicBrief from "./screens/MRCLM/TopicBrief";
 
 
 function Url_Routes() {
@@ -106,6 +107,7 @@ function Url_Routes() {
                 <Route exact path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
                 <Route exact path="/studentDashboardScreening" element={<HeaderFooterLayout Component={<StudentDashboardScreenig />} />} />
                 <Route exact path="/studentMRCLM" element={<HeaderFooterLayout Component={<StudentMRCLM />} />} />
+                <Route exact path="/studentMRCLM/view/:id" element={<HeaderFooterLayout Component={<TopicBrief />} />} /> 
 
               </>
             }
