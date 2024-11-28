@@ -94,7 +94,6 @@ const FlashcardSelection = ({ selectedSubtopicName, flashcards }) => {
     { title: "Case Studies", gradient: "linear-gradient(to right, #84fab0, #8fd3f4)", cardCount: `${categoryCounts["Case Studies"] || 0} cards`, border: '#19d19a' },
   ];
 
-  console.log("Flashcards : ", flashcards)
   return (
     <div className="flex flex-col text-center justify-center">
       <h1 className="flashcard-title mt-5">{selectedSubtopicName} - Flashcards</h1>
