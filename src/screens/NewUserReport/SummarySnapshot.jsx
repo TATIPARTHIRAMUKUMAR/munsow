@@ -103,11 +103,9 @@ const SummarySnapshot = (props) => {
 
   const formatScore = (score) => {
     if (score <= 10) {
-        return score;
-    } else {
-        const decimalScore = score / 10;
-        return Math.floor(decimalScore);
+      return score;
     }
+    return formatScore(Math.floor(score / 10));
   };
 
   // const formatScore = (score) => {

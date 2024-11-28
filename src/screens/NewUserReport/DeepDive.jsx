@@ -59,8 +59,7 @@ const DeepDive = (props) => {
     if (score <= 10) {
       return score;
     }
-    const decimalScore = (score % 10) + (Math.floor(score / 10) / 10);
-    return Math.floor(decimalScore);
+    return formatScore(Math.floor(score / 10));
   };
   
   
