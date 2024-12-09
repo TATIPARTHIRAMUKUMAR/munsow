@@ -1667,6 +1667,37 @@ export const create_mrclm_course = (data) => {
   };
 };
 
+export const create_mrclm_quiz = (data) => {
+  return function (dispatch) {
+    const headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    const toastId = toast("Creating Quiz .. please wait", { autoClose: false });
+
+    return axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/generate_quiz`, JSON.stringify(data), {
+        headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: "Quiz Created", type: "success", autoClose: true });
+        } else {
+          toast.update(toastId, { render: "Quiz Created!", type: "success", autoClose: true });
+          return resp.data;
+        }
+      })
+      .catch((error) => {
+        toast.update(toastId, { 
+          render: "Error creating quiz: " + (error?.response?.data?.message || "Unknown error"), 
+          type: "error", 
+          autoClose: 2000 
+        });
+        throw error;
+      });
+  };
+};
+
 
 const getTrees = (data) => ({
   type: types.TREE_LIST,

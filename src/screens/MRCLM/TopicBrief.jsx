@@ -112,6 +112,8 @@ const TopicBrief = () => {
                         <>
                             <QuizSelection  
                                 selectedSubtopicName={ selectedTopic?.subtopics[selectedSubtopicId]?.name }
+                                selectedTopicName={selectedTopic}
+                                selectedCourseId={courseData?.course_id}
                             />
                         </>
                     ) : (

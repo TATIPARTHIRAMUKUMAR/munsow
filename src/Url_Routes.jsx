@@ -64,7 +64,7 @@ import SoftSkills from "./screens/Admin/Analysis/SoftSkills";
 
 import StudentMRCLM from "./screens/MRCLM/StudentMRCLM";
 import TopicBrief from "./screens/MRCLM/TopicBrief";
-
+import QuizBrief from "./screens/MRCLM/QuizBrief";
 
 function Url_Routes() {
   return (
@@ -108,7 +108,7 @@ function Url_Routes() {
                 <Route exact path="/studentDashboardScreening" element={<HeaderFooterLayout Component={<StudentDashboardScreenig />} />} />
                 <Route exact path="/studentMRCLM" element={<HeaderFooterLayout Component={<StudentMRCLM />} />} />
                 <Route exact path="/studentMRCLM/view/:id" element={<HeaderFooterLayout Component={<TopicBrief />} />} /> 
-
+                <Route exact path="/studentMRCLM/quiz_view/:id" element={<HeaderFooterLayout Component={<QuizBrief />} />} /> 
               </>
             }
           </>
