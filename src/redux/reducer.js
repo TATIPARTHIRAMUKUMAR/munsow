@@ -40,6 +40,7 @@ const initialState = {
   summaryData:{},
   detailedCourse:{},
   detailedTree:{},
+  detailedQuiz:{},
   detailedQuestionBank:{},
   courses:[],
   assignedUsers:[],
@@ -198,6 +199,11 @@ const DataReducers = (state = initialState, action) => {
     case types.DETAILED_TREE: return{
       ...state,
       detailedTree: action.payload,
+      loading:false
+    }
+    case types.DETAILED_QUIZ: return{
+      ...state,
+      detailedQuiz: action.payload,
       loading:false
     }
     case types.DETAILED_QUESTIONBANK: return{

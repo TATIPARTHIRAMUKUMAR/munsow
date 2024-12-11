@@ -21,6 +21,7 @@ const StudentMRCLM = () => {
 
   const { colorTheme } = useSelector((state) => state?.data);
   const trees = useSelector((state) => state?.data?.treeList?.courses);
+  const quizzes = useSelector((state) => state?.data?.treeList?.quizzes || []);
   const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,33 +31,70 @@ const StudentMRCLM = () => {
     dispatch(loadTrees());
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (isAddClicked) {
+  //     // dispatch(loadTrees());
+  //     window.location.reload();
+  //   }
+  // }, [dispatch, isAddClicked]);
+
+  // // useEffect(() => {
+  // //   if (trees?.length > 0 && isAddClicked) {
+  // //     const latestCourseId = trees[trees.length - 1]?.course_id;
+  // //     if (latestCourseId) {
+  // //       navigate(`/studentMRCLM/view/${latestCourseId}`);
+  // //       setIsAddClicked(false); 
+  // //     }
+  // //   }
+  // // }, [trees, isAddClicked, navigate]);
+
+  // const handleAddClick = async () => {
+  //   try {
+  //     const response = await dispatch(create_mrclm_course({ name: searchText, description: descriptionText }));
+  //     const courseId = response?.data?.course_id;
+  //     if (courseId) {
+  //       navigate(`/studentMRCLM/view/${courseId}`);
+  //     }
+  //   } catch (error) {
+  //     console.warn("Ignoring API response error:", error);
+  //   } finally {
+  //     closeModal();
+  //     setIsAddClicked(true);
+  //   }
+  // };
+  
+
   useEffect(() => {
     if (isAddClicked) {
       dispatch(loadTrees());
     }
   }, [dispatch, isAddClicked]);
-
-  // useEffect(() => {
-  //   if (trees?.length > 0 && isAddClicked) {
-  //     const latestCourseId = trees[trees.length - 1]?.course_id;
-  //     if (latestCourseId) {
-  //       navigate(`/studentMRCLM/view/${latestCourseId}`);
-  //       setIsAddClicked(false); 
-  //     }
-  //   }
-  // }, [trees, isAddClicked, navigate]);
-
+  
+  useEffect(() => {
+    if (trees?.length > 0 && isAddClicked) {
+      const latestCourse = trees.find(
+        (course) => course.course_name === searchText // Match based on name
+      );
+      if (latestCourse) {
+        navigate(`/studentMRCLM/view/${latestCourse.course_id}`);
+        setIsAddClicked(false);
+      }
+    }
+  }, [trees, isAddClicked, navigate, searchText]);
+  
   const handleAddClick = async () => {
     try {
-      await dispatch(create_mrclm_course({ name: searchText, description: descriptionText }));
+      const response = await dispatch(create_mrclm_course({ name: searchText, description: descriptionText }));
+      if (response) {
+        setIsAddClicked(true);
+      }
     } catch (error) {
-      console.warn("Ignoring API response error due to buffer size issue:", error);
+      console.warn("Ignoring API response error:", error);
     } finally {
       closeModal();
-      setIsAddClicked(true);
     }
   };
-
+  
   const handleInputChange = (event) => {
     setSearchText(event.target.value);
   };
@@ -85,6 +123,10 @@ const StudentMRCLM = () => {
     navigate(`/studentMRCLM/view/${courseId}`);
   };
 
+  const handleQuizClick = (quizId) => {
+    navigate(`/studentMRCLM/quiz_view/${quizId}`);
+  };
+
   const linearGradientBackground = isDarkMode
     ? colorTheme.dark.selectBackground
     : colorTheme.light.selectBackground;
@@ -100,18 +142,18 @@ const StudentMRCLM = () => {
       </h1>
 
       <div className="flex justify-center gap-6 mb-8">
-        {options.map((option) => (
-          <label key={option.value} className={`flex items-center ${option.color} rounded-full border pl-4 p-2 bg-white border-2 cursor-pointer transition-all`}>
-            <span className="px-[50px]">{option.label}</span>
+        {options?.map((option) => (
+          <label key={option?.value} className={`flex items-center ${option?.color} rounded-full border pl-4 p-2 bg-white border-2 cursor-pointer transition-all`}>
+            <span className="px-[50px]">{option?.label}</span>
             <input
               type="radio"
               name="uploadOption"
-              value={option.value}
-              checked={selectedOption === option.value}
-              onChange={() => handleRadioChange(option.value)}
-              className={`w-4 h-4`}
+              value={option?.value}
+              checked={selectedOption === option?.value}
+              onChange={() => handleRadioChange(option?.value)}
+              className={`w-4 h-4 mr-4`}
               style={{
-                color: option.hash
+                color: option?.hash
               }}
             />
           </label>
@@ -172,25 +214,71 @@ const StudentMRCLM = () => {
       )}
 
       {trees?.length > 0 && (
+        // <div className="mb-8">
+        //   <h2 className="text-2xl font-semibold text-gray-800 mb-4">Continue Learning...</h2>
+        //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        //     {trees.map((course) => (
+        //       <div
+        //         key={course.course_id}
+        //         onClick={() => handleCardClick(course.course_id)}
+        //         className="flex justify-between items-center bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-xl transition-shadow"
+        //       >
+        //         <h3 className="text-xl font-bold">{course.course_name}</h3>
+        //         <button
+        //             onClick={(e) => {
+        //               e.stopPropagation(); // Prevents card click from triggering
+        //               handleCardClick(course.course_id);
+        //             }}
+        //             className="bg-teal-400 p-2 w-[40px] rounded-full text-white hover:bg-teal-500 transition-all"
+        //           >
+        //             ▶
+        //           </button>
+        //       </div>
+        //     ))}
+        //   </div>
+        // </div>
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Continue Learning...</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {trees.map((course) => (
               <div
                 key={course.course_id}
                 onClick={() => handleCardClick(course.course_id)}
-                className="flex justify-between items-center bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-xl transition-shadow"
+                className="bg-white shadow-md rounded-md p-4 cursor-pointer hover:shadow-lg transition-shadow flex flex-col items-center"
               >
-                <h3 className="text-xl font-bold">{course.course_name}</h3>
+                <h3 className="text-xl font-bold text-gray-700 mb-2">{course.course_name}</h3>
                 <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevents card click from triggering
-                      handleCardClick(course.course_id);
-                    }}
-                    className="bg-teal-400 p-2 w-[40px] rounded-full text-white hover:bg-teal-500 transition-all"
-                  >
-                    ▶
-                  </button>
+                  onClick={(e) => {
+                    handleCardClick(course.course_id);
+                  }}
+                  className="bg-teal-500 text-white p-2 rounded-full hover:bg-teal-600 transition-all"
+                >
+                  ▶
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {quizzes?.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Take a Quiz...</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            {quizzes.map((quiz, index) => (
+              <div
+                key={index}
+                className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-300 rounded-md p-4 hover:shadow-lg transition-all"
+              >
+                <h3 className="text-lg font-bold text-gray-700">{quiz.course_name}</h3>
+                <p className="text-gray-600 text-sm">Level: {quiz.level}</p>
+                <p className="text-gray-600 text-sm">{quiz.subtopic_name}</p>
+                <button
+                  onClick={() => handleQuizClick(quiz.quiz_id)}
+                  className="bg-teal-500 text-white py-1 px-4 rounded mt-2 hover:bg-teal-600 transition-all"
+                >
+                  Take Quiz
+                </button>
               </div>
             ))}
           </div>
