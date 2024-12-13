@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import "./FlashcardSelection.css";
 import { useDarkMode } from "./../../Dark";
@@ -119,6 +118,7 @@ const FlashcardSelection = ({ selectedSubtopicName, flashcards }) => {
                   type="radio"
                   name="level"
                   checked={selectedLevel === card.title}
+                  onChange={() => handleCardSelect(card.title)}
                 />
                 {selectedLevel === card.title && (
                   <div className="checkmark" style={{
