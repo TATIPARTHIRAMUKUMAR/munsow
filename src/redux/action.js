@@ -1604,6 +1604,199 @@ export const create_course = (data, callback) => {
   };
 };
 
+// export const create_mrclm_course = (data, callback) => {
+//   return function () {
+//     var headers = {
+//       "Content-type": "application/json",
+//       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+//     };
+//     let toastId = toast("Creating Tree .. please wait", { autoClose: false });
+//     axios
+//       .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/create_course`, JSON.stringify(data), {
+//          headers,
+//       })
+//       .then((resp) => {
+//         if (resp?.data?.error) {
+//           toast.update(toastId, { render: resp?.data?.error, type: "error", autoClose: true })
+
+//         }
+//         else {
+//           toast.update(toastId, { render: "Tree Created and now assign users", type: "success", autoClose: true })
+//           callback(resp)
+//         }
+//       })
+//       .catch((error) => {
+//         toast.error(
+//           error ?? "Something went wrong",
+//           {
+//             autoClose: 2000,
+//           }
+//         );
+//       });
+//   };
+// };
+
+// export const create_mrclm_course = (data) => {
+//   return function (dispatch) {
+//     const headers = {
+//       "Content-type": "application/json",
+//       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+//     };
+//     const toastId = toast("Creating Tree .. please wait", { autoClose: false });
+//     console.log('// : ', headers)
+//     return axios
+//       .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/create_course`, JSON.stringify(data), {
+//         headers,
+//       })
+//       .then((resp) => {
+//         if (resp?.data?.error) {
+//           toast.update(toastId, { render: "Course Created", type: "success", autoClose: true });
+//         } else {
+//           toast.update(toastId, { render: "Tree Created and now assign users", type: "success", autoClose: true });
+//           return resp.data;
+//         }
+//       })
+//       .catch((error) => {
+//         toast.update(toastId, { 
+//           render: "Course Created", 
+//           type: "success", 
+//           autoClose: 2000 
+//         });
+//         throw error; 
+//       });
+//   };
+// };
+
+export const create_mrclm_course = (data) => {
+  return function (dispatch) {
+    const headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`,
+    };
+
+    const toastId = toast("Creating Tree .. please wait", { autoClose: false });
+    console.log('// : ', headers);
+
+    return axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/create_course`, JSON.stringify(data), { headers })
+      .then((resp) => {
+        if (resp?.data?.status) {
+          toast.update(toastId, {
+            render: "Tree Created, now content will be generated in background and you can try after 2-3 minutes",
+            type: "success",
+            autoClose: true,
+          });
+          return resp.data;
+        } else {
+          toast.update(toastId, {
+            render: "Failed to create tree, please try again",
+            type: "error",
+            autoClose: true,
+          });
+        }
+      })
+      .catch((error) => {
+        toast.update(toastId, {
+          render: "Error creating tree. Please try again.",
+          type: "error",
+          autoClose: 2000,
+        });
+        console.error(error); 
+        throw error;
+      });
+  };
+};
+
+export const create_mrclm_quiz = (data) => {
+  return function (dispatch) {
+    const headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    const toastId = toast("Creating Quiz .. please wait", { autoClose: false });
+
+    return axios
+      .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/generate_quiz`, JSON.stringify(data), {
+        headers,
+      })
+      .then((resp) => {
+        if (resp?.data?.error) {
+          toast.update(toastId, { render: "Quiz Created", type: "success", autoClose: true });
+        } else {
+          toast.update(toastId, { render: "Quiz Created!", type: "success", autoClose: true });
+          return resp.data;
+        }
+      })
+      .catch((error) => {
+        toast.update(toastId, { 
+          render: "Error creating quiz: " + (error?.response?.data?.message || "Unknown error"), 
+          type: "error", 
+          autoClose: 2000 
+        });
+        throw error;
+      });
+  };
+};
+
+
+const getTrees = (data) => ({
+  type: types.TREE_LIST,
+  payload: data,
+});
+
+export const loadTrees = () => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}topic_tree/get_course`, {  headers })
+      .then((resp) => {
+        dispatch(getTrees(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+const getTreeDetails = (data) => ({
+  type: types.DETAILED_TREE,
+  payload: data,
+});
+
+export const loadDetailedTree = (id) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}topic_tree/get_course_tree/${id}`, {  headers })
+      .then((resp) => {
+        dispatch(getTreeDetails(resp?.data?.course));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+const getQuizDetails = (data) => ({
+  type: types.DETAILED_QUIZ,
+  payload: data,
+});
+
+export const loadDetailedQuiz = (id) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+    };
+    axios.get(`${GLOBAL_CONSTANTS?.backend_url}topic_tree/get_quiz/${id}`, {  headers })
+      .then((resp) => {
+        dispatch(getQuizDetails(resp?.data));
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+
 export const create_assignment = (data, callback) => {
   return function () {
     var headers = {

@@ -41,7 +41,7 @@ import {
   FaBook,
 } from "react-icons/fa";
 
-import { FaFileCircleCheck, FaChartColumn, FaChartGantt, FaHeartPulse } from "react-icons/fa6";
+import { FaFileCircleCheck, FaChartColumn, FaChartGantt, FaHeartPulse, FaClipboardList } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
@@ -375,6 +375,12 @@ export default function HeaderFooterLayout({ Component }) {
           label: "My Courses",
           icon: <FaBook size={20} className="" />,
           route: "/studentCourseList",
+          subItems: [],
+        },
+        {
+          label: "MRCLM",
+          icon: <FaClipboardList size={20} className="" />,
+          route: "/studentMRCLM",
           subItems: [],
         },
         {

@@ -1,0 +1,298 @@
+
+  .flashcard-title {
+    font-size: 2.1rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .flashcard-subtitle {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+    color: gray;
+  }
+  
+  /* Flashcard Styles */
+  .flashcard-box {
+    background-color: white;
+    width: 80%;
+    max-width: 1000px;
+    padding: 20px;
+    border-radius: 15px;
+    margin-left: 10%;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  /* .flashcard {
+    position: relative;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 80%;
+    width: 90%;
+    z-index: 2;
+    background-color: white;
+  }
+
+  .flashcard::before,
+.flashcard::after {
+  content: '';
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  right: 0;
+  bottom: 0;
+  border-radius: 10px; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.flashcard::before {
+  background-color: rgba(255, 255, 255, 0.9); 
+  transform: translateY(10px); 
+  z-index: 1; 
+}
+
+.flashcard::after {
+  background-color: rgba(240, 240, 240, 0.9); 
+  transform: translateY(20px);
+  z-index: 0; 
+} */
+
+.flashcard {
+  position: relative; 
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 80%;
+  width: 90%;
+}
+
+  
+  .flashcard.selected {
+    border: 3px solid;
+  }
+  
+  .flashcard-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .card-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-count {
+    background-color: white;
+    color: black;
+    border: 2px solid;
+    border-radius: 50px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    width: 100px;
+  }
+  
+  .card-title {
+    margin-top: 70px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .radio-button {
+    position: relative;
+  }
+  
+  .radio-button input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+  }
+  
+  .radio-button .checkmark {
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .flashcard.selected .checkmark {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  @font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialicons/v142/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');
+  }
+  
+  .material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .gallery-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* min-height: 100vh; */
+    background-color: #dcdcdc;
+    border-radius: 18px;
+  }
+  
+  .navigation-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .gallery-track {
+    /* width: 300px;
+    height: 200px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    border-radius: 18px;
+    aspect-ratio: 168/100;
+    /* position: relative; */
+    width: 100%;
+    /* overflow: hidden; */
+  }
+  
+  .slide-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  
+  .flip-card-inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  
+  .slide-card.flipped .flip-card-inner {
+    transform: rotateY(-180deg);
+  }
+  
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 18px;
+    padding: 0px 20px;
+  }
+  
+  .flip-card-front {
+    background-color: #f0f0f0;
+    border-left: 18px solid #2BE2D0;
+  }
+  
+  .flip-card-back {
+    background-color: #f0f0f0;
+    transform: rotateY(-180deg);
+  }
+  
+  /* Card counter styles */
+  /* .card-counters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  } */
+  .card-counters-container {
+    width: 100%;
+    overflow-x: auto; 
+    white-space: nowrap; 
+  }
+
+  .card-counters {
+    display: flex; 
+    gap: 10px; 
+    padding: 10px;
+  }
+  .card-counters-container::-webkit-scrollbar {
+    height: 8px!important;
+}
+
+.card-counters-container::-webkit-scrollbar-track {
+    background: #D5D5D5 !important;
+    border-radius: 12px;
+}
+
+.card-counters-container::-webkit-scrollbar-thumb {
+    background: #888 !important;
+}
+
+.card-counters-container::-webkit-scrollbar-thumb:hover {
+    background: #555 !important;
+}
+
+  .counter-outer {
+    display: inline-block;
+    margin: 0 5px;
+    cursor: pointer;
+    color: grey;
+}
+
+.counter-outer.active {
+    color: black;
+    font-weight: bold;
+}
+  
+  .counter-inner {
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  .button-prev,
+  .button-next {
+  font-family:"Material Icons";
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+  background-color: #2BE2D0;
+  border-radius: 100%;
+  height: 46px;
+  width: 46px;
+  text-align: center;
+  }
