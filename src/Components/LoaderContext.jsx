@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from 'react';
 import Loader from './Loader';
 
@@ -17,13 +16,13 @@ export const LoaderProvider = ({ children }) => {
     };
 
     const hideLoader = () => {
-        setLoaderType(null);
+        setLoaderType(null); // Corrected to remove `setLoading(false);` as it was undefined
     };
 
     const setQuestions = (questions) => {
         setQuestionsList(questions);
     };
-
+    
     return (
         <LoaderContext.Provider value={{ loaderType, showLoader, hideLoader, questionsList, setQuestions }}>
             {children}

@@ -1,142 +1,136 @@
-import React, { useState } from 'react';
-import { FormControl, Button, InputLabel, Select, MenuItem, Divider, LinearProgress, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { FormControl, Select, MenuItem, CircularProgress, Box, Typography, useTheme } from '@mui/material';
+import { SentimentDissatisfied } from '@mui/icons-material';
 
-// const interviewData = [
-//   {
-//     "company_name": "Cognizant",
-//     "role": "Software Developer",
-//     "data": [
-//       { "skill_name": "Python", "scored": 70, "total": 100 },
-//       { "skill_name": "Java", "scored": 60, "total": 100 },
-//       { "skill_name": "C++", "scored": 50, "total": 100 },
-//       { "skill_name": "C", "scored": 40, "total": 100 }
-//     ]
-//   },
-//   {
-//     "company_name": "Cognizant",
-//     "role": "Senior Software Developer",
-//     "data": [
-//       { "skill_name": "Python", "scored": 70, "total": 100 },
-//       { "skill_name": "Java", "scored": 60, "total": 100 },
-//       { "skill_name": "C++", "scored": 50, "total": 100 },
-//       { "skill_name": "C1", "scored": 30, "total": 100 }
-//     ]
-//   }
-// ];
+const getColor = (score, theme) => {
+  if (score <= 3) return "#d63333";
+  if (score <= 7) return theme.palette.warning.main;
+  return "#24d653";
+};
 
-const CulturalInterviews = ({ interviewData, type }) => {
-  const [currentDataIndex, setCurrentDataIndex] = useState(0);
-  const selectedInterview = interviewData[currentDataIndex];
+const getLighterColor = (score, theme) => {
+  if (score <= 3) return "#f0b9b9";
+  if (score <= 7) return "#f0ccb9";
+  return "#9df2b4";
+};
+
+const CulturalInterviews = ({ interviewData }) => {
+  const theme = useTheme();
+
+  const combinedInterviews = interviewData.map(interview => ({
+    label: `${interview.company_name} - ${interview.role}`,
+    company_name: interview.company_name,
+    role: interview.role,
+    data: interview.data,
+  }));
+
+  const latestInterview = combinedInterviews.length > 0 ? combinedInterviews[combinedInterviews.length - 1] : null;
+
+  const [selectedInterview, setSelectedInterview] = useState('');
+
+  useEffect(() => {
+    if (latestInterview && !selectedInterview) {
+      setSelectedInterview(latestInterview.label);
+    }
+  }, [latestInterview, selectedInterview]);
 
   const handleChange = (event) => {
-    const newIndex = interviewData.findIndex(interview => interview.role === event.target.value);
-    setCurrentDataIndex(newIndex);
+    const selectedLabel = event.target.value;
+    setSelectedInterview(selectedLabel);
   };
 
-  const getColorClass = (score) => {
-    if (score <= 40) return '#ef4444';
-    if (score <= 70) return '#f97316';
-    return '#22c55e';
-  };
-
-  const moveNext = () => {
-    setCurrentDataIndex(prev => (prev + 1) % interviewData?.length);
-  };
-
-  const movePrevious = () => {
-    setCurrentDataIndex(prev => (prev - 1 + interviewData?.length) % interviewData?.length);
-  };
+  const selectedInterviewDetails = combinedInterviews.find(
+    (interview) => interview.label === selectedInterview
+  );
 
   return (
     <div>
-      <p className="text-lg font-bold p-2">
-        Cultural Fit Interview Summary
-      </p>
-      <Divider style={{ opacity: '0.4' }} />
-      <p className="text-lg p-2 text-center">
-        {selectedInterview?.company_name} - {selectedInterview?.role}
-      </p>
-      {/* <div className="flex justify-end mt-3 mb-4 mr-3">
-                <FormControl style={{ width: '200px' }} size="small">
-                    <InputLabel id="role-select-label">Select Role</InputLabel>
-                    <Select
-                        labelId="role-select-label"
-                        id="role-select"
-                        label="Select Role"
-                        value={selectedInterview.role}
-                        onChange={handleChange}
-                    >
-                        {interviewData.map((interview, index) => (
-                            <MenuItem key={index} value={interview.role}>
-                                {interview.role}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </div> */}
-
-      <div className="mt-5 mx-5 mb-3">
-        {selectedInterview?.data?.map((skill, index) => (
-          <div key={index} className="flex items-center mb-4">
-            <span className="w-1/3">{skill.skill_name}</span>
-            <Box className="w-1/2" sx={{ mx: 2 }}>
-              <LinearProgress
-                variant="determinate"
-                value={(skill.scored / skill.total) * 100}
+      <p className="text-lg font-bold p-1 ml-3 text-center my-2">Cultural Interview Summary</p>
+      {combinedInterviews?.length > 0 ? (
+        <>
+          <div className="flex justify-start mt-1 mb-4 ml-5">
+            <FormControl 
+            sx={{
+              width: '310px',
+              backgroundColor: '#F0F0F0',
+              borderRadius: '8px',
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: 'none',
+                  borderRadius: '8px',
+                },
+              },
+            }}
+            size="small"
+            >
+              <Select
+                value={selectedInterview}
+                onChange={handleChange}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
                 sx={{
-                  height: 10,
-                  borderRadius: 5,
-                  backgroundColor: '#e0e0e0',
-                  '& .MuiLinearProgress-bar': {
-                    backgroundColor: getColorClass(skill.scored),
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                  },
+                  '& .MuiSelect-select': {
+                    padding: '8px 14px', // Adjust padding if needed
                   },
                 }}
-              />
-            </Box>
-            <span className={`w-1/6 text-center font-semibold`}
-              style={{ color: getColorClass(skill.scored) }}>{skill.scored}/{skill.total}</span>
+              >
+                {combinedInterviews.map((interview, index) => (
+                  <MenuItem key={index} value={interview.label}>
+                    {interview.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
-        ))}
-        <>{type == "admin" && (
-          interviewData.map((skill, index) => (
-            <div key={index} className="flex items-center mb-4">
-              <span className="w-1/3">{skill.skill_name}</span>
-              <Box className="w-1/2" sx={{ mx: 2 }}>
-                <LinearProgress
-                  variant="determinate"
-                  value={(skill.scored / skill.total) * 100}
-                  sx={{
-                    height: 10,
-                    borderRadius: 5,
-                    backgroundColor: '#e0e0e0',
-                    '& .MuiLinearProgress-bar': {
-                      backgroundColor: getColorClass(skill.scored),
-                    },
-                  }}
-                />
-              </Box>
-              <span className={`w-1/6 text-center font-semibold`}
-                style={{ color: getColorClass(skill.scored) }}>{skill.scored}/{skill.total}</span>
-            </div>
-          )))
-        }
+
+          <div className="mt-5 mx-5 mb-3">
+            {selectedInterviewDetails &&
+              selectedInterviewDetails?.data?.map((skill, index) => (
+                <div key={index} className="flex flex-col items-center mb-9">
+                  <Box position="relative" display="inline-flex" sx={{ width: 70, height: 70 }}>
+                    <CircularProgress
+                      variant="determinate"
+                      value={100}
+                      thickness={4}
+                      sx={{ color: getLighterColor(skill.scored, theme), width: '100% !important', height: '100% !important' }}
+                    />
+                    <CircularProgress
+                      variant="determinate"
+                      value={(skill.scored / skill.total) * 100}
+                      thickness={4}
+                      sx={{ color: getColor(skill.scored, theme), position: 'absolute', left: 0, width: '100% !important', height: '100% !important' }}
+                    />
+                    <Box
+                      top={0}
+                      left={0}
+                      bottom={0}
+                      right={0}
+                      position="absolute"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Typography variant="caption" component="div" color="textSecondary" style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                        {skill.scored}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <span className="flex justify-center text-center w-[220px]">{skill.skill_name}</span>
+                </div>
+              ))}
+          </div>
         </>
-
-      </div>
-      <>
-        {type !== "admin" && (
-
-
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', m: 2 }}>
-            <Button variant="contained" onClick={movePrevious} disabled={currentDataIndex === 0}>
-              Previous
-            </Button>
-            <Button variant="contained" onClick={moveNext} disabled={currentDataIndex === interviewData.length - 1}>
-              Next
-            </Button>
-          </Box>
-        )}
-      </>
+      ) : (
+        <div className='font-bold mt-[40%]' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
+          <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
+          <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
+            There's not enough data to present any insights. Start attending interviews to see your journey.
+          </div>
+        </div>
+      )}
     </div>
   );
 };

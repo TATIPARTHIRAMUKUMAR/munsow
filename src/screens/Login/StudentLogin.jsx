@@ -8,10 +8,14 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { user_login } from "../../redux/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ForgotPassword from "./ForgotPassword";
 import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useDarkMode } from "./../../Dark";
+import "./Login.css";
+import MunsowLogo from "./../../assets/Munsow-logo-Transparent.svg";
+import StudentLoginHero from "./../../assets/student-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
   flexDirection: 'row',
@@ -38,9 +42,8 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  // border: "2px solid #000",
   borderRadius: "0.4rem",
-  boxShadow: 24,
+  // boxShadow: 24,
   p: 4,
 };
 
@@ -53,6 +56,13 @@ const StudentLogin = () => {
   const [password, setPassword] = useState("");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+
+  const { isDarkMode, colorTheme } = useDarkMode();
+
+  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const BackgroundColor = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
 
   const loginInputHandler = (e) => {
     const { name = "", value = "" } = e.target;
@@ -93,68 +103,74 @@ const StudentLogin = () => {
     const selectedType = event.target.value;
     setLoginType(selectedType);
     if (selectedType === 'institution') {
-      navigate("/");
+      navigate("/institutionLogin");
     } else if (selectedType === 'teacher') {
       navigate("/teacherLogin");
     }
     // Add more conditions for other types if necessary
   };
 
-  return (
-    <div className="p-4">
-      <div className="flex flex-col md:flex-row">
-        <div className="w-full md:w-3/6 p-5 md:p-20">
-          <div className="bg-white   rounded-lg p-6">
+  // Click handler for the span
+  const handleInstitutionClick = () => {
+    navigate('/institutionLogin');
+  };
 
-            <FormControl component="fieldset">
-              {/* <FormLabel component="legend" style={{ textAlign: 'center', marginBottom: '10px' }}>Login Type</FormLabel> */}
+  return (
+    <div className="bg-[#F1F8F8] h-screen overflow-auto">
+      <div className="flex flex-col md:flex-row">
+        <div className="w-full md:w-3/6 p-5 lg:p-20 rounded-none md:rounded-r-[84px] login-bg-gradient h-screen overflow-visible">
+          <div className="rounded-lg p-6">
+
+            {/* <FormControl component="fieldset">
               <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
                 <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
                 <StyledFormControlLabel value="student" control={<Radio />} label="Student" />
                 <StyledFormControlLabel value="teacher" control={<Radio />} label="Teacher" />
               </StyledRadioGroup>
-            </FormControl>
+            </FormControl> */}
 
-            <h2 className="text-2xl font-semibold mb-4">Student Login</h2>
-            {/* <p className="text-base text-gray-600 mb-4">
-              Get personalized insights on your interview skills, strengths, and areas for improvement.
-            </p> */}
+            <div className="mb-4">
+              <img src={MunsowLogo} height="54px" width="54px"/>
+            </div>
+            <h2 className="text-3xl font-semibold mb-2 text-white">Student Login</h2>
+            <p className="mb-8 text-white">Enter Your Details Below To Login Into Your Account</p>
             <form onSubmit={handleSubmit}>
               <div>
                 <div className="space-y-4">
                   <div className="mb-2">
-                    <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
-                      Email ID
+                    <label htmlFor="universityId" className="text-sm font-bold text-white">
+                      Email Address
                     </label>
                     <input
                       type="text"
-                      className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                      className="mt-2 w-full border border-gray-300 rounded-lg py-2 px-3"
                       id="universityId"
                       name="universityId"
-                      placeholder=""
+                      placeholder="Enter Email Address"
                       value={universityId}
                       onChange={loginInputHandler}
                     />
                   </div>
                   <div className="mb-2">
-                    <label htmlFor="password" className="text-sm font-medium text-gray-600">
+                    <label htmlFor="password" className="text-sm font-bold text-white">
                       Password
                     </label>
                     <input
                       type="password"
-                      className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
+                      className="mt-2 w-full border border-gray-300 rounded-lg py-2 px-3"
                       id="password"
                       name="password"
-                      placeholder=""
+                      placeholder="Enter Password"
                       value={password}
                       onChange={loginInputHandler}
                     />
                   </div>
                 </div>
-                <div className="mt-4">
+                <div className="mt-8">
                   <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                    className="w-full text-black rounded-lg py-2 px-4"
+                    style={{ background: BackgroundColor }}
                   >
                     Login
                   </button>
@@ -240,24 +256,24 @@ const StudentLogin = () => {
                 forget Password
               </span>
             </div> */}
-            <div className="mt-10 text-center text-gray-600">
+            <div className="mt-5 text-white">
               <span>
-                By continuing, you agree to our
+                Not Registered?&nbsp;
               </span>
-              <a href=" https://www.munsow.com/terms-and-conditions" target="_blank"><span className="font-semibold text-blue-500">  Terms of Service  </span></a>
-
-              {/* <span className="font-semibold"> Terms of Service </span> */}
-              <span>and</span>
-              <a href=" https://www.munsow.com/privacy-policy" target="_blank"><span className="font-semibold text-blue-500">  Privacy Policy  </span></a>
-
-              {/* <span className="font-semibold"> Privacy Policy</span> */}
+              <a href="https://www.munsow.com/contact" target="_blank"><span className="underline" style={{ color: BackgroundColor }}>Contact Us</span></a>              
+            </div>
+            <div className="mt-16 text-center text-white">
+              <span>
+                Not a Job Seeker?&nbsp;Organisation Login&nbsp;
+              </span>
+              <span className="underline cursor-pointer" style={{ color: BackgroundColor }} onClick={handleInstitutionClick}>Here</span>            
             </div>
           </div>
         </div>
-        <div className="hidden md:inline w-3/6">
+        <div className="hidden md:flex justify-center items-center w-3/6">
           <img
-            src={interview}
-            className="w-full p-5 md:p-20"
+            src={StudentLoginHero}
+            className="object-cover w-full"
             alt="Login"
           />
         </div>

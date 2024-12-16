@@ -1,26 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Divider, Typography } from '@mui/material'; 
+import { Avatar, Divider, Typography } from '@mui/material'; // Import Material-UI components
+import InsightsIcon from '@mui/icons-material/Insights';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import hardSkill from '../../assets/tools.png'
+import sofSkills from '../../assets/expertise.png'
 import { useSelector } from 'react-redux';
-import { useDarkMode } from "./../../Dark";
-import WorkIcon from '@mui/icons-material/Work';
-import PeopleIcon from '@mui/icons-material/People';
-import SchoolIcon from '@mui/icons-material/School';
-import BusinessIcon from '@mui/icons-material/Business';
 
-const getIconByName = (name) => {
-    switch (name) {
-        case 'Job Description':
-            return <WorkIcon />;
-        case 'Cultural Fit':
-            return <PeopleIcon />;
-        case 'Hard/Soft Skill':
-            return <SchoolIcon />;
-        case 'Company Role':
-            return <BusinessIcon />;
-        default:
-            return <Avatar />;
-    }
-};
+
+import TrendingFlatIcon from '@mui/icons-material/TrendingFlat'; // Import for the flat trend icon
+import { useDarkMode } from "./../../Dark";
+
+import { FaFileAlt, FaUsers, FaBuilding, FaHeadSideVirus, FaUserTie } from 'react-icons/fa';
 
 const JDCult = () => {
     const { userStats } = useSelector((state) => state.data);
@@ -34,39 +25,73 @@ const JDCult = () => {
         : reduxColorTheme.light.textColor2;
 
     useEffect(() => {
-        setData(userStats?.cards ? userStats.cards : []);
-    }, [userStats]);
+        setData(userStats?.cards ? userStats.cards : {})
+        console.log("data1 : ", userStats)
+        // setdataWithSerialNumbers(userStats?.graphs?.length > 0 ? userStats.graphs[0].data : [])
+    }, [userStats])
 
     return (
         <div className="col-span-1 bg-white rounded-lg">
-            <p className="text-lg font-semibold p-2" style={{ color: textColor }}>
-                Interview Submissions
+            <p className="ml-2 text-lg font-semibold p-2" style={{ color: "black" }}>
+            Interviews Taken
             </p>
-            <Divider style={{ opacity: "0.4" }} />
             <div className='p-5'>
-                {data.map((item, index) => (
-                    <div key={index}>
-                        <div className='flex justify-between items-center pt-4'>
-                            <div className='flex flex-row justify-start items-center space-x-4'>
-                                <div className="flex-shrink-0">
-                                    <Avatar
-                                        // style={{ border: 0, borderRadius: '0%' }}
-                                        sx={{ width: 35, height: 35 }}
-                                    >
-                                        {getIconByName(item.name)}
-                                    </Avatar>
-                                </div>
-                                <div>
-                                    <Typography variant="h6">{item.name}</Typography>
-                                </div>
-                            </div>
-                            <div>
-                                {item.value}
-                            </div>
+                <div className='flex justify-between items-center'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
+                        <div className="flex-shrink-0">
+                            <FaFileAlt style={{ color: textColor, fontSize: '30px' }} />
                         </div>
-                        {index < data.length - 1 && <Divider className='pt-3' />}
+                        <div>
+                            <Typography variant="h7" style={{ color: textColor }}>Job Description Specific</Typography>
+                           
+                        </div>
                     </div>
-                ))}
+                    <div className='text-lg font-bold'>
+                       {data[0]?.value}
+                    </div>
+                </div>
+                <div className='flex justify-between items-center mt-7'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
+                        <div className="flex-shrink-0">
+                            <FaUsers style={{ color: textColor, fontSize: '30px' }} />
+                        </div>
+                        <div>
+                            <Typography variant="h7" style={{ color: textColor }}>Cultural Fit Specific</Typography>
+                           
+                        </div>
+                    </div>
+                    <div className='text-lg font-bold'>
+                       {data[1]?.value}
+                    </div>
+                </div>
+                <div className='flex justify-between items-center mt-7'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
+                        <div className="flex-shrink-0">
+                            <FaHeadSideVirus style={{ color: textColor, fontSize: '30px' }} />
+                        </div>
+                        <div>
+                            <Typography variant="h7" style={{ color: textColor }}>Skill Specific</Typography>
+                           
+                        </div>
+                    </div>
+                    <div className='text-lg font-bold'>
+                       {data[2]?.value}
+                    </div>
+                </div>
+                <div className='flex justify-between items-center mt-7'>
+                    <div className='flex flex-row justify-start text-md font-bold items-center space-x-3 ml-3'>
+                        <div className="flex-shrink-0">
+                            <FaUserTie style={{ color: textColor, fontSize: '30px' }} />
+                        </div>
+                        <div>
+                            <Typography variant="h7" style={{ color: textColor }}>Company Role Specific</Typography>
+                           
+                        </div>
+                    </div>
+                    <div className='text-lg font-bold'>
+                       {data[3]?.value}
+                    </div>
+                </div>
             </div>
         </div>
     );

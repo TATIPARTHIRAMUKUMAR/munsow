@@ -8,7 +8,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function QuizResultView({ setValue }) {
+export default function QuizResultView({ setValue = () => {} }) {
   const { id } = useParams();
   const { resultAssignment } = useSelector((state) => state.data);
   const navigate = useNavigate();
@@ -16,7 +16,8 @@ export default function QuizResultView({ setValue }) {
 
   useEffect(() => {
     dispatch(loadResultAssignment(id));
-  }, [dispatch, id]);
+    setValue?.("Quiz Results");
+  }, [dispatch, id, setValue]);
 
   const handleBack = () => {
     navigate(-1);
@@ -96,5 +97,9 @@ export default function QuizResultView({ setValue }) {
 }
 
 QuizResultView.propTypes = {
-  setValue: PropTypes.func.isRequired,
+  setValue: PropTypes.func,
+};
+
+QuizResultView.defaultProps = {
+  setValue: () => {},
 };

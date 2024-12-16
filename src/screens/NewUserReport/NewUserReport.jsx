@@ -85,7 +85,6 @@ const NewUserReport = () => {
               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
               readiness_score={userReport?.readiness_score}
               report_data={userReport}
-              interview_type={userReport?.interview_type}
             />
           </div> 
     
@@ -142,18 +141,18 @@ const NewUserReport = () => {
             report_data={userReport}
           /> 
         </div> */}
-        {userReport?.report_type === "skill based report" ? (
+        {userReport?.interview_type === "skill_interview" ? (
           <div className="page-break">
           <CuratedSummary
-            report_type={userReport?.report_type}
+            interview_type={userReport?.interview_type}
             skillSuggestions={userReport?.skill_based_suggestions}
             report_data={userReport}
           /> 
           </div>
-        ) : userReport?.report_type === "role based report" ? (
+        ) : userReport?.interview_type === "company_role_interview" ? (
           <div className="page-break">
           <CuratedSummary
-            report_type={userReport?.report_type}
+            interview_type={userReport?.interview_type}
             skillSuggestions={userReport?.skill_based_suggestions}
             report_data={userReport}
           /> 

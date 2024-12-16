@@ -255,7 +255,7 @@ const ScrollableContainer = ({ title, courses, handleCardClick, handleBannerClic
                                 className={`grid grid-cols-4 gap-8`}
                             >
                                 {courses.map((course) => (
-                                    <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
+                                    <CourseCard key={course?.course_id || course?.id} course={course} onClick={handleCardClick} title={title} />
                                 ))}
                             </motion.div>
                         </div>
@@ -320,7 +320,7 @@ const ScrollableContainer = ({ title, courses, handleCardClick, handleBannerClic
                                 overflow-x-scroll overflow-y-hidden whitespace-nowrap `}
                             >
                                 {courses.slice(visibleStartIndex, visibleStartIndex + visibleCount).map((course) => (
-                                    <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
+                                    <CourseCard key={course?.course_id || course?.id} course={course} onClick={handleCardClick} title={title} />
                                 ))}
                             </motion.div>
                         </div>

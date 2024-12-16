@@ -1,13 +1,13 @@
 const CuratedSummary = (props) => {
 
-    const {report_type, skillSuggestions, report_data} = props;
+    const {interview_type, skillSuggestions, report_data} = props;
   
     return (
   
       <>
       <div className="mx-3 my-3 md:mx-6 md:my-6 bg-grey">
   
-        {report_type === "skill based report" && (
+        {interview_type === "skill_interview" && (
           <>
             <div className="px-4 py-6 md:px-8 md:py-8">
               <h3 className="text-2xl font-semibold text-purple">Skill Based Curated Summary</h3>
@@ -29,7 +29,7 @@ const CuratedSummary = (props) => {
           </>
         )}
   
-        {report_type === "role based report" && (
+        {interview_type === "company_role_interview" && (
           <>
             <div className="px-4 py-6 md:px-8 md:py-8">
               <h3 className="text-2xl font-semibold text-purple">Company and Role Based Curated Summary</h3>

@@ -64,7 +64,7 @@ const Carousel = () => {
 
   return (
     <div>
-      <p className=" text-lg font-bold p-2" style={{ color: textColor }}>
+      <p className=" text-lg font-bold p-2" style={{ color: textColor2 }}>
         Emotional Insight
       </p>
       <Divider style={{ opacity: "0.4" }} />
@@ -91,7 +91,7 @@ const Carousel = () => {
           <div className="text-center">
             {" "}
             {/* Center content */}
-            <h3 className="text-xl font-semibold " style={{ color: textColor }}>
+            <h3 className="text-xl font-semibold " style={{ color: textColor2 }}>
               {objects[currentIndex].title}
             </h3>
             <p className="mt-2 text-sm">{objects[currentIndex].description}</p>

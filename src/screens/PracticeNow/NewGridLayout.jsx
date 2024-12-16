@@ -7,12 +7,13 @@ import { submit_interview } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import image from "../../assets/h.jpeg";
+import image from "../../assets/Interviewer.png";
 import InterviewOver from "./InterviewOver";
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { useDarkMode } from "./../../Dark";
 import './Practice.css';
 import { Height } from "@mui/icons-material";
+import GLOBAL_CONSTANTS from "../../../GlobalConstants";
 
 let mediaRecorder;
 
@@ -84,8 +85,18 @@ export default function NewGridLayout({ questions }) {
 
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
-      stopRecording();
+      stopRecording(false);
       setRecordedChunks([]); // Reset the recordedChunks array here
+      setQuestionIndex((prevIndex) => prevIndex + 1);
+      setQuestionTimeLeft(questions[questionIndex + 1].duration);
+      startStreamAndRecording();
+    }
+  };
+
+  const skipQuestion = () => {
+    if (questionIndex < questions.length - 1) {
+      stopRecording(true);
+      setRecordedChunks([]);
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       startStreamAndRecording();
@@ -94,7 +105,7 @@ export default function NewGridLayout({ questions }) {
 
   useEffect(() => {
     if (interviewCompleted) {
-      stopRecording();
+      stopRecording(false);
     }
   }, [interviewCompleted]);
 
@@ -149,7 +160,7 @@ export default function NewGridLayout({ questions }) {
       });
   }
 
-  function stopRecording() {
+  function stopRecording(skipped) {
     if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
       mediaRecorder.onstop = function () {
@@ -176,6 +187,7 @@ export default function NewGridLayout({ questions }) {
             category: questions[questionIndex]?.category,
             sub_category: questions[questionIndex]?.sub_category,
             tag: questions[questionIndex]?.tag ? questions[questionIndex]?.tag : "",
+            skipped: skipped ? 1 : 0
           };
           console.log("payload", payload);
           // dispatch(submit_interview(payload));
@@ -183,7 +195,11 @@ export default function NewGridLayout({ questions }) {
           dispatch(submit_interview(payload, (resp) => {
             console.log("result-resp", resp)
             if (interviewCompleted) {
-              window.location.href = "./report";
+              if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
+                window.location.href = "./studentDashboardScreening";
+              }else{
+                window.location.href = "./report";
+              }
             }
           }));
 
@@ -204,6 +220,59 @@ export default function NewGridLayout({ questions }) {
     }
   }
 
+  //WORKING CODE FOR CHROME 
+  // const speakOut = (text) => {
+  //   if (
+  //     "speechSynthesis" in window &&
+  //     isSpeakerOn &&
+  //     !spokenQuestions.includes(text)
+  //   ) {
+  //     let allVoices = window.speechSynthesis.getVoices();
+  //     // console.log(window.speechSynthesis.getVoices());
+  //     if (!allVoices.length) {
+  //       window.speechSynthesis.onvoiceschanged = function () {
+  //         allVoices = window.speechSynthesis.getVoices();
+  //         let femaleVoice = allVoices.find((voice) => voice.name === "Google हिन्दी" && voice.lang === "hi-IN");
+
+  //         // fallback to en-GB 
+  //         if (!femaleVoice) {
+  //           femaleVoice = allVoices.find((voice) => voice.lang === "en-GB" && /female/i.test(voice.name));
+  //         }
+  //         // If not found, fallback to Tessa (available in Safari)
+  //         if (!femaleVoice) {
+  //           femaleVoice = allVoices.find((voice) => voice.name === "Tessa" && voice.lang === "en-US");
+  //         }
+
+  //       speak(text, femaleVoice || allVoices[0]);
+  //       };
+  //       window.speechSynthesis.getVoices();
+  //     } else {
+  //       let femaleVoice = allVoices.find((voice) => voice.name === "Google हिन्दी" && voice.lang === "hi-IN");
+
+  //       // fallback to en-GB 
+  //       if (!femaleVoice) {
+  //         femaleVoice = allVoices.find((voice) => voice.lang === "en-GB" && /female/i.test(voice.name));
+  //       }
+  //       // If not found, fallback to Tessa (available in Safari)
+  //       if (!femaleVoice) {
+  //         femaleVoice = allVoices.find((voice) => voice.name === "Tessa" && voice.lang === "en-US");
+  //       }
+
+  //       speak(text, femaleVoice || allVoices[0]);
+  //     }
+  //   }
+  // };
+
+  // const speak = (text, voice) => {
+  //   const utterance = new SpeechSynthesisUtterance(text);
+  //   if (voice) {
+  //     utterance.voice = voice;
+  //   }
+  //   window.speechSynthesis.speak(utterance);
+  //   setSpokenQuestions((prev) => [...prev, text]);
+  // };
+
+  //WORKING CODE FOR CHROME AND SAFARI
   const speakOut = (text) => {
     if (
       "speechSynthesis" in window &&
@@ -211,28 +280,51 @@ export default function NewGridLayout({ questions }) {
       !spokenQuestions.includes(text)
     ) {
       let allVoices = window.speechSynthesis.getVoices();
+      
       if (!allVoices.length) {
+        // Safari may not have voices available immediately
         window.speechSynthesis.onvoiceschanged = function () {
           allVoices = window.speechSynthesis.getVoices();
-          const femaleVoice = allVoices.find((voice) => /female/i.test(voice.name));
-          speak(text, femaleVoice);
+          handleSpeak(text, allVoices);
         };
-        window.speechSynthesis.getVoices();
+        window.speechSynthesis.getVoices(); // Trigger loading of voices
       } else {
-        const femaleVoice = allVoices.find((voice) => /female/i.test(voice.name));
-        speak(text, femaleVoice);
+        handleSpeak(text, allVoices); // Voices are already loaded in Chrome
       }
     }
   };
+  
+  const handleSpeak = (text, allVoices) => {
+    let femaleVoice = allVoices.find((voice) => voice.name === "Google हिन्दी" && voice.lang === "hi-IN");
+  
+    // fallback to en-GB (typically available)
+    if (!femaleVoice) {
+      femaleVoice = allVoices.find((voice) => voice.lang === "en-GB" && /female/i.test(voice.name));
+    }
+  
+    // Fallback to Tessa (commonly available on Safari for en-US)
+    if (!femaleVoice) {
+      femaleVoice = allVoices.find((voice) => voice.name === "Tessa" && voice.lang === "en-US");
+    }
 
+
+  // Log the selected voice for debugging
+  console.log('Selected voice:', femaleVoice ? femaleVoice.name : 'None');
+  
+    // Fallback to any first voice if no match is found
+    speak(text, femaleVoice || allVoices[0]);
+  };
+  
   const speak = (text, voice) => {
     const utterance = new SpeechSynthesisUtterance(text);
     if (voice) {
       utterance.voice = voice;
+      utterance.voiceURI = voice.voiceURI;
     }
     window.speechSynthesis.speak(utterance);
     setSpokenQuestions((prev) => [...prev, text]);
   };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -244,7 +336,7 @@ export default function NewGridLayout({ questions }) {
       if (totalTimeLeft > 0) {
         setTotalTimeLeft((prevTime) => prevTime - 1);
       } else {
-        stopRecording();
+        stopRecording(false);
         setInterviewCompleted(true);
         const videoElement = document.getElementById("vid");
         const stream = videoElement.srcObject;
@@ -281,16 +373,6 @@ export default function NewGridLayout({ questions }) {
     }
   }, [interviewCompleted]);
 
-  const skipQuestion = () => {
-    if (questionIndex < questions.length - 1) {
-      stopRecording();
-      setRecordedChunks([]);
-      setQuestionIndex((prevIndex) => prevIndex + 1);
-      setQuestionTimeLeft(questions[questionIndex + 1].duration);
-      startStreamAndRecording();
-    }
-  };
-
   return (
     <>
       {questions?.length > 0 && (
@@ -301,6 +383,9 @@ export default function NewGridLayout({ questions }) {
             </>
           ) : (
             <>
+              <div className="">
+
+              {/* timer progress bar */}
               <div className="bg-teal-100 h-[25px] progressBar relative">
                 <div
                   key={questionIndex}
@@ -314,11 +399,8 @@ export default function NewGridLayout({ questions }) {
                   Time Left: {formatTime(questionTimeLeft)}
                 </span>
               </div>
-              <div className="p-[40px]">
-                <div className="flex justify-end">
 
-
-                </div>
+              <div className="p-[32px]">
                 <div>
                   {/* <LinearProgress
                   className="my-2"
@@ -336,18 +418,21 @@ export default function NewGridLayout({ questions }) {
                     ))}
                   </Stepper> */}
 
-                  <div className="grid grid-cols-4  gap-4 ">
-                    {/* Left Top Cell */}
-                    <div className="col-span-2 flex flex-col">
-                      <div className="text-lg font-bold py-9">
-                        {questionIndex + 1}
-                        {". "}
-                        {questions[questionIndex]?.question}
-                      </div>
-                      <div className="relative w-[600px] h-full rounded-lg overflow-hidden">
+                  {/* question */}
+                  <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 items-center">
+                    <div className="text-lg font-bold">
+                      {questionIndex + 1}
+                      {". "}
+                      {questions[questionIndex]?.question}
+                    </div>
+                  </div>
+
+                  {/* screens */}
+                  <div className="flex flex-col md:flex-row gap-6 mt-8">
+                    <div className="relative rounded-lg w-full md:w-2/3">
                         <img
                           src={image}
-                          className="w-full h-full object-cover"
+                          className="rounded-lg"
                           alt="User"
                         />
                         <div
@@ -360,33 +445,43 @@ export default function NewGridLayout({ questions }) {
                             <VolumeOffIcon className="text-white text-2xl" />
                           )}
                         </div>
-                      </div>
-
-                      {/* <div className="col-span-2 bg-white p-3 ">
-                        <div className="flex w-full justify-between items-center">
-                          <div className="font-bold text-lg">Question {questionIndex + 1} of {questions.length}</div>
-                        </div>
-                      </div> */}
                     </div>
+                    <div className="w-full md:w-1/2">
+                        <div className="relative flex justify-center items-center h-full">
+                          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
+                            REC
+                          </div>
+                          <video
+                            id="vid"
+                            className="rounded-lg"
+                            muted
+                            autoPlay
+                          ></video>
+                        </div>
+                    </div>
+                  </div>
 
-                    {/* Right Vertical Cell */}
-                    <div className="col-span-2 bg-white p-4 rounded-xl mt-3">
-                      <div className="flex gap-4 mb-[5%] justify-end">
-                        <button
+                  {/* last row of question number and buttons */}
+                  <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center mt-8">
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <button
+                      onClick={handleFinishInterview}
+                      className="bg-red-500 text-white h-[45px] px-8 rounded-lg"
+                      >
+                      Finish Interview
+                      </button>
+                      <button
                           onClick={skipQuestion}
-                          className="border w-[130px] h-[45px] bg-gray-300 border-gray-300 rounded-lg flex justify-center items-center"
+                          className="px-8 h-[45px] bg-gray-300 rounded-lg"
                         >
                           Skip
-                        </button>
-                        <button
+                      </button>
+                      <button
                           onClick={nextQuestion}
                           style={{
-                            cursor: "pointer",
-                            fontSize: "18px",
+                            cursor: "pointer",                           
                             borderRadius: "8px",
-                            width: '200px',
                             height: '45px',
-                            marginBottom: '33px',
                             background: linearGradientBackground,
                             color: textColor,
                             visibility:
@@ -394,29 +489,19 @@ export default function NewGridLayout({ questions }) {
                                 ? ""
                                 : "hidden",
                           }}
-                          className="text-secondary"
+                          className="text-secondary px-8"
                         >
                           Next Question
-                        </button>
-                      </div>
-                      <div className="relative ml-[45px]">
-                        <div className="relative w-[520px]  flex justify-center items-center">
-                          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">
-                            REC
-                          </div>
-                          <video
-                            id="vid"
-                            className="rounded-md bg-black"
-                            muted
-                            autoPlay
-                          ></video>
-                        </div>
-                      </div>
+                      </button>
+                    </div>
+                    <div className="text-xl font-bold">
+                      Question {questionIndex + 1} of {questions.length}
                     </div>
                   </div>
+                  
+                  {/* finish interview confirmation modal code */}
                   {showConfirmationPopup && (
                     <div className="fixed z-99999999999999999 inset-0 overflow-y-auto">
-                      {/* Rest of the modal code */}
                       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
                           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -448,7 +533,7 @@ export default function NewGridLayout({ questions }) {
                             </button>
                             <button
                               type="button"
-                              className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                              className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                               onClick={() => setShowConfirmationPopup(false)}
                             >
                               Cancel
@@ -458,18 +543,10 @@ export default function NewGridLayout({ questions }) {
                       </div>
                     </div>
                   )}
+
                 </div>
               </div>
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={handleFinishInterview}
-                  className="fixed bottom-[115px] bg-red-500 text-white right-11 px-6 py-3 rounded-lg flex justify-center gap-2 items-center"
-                >
-                  Finish Interview
-                </button>
-                <div className="relative bottom-[-70px] ml-9 text-xl font-bold">
-                  Question {questionIndex + 1} of {questions.length}
-                </div>
+
               </div>
             </>
           )}

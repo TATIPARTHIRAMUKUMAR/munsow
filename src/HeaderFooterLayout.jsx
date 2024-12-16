@@ -41,7 +41,7 @@ import {
   FaBook,
 } from "react-icons/fa";
 
-import { FaChartColumn, FaChartGantt, FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
+import { FaFileCircleCheck, FaChartColumn, FaChartGantt, FaHeartPulse, FaClipboardList } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
@@ -233,12 +233,13 @@ export default function HeaderFooterLayout({ Component }) {
               icon: <FaChalkboardTeacher size={20} className="" />,
               route: "/teachersList",
             },
-            {
-              label: "Screening Users",
-              icon: <FaChalkboardTeacher size={20} className="" />,
-              route: "/screeningUsers",
-            },
           ],
+        },
+        {
+          label: "Screening Users",
+          icon: <FaChalkboardTeacher size={20} className="" />,
+          route: "/screeningUsers",
+          subItems: [],
         },
         {
           label: "Configurations",
@@ -374,6 +375,12 @@ export default function HeaderFooterLayout({ Component }) {
           label: "My Courses",
           icon: <FaBook size={20} className="" />,
           route: "/studentCourseList",
+          subItems: [],
+        },
+        {
+          label: "MRCLM",
+          icon: <FaClipboardList size={20} className="" />,
+          route: "/studentMRCLM",
           subItems: [],
         },
         {
@@ -799,7 +806,7 @@ export default function HeaderFooterLayout({ Component }) {
       />
 
       <div
-        className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`}
+        className={`mt-[60px] overflow-auto ${backgroundColorClass}`}
         style={{ flexGrow: 1 }}
       >
         {Component}

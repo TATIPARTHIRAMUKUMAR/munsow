@@ -32,7 +32,7 @@ const Intro = (props) => {
           </div>
         </div>
 
-        {report_data?.report_type === "skill based report" ? (
+        {report_data?.interview_type === "skill_interview" ? (
           <div className="mt-40 mb-48">
           <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
             <h1>Skill based Report</h1>
@@ -44,7 +44,7 @@ const Intro = (props) => {
             </div>
           </div>
           </div>
-        ) : report_data?.report_type === "role based report" ? (
+        ) : report_data?.interview_type === "company_role_interview" ? (
           <div className="mt-40 mb-48">
           <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
             <h1>Role based Report</h1>

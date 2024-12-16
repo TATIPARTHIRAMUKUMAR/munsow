@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { loadReportsList, loadStatus, loadUserReport } from "../../redux/action";
 import NoDataPage from "./NoData";
-import moment from "moment";
+import moment from "moment-timezone";
 
 import { useDarkMode } from "./../../Dark";
 import Tooltip from '@mui/material/Tooltip';
@@ -84,6 +84,7 @@ export default function ReportIndex() {
             navigate('/reportView');
             console.log("Report Data:", data);
         };
+        const formattedDate = moment(generated).add(5, 'hours').add(30, 'minutes').format('MMMM DD, YYYY HH:mm:ss');
 
 
 
@@ -196,7 +197,7 @@ export default function ReportIndex() {
                         {(report_type === "cultural_interview" || report_type === "jd_interview" || report_type === "company_role_interview") && <div className="font-medium"><span className="font-bold">Role:</span> {role}</div>}
                         {(report_type === "cultural_interview" || report_type === "jd_interview" || report_type === "company_role_interview") && <div className="font-medium"><span className="font-bold">Company:</span> {company}</div>}
                         {(report_type === "company_role_interview" || report_type === "skill_interview") && <div className="font-medium"><span className="font-bold">Level:</span> {level}</div>}
-                        <div className="font-medium"><span className="font-bold">Generated On:</span> {moment(generated).format('MMMM DD, YYYY HH:mm:ss')}</div>
+                        <div className="font-medium"><span className="font-bold">Generated On:</span> {formattedDate} IST</div>
                     </div>
                     <Divider className="my-5" />
                     <div className="py-2 w-full">
