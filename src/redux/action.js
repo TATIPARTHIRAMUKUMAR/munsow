@@ -1682,7 +1682,7 @@ export const create_mrclm_course = (data) => {
       .then((resp) => {
         if (resp?.data?.status) {
           toast.update(toastId, {
-            render: "Tree Created, now assign users",
+            render: "Tree Created, now content will be generated in background and you can try after 2-3 minutes",
             type: "success",
             autoClose: true,
           });

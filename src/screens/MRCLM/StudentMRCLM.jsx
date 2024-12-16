@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useDarkMode } from "./../../Dark";
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { create_mrclm_course, loadTrees } from '../../redux/action';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const options = [
   { value: 'images', label: 'Images', color: 'border-red-500', hash: '#EF4444' },
@@ -18,6 +19,7 @@ const StudentMRCLM = () => {
   const [searchText, setSearchText] = useState('');
   const [descriptionText, setDescriptionText] = useState('');
   const [isAddClicked, setIsAddClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { colorTheme } = useSelector((state) => state?.data);
   const trees = useSelector((state) => state?.data?.treeList?.courses);
@@ -78,18 +80,21 @@ const StudentMRCLM = () => {
       if (latestCourse) {
         navigate(`/studentMRCLM/view/${latestCourse.course_id}`);
         setIsAddClicked(false);
+        setIsLoading(false);
       }
     }
   }, [trees, isAddClicked, navigate, searchText]);
   
   const handleAddClick = async () => {
     try {
+      setIsLoading(true);
       const response = await dispatch(create_mrclm_course({ name: searchText, description: descriptionText }));
       if (response) {
         setIsAddClicked(true);
       }
     } catch (error) {
       console.warn("Ignoring API response error:", error);
+      setIsLoading(false);
     } finally {
       closeModal();
     }
@@ -247,14 +252,18 @@ const StudentMRCLM = () => {
                 className="bg-white shadow-md rounded-md p-4 cursor-pointer hover:shadow-lg transition-shadow flex flex-col items-center"
               >
                 <h3 className="text-xl font-bold text-gray-700 mb-2">{course.course_name}</h3>
-                <button
-                  onClick={(e) => {
-                    handleCardClick(course.course_id);
-                  }}
-                  className="bg-teal-500 text-white p-2 rounded-full hover:bg-teal-600 transition-all"
-                >
-                  ▶
-                </button>
+                {isLoading && course.course_name === searchText ? (
+                  <p className="text-sm text-teal-600">Generating course content...</p>
+                ) : (
+                  <button
+                    onClick={(e) => {
+                      handleCardClick(course.course_id);
+                    }}
+                    className="bg-teal-500 text-white p-2 rounded-full hover:bg-teal-600 transition-all"
+                  >
+                    ▶
+                  </button>
+                )}
               </div>
             ))}
           </div>
