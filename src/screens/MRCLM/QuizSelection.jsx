@@ -142,7 +142,7 @@ const QuizSelection = ({selectedSubtopicName, selectedTopicName, selectedCourseI
   const { colorTheme } = useSelector((state) => state?.data);
   const { isDarkMode } = useDarkMode();
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // React Router's navigation hook
+  const navigate = useNavigate();
   const [selectedLevel, setSelectedLevel] = useState(null);
 
   const linearGradientBackground = isDarkMode
@@ -156,19 +156,19 @@ const QuizSelection = ({selectedSubtopicName, selectedTopicName, selectedCourseI
   const levels = [
     {
       name: "Easy",
-      totalCards: 60,
+      totalCards: 5,
       border: "#f7ca02",
       gradient: "linear-gradient(to top, #b59205, #f5d349)"
     },
     {
       name: "Medium",
-      totalCards: 60,
+      totalCards: 7,
       border: "#f77002",
       gradient: "radial-gradient(circle at center, #f53f02, #f0a890)"
     },
     {
       name: "Hard",
-      totalCards: 60,
+      totalCards: 10,
       border: "#f70251",
       gradient: "linear-gradient(to bottom, #f75e8f, #913351)"
     },
@@ -226,7 +226,7 @@ const QuizSelection = ({selectedSubtopicName, selectedTopicName, selectedCourseI
                   className="card-count float-left"
                   style={{ borderColor: level.border }}
                 >
-                  0/{level.totalCards} Cards
+                  {level.totalCards} Cards
                 </div>
                 <h3 className="card-title">{level.name}</h3>
               </div>

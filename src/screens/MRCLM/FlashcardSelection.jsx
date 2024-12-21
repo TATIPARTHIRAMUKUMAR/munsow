@@ -86,12 +86,20 @@ const FlashcardSelection = ({ selectedSubtopicName, flashcards }) => {
     return acc;
   }, {});
 
+  // const cards = [
+  //   { title: "Knowledge", gradient: "linear-gradient(to right, #ff9a9e, #fad0c4)", cardCount: `${categoryCounts["Knowledge"] || 0} cards`, border: '#e87998' },
+  //   { title: "Understanding", gradient: "linear-gradient(to right, #a1c4fd, #c2e9fb)", cardCount: `${categoryCounts["Understanding"] || 0} cards`, border: '#6d9ced' },
+  //   { title: "Examples and Applications", gradient: "linear-gradient(to right, #d4fc79, #96e6a1)", cardCount: `${categoryCounts["Examples and Applications"] || 0} cards`, border: '#abdb6b' },
+  //   { title: "Case Studies", gradient: "linear-gradient(to right, #84fab0, #8fd3f4)", cardCount: `${categoryCounts["Case Studies"] || 0} cards`, border: '#19d19a' },
+  // ];
+
   const cards = [
-    { title: "Knowledge", gradient: "linear-gradient(to right, #ff9a9e, #fad0c4)", cardCount: `${categoryCounts["Knowledge"] || 0} cards`, border: '#e87998' },
-    { title: "Understanding", gradient: "linear-gradient(to right, #a1c4fd, #c2e9fb)", cardCount: `${categoryCounts["Understanding"] || 0} cards`, border: '#6d9ced' },
-    { title: "Examples and Applications", gradient: "linear-gradient(to right, #d4fc79, #96e6a1)", cardCount: `${categoryCounts["Examples and Applications"] || 0} cards`, border: '#abdb6b' },
-    { title: "Case Studies", gradient: "linear-gradient(to right, #84fab0, #8fd3f4)", cardCount: `${categoryCounts["Case Studies"] || 0} cards`, border: '#19d19a' },
+    { title: "Knowledge", gradient: "linear-gradient(to right, #0CC7C2, #1F5A5E)", cardCount: `${categoryCounts["Knowledge"] || 0} cards`, border: '#1F5A5E' },
+    { title: "Understanding", gradient: "linear-gradient(to left, #30638E, #242D36)", cardCount: `${categoryCounts["Understanding"] || 0} cards`, border: '#30638E' },
+    { title: "Examples and Applications", gradient: "linear-gradient(to right, #08ADB0, #186E8D)", cardCount: `${categoryCounts["Examples and Applications"] || 0} cards`, border: '#186E8D' },
+    { title: "Case Studies", gradient: "linear-gradient(to left, #0FE1D3, #003D5B)", cardCount: `${categoryCounts["Case Studies"] || 0} cards`, border: '#0FE1D3' },
   ];
+
 
   return (
     <div className="flex flex-col text-center justify-center">

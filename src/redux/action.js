@@ -1675,7 +1675,6 @@ export const create_mrclm_course = (data) => {
     };
 
     const toastId = toast("Creating Tree .. please wait", { autoClose: false });
-    console.log('// : ', headers);
 
     return axios
       .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/create_course`, JSON.stringify(data), { headers })
