@@ -14,6 +14,7 @@ import { useDarkMode } from "./../../Dark";
 import './Practice.css';
 import { Height } from "@mui/icons-material";
 import GLOBAL_CONSTANTS from "../../../GlobalConstants";
+import WarningModel from "./WarningModel";
 
 let mediaRecorder;
 
@@ -78,6 +79,45 @@ export default function NewGridLayout({ questions }) {
     ? reduxColorTheme.dark.textColor3
     : reduxColorTheme.light.textColor3;
 
+  const [warningCount, setWarningCount] = useState(0);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const maxWarnings = 3;
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "hidden") {
+      const newWarningCount = warningCount + 1;
+      setWarningCount(newWarningCount);
+
+      if (newWarningCount < maxWarnings) {
+        setModalMessage(
+          `Warning ${newWarningCount}/${maxWarnings}: Please do not switch tabs or leave this window. Your interview will be terminated after ${
+          maxWarnings - newWarningCount
+          } more ${maxWarnings - newWarningCount <= 1 ? "warning" : "warnings"}.`
+        );
+        setModalVisible(true);
+      }
+
+      if (newWarningCount >= maxWarnings) {
+        setModalMessage(
+          "You have exceeded the maximum number of warnings. The interview is now terminated."
+        );
+        setModalVisible(true);
+        confirmEndInterview();
+      }
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [warningCount]);
 
   const handleFinishInterview = () => {
     setShowConfirmationPopup(true);
@@ -103,15 +143,15 @@ export default function NewGridLayout({ questions }) {
     }
   };
 
-  useEffect(() => {
-    if (interviewCompleted) {
-      stopRecording(false);
-    }
-  }, [interviewCompleted]);
+  // useEffect(() => {
+  //   if (interviewCompleted) {
+  //     stopRecording(false);
+  //   }
+  // }, [interviewCompleted]);
 
   const confirmEndInterview = () => {
     setInterviewCompleted(true);
-    // stopRecording();
+    stopRecording();
     const videoElement = document.getElementById("vid");
     const stream = videoElement.srcObject;
     if (stream) {
@@ -384,6 +424,11 @@ export default function NewGridLayout({ questions }) {
           ) : (
             <>
               <div className="">
+              <WarningModel
+                message={modalMessage}
+                isVisible={isModalVisible}
+                onClose={closeModal}
+              />
 
               {/* timer progress bar */}
               <div className="bg-teal-100 h-[25px] progressBar relative">
