@@ -9,6 +9,7 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import image from "../../assets/Interviewer.png";
 import InterviewOver from "./InterviewOver";
+import InterviewCancle from "./InterviewCancel";
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { useDarkMode } from "./../../Dark";
 import './Practice.css';
@@ -58,6 +59,7 @@ export default function NewGridLayout({ questions }) {
   const [totalTimeLeft, setTotalTimeLeft] = useState(TOTAL_TIME);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [interviewCompleted, setInterviewCompleted] = useState(false);
+  const [interviewCancelled, setInterviewCancelled] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [spokenQuestions, setSpokenQuestions] = useState([]);
 
@@ -150,7 +152,7 @@ export default function NewGridLayout({ questions }) {
   // }, [interviewCompleted]);
 
   const confirmEndInterview = () => {
-    setInterviewCompleted(true);
+    setInterviewCancelled(true);
     stopRecording();
     const videoElement = document.getElementById("vid");
     const stream = videoElement.srcObject;
@@ -423,6 +425,12 @@ export default function NewGridLayout({ questions }) {
             </>
           ) : (
             <>
+            {interviewCancelled ? (
+              <>
+                <InterviewCancle />
+              </>
+            ) : (
+            <>
               <div className="">
               <WarningModel
                 message={modalMessage}
@@ -594,7 +602,10 @@ export default function NewGridLayout({ questions }) {
 
               </div>
             </>
+          
           )}
+          </>
+        )}
         </>
       )}
     </>
