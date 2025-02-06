@@ -106,7 +106,7 @@ export default function NewGridLayout({ questions }) {
           "You have exceeded the maximum number of warnings. The interview is now terminated."
         );
         setModalVisible(true);
-        confirmEndInterview();
+        confirmCancelInterview();
       }
     }
   };
@@ -151,8 +151,24 @@ export default function NewGridLayout({ questions }) {
   //   }
   // }, [interviewCompleted]);
 
-  const confirmEndInterview = () => {
+  const confirmCancelInterview = () => {
     setInterviewCancelled(true);
+    stopRecording();
+    const videoElement = document.getElementById("vid");
+    const stream = videoElement.srcObject;
+    if (stream) {
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => {
+        track.stop();
+      });
+      videoElement.srcObject = null;
+    }
+    // setTotalTimeLeft(0);
+    setShowConfirmationPopup(false);
+  }
+
+  const confirmEndInterview = () => {
+    setInterviewCompleted(true);
     stopRecording();
     const videoElement = document.getElementById("vid");
     const stream = videoElement.srcObject;
