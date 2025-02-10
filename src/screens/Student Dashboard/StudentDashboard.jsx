@@ -23,8 +23,8 @@ export default function StudentDashboard() {
 
   const { userStats } = useSelector((state) => state.data);
 
-  // State to store average scores
-  const [averageScores, setAverageScores] = useState(null);
+  // State to store average scores (Meter Chart)
+  // const [averageScores, setAverageScores] = useState(null);
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
@@ -62,52 +62,53 @@ export default function StudentDashboard() {
     }
   };
 
-  useEffect(() => {
+  // Meter Chart
+  // useEffect(() => {
 
-    // Calculate average scores
-   const calculateAverageScores = (userStats) => {
-    if (!userStats || !userStats.graphs || !Array.isArray(userStats.graphs)) {
-      return null;
-    }
+  //   // Calculate average scores
+  //  const calculateAverageScores = (userStats) => {
+  //   if (!userStats || !userStats.graphs || !Array.isArray(userStats.graphs)) {
+  //     return null;
+  //   }
 
-    const { graphs } = userStats;
-    const { totalInterviews, skillSums } = graphs.reduce(
-      (accumulator, graph) => {
-        const { data } = graph;
-        data.forEach((interview) => {
-          accumulator.totalInterviews++;
-          Object.keys(interview).forEach((key) => {
-            if (key !== "name") {
-              accumulator.skillSums[key] += interview[key];
-            }
-          });
-        });
-        return accumulator;
-      },
-      {
-        totalInterviews: 0,
-        skillSums: {
-          "Knowledge/Skills": 0,
-          "Mindset/Attitude": 0,
-          "Practical Thinking": 0,
-        },
-      }
-    );
+  //   const { graphs } = userStats;
+  //   const { totalInterviews, skillSums } = graphs.reduce(
+  //     (accumulator, graph) => {
+  //       const { data } = graph;
+  //       data.forEach((interview) => {
+  //         accumulator.totalInterviews++;
+  //         Object.keys(interview).forEach((key) => {
+  //           if (key !== "name") {
+  //             accumulator.skillSums[key] += interview[key];
+  //           }
+  //         });
+  //       });
+  //       return accumulator;
+  //     },
+  //     {
+  //       totalInterviews: 0,
+  //       skillSums: {
+  //         "Knowledge/Skills": 0,
+  //         "Mindset/Attitude": 0,
+  //         "Practical Thinking": 0,
+  //       },
+  //     }
+  //   );
 
-    const averageScores = {
-      "Knowledge/Skills": Math.round(skillSums["Knowledge/Skills"] / totalInterviews),
-      "Mindset/Attitude": Math.round(skillSums["Mindset/Attitude"] / totalInterviews),
-      "Practical Thinking": Math.round(skillSums["Practical Thinking"] / totalInterviews),
-    };
+  //   const averageScores = {
+  //     "Knowledge/Skills": Math.round(skillSums["Knowledge/Skills"] / totalInterviews),
+  //     "Mindset/Attitude": Math.round(skillSums["Mindset/Attitude"] / totalInterviews),
+  //     "Practical Thinking": Math.round(skillSums["Practical Thinking"] / totalInterviews),
+  //   };
 
-    return averageScores;
-  };
+  //   return averageScores;
+  // };
 
-    const scores = calculateAverageScores(userStats);
-    if (scores) {
-      setAverageScores(scores);
-    }
-  }, [userStats]);
+  //   const scores = calculateAverageScores(userStats);
+  //   if (scores) {
+  //     setAverageScores(scores);
+  //   }
+  // }, [userStats]);
 
   
   return (
@@ -198,11 +199,15 @@ export default function StudentDashboard() {
 
       <div>
         <div className=" w-[100%] relative bg-white overflow-auto max-w-full rounded-lg mb-4">
-        <p className=" text-lg font-bold pl-3 mt-3" style={{ color: "black" }}>
+          
+        {/* Meter Chart Section start ----- */}
+        
+        {/* <p className=" text-lg font-bold pl-3 mt-3" style={{ color: "black" }}>
           Role Based & Skill Based Interview Summary
         </p>
-        <Divider style={{ opacity: "1" }} />
-        {averageScores ? (
+        <Divider style={{ opacity: "1" }} /> */}
+        
+        {/* {averageScores ? (
         <div className="flex h-[280px]">
           <div className="w-[21%] mx-[6%] bg-white">
               <MeterChart
@@ -231,7 +236,9 @@ export default function StudentDashboard() {
         </div>
         ) : (
           <p>Loading...</p>
-        )}
+        )} */}
+
+        {/* Meter Chart Section end ----- */}
           
         </div>
         <div className="bg-white rounded-lg">
