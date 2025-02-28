@@ -168,20 +168,23 @@ export default function NewGridLayout({ questions }) {
   }
 
   const confirmEndInterview = () => {
-    setInterviewCompleted(true);
-    stopRecording();
-    const videoElement = document.getElementById("vid");
-    const stream = videoElement.srcObject;
-    if (stream) {
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => {
-        track.stop();
-      });
-      videoElement.srcObject = null;
-    }
-    // setTotalTimeLeft(0);
-    setShowConfirmationPopup(false);
-  };
+    setInterviewCompleted(true); 
+};
+
+  useEffect(() => {
+      if (interviewCompleted) {
+          console.log('Interview Completed Updated:', interviewCompleted);
+          stopRecording();
+          const videoElement = document.getElementById("vid");
+          const stream = videoElement?.srcObject;
+          if (stream) {
+              const tracks = stream.getTracks();
+              tracks.forEach((track) => track.stop());
+              videoElement.srcObject = null;
+          }
+          setShowConfirmationPopup(false);
+      }
+  }, [interviewCompleted]);
 
   function startStreamAndRecording() {
     setRecordedChunks([]); // Reset the recordedChunks array here
@@ -394,7 +397,6 @@ export default function NewGridLayout({ questions }) {
       if (totalTimeLeft > 0) {
         setTotalTimeLeft((prevTime) => prevTime - 1);
       } else {
-        stopRecording(false);
         setInterviewCompleted(true);
         const videoElement = document.getElementById("vid");
         const stream = videoElement.srcObject;
@@ -410,6 +412,20 @@ export default function NewGridLayout({ questions }) {
     speakOut(questions[questionIndex]?.question);
     return () => clearInterval(interval);
   }, [questionTimeLeft, questionIndex, totalTimeLeft]);
+
+  useEffect(() => {
+    if (interviewCompleted) {
+      stopRecording(false);
+      const videoElement = document.getElementById("vid");
+      const stream = videoElement?.srcObject;
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => track.stop());
+        videoElement.srcObject = null;
+      }
+    }
+  }, [interviewCompleted]);
+  
 
   useEffect(() => {
     setIsLoading(true);
