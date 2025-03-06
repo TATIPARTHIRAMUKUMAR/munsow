@@ -29,6 +29,9 @@ import HelpSupportAdmin from "./screens/Help/AdminHelp";
 import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 // import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
+import LoadResultsData from "./screens/PracticeNow/LoadResultsData";
+import VideoAnalysis from "./screens/NewUserReport/VideoAnalysis";
+import SpeechAnalysis from "./screens/NewUserReport/SpeechAnalysis";
 import Configurations from "./screens/Admin/Configurations/Configurations";
 import QuestionBankForm from "./screens/Teacher/CreateQuestionBank/CreateQuestionBank";
 // import TopicandSubtopic from "./screens/Course/Topic/TopicandSubtopic";
@@ -42,7 +45,7 @@ import StudentCourseView from "./screens/Course/StudentCourseView/CourseView";
 import StudentCourseList from "./screens/Course/StudentCourseView/StudentCourseList";
 import CourseEdit from "./screens/Course/StudentCourseView/CourseEdit";
 // import CourseView from "./screens/Course/CourseView";
-import NewUserReport from "./screens/NewUserReport/NewUserReport";
+import AnswerAnalysis from "./screens/NewUserReport/AnswerAnalysis";
 import ReportIndex from "./screens/NewUserReport/ReportsList";
 import ScreeningUserRegister from "./screens/Login/ScreeningUserRegister";
 import LinksList from "./screens/Admin/ScreeningUsers/LinksList";
@@ -97,9 +100,12 @@ function Url_Routes() {
 
               </> : <>
                 <Route exact path="/report" element={<HeaderFooterLayout Component={<ReportIndex />} />} />
-                <Route exact path="/reportView" element={<HeaderFooterLayout Component={<NewUserReport />} />} />
+                <Route exact path="/answer-analysis" element={<HeaderFooterLayout Component={<AnswerAnalysis />} />} />
                 <Route exact path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
                 <Route exact path="/interview" element={<HeaderFooterLayout Component={<LoadQuestionsData />} />} />
+                <Route exact path="/interview-results" element={<HeaderFooterLayout Component={<LoadResultsData />} />} />
+                <Route exact path="/video-analysis" element={<HeaderFooterLayout Component={<VideoAnalysis />} />} />
+                <Route exact path="/speech-analysis" element={<HeaderFooterLayout Component={<SpeechAnalysis />} />} />
                 <Route exact path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
                 <Route exact path="/notifications" element={<HeaderFooterLayout Component={<NotificationsPage />} />} />
                 <Route exact path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
