@@ -139,22 +139,43 @@ export default function StudentDashboard() {
                     View My Interview Reports
                   </button>
                   <button
-                    className="mb-4 sm:mb-0 ml-4 sm:ml-0"
-                    style={{
-                      background: "white",
-                      color: textColor,
-                      fontWeight: "bold",
-                      padding: "8px 16px",
-                      border: "1px solid gray-300",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                    }}
-                    onClick={() => {
-                      navigateUser();
-                    }}
-                  >
-                    Practice Now
-                  </button>
+  className="mb-4 sm:mb-0 ml-4 sm:ml-0 flex items-center gap-2"
+  style={{
+    background: "white",
+    color: textColor,
+    fontWeight: "bold",
+    padding: "8px 16px",
+    border: "1px solid gray-300",
+    borderRadius: "8px",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  }}
+  onClick={() => {
+    navigateUser();
+  }}
+>
+  Mock Interview
+  <div className="flex items-center">
+    <svg viewBox="0 0 200 200" className="w-6 h-6">
+      <defs>
+        <linearGradient id="starGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style={{ stopColor: "#00f5f5" }} />
+          <stop offset="50%" style={{ stopColor: "#7fff00" }} />
+          <stop offset="100%" style={{ stopColor: "#ffff00" }} />
+        </linearGradient>
+      </defs>
+      <path
+        d="M100,10 L120,80 L190,80 L130,120 L150,190 L100,150 L50,190 L70,120 L10,80 L80,80 Z"
+        fill="url(#starGradient)"
+      />
+    </svg>
+    <svg viewBox="0 0 200 200" className="w-4 h-4 -ml-1">
+      <path
+        d="M100,10 L120,80 L190,80 L130,120 L150,190 L100,150 L50,190 L70,120 L10,80 L80,80 Z"
+        fill="url(#starGradient)"
+      />
+    </svg>
+  </div>
+</button>
                 </div>
               </div>
               <div className="absolute top-[-60px] right-0 flex justify-center items-center overflow-visible">

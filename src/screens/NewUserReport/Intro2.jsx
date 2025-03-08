@@ -1,7 +1,7 @@
 
 import MunsowLogo from "./../../assets/MunsowLogo.png";
 
-const Intro = (props) => {
+const Intro2 = (props) => {
 
   const { user, report_data, interview_type } = props;
 
@@ -30,14 +30,14 @@ const Intro = (props) => {
           <div className="ml-4 md:ml-7">
             
             <h1 className="text-xl md:text-2xl font-bold mb-4 text-sky">MUNSOW</h1>
-            <h1 className="text-2xl md:text-3xl font-extrabold mb-4">Candidate Interview<br></br> Answer Analysis Report</h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold mb-4">Candidate Interview<br></br> Video Analysis Report</h1>
           </div>
         </div>
 
         {report_data?.interview_type === "skill_interview" ? (
           <div className="mt-40 mb-48">
           <div className="flex text-center justify-center items-center mb-5 uppercase text-2xl font-bold mb-4 text-purple">
-            <h1>Skill based Report</h1>
+            <h1>Skill Based Report</h1>
           </div>
           <div className="flex justify-center items-center mb-5">
             <div className="munsow-light-bg px-6 py-4 rounded-full">
@@ -95,4 +95,4 @@ const Intro = (props) => {
   );
 };
 
-export default Intro;
+export default Intro2;

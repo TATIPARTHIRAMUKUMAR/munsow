@@ -1,6 +1,6 @@
+import LoadingOverlay from '../../Components/LoadingOverlay';
 import { Autocomplete, Divider, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// import Stepper from "react-stepper-horizontal";
 import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,10 +25,11 @@ import Tooltip from "@mui/material/Tooltip";
 import MutiSelect from "../../Components/Multiselect";
 import { useDarkMode } from "./../../Dark";
 import interview from "../../assets/interview.jpeg";
-// import JobDescriptionInput from "./JobDescription";
 import JobDescriptionForm from "./JobDescription";
 import { useLoader } from '../../Components/LoaderContext';
 
+// Import the new LoadingPopup component
+import LoadingPopup from '../../Components/LoadingPopup';
 
 const QontoConnector = styled(StepConnector)(({ theme, linearGradientBackground }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -58,11 +59,13 @@ const StepperComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { entity_type } = location.state || {};  // Access the entity_type from state
+  const { entity_type } = location.state || {};
+
+  // Add loading state for popup
+  const [isLoading, setIsLoading] = useState(false);
 
   const [steps] = useState([
     { title: "Step 1" },
-    // { title: "Role Specific" },
     { title: "Step 2" },
     { title: "Step 3" },
   ]);
@@ -73,11 +76,11 @@ const StepperComponent = () => {
   const [softSkills, setSoftSkills] = useState(false);
   const [chosenRole, setChosenRole] = useState(false);
   const [chosenCompany, setChosenCompany] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [level, setLevel] = useState(0);
   const [experienceLevel, setExperienceLevel] = useState("low");
   const [selectedCategory, setSelectedCategory] = useState("skills");
   const [selectedOptions, setSelectedOptions] = useState([]);
-
 
   const [selectedSoftskill, setSelectedSoftskill] = useState(null);
   const [selectedHardskill, setSelectedHardskill] = useState(null);
@@ -92,8 +95,10 @@ const StepperComponent = () => {
 
   const { showLoader, hideLoader, setQuestions } = useLoader();
 
+  const [audioValidated, setAudioValidated] = useState(false);
+  const [videoValidated, setVideoValidated] = useState(false);
+
   const payload = {
-   
     specifications: {
       role: "",
       company: "",
@@ -105,11 +110,7 @@ const StepperComponent = () => {
 
   useEffect(() => {
     setSelectedRole(null);
-    console.log("selectedCompany", selectedCompany);
   }, [selectedCompany]);
-
-  const [audioValidated, setAudioValidated] = useState(false);
-  const [videoValidated, setVideoValidated] = useState(false);
 
   const handleSelection = () => {
     if (selectedCategory == "skills") {
@@ -127,9 +128,7 @@ const StepperComponent = () => {
       }
     }
     if ((selectedCategory == "jd"||selectedCategory == "cult")&&currentStep==1) {
-      // console.log("selectedOptions",typeof (selectedOptions),currentStep)
       if (Object.keys(selectedOptions).length>=1) {
-        console.log("hehe")
         return false;
       } else {
         return true;
@@ -149,98 +148,101 @@ const StepperComponent = () => {
   useEffect(() => {
     if (questionsList?.questions?.length > 0) {
       setQuestions(questionsList);
-      // setTimeout(() => {
-      //     hideLoader();
-      // }, 3000);
+      setIsLoading(false); // Hide loading when questions are loaded
     }
   }, [questionsList, setQuestions, hideLoader]);
 
+ // Replace just the handleNext function with this updated version
+const handleNext = async () => {
+  if (currentStep === 1) {
+    // Your existing code for step 1
+    const payload = {
+      specifications: {
+        level: experienceLevel || "",
+        role: selectedRole?.label || "",
+        company: selectedCompany?.label || "",
+        hard_skill: selectedHardskill?.map(skill => skill.label) || [],
+        soft_skill: selectedSoftskill?.map(skill => skill.label) || []
+      },
+      interview_type: selectedCategory === "jd" ? "jd_interview" 
+        : selectedCategory === "cult" ? "cultural_interview" 
+        : selectedCategory === "skills" ? "skill_interview" 
+        : "company_role_interview"
+    };
 
-
-  const handleNext = async () => {
-
-    payload.specifications.level = experienceLevel ? experienceLevel : "";
-    payload.specifications.role = selectedRole ? selectedRole?.label : "";
-    payload.specifications.company = selectedCompany
-      ? selectedCompany?.label
-      : "";
-    payload.specifications.hard_skill = selectedHardskill
-      ? selectedHardskill.map((skill) => skill.label)
-      : [];
-    payload.specifications.soft_skill = selectedSoftskill
-      ? selectedSoftskill.map((skill) => skill.label)
-      : [];
-      payload.interview_type=selectedCategory=="jd"?"jd_interview":selectedCategory=="cult"?"cultural_interview":selectedCategory=="skills"?"skill_interview":"company_role_interview";
-      if(selectedCategory=="jd"){
-        payload.specifications.jd_skill=selectedOptions;
-        payload.specifications.company=jdcompany;
-        payload.specifications.role=jdrole;
-        
-        delete payload?.specifications?.hard_skill
-        delete payload?.specifications?.soft_skill
-        delete payload?.specifications?.level
-
-      }
-      if(selectedCategory=="cult"){
-        payload.specifications.cultural_skill=selectedOptions;
-        payload.specifications.company=cultcompany;
-        payload.specifications.role=cultrole;
-
-        delete payload?.specifications?.hard_skill
-        delete payload?.specifications?.soft_skill
-        delete payload?.specifications?.level
-
-      }
-
-    if (currentStep == 1) {
-      showLoader('splash');
-      dispatch(loadQuestions(payload));
+    // Handle JD specific case
+    if (selectedCategory === "jd") {
+      payload.specifications.jd_skill = selectedOptions;
+      payload.specifications.company = jdcompany;
+      payload.specifications.role = jdrole;
+      delete payload.specifications.hard_skill;
+      delete payload.specifications.soft_skill;
+      delete payload.specifications.level;
     }
-    else if (currentStep == 2) {
-      console.log('currentStep == 2 : ', questionsList)
-      // setShowAcknowledgement(true);
 
-      let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
-      toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
+    // Handle cultural specific case
+    if (selectedCategory === "cult") {
+      payload.specifications.cultural_skill = selectedOptions;
+      payload.specifications.company = cultcompany;
+      payload.specifications.role = cultrole;
+      delete payload.specifications.hard_skill;
+      delete payload.specifications.soft_skill;
+      delete payload.specifications.level;
+    }
+
+    setShowLoading(true);
+    try {
+      await dispatch(loadQuestions(payload));
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setCurrentStep(currentStep + 1);
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to load questions. Please try again.');
+    } finally {
+      setShowLoading(false);
+    }
+  }
+  else if (currentStep === 2) {
+    // Only proceed if all validations pass
+    if (chosenCompany && audioValidated && videoValidated) {
       if (questionsList?.questions?.length > 0) {
+        setShowLoading(true);
+        let toastId = toast("Preparing your interview...", { 
+          autoClose: false 
+        });
+
+        try {
+          await dispatch(prepare_interview()); // Add this if needed
+
           setTimeout(() => {
-              navigate("/interview")
-          }, 3000);
+            toast.update(toastId, {
+              render: "Ready for your interview!",
+              type: "success",
+              autoClose: 2000
+            });
+            
+            setTimeout(() => {
+              setShowLoading(false);
+              navigate("/interview");
+            }, 1000);
+          }, 2000);
+        } catch (error) {
+          toast.error("Failed to start interview. Please try again.");
+          setShowLoading(false);
+        }
+      } else {
+        toast.error("No questions available. Please try again.");
       }
+    } else {
+      toast.warning("Please complete all system checks before proceeding.");
     }
-    //else if ((showAcknowledgement) && (currentStepModal === 0)) {
-      //setCurrentStepModal(currentStepModal + 1);
-    //}
-    else if (currentStepModal === 1) {
-      setCurrentStepModal(currentStepModal + 1);
-    }
-    else if (currentStepModal === 2) {
-      let toastId = toast("Wait .. redirecting to Interview Section", {
-        autoClose: false,
-      });
-      toast.update(toastId, {
-        render: "Wait .. redirecting to Interview Section",
-        type: "success",
-        autoClose: true,
-      });
-      if (questionsList?.questions?.length > 0) {
-        setTimeout(() => {
-          navigate("/interview");
-        }, 3000);
-      }
-      console.log(questionsList, "QuestionsList")
-    }
+  } else {
     setCurrentStep(currentStep + 1);
-  };
-
+  }
+};
   const handlePrev = () => {
     setCurrentStep(currentStep - 1);
   };
-
-  const handlePrevModal = () => {
-    setCurrentStepModal(currentStepModal - 1);
-  };
-
 
   const { isDarkMode } = useDarkMode();
 
@@ -256,21 +258,9 @@ const StepperComponent = () => {
     ? colorTheme.dark.textColor3
     : colorTheme.light.textColor3;
 
-  const blackColors = isDarkMode
-    ? colorTheme.dark.blackColor4
-    : colorTheme.light.blackColor;
-
   const grayColors = isDarkMode
     ? colorTheme.dark.grayColor3
     : colorTheme.light.grayColor;
-
-  const previousButton = isDarkMode
-    ? colorTheme.dark.backgrounds
-    : colorTheme.light.backgrounds;
-
-  useEffect(() => {
-    console.log("selectedSoftskill", selectedSoftskill);
-  }, [selectedSoftskill]);
 
   useEffect(() => {
     dispatch(loadHardSkillsList());
@@ -279,24 +269,9 @@ const StepperComponent = () => {
     dispatch(loadCompaniesList());
   }, [dispatch]);
 
-  const handleStartInterview = () => {
-    // Start the interview when the user confirms readiness
-    setShowAcknowledgement(false); // Hide the acknowledgment pop-up
-    let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
-    toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
-    if (questionsList?.questions?.length > 0) {
-      setTimeout(() => {
-        navigate("/interview")
-      }, 3000);
-    }
-  };
-
   return (
     <div className="">
       <div className="w-full mx-auto rounded-xl">
-        {/* <p className="p-5 text-xl font-semibold">Practice</p>
-        <Divider /> */}
-
         <Stepper
           activeStep={currentStep}
           alternativeLabel
@@ -323,7 +298,10 @@ const StepperComponent = () => {
             </Step>
           ))}
         </Stepper>
+        
         <Divider style={{ marginTop: "1rem" }} />
+        
+        {/* Main content sections */}
         <div className="flex  p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
           
           {currentStep === 0 && (
@@ -448,7 +426,7 @@ const StepperComponent = () => {
                       color: grayColors,
                     }}
                   >
-                    Job Description Specific
+                    Technical Mock 
                   </h2>
                 </div>
                 <div
@@ -708,7 +686,7 @@ const StepperComponent = () => {
                       color: grayColors,
                     }}
                   >
-                    Job Description Specific
+                    Technical Mock 
                   </h2>
                 </div>
                 <div
@@ -780,7 +758,7 @@ const StepperComponent = () => {
                       color: grayColors,
                     }}
                   >
-                    Cultural Fit Specific
+                    HR / Behavioural Mock 
                   </h2>
                 </div>
                 <div
@@ -945,8 +923,10 @@ const StepperComponent = () => {
             </div>
           )}
         </div>
+
+        {/* Navigation buttons */}
         <div className="mt-4 p-6 flex justify-end items-center">
-          {(currentStep > 0) && (
+          {currentStep > 0 && (
             <button
               onClick={handlePrev}
               disabled={handleSelection()}
@@ -960,16 +940,17 @@ const StepperComponent = () => {
                 borderRadius: "0.375rem",
                 cursor: "pointer",
               }}
-              onMouseEnter={(e) => { e.target.style.background = `${linearGradientBackground}` }}
+              onMouseEnter={(e) => { e.target.style.background = linearGradientBackground }}
               onMouseLeave={(e) => { e.target.style.background = "none" }}
             >
               Previous
             </button>
           )}
-          {(currentStep < steps.length - 1) && (
+          
+          {currentStep < steps.length - 1 && (
             <button
               onClick={handleNext}
-              disabled={handleSelection()} // Use the isRoleSelected state variable here
+              disabled={handleSelection()}
               className={`shadow-md mx-2 px-4 rounded-md ${handleSelection() ? 'opacity-50 cursor-not-allowed' : ''}`}
               style={{
                 backgroundColor: linearGradientBackground,
@@ -983,8 +964,8 @@ const StepperComponent = () => {
             </button>
           )}
 
-          {(currentStep === steps.length - 1) && (
-              <span>
+          {currentStep === steps.length - 1 && (
+            <span>
               {chosenCompany && audioValidated && videoValidated ? (
                 <button
                   onClick={handleNext}
@@ -999,7 +980,6 @@ const StepperComponent = () => {
               ) : (
                 <Tooltip title="Please finish system checks before submitting">
                   <button
-                    onClick={handleNext}
                     disabled={true}
                     className="shadow-md bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md opacity-50 cursor-not-allowed"
                     style={{
@@ -1016,140 +996,15 @@ const StepperComponent = () => {
         </div>
       </div>
 
-      {showAcknowledgement && (
-        <div className="modal">
-          <div className="modal-content">
-            {currentStepModal === 0 && (
-              <>
-                <div className="modalContent">
-                  <h1 className="text-2xl font-bold text-[#777b7e] mb-4">
-                    Prepare for your interview!
-                  </h1>
-
-                  <div className="flex justify-center">
-                    <img src={interview} alt="Interview" className="w-[200px] h-[200px] rounded-2xl" />
-                  </div><br />
-
-                  <p className="text-gray-500 font-semibold mb-4">
-                    Before you start the interview, please review these tips:
-                  </p>
-
-                  <ul className="list-disc font-semibold pl-5 text-gray-500 mb-4">
-                    <li className="mb-2">Find a quiet and well-lit place.</li>
-                    <li className="mb-2">Ensure a stable internet connection.</li>
-                    <li className="mb-2">Test your audio and video beforehand.</li>
-                    <li className="mb-2">Have a notepad, pen, and water bottle ready (optional).</li>
-                  </ul>
-                  <br />
-
-                  <div className="flex items-center justify-center">
-                    <div className="flex space-x-2">
-                      {[...Array(stepsModal)].map((_, index) => (
-                        <div
-                          key={index}
-                          className={`w-2 h-2 rounded-full ${index === currentStepModal ? 'bg-blue-500' : 'bg-gray-300'
-                            }`}
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </>
-
-            )}
-
-            {currentStepModal === 1 && (
-              <>
-                <div className="modalContent">
-                  <p className="text-2xl font-bold text-[#777b7e] mb-4">
-                    Feeling confident and ready? Let's begin!
-                  </p>
-                  <br />
-                  <br />
-                  <div className="flex justify-center">
-                    <img src={interview} alt="Interview" className="w-[200px] h-[200px] rounded-2xl" />
-                  </div><br />
-
-                  <div className="flex items-center justify-center">
-                    <div className="flex space-x-2">
-                      {[...Array(stepsModal)].map((_, index) => (
-                        <div
-                          key={index}
-                          className={`w-2 h-2 rounded-full ${index === currentStepModal ? 'bg-blue-500' : 'bg-gray-300'
-                            }`}
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                  <br />
-                </div>
-              </>
-            )}
-
-            {currentStepModal === 2 && (
-              <>
-                <div className="modalContent">
-                  <p className="text-2xl font-bold text-[#777b7e] mb-4">Start your interview now!</p>
-                  <br />
-
-                  <p className="text-gray-500 mb-4 font-bold">
-                    Remember, make eye contact, smile, and speak clearly and confidently.
-                  </p>
-                  <br />
-
-                  <div className="flex justify-center">
-                    <img src={interview} alt="Interview" className="w-[200px] h-[200px] rounded-2xl" />
-                  </div><br />
-
-                  <div className="flex items-center justify-center">
-                    <div className="flex space-x-2">
-                      {[...Array(stepsModal)].map((_, index) => (
-                        <div
-                          key={index}
-                          className={`w-2 h-2 rounded-full ${index === currentStepModal ? 'bg-blue-500' : 'bg-gray-300'
-                            }`}
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                  <br />
-                </div>
-              </>
-            )}
-
-            <div className="flex justify-end">
-              {(currentStepModal > 0) && (
-                <button
-                  onClick={handlePrevModal}
-                  className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white mx-2 py-2 px-4 rounded-md"
-                >
-                  Previous
-                </button>
-              )}
-              {(currentStepModal < stepsModal - 1) && (
-                <button
-                  onClick={handleNext}
-                  className={`bg-blue-500 mx-2 text-white py-2 px-4 rounded-md 
-                      hover:bg-blue-700 `}
-                >
-                  Next
-                </button>
-              )}
-              {(currentStepModal === stepsModal - 1) && (
-                <span>
-                  <button
-                    onClick={handleNext}
-                    className="bg-green-500 mx-2 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-                  >
-                    I am ready - start my interview now
-                  </button>
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* Loading Popup */}
+<LoadingOverlay 
+  show={showLoading}
+  message={
+    currentStep === 1 
+      ? "Preparing your interview questions..." 
+      : "Setting up your interview environment..."
+  }
+/>
     </div>
   );
 };
