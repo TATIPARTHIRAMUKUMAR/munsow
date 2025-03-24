@@ -158,11 +158,11 @@ export default function NewGridLayout({ questions }) {
     setCurrentTranscript(transcript);
   };
 
-  // Modified function to submit all data in one payload
+  
   const submitInterviewData = (videoBlob = null, status, skipped = false) => {
     console.log('Preparing unified submission payload');
     
-    // Include the current transcript for the active question
+   
     const finalTranscripts = {
       ...allTranscripts,
       [questionIndex]: currentTranscript
@@ -178,7 +178,7 @@ export default function NewGridLayout({ questions }) {
     
     console.log('Formatted transcripts for payload:', formattedTranscripts);
     
-    // Base payload that will be used for all submissions
+    
     const basePayload = {
       interview_id: questionsList?.interview_id,
       status: status,
@@ -191,7 +191,7 @@ export default function NewGridLayout({ questions }) {
       skipped: skipped ? 1 : 0
     };
     
-    // If we have a video blob, add it to the payload
+    
     if (videoBlob) {
       const reader = new FileReader();
       reader.onloadend = function() {
@@ -206,7 +206,7 @@ export default function NewGridLayout({ questions }) {
           base64data += "=";
         }
         
-        // Complete payload with video
+       
         const completePayload = {
           ...basePayload,
           video: base64data
@@ -221,7 +221,7 @@ export default function NewGridLayout({ questions }) {
           })
         );
         
-        // Dispatch the action with the complete payload
+        
         dispatch(submit_interview(completePayload, (resp) => {
           console.log("Submission response:", resp);
           
@@ -237,7 +237,7 @@ export default function NewGridLayout({ questions }) {
       };
       reader.readAsDataURL(videoBlob);
     } else {
-      // Send payload without video
+     
       console.log('Sending unified submission without video');
       console.log('Payload details (partial):', 
         JSON.stringify({
@@ -246,7 +246,7 @@ export default function NewGridLayout({ questions }) {
         })
       );
       
-      // Dispatch the action with just the base payload
+      
       dispatch(submit_interview(basePayload, (resp) => {
         console.log("Submission response:", resp);
         
@@ -358,7 +358,7 @@ export default function NewGridLayout({ questions }) {
   };
 
   function startStreamAndRecording() {
-    setRecordedChunks([]); // Reset the recordedChunks array here
+    setRecordedChunks([]); 
     
     console.log('Starting stream and recording...');
     
@@ -390,7 +390,7 @@ export default function NewGridLayout({ questions }) {
               console.log(`Created video blob of size ${blob.size} bytes`);
               
               const url = URL.createObjectURL(blob);
-              // Create a download link for the recorded video
+              
               const a = document.createElement("a");
               a.href = url;
               a.download = "recorded-video.mp4";
@@ -399,7 +399,7 @@ export default function NewGridLayout({ questions }) {
               a.click();
               document.body.removeChild(a);
 
-              // Clear the recordedChunks array
+             
               setRecordedChunks([]);
             } else {
               console.warn('No recorded chunks available to process');
@@ -409,7 +409,7 @@ export default function NewGridLayout({ questions }) {
           mediaRecorder.start();
           console.log('Media recorder started');
           
-          // Start transcription after media recorder is started
+          
           console.log('Activating transcription');
           setTranscriptionActive(true);
         } else {
@@ -467,7 +467,7 @@ export default function NewGridLayout({ questions }) {
     }
   }
   
-  //WORKING CODE FOR CHROME AND SAFARI
+  
   const speakOut = (text) => {
     if (
       "speechSynthesis" in window &&
@@ -478,14 +478,14 @@ export default function NewGridLayout({ questions }) {
       let allVoices = window.speechSynthesis.getVoices();
       
       if (!allVoices.length) {
-        // Safari may not have voices available immediately
+       
         window.speechSynthesis.onvoiceschanged = function () {
           allVoices = window.speechSynthesis.getVoices();
           handleSpeak(text, allVoices);
         };
-        window.speechSynthesis.getVoices(); // Trigger loading of voices
+        window.speechSynthesis.getVoices(); 
       } else {
-        handleSpeak(text, allVoices); // Voices are already loaded in Chrome
+        handleSpeak(text, allVoices); 
       }
     }
   };
@@ -494,20 +494,20 @@ export default function NewGridLayout({ questions }) {
     console.log(`Available voices: ${allVoices.length}`);
     let femaleVoice = allVoices.find((voice) => voice.name === "Google हिन्दी" && voice.lang === "hi-IN");
   
-    // fallback to en-GB (typically available)
+   
     if (!femaleVoice) {
       femaleVoice = allVoices.find((voice) => voice.lang === "en-GB" && /female/i.test(voice.name));
     }
   
-    // Fallback to Tessa (commonly available on Safari for en-US)
+   
     if (!femaleVoice) {
       femaleVoice = allVoices.find((voice) => voice.name === "Tessa" && voice.lang === "en-US");
     }
 
-    // Log the selected voice for debugging
+    
     console.log('Selected voice:', femaleVoice ? femaleVoice.name : 'None');
   
-    // Fallback to any first voice if no match is found
+    
     speak(text, femaleVoice || allVoices[0]);
   };
   
@@ -574,7 +574,7 @@ export default function NewGridLayout({ questions }) {
     }
   }, [interviewCompleted]);
 
-  // Render three different states with a single parent element
+  
   let content;
   if (interviewCompleted) {
     content = <InterviewOver />;
