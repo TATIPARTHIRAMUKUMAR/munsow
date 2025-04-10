@@ -26,6 +26,7 @@ export const LoaderProvider = ({ children }) => {
     setQuestionsList(questions);
   };
   
+  // Hide loader when changing routes
   useEffect(() => {
     hideLoader();
   }, [location.pathname]);

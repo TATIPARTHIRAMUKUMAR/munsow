@@ -81,7 +81,7 @@ export default function ReportIndex() {
     const ReportCards = ({ id, role, level, report_ready, report_data, result_data, skill_type, skills_list, generated, company, report_type, jdSkills,cultSkills }) => {
         const viewReport = (data) => {
             localStorage.setItem('reportData', JSON.stringify(data));
-            navigate('/answer-analysis');
+            navigate('/reportView');
             console.log("Report Data:", data);
         };
         const formattedDate = moment(generated).add(5, 'hours').add(30, 'minutes').format('MMMM DD, YYYY HH:mm:ss');

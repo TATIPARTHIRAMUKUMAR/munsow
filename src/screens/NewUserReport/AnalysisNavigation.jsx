@@ -6,6 +6,7 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import MicIcon from '@mui/icons-material/Mic';
 import DescriptionIcon from '@mui/icons-material/Description';
 
+// This component provides consistent navigation across analysis pages
 const AnalysisNavigation = ({ currentPage = "answer" }) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ const AnalysisNavigation = ({ currentPage = "answer" }) => {
         // This would connect to your PDF generation logic
         setTimeout(() => {
             setLoading(false);
-            navigate('/answer-analysis');
+            navigate('/reportView');
         }, 1000);
     };
 
@@ -24,7 +25,7 @@ const AnalysisNavigation = ({ currentPage = "answer" }) => {
             <div className="flex flex-col sm:flex-row justify-between items-start mb-4">
                 <button         
                     className="bg-gradient-to-r mb-3 sm:mb-0 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
-                    onClick={() => navigate('/answer-analysis')}>
+                    onClick={() => navigate('/reportView')}>
                     <ArrowBackIcon fontSize="small" />
                     Back to Report
                 </button>

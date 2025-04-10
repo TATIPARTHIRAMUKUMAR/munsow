@@ -1,3 +1,6 @@
+
+
+//new2
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import store from './redux/store';
@@ -8,9 +11,9 @@ import './App.css';
 import axios from 'axios';
 import Loader from './Components/Loader';
 import { LoaderProvider } from './Components/LoaderContext';
-
 function App() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showVoiceWidget, setShowVoiceWidget] = useState(false);
 
   const checkIfPracticePage = () => {
     return window.location.pathname.includes('/practice');
@@ -38,31 +41,37 @@ function App() {
       }
     );
 
+    // Check if we should show the voice widget on this page
+    setShowVoiceWidget(checkIfPracticePage());
+
     // Clean up interceptors when the component unmounts
     return () => {
       axios.interceptors.request.eject(requestInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, []); 
+  }, [window.location.pathname]); 
 
   return (
-    <LoaderProvider>
-      {isLoading && !checkIfPracticePage() && <Loader />}
-      <Url_Routes />
-      <ToastContainer
-        transition={Slide}
-        autoClose={2000}
-        position="top-right"
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </LoaderProvider>
+    <Provider store={store}>
+      <LoaderProvider>
+        {isLoading && !checkIfPracticePage() && <Loader />}
+        <Url_Routes />
+        {showVoiceWidget && <VoiceWidget />}
+        <ToastContainer
+          transition={Slide}
+          autoClose={2000}
+          position="top-right"
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </LoaderProvider>
+    </Provider>
   );
 }
 

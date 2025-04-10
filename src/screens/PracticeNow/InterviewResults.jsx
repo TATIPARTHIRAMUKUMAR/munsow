@@ -1,4 +1,4 @@
-
+//src/Pages/Practice/InterviewResults.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from "react-redux";
 import { useDarkMode } from "./../../Dark";
@@ -52,6 +52,7 @@ const InterviewResults = () => {
             }));
             setResults(processedResults);
         } 
+        // Otherwise, use questions data and add mock results
         else if (questionsList?.questions) {
             const mockResults = questionsList.questions.map(question => ({
                 question: question.question,
@@ -133,6 +134,10 @@ const InterviewResults = () => {
         navigate("/speech-analysis");
     };
 
+    const navigateToAnswerAnalysis = () => {
+        navigate("/interview-results")
+    };
+
     if (!results.length) {
         return (
             <div className="flex items-center justify-center h-screen" style={{ background: backgroundColor }}>
@@ -158,7 +163,7 @@ const InterviewResults = () => {
                     <div className="flex flex-wrap gap-3">
                         <button
                             className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
-                            onClick={handleGeneratePdf}
+                            onClick={navigateToAnswerAnalysis}
                         >
                             <DescriptionIcon /> 
                             Answer Analysis
