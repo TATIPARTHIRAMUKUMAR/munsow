@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Lottie from 'react-lottie';
 import SplashModal from './SplashModal';
 import splashScreen from '../assets/splashScreen.svg';
-
+// Import your Lottie animation JSON
 import * as loaderAnimation from '../assets/loader-animation.json';
 
 const LottieLoader = ({ type, questionsList, hideLoader = () => {} }) => {

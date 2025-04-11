@@ -1220,7 +1220,7 @@ export const prepare_interview = (data, callback) => {
       "Content-type": "application/json",
       "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
     };
-    let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: false });
+    let toastId = toast("Wait .. redirecting to Interview Section", { autoClose: 5000 });
     axios
       .post(`${GLOBAL_CONSTANTS.backend_url}user/register_interview`, JSON.stringify(data), {
         headers,

@@ -63,6 +63,7 @@ const StepperComponent = () => {
 
   // Add loading state for popup
   const [isLoading, setIsLoading] = useState(false);
+  const [questionsLoading, setQuestionsLoading] = useState(false);
 
   const [steps] = useState([
     { title: "Step 1" },
@@ -145,101 +146,222 @@ const StepperComponent = () => {
     colorTheme,
   } = useSelector((state) => state?.data);
 
+  // Monitor for questions being loaded and automatically navigate when they're available
   useEffect(() => {
     if (questionsList?.questions?.length > 0) {
+      console.log("Questions loaded successfully:", questionsList.questions.length);
       setQuestions(questionsList);
       setIsLoading(false); // Hide loading when questions are loaded
+      
+      // If questions are loaded after step 1, proceed to step 2
+      if (currentStep === 1 && questionsLoading) {
+        setCurrentStep(2);
+        setQuestionsLoading(false);
+        setShowLoading(false);
+      }
     }
-  }, [questionsList, setQuestions, hideLoader]);
+  }, [questionsList, setQuestions, hideLoader, currentStep, questionsLoading]);
 
- // Replace just the handleNext function with this updated version
-const handleNext = async () => {
-  if (currentStep === 1) {
-    // Your existing code for step 1
-    const payload = {
-      specifications: {
-        level: experienceLevel || "",
-        role: selectedRole?.label || "",
-        company: selectedCompany?.label || "",
-        hard_skill: selectedHardskill?.map(skill => skill.label) || [],
-        soft_skill: selectedSoftskill?.map(skill => skill.label) || []
-      },
-      interview_type: selectedCategory === "jd" ? "jd_interview" 
-        : selectedCategory === "cult" ? "cultural_interview" 
-        : selectedCategory === "skills" ? "skill_interview" 
-        : "company_role_interview"
-    };
-
-    // Handle JD specific case
-    if (selectedCategory === "jd") {
-      payload.specifications.jd_skill = selectedOptions;
-      payload.specifications.company = jdcompany;
-      payload.specifications.role = jdrole;
-      delete payload.specifications.hard_skill;
-      delete payload.specifications.soft_skill;
-      delete payload.specifications.level;
-    }
-
-    // Handle cultural specific case
-    if (selectedCategory === "cult") {
-      payload.specifications.cultural_skill = selectedOptions;
-      payload.specifications.company = cultcompany;
-      payload.specifications.role = cultrole;
-      delete payload.specifications.hard_skill;
-      delete payload.specifications.soft_skill;
-      delete payload.specifications.level;
-    }
-
-    setShowLoading(true);
-    try {
-      await dispatch(loadQuestions(payload));
-      await new Promise(resolve => setTimeout(resolve, 2000));
+  const handleNext = async () => {
+    if (currentStep === 0) {
+      // Move to next step
       setCurrentStep(currentStep + 1);
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error('Failed to load questions. Please try again.');
-    } finally {
-      setShowLoading(false);
     }
-  }
-  else if (currentStep === 2) {
-    // Only proceed if all validations pass
-    if (chosenCompany && audioValidated && videoValidated) {
-      if (questionsList?.questions?.length > 0) {
-        setShowLoading(true);
-        let toastId = toast("Preparing your interview...", { 
-          autoClose: false 
-        });
-
-        try {
-          await dispatch(prepare_interview()); // Add this if needed
-
+    else if (currentStep === 1) {
+      // Show loading overlay
+      setShowLoading(true);
+      setQuestionsLoading(true);
+      
+      let toastId = toast("Preparing your interview questions...", { 
+        autoClose: false 
+      });
+      
+      const payload = {
+        specifications: {
+          level: experienceLevel || "",
+          role: selectedRole?.label || "",
+          company: selectedCompany?.label || "",
+          hard_skill: selectedHardskill?.map(skill => skill.label) || [],
+          soft_skill: selectedSoftskill?.map(skill => skill.label) || []
+        },
+        interview_type: selectedCategory === "jd" ? "jd_interview" 
+          : selectedCategory === "cult" ? "cultural_interview" 
+          : selectedCategory === "skills" ? "skill_interview" 
+          : "company_role_interview"
+      };
+  
+      // Handle JD specific case
+      if (selectedCategory === "jd") {
+        payload.specifications.jd_skill = selectedOptions;
+        payload.specifications.company = jdcompany;
+        payload.specifications.role = jdrole;
+        delete payload.specifications.hard_skill;
+        delete payload.specifications.soft_skill;
+        delete payload.specifications.level;
+      }
+  
+      // Handle cultural specific case
+      if (selectedCategory === "cult") {
+        payload.specifications.cultural_skill = selectedOptions;
+        payload.specifications.company = cultcompany;
+        payload.specifications.role = cultrole;
+        delete payload.specifications.hard_skill;
+        delete payload.specifications.soft_skill;
+        delete payload.specifications.level;
+      }
+      
+      try {
+        await dispatch(loadQuestions(payload));
+        
+        // Check if questions loaded immediately
+        if (questionsList?.questions?.length > 0) {
+          toast.update(toastId, {
+            render: "Questions loaded successfully!",
+            type: "success",
+            autoClose: 2000
+          });
+          
+          setCurrentStep(2);
+          setQuestionsLoading(false);
+        } else {
+          // Keep showing loading until questions are loaded
+          toast.update(toastId, {
+            render: "Still preparing your questions...",
+            type: "info",
+            autoClose: 5000
+          });
+          
+          // Start a timer to check for questions
+          const checkQuestionsInterval = setInterval(() => {
+            if (questionsList?.questions?.length > 0) {
+              clearInterval(checkQuestionsInterval);
+              
+              toast.update(toastId, {
+                render: "Questions loaded successfully!",
+                type: "success",
+                autoClose: 2000
+              });
+              
+              // Let the useEffect handle the navigation
+            }
+          }, 2000); // Check every 2 seconds
+          
+          // Set timeout to prevent infinite loading
           setTimeout(() => {
+            clearInterval(checkQuestionsInterval);
+            if (!questionsList?.questions?.length > 0) {
+              setShowLoading(false);
+              setQuestionsLoading(false);
+              
+              toast.update(toastId, {
+                render: "Failed to load questions. Please try again.",
+                type: "error",
+                autoClose: 5000
+              });
+            }
+          }, 60000); // 1 minute timeout
+        }
+      } catch (error) {
+        console.error('Error loading questions:', error);
+        toast.update(toastId, {
+          render: "Failed to load questions. Please try again.",
+          type: "error",
+          autoClose: 5000
+        });
+        
+        setShowLoading(false);
+        setQuestionsLoading(false);
+      }
+    }
+    else if (currentStep === 2) {
+      // Only proceed if all validations pass
+      if (chosenCompany && audioValidated && videoValidated) {
+        // Show toast and loading overlay
+        let toastId = toast("Preparing your interview...", { 
+          autoClose: 5000 
+        });
+        
+        // Show the loading overlay
+        setShowLoading(true);
+        
+        try {
+          // First prepare the interview
+          await dispatch(prepare_interview());
+          
+          // Check if questions are available
+          if (questionsList?.questions?.length > 0) {
+            // If questions are available, proceed to interview
             toast.update(toastId, {
               render: "Ready for your interview!",
               type: "success",
               autoClose: 2000
             });
             
+            // Navigate with a flag to start the interview
+            setShowLoading(false);
+            navigate("/interview", { 
+              state: { 
+                startInterview: true // Add this flag to indicate user explicitly started the interview
+              } 
+            });
+          } else {
+            // If questions are not available yet, retry loading
+            toast.update(toastId, {
+              render: "Still preparing your questions...",
+              type: "info",
+              autoClose: 5000
+            });
+            
+            // Try to load questions again and automatically redirect when they're ready
+            const checkQuestionsInterval = setInterval(() => {
+              if (questionsList?.questions?.length > 0) {
+                // Once questions are available, navigate with start flag
+                clearInterval(checkQuestionsInterval);
+                
+                toast.update(toastId, {
+                  render: "Ready for your interview!",
+                  type: "success",
+                  autoClose: 2000
+                });
+                
+                setShowLoading(false);
+                navigate("/interview", { 
+                  state: { 
+                    startInterview: true // Add this flag to indicate user explicitly started the interview
+                  } 
+                });
+              }
+            }, 1000); // Check every 1 second
+            
+            // Set a timeout to stop checking after 100 seconds
             setTimeout(() => {
-              setShowLoading(false);
-              navigate("/interview");
-            }, 1000);
-          }, 2000);
+              clearInterval(checkQuestionsInterval);
+              if (!questionsList?.questions?.length > 0) {
+                toast.update(toastId, {
+                  render: "Unable to load interview questions. Please try again.",
+                  type: "error",
+                  autoClose: 5000
+                });
+                setShowLoading(false);
+              }
+            }, 100000);
+          }
         } catch (error) {
-          toast.error("Failed to start interview. Please try again.");
+          toast.update(toastId, {
+            render: "Something went wrong. Please try again.",
+            type: "error",
+            autoClose: 5000
+          });
           setShowLoading(false);
         }
       } else {
-        toast.error("No questions available. Please try again.");
+        toast.warning("Please complete all system checks before proceeding.");
       }
     } else {
-      toast.warning("Please complete all system checks before proceeding.");
+      setCurrentStep(currentStep + 1);
     }
-  } else {
-    setCurrentStep(currentStep + 1);
-  }
-};
+  };
+
   const handlePrev = () => {
     setCurrentStep(currentStep - 1);
   };
@@ -929,8 +1051,8 @@ const handleNext = async () => {
           {currentStep > 0 && (
             <button
               onClick={handlePrev}
-              disabled={handleSelection()}
-              className="shadow-md"
+              disabled={handleSelection() || questionsLoading}
+              className={`shadow-md ${questionsLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               style={{
                 margin: "0 0.5rem",
                 borderColor: linearGradientBackground,
@@ -938,9 +1060,13 @@ const handleNext = async () => {
                 color: grayColors,
                 padding: "0.5rem 1rem",
                 borderRadius: "0.375rem",
-                cursor: "pointer",
+                cursor: questionsLoading ? "not-allowed" : "pointer",
               }}
-              onMouseEnter={(e) => { e.target.style.background = linearGradientBackground }}
+              onMouseEnter={(e) => { 
+                if (!questionsLoading) {
+                  e.target.style.background = linearGradientBackground 
+                }
+              }}
               onMouseLeave={(e) => { e.target.style.background = "none" }}
             >
               Previous
@@ -950,17 +1076,17 @@ const handleNext = async () => {
           {currentStep < steps.length - 1 && (
             <button
               onClick={handleNext}
-              disabled={handleSelection()}
-              className={`shadow-md mx-2 px-4 rounded-md ${handleSelection() ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={handleSelection() || questionsLoading}
+              className={`shadow-md mx-2 px-4 rounded-md ${handleSelection() || questionsLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               style={{
                 backgroundColor: linearGradientBackground,
                 color: textColor,
                 padding: "0.5rem 1rem",
                 borderRadius: "0.375rem",
-                cursor: "pointer",
+                cursor: handleSelection() || questionsLoading ? "not-allowed" : "pointer",
               }}
             >
-              Next
+              {questionsLoading ? "Loading..." : "Next"}
             </button>
           )}
 
@@ -995,18 +1121,23 @@ const handleNext = async () => {
           )}
         </div>
       </div>
-
-      {/* Loading Popup */}
-<LoadingOverlay 
-  show={showLoading}
-  message={
-    currentStep === 1 
-      ? "Preparing your interview questions..." 
-      : "Setting up your interview environment..."
-  }
-/>
+ 
+      {/* Loading Overlay */}
+      <LoadingOverlay 
+        show={showLoading}
+        message={
+          questionsLoading
+            ? "Preparing your interview questions..." 
+            : currentStep === 2
+              ? "Setting up your interview environment..."
+              : "Loading..."
+        }
+      />
     </div>
   );
 };
 
 export default StepperComponent;
+
+
+

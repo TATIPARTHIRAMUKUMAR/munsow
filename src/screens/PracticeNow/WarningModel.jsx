@@ -17,3 +17,4 @@ const WarningModel = ({ message, isVisible, onClose }) => {
 };
 
 export default WarningModel;
+
