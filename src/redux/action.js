@@ -1232,7 +1232,7 @@ export const prepare_interview = (data, callback) => {
         }
         else {
           toast.update(toastId, { render: "Wait .. redirecting to Interview Section", type: "success", autoClose: true })
-          callback
+          callback(resp)
         }
       })
       .catch((error) => {

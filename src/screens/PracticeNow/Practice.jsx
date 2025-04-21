@@ -285,8 +285,6 @@ const StepperComponent = () => {
         setShowLoading(true);
         
         try {
-          // First prepare the interview
-          await dispatch(prepare_interview());
           
           // Check if questions are available
           if (questionsList?.questions?.length > 0) {

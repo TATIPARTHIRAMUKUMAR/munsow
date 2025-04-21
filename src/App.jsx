@@ -56,7 +56,7 @@ function App() {
       <LoaderProvider>
         {isLoading && !checkIfPracticePage() && <Loader />}
         <Url_Routes />
-        {showVoiceWidget && <VoiceWidget />}
+        {showVoiceWidget}
         <ToastContainer
           transition={Slide}
           autoClose={2000}
