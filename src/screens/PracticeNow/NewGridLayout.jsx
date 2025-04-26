@@ -46,6 +46,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   const [micPermissionGranted, setMicPermissionGranted] = useState(null);
   const [permissionError, setPermissionError] = useState('');
   const [componentInitialized, setComponentInitialized] = useState(false);
+  const [videoRecordingActive, setVideoRecordingActive] = useState(false);
   
   // Check if interview should start (from navigation state)
   const shouldStartInterview = location.state?.startInterview || false;
@@ -361,6 +362,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     }
   };
 
+  // OPTIMIZED: nextQuestion function to prevent buffering between questions
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
       console.log(`Moving from question ${questionIndex} to question ${questionIndex + 1}`);
@@ -374,18 +376,29 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         }));
       }
       
-      stopRecording(false);
-      setRecordedChunks([]);
+      // IMPORTANT CHANGE: Instead of stopping and restarting recording,
+      // we continue recording while changing questions to avoid buffering
+      
+      // Update question index and timer
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       
       // Reset current transcript for the next question
       setCurrentTranscript('');
+      
+      // THIS IS THE KEY FIX: We don't change transcriptionActive, 
+      // we just trigger a reset while keeping transcription active
       setTranscriptResetTrigger(prev => prev + 1);
-      startStreamAndRecording();
+      
+      // Log that we're maintaining transcription
+      console.log('Maintaining active transcription while changing questions');
+      
+      // No need to call stopRecording and startStreamAndRecording - those cause buffering
+      // Just let the transcription continue with the new question
     }
   };
 
+  // OPTIMIZED: skipQuestion function to prevent buffering between questions
   const skipQuestion = () => {
     if (questionIndex < questions.length - 1) {
       console.log(`Skipping question ${questionIndex}`);
@@ -399,16 +412,34 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         }));
       }
       
-      stopRecording(true);
-      setRecordedChunks([]);
+      // FIXED: Don't create or submit video blob when skipping - this causes buffering
+      // Just mark the question as skipped in the database
+      submitInterviewData(null, "Inprogress", true);
+      
+      // Update question index and timer
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       
       // Reset current transcript for the next question
       setCurrentTranscript('');
+      
+      // KEY FIX: Same as in nextQuestion - just toggle the reset trigger
+      // without changing transcriptionActive state
       setTranscriptResetTrigger(prev => prev + 1);
-      startStreamAndRecording();
+      
+      // Log that we're maintaining transcription
+      console.log('Maintaining active transcription while skipping question');
+      
+      // No need to restart recording - just continue with current stream
     }
+  };
+
+  // Helper function to create a video blob from current chunks without stopping recorder
+  const createCurrentVideoBlob = () => {
+    if (recordedChunks.length > 0) {
+      return new Blob(recordedChunks, { type: "video/mp4" });
+    }
+    return null;
   };
 
   const confirmCancelInterview = () => {
@@ -488,24 +519,23 @@ export default function NewGridLayout({ questions, isLoading = true }) {
               const blob = new Blob(recordedChunks, { type: "video/mp4" });
               console.log(`Created video blob of size ${blob.size} bytes`);
               
-              const url = URL.createObjectURL(blob);
-              // Create a download link for the recorded video
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = "recorded-video.mp4";
-              a.style.display = "none";
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-
-              // Clear the recordedChunks array
-              setRecordedChunks([]);
+              // Send the combined data (transcript + video)
+              const status = interviewCompleted ? "Completed" : "Inprogress";
+              submitInterviewData(blob, status, false);
             } else {
               console.warn('No recorded chunks available to process');
+              
+              // If it's the end of the interview, ensure we still submit all data
+              if (interviewCompleted) {
+                console.log('Interview completed but no video chunks - still submitting data');
+                submitInterviewData(null, "Completed", false);
+              }
             }
           };
           
-          mediaRecorder.start();
+          // Set a timeslice to capture data more frequently (every 1 second)
+          mediaRecorder.start(1000);
+          setVideoRecordingActive(true);
           console.log('Media recorder started');
           
           // Start transcription after media recorder is started
@@ -526,35 +556,13 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     // Stop transcription first
     console.log('Stopping transcription');
     setTranscriptionActive(false);
+    setVideoRecordingActive(false);
     
     console.log(`Current recorded chunks: ${recordedChunks.length}`);
     
     if (mediaRecorder && mediaRecorder.state === "recording") {
       console.log('Stopping media recorder');
       mediaRecorder.stop();
-      
-      mediaRecorder.onstop = function () {
-        console.log('Processing recording after stop');
-        console.log(`Recorded chunks size: ${recordedChunks.length}`);
-        
-        if (recordedChunks.length === 0) {
-          console.warn('No recorded chunks to process');
-          
-          // If it's the end of the interview, ensure we still submit all data
-          if (interviewCompleted) {
-            console.log('Interview completed but no video chunks - still submitting data');
-            submitInterviewData(null, "Completed", skipped);
-          }
-          return;
-        }
-        
-        const blob = new Blob(recordedChunks, { type: "video/mp4" });
-        console.log(`Video blob created: ${blob.size} bytes`);
-        
-        // Send the combined data (transcript + video)
-        const status = interviewCompleted ? "Completed" : "Inprogress";
-        submitInterviewData(blob, status, skipped);
-      };
     } else {
       console.warn("No active recording to stop.");
       
@@ -950,4 +958,3 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     </div>
   );
 }
-  
