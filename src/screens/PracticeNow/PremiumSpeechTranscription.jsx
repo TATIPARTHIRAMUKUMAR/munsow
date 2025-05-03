@@ -1,92 +1,72 @@
-//finest
-import React, { useEffect, useState, useRef } from "react";
-import MicIcon from "@mui/icons-material/Mic";
-import MicOffIcon from "@mui/icons-material/MicOff";
-import SettingsVoiceIcon from "@mui/icons-material/SettingsVoice";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import WarningIcon from "@mui/icons-material/Warning";
-import CircularProgress from "@mui/material/CircularProgress";
-import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
+import React, { useEffect, useState, useRef } from 'react';
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
+import SettingsVoiceIcon from '@mui/icons-material/SettingsVoice';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import WarningIcon from '@mui/icons-material/Warning';
+import CircularProgress from '@mui/material/CircularProgress';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
-// Popup animation styles
-const popupStyles = `
-  @keyframes popupFadeIn {
-    from {
-      opacity: 0;
-      transform: translate(-50%, -60%);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, -50%);
-    }
-  }
-`;
-
-// Inject popup styles into the document
-const styleSheet = document.createElement("style");
-styleSheet.type = "text/css";
-styleSheet.innerText = popupStyles;
-document.head.appendChild(styleSheet);
-
-// TranscriptionPopup component with animation
+// Enhanced TranscriptionPopup component that handles both network and clarity issues
 const TranscriptionPopup = ({ isOpen, message, onRestart, onClose }) => {
   if (!isOpen) return null;
 
+  // Determine the type of alert (network or clarity)
+  const isNetworkIssue = message && message.toLowerCase().includes('network');
+  const isClarityIssue = message && message.toLowerCase().includes('clarity');
+  
+  // Choose icon color based on alert type
+  const iconColor = isNetworkIssue ? '#ff9800' : '#f44336';
+  const alertTitle = isNetworkIssue ? 'Network Connection Issue' : 
+                    isClarityIssue ? 'Voice Clarity Issue' : 'Speech Recognition Issue';
+
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "300px",
-        backgroundColor: "white",
-        borderRadius: "8px",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-        padding: "16px",
-        zIndex: 1000,
-        animation: "popupFadeIn 0.3s ease-out",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          marginBottom: "12px",
-          color: "#f44336",
-        }}
-      >
-        <WarningIcon style={{ marginRight: "8px", fontSize: "20px" }} />
-        <span style={{ fontWeight: 500 }}>Speech Recognition Issue</span>
+    <div style={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '300px',
+      backgroundColor: 'white',
+      borderRadius: '8px',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+      padding: '16px',
+      zIndex: 1000,
+      animation: 'popupFadeIn 0.3s ease-out'
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '12px',
+        color: iconColor
+      }}>
+        <WarningIcon style={{ marginRight: '8px', fontSize: '20px' }} />
+        <span style={{ fontWeight: 500 }}>{alertTitle}</span>
       </div>
 
-      <p
-        style={{
-          margin: "0 0 16px 0",
-          fontSize: "14px",
-          color: "#333",
-        }}
-      >
-        {message || "There was an issue with the speech recognition."}
+      <p style={{
+        margin: '0 0 16px 0',
+        fontSize: '14px',
+        color: '#333'
+      }}>
+        {message || 'There was an issue with the speech recognition.'}
       </p>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: "8px",
-        }}
-      >
+      <div style={{
+        display: 'flex',
+        justifyContent: 'flex-end',
+        gap: '8px'
+      }}>
         <button
           onClick={onClose}
           style={{
-            padding: "6px 12px",
-            backgroundColor: "#0fe1d2",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "14px",
+            padding: '6px 12px',
+            backgroundColor: '#f5f5f5',
+            color: '#333',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px'
           }}
         >
           Dismiss
@@ -94,18 +74,18 @@ const TranscriptionPopup = ({ isOpen, message, onRestart, onClose }) => {
         <button
           onClick={onRestart}
           style={{
-            padding: "6px 12px",
-            backgroundColor: "#0fe1d2",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "14px",
-            display: "flex",
-            alignItems: "center",
+            padding: '6px 12px',
+            backgroundColor: '#4caf50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            display: 'flex',
+            alignItems: 'center'
           }}
         >
-          <SettingsVoiceIcon style={{ fontSize: "16px", marginRight: "4px" }} />
+          <SettingsVoiceIcon style={{ fontSize: '16px', marginRight: '4px' }} />
           Restart
         </button>
       </div>
@@ -117,35 +97,39 @@ const PremiumSpeechTranscription = ({
   isActive,
   onTranscriptUpdate,
   questionIndex,
-  resetTranscription,
+  resetTranscription
 }) => {
   // State
-  const [transcript, setTranscript] = useState("");
-  const [interimTranscript, setInterimTranscript] = useState("");
+  const [transcript, setTranscript] = useState('');
+  const [interimTranscript, setInterimTranscript] = useState('');
   const [isListening, setIsListening] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [recognitionState, setRecognitionState] = useState("idle"); // idle, initializing, ready, listening, error
+  const [errorMessage, setErrorMessage] = useState('');
+  const [recognitionState, setRecognitionState] = useState('idle'); // idle, initializing, ready, listening, error
   const [restartCount, setRestartCount] = useState(0);
-  const [languageDetected, setLanguageDetected] = useState("en-US");
+  const [languageDetected, setLanguageDetected] = useState('en-US');
   const [confidenceScore, setConfidenceScore] = useState(0);
   const [showControls, setShowControls] = useState(false);
   const [audioDevices, setAudioDevices] = useState([]);
-  const [selectedMicId, setSelectedMicId] = useState("");
+  const [selectedMicId, setSelectedMicId] = useState('');
   const [micPermissionGranted, setMicPermissionGranted] = useState(null);
   const [autoRestartEnabled, setAutoRestartEnabled] = useState(true);
   const [deviceChangeDetected, setDeviceChangeDetected] = useState(false);
   const [lastResetTrigger, setLastResetTrigger] = useState(0);
   const [lastDeviceList, setLastDeviceList] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
+  const [popupMessage, setPopupMessage] = useState('');
   const [lowClarityDetected, setLowClarityDetected] = useState(false);
   const [lowClaritySamples, setLowClaritySamples] = useState(0);
+  const [networkStatus, setNetworkStatus] = useState({
+    isOnline: navigator.onLine,
+    lastChecked: Date.now()
+  });
 
   // Refs
   const recognitionRef = useRef(null);
   const recognitionTimeoutRef = useRef(null);
   const restartTimeoutRef = useRef(null);
-  const transcriptRef = useRef("");
+  const transcriptRef = useRef('');
   const resultHistoryRef = useRef([]);
   const continuityBufferRef = useRef([]);
   const audioStreamRef = useRef(null);
@@ -156,7 +140,29 @@ const PremiumSpeechTranscription = ({
   const lowClarityTimeoutRef = useRef(null);
   const popupTimeoutRef = useRef(null);
   const popupDebounceTimeoutRef = useRef(null);
-  const lowClarityWindowRef = useRef([]);
+
+  // Inject popup styles
+  useEffect(() => {
+    const existingStyle = document.querySelector('style[data-popup-styles]');
+    if (!existingStyle) {
+      const styleSheet = document.createElement('style');
+      styleSheet.type = 'text/css';
+      styleSheet.setAttribute('data-popup-styles', '');
+      styleSheet.innerText = `
+        @keyframes popupFadeIn {
+          from {
+            opacity: 0;
+            transform: translate(-50%, -60%);
+          }
+          to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+          }
+        }
+      `;
+      document.head.appendChild(styleSheet);
+    }
+  }, []);
 
   // Update isActive ref
   useEffect(() => {
@@ -170,109 +176,107 @@ const PremiumSpeechTranscription = ({
   const DEVICE_CHANGE_DEBOUNCE = 1000;
   const QUESTION_CHANGE_DELAY = 500;
   const DEVICE_CHECK_INTERVAL = 2000;
-  const SUPPORTED_LANGUAGES = [
-    "en-US",
-    "en-GB",
-    "es-ES",
-    "fr-FR",
-    "de-DE",
-    "it-IT",
-    "zh-CN",
-    "ja-JP",
-    "ko-KR",
-    "ru-RU",
-  ];
+  const SUPPORTED_LANGUAGES = ['en-US', 'en-GB', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 'zh-CN', 'ja-JP', 'ko-KR', 'ru-RU'];
   const PHRASE_LIST = [
-    "experience",
-    "skills",
-    "project",
-    "education",
-    "challenge",
-    "leadership",
-    "teamwork",
-    "problem",
-    "solution",
-    "development",
-    "management",
-    "technical",
-    "software",
-    "programming",
-    "application",
-    "algorithm",
-    "database",
-    "system",
-    "network",
-    "interface",
-    "component",
-    "architecture",
-    "framework",
-    "library",
-    "implementation",
-    "test",
-    "debugging",
-    "deployment",
-    "integration",
-    "analysis",
-    "design",
-    "performance",
-    "security",
-    "scalability",
-    "maintenance",
-    "optimization",
-    "documentation",
-    "collaboration",
-    "communication",
-    "requirement",
-    "specification",
-    "methodology",
-    "agile",
-    "scrum",
-    "waterfall",
-    "iteration",
-    "sprint",
-    "backlog",
-    "milestone",
-    "deadline",
-    "budget",
-    "resource",
-    "stakeholder",
-    "client",
-    "team",
-    "manager",
-    "lead",
-    "mentor",
-    "coach",
-    "review",
-    "feedback",
-    "assessment",
-    "evaluation",
+    'experience', 'skills', 'project', 'education', 'challenge', 'leadership',
+    'teamwork', 'problem', 'solution', 'development', 'management', 'technical',
+    'software', 'programming', 'application', 'algorithm', 'database', 'system',
+    'network', 'interface', 'component', 'architecture', 'framework', 'library',
+    'implementation', 'test', 'debugging', 'deployment', 'integration', 'analysis',
+    'design', 'performance', 'security', 'scalability', 'maintenance', 'optimization',
+    'documentation', 'collaboration', 'communication', 'requirement', 'specification',
+    'methodology', 'agile', 'scrum', 'waterfall', 'iteration', 'sprint', 'backlog',
+    'milestone', 'deadline', 'budget', 'resource', 'stakeholder', 'client', 'team',
+    'manager', 'lead', 'mentor', 'coach', 'review', 'feedback', 'assessment', 'evaluation'
   ];
+
+  // Network status monitor
+  useEffect(() => {
+    const handleOnline = () => {
+      console.log('Network connection restored by browser event');
+      setNetworkStatus({
+        isOnline: true,
+        lastChecked: Date.now()
+      });
+      
+      if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
+        console.log('Auto-closing network error popup on connection restore');
+        handleClosePopup();
+      }
+    };
+    
+    const handleOffline = () => {
+      console.log('Network connection lost by browser event');
+      setNetworkStatus({
+        isOnline: false,
+        lastChecked: Date.now()
+      });
+      
+      if (isListening && isActiveRef.current) {
+        handleNetworkError();
+      }
+    };
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    const networkCheckInterval = setInterval(() => {
+      if (isListening && isActiveRef.current) {
+        const isOnlineNow = navigator.onLine;
+        
+        if (!networkStatus.isOnline && isOnlineNow) {
+          console.log('Network connection restored by interval check');
+          setNetworkStatus({
+            isOnline: true,
+            lastChecked: Date.now()
+          });
+          
+          if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
+            handleClosePopup();
+          }
+        }
+        else if (networkStatus.isOnline && !isOnlineNow) {
+          console.log('Network connection lost by interval check');
+          setNetworkStatus({
+            isOnline: false,
+            lastChecked: Date.now()
+          });
+          
+          handleNetworkError();
+        }
+      }
+    }, 5000);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      clearInterval(networkCheckInterval);
+    };
+  }, [isListening, networkStatus.isOnline, showPopup, popupMessage]);
 
   // Confidence indicator component
   const ConfidenceIndicator = ({ score }) => {
     const confidence = score || 0;
-    let color = "#f44336";
-    let label = "Low";
+    let color = '#f44336';
+    let label = 'Low';
 
     if (confidence >= 0.7) {
-      color = "#4caf50";
-      label = "High";
+      color = '#4caf50';
+      label = 'High';
     } else if (confidence >= 0.4) {
-      color = "#ff9800";
-      label = "Medium";
+      color = '#ff9800';
+      label = 'Medium';
     }
 
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-        <div
-          style={{
-            width: "8px",
-            height: "8px",
-            borderRadius: "50%",
-            backgroundColor: color,
-          }}
-        ></div>
-        <span style={{ fontSize: "12px", color: "#666" }}>{label} clarity</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div style={{
+          width: '8px',
+          height: '8px',
+          borderRadius: '50%',
+          backgroundColor: color
+        }}></div>
+        <span style={{ fontSize: '12px', color: '#666' }}>{label} clarity</span>
       </div>
     );
   };
@@ -280,52 +284,40 @@ const PremiumSpeechTranscription = ({
   // Handle browser sleep/wake cycles
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible" && isListening) {
+      if (document.visibilityState === 'visible' && isListening) {
         setTimeout(() => {
           if (!interimTranscript && isListening) {
-            console.log(
-              "Page visibility changed, ensuring recognition is active"
-            );
+            console.log('Page visibility changed, ensuring recognition is active');
             forceRestartRecognition();
           }
         }, 2000);
       }
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () =>
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [isListening, interimTranscript]);
 
   // Compare audio device lists
   const compareDeviceLists = (oldList, newList) => {
     if (oldList.length !== newList.length) {
-      console.log(
-        "Device list length changed:",
-        oldList.length,
-        "->",
-        newList.length
-      );
+      console.log('Device list length changed:', oldList.length, '->', newList.length);
       return true;
     }
 
-    const oldDeviceMap = new Map(
-      oldList.map((device) => [device.deviceId, device])
-    );
-    const newDeviceMap = new Map(
-      newList.map((device) => [device.deviceId, device])
-    );
+    const oldDeviceMap = new Map(oldList.map(device => [device.deviceId, device]));
+    const newDeviceMap = new Map(newList.map(device => [device.deviceId, device]));
 
     for (const [id, device] of oldDeviceMap.entries()) {
       if (!newDeviceMap.has(id)) {
-        console.log("Device removed:", device.label || id);
+        console.log('Device removed:', device.label || id);
         return true;
       }
     }
 
     for (const [id, device] of newDeviceMap.entries()) {
       if (!oldDeviceMap.has(id)) {
-        console.log("Device added:", device.label || id);
+        console.log('Device added:', device.label || id);
         return true;
       }
     }
@@ -333,12 +325,7 @@ const PremiumSpeechTranscription = ({
     for (const [id, oldDevice] of oldDeviceMap.entries()) {
       const newDevice = newDeviceMap.get(id);
       if (newDevice && oldDevice.label !== newDevice.label) {
-        console.log(
-          "Device label changed:",
-          oldDevice.label,
-          "->",
-          newDevice.label
-        );
+        console.log('Device label changed:', oldDevice.label, '->', newDevice.label);
         return true;
       }
     }
@@ -357,16 +344,16 @@ const PremiumSpeechTranscription = ({
         if (!isListening || !isActiveRef.current) return;
 
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const mics = devices.filter((device) => device.kind === "audioinput");
+        const mics = devices.filter(device => device.kind === 'audioinput');
 
         if (compareDeviceLists(lastDeviceList, mics)) {
-          console.log("Device change detected by interval check!");
+          console.log('Device change detected by interval check!');
           handleDeviceChange(mics);
         }
 
         setLastDeviceList(mics);
       } catch (err) {
-        console.error("Error checking devices in interval:", err);
+        console.error('Error checking devices in interval:', err);
       }
     }, DEVICE_CHECK_INTERVAL);
 
@@ -377,43 +364,81 @@ const PremiumSpeechTranscription = ({
     };
   };
 
-  // Show restart popup with debounce
+  // Updated showRestartPopup function with consistent behavior
   const showRestartPopup = (message) => {
+    // Clear any existing timeouts
     if (popupDebounceTimeoutRef.current) {
       clearTimeout(popupDebounceTimeoutRef.current);
+      popupDebounceTimeoutRef.current = null;
     }
     if (popupTimeoutRef.current) {
       clearTimeout(popupTimeoutRef.current);
+      popupTimeoutRef.current = null;
     }
 
-    popupDebounceTimeoutRef.current = setTimeout(() => {
-      setPopupMessage(message);
-      setShowPopup(true);
+    // Show popup immediately (no debounce)
+    setPopupMessage(message);
+    setShowPopup(true);
 
-      popupTimeoutRef.current = setTimeout(() => {
-        setShowPopup(false);
-      }, 10000);
-    }, 500);
+    // Auto-dismiss after 10 seconds for all alert types
+    popupTimeoutRef.current = setTimeout(() => {
+      handleClosePopup();
+    }, 10000);
   };
 
-  // Handle manual popup close
+  // Enhanced handleClosePopup with auto-restart
   const handleClosePopup = () => {
+    // Clear timeouts
     if (popupTimeoutRef.current) {
       clearTimeout(popupTimeoutRef.current);
+      popupTimeoutRef.current = null;
     }
     if (popupDebounceTimeoutRef.current) {
       clearTimeout(popupDebounceTimeoutRef.current);
+      popupDebounceTimeoutRef.current = null;
     }
+    
+    // Hide the popup
     setShowPopup(false);
+    
+    // Automatically restart transcription
+    if (isListening && isActiveRef.current) {
+      console.log('Alert dismissed, automatically restarting transcription');
+      setTimeout(() => {
+        forceRestartRecognition();
+      }, 300);
+    }
+  };
+
+  // Network error handler
+  const handleNetworkError = () => {
+    setErrorMessage('Network error. Please check your internet connection.');
+    showRestartPopup('Network error detected. Transcription will resume automatically when your connection is restored.');
+    
+    // Set up a periodic check for network restoration
+    const checkNetworkInterval = setInterval(() => {
+      if (navigator.onLine) {
+        clearInterval(checkNetworkInterval);
+        if (isListening && isActiveRef.current && autoRestartEnabled) {
+          console.log('Network connection restored, restarting transcription');
+          handleClosePopup();
+        }
+      }
+    }, 3000);
+    
+    // Safety cleanup
+    setTimeout(() => {
+      clearInterval(checkNetworkInterval);
+    }, 120000);
   };
 
   // Handle device change
   const handleDeviceChange = async (newDevices = null) => {
-    console.log("Audio devices changed, updating device list");
+    console.log('Audio devices changed, updating device list');
 
     const now = Date.now();
     if (now - lastDeviceChangeTimeRef.current < DEVICE_CHANGE_DEBOUNCE) {
-      console.log("Debouncing device change event");
+      console.log('Debouncing device change event');
       return;
     }
     lastDeviceChangeTimeRef.current = now;
@@ -426,48 +451,39 @@ const PremiumSpeechTranscription = ({
         mics = newDevices;
       } else {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        mics = devices.filter((device) => device.kind === "audioinput");
+        mics = devices.filter(device => device.kind === 'audioinput');
       }
       setAudioDevices(mics);
       setLastDeviceList(mics);
 
       let newMicId = selectedMicId;
-      const currentMicStillAvailable = mics.some(
-        (device) => device.deviceId === selectedMicId
-      );
+      const currentMicStillAvailable = mics.some(device => device.deviceId === selectedMicId);
       if (!currentMicStillAvailable && mics.length > 0) {
-        console.log("Currently selected microphone is no longer available");
-        const newDefaultMic =
-          mics.find((device) => device.deviceId === "default") || mics[0];
+        console.log('Currently selected microphone is no longer available');
+        const newDefaultMic = mics.find(device => device.deviceId === 'default') || mics[0];
         newMicId = newDefaultMic.deviceId;
         setSelectedMicId(newMicId);
 
-        showRestartPopup(
-          "Your microphone is no longer available. Switching to " +
-            (newDefaultMic.label || "default microphone")
-        );
+        showRestartPopup('Your microphone is no longer available. Switching to ' +
+                        (newDefaultMic.label || 'default microphone'));
       } else if (mics.length > 0 && !newMicId) {
-        const defaultDevice = mics.find(
-          (device) => device.deviceId === "default" || device.deviceId === ""
-        );
+        const defaultDevice = mics.find(device => device.deviceId === 'default' || device.deviceId === '');
         newMicId = defaultDevice ? defaultDevice.deviceId : mics[0].deviceId;
         setSelectedMicId(newMicId);
       }
 
       if (isListening && currentMicStillAvailable && autoRestartEnabled) {
-        showRestartPopup(
-          "Audio device changed. Would you like to restart transcription?"
-        );
+        showRestartPopup('Audio device changed. Would you like to restart transcription?');
         forceRestartRecognition();
       }
     } catch (err) {
-      console.error("Error handling device change:", err);
+      console.error('Error handling device change:', err);
     }
   };
 
   // Force restart recognition
   const forceRestartRecognition = () => {
-    console.log("Forcing recognition restart");
+    console.log('Forcing recognition restart');
 
     setShowPopup(false);
 
@@ -491,20 +507,20 @@ const PremiumSpeechTranscription = ({
     try {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
-        console.log("Successfully stopped recognition before force restart");
+        console.log('Successfully stopped recognition before force restart');
       }
     } catch (e) {
-      console.log("Error stopping recognition during force restart:", e);
+      console.log('Error stopping recognition during force restart:', e);
     }
 
     setTimeout(() => {
       if (recognitionRef.current && isActiveRef.current) {
         try {
-          console.log("Attempting to start recognition after force restart");
+          console.log('Attempting to start recognition after force restart');
           recognitionRef.current.start();
           setIsListening(true);
-          setRecognitionState("listening");
-          console.log("Successfully started recognition after force restart");
+          setRecognitionState('listening');
+          console.log('Successfully started recognition after force restart');
           resetSilenceTimeout();
 
           if (deviceChangeDetected) {
@@ -513,31 +529,24 @@ const PremiumSpeechTranscription = ({
             }, 2000);
           }
         } catch (e) {
-          console.error("Failed to restart recognition:", e);
+          console.error('Failed to restart recognition:', e);
 
-          if (e.name === "InvalidStateError") {
-            console.log(
-              "Recognition is already running, updating state to match"
-            );
+          if (e.name === 'InvalidStateError') {
+            console.log('Recognition is already running, updating state to match');
             setIsListening(true);
-            setRecognitionState("listening");
+            setRecognitionState('listening');
           } else {
-            setErrorMessage("Failed to restart recognition. Please try again.");
+            setErrorMessage('Failed to restart recognition. Please try again.');
             setTimeout(() => {
               if (recognitionRef.current && isActiveRef.current) {
                 try {
-                  console.log("Second attempt to start recognition");
+                  console.log('Second attempt to start recognition');
                   recognitionRef.current.start();
                   setIsListening(true);
-                  setRecognitionState("listening");
+                  setRecognitionState('listening');
                 } catch (innerError) {
-                  console.error(
-                    "Second attempt to restart recognition failed:",
-                    innerError
-                  );
-                  showRestartPopup(
-                    "Multiple restart attempts failed. Please try restarting manually."
-                  );
+                  console.error('Second attempt to restart recognition failed:', innerError);
+                  showRestartPopup('Multiple restart attempts failed. Please try restarting manually.');
                 }
               }
             }, 1000);
@@ -553,15 +562,13 @@ const PremiumSpeechTranscription = ({
 
     if (isListening) {
       recognitionTimeoutRef.current = setTimeout(() => {
-        console.log("Silence timeout - no speech detected for a while");
+        console.log('Silence timeout - no speech detected for a while');
         if (isListening && recognitionRef.current && isActiveRef.current) {
           try {
-            console.log("Silence detected, showing popup");
-            showRestartPopup(
-              "No speech detected for a while. Would you like to restart?"
-            );
+            console.log('Silence detected, showing popup');
+            showRestartPopup('No speech detected for a while. Would you like to restart?');
           } catch (e) {
-            console.error("Error handling silence timeout:", e);
+            console.error('Error handling silence timeout:', e);
           }
         }
       }, SPEECH_TIMEOUT);
@@ -579,91 +586,59 @@ const PremiumSpeechTranscription = ({
   // Handle recognition failure
   const handleRecognitionFailure = () => {
     if (restartCount >= MAX_RESTART_ATTEMPTS) {
-      console.log("Max restart attempts reached, stopping auto-restart");
-      setErrorMessage(
-        "Speech recognition has failed multiple times. Please try manually restarting or selecting a different microphone."
-      );
+      console.log('Max restart attempts reached, stopping auto-restart');
+      setErrorMessage('Speech recognition has failed multiple times. Please try manually restarting or selecting a different microphone.');
       setIsListening(false);
-      setRecognitionState("error");
+      setRecognitionState('error');
       return;
     }
 
-    showRestartPopup(
-      "Speech recognition interrupted. Would you like to restart?"
-    );
+    showRestartPopup('Speech recognition interrupted. Would you like to restart?');
   };
 
-  // Low clarity detection - UPDATED
+  // Low clarity detection
   useEffect(() => {
     if (!isListening || confidenceScore === 0) return;
 
-    // Update timestamp and confidence score window (last 15 seconds)
-    const now = Date.now();
-    lowClarityWindowRef.current.push({
-      timestamp: now,
-      score: confidenceScore,
-    });
-
-    // Remove entries older than 15 seconds
-    lowClarityWindowRef.current = lowClarityWindowRef.current.filter(
-      (entry) => now - entry.timestamp < 15000
-    );
-
-    // Only check if we have at least 3 samples to analyze
-    if (lowClarityWindowRef.current.length >= 3) {
-      // Count how many samples have very low confidence (below 0.15)
-      const veryLowConfidenceSamples = lowClarityWindowRef.current.filter(
-        (entry) => entry.score < 0.15
-      ).length;
-
-      // Calculate average confidence
-      const averageConfidence =
-        lowClarityWindowRef.current.reduce(
-          (sum, entry) => sum + entry.score,
-          0
-        ) / lowClarityWindowRef.current.length;
-
-      // Show low clarity warning if:
-      // 1. At least 5 very low confidence samples in the last 15 seconds, or
-      // 2. Average confidence is below 0.2 with at least 5 samples
-      if (
-        (veryLowConfidenceSamples >= 5 ||
-          (averageConfidence < 0.2 &&
-            lowClarityWindowRef.current.length >= 5)) &&
-        !lowClarityDetected
-      ) {
+    if (confidenceScore < 0.3) {
+      setLowClaritySamples(prev => prev + 1);
+      if (lowClaritySamples >= 3 && !lowClarityDetected) {
         setLowClarityDetected(true);
-        showRestartPopup(
-          "Low voice clarity detected. Your speech may not be recognized correctly."
-        );
-
-        // Reset the detection state after 30 seconds
+        showRestartPopup('Low voice clarity detected. Your speech may not be recognized correctly. Transcription will restart automatically.');
+        
         if (lowClarityTimeoutRef.current) {
           clearTimeout(lowClarityTimeoutRef.current);
         }
-
         lowClarityTimeoutRef.current = setTimeout(() => {
           setLowClarityDetected(false);
-          lowClarityWindowRef.current = [];
-        }, 30000);
+          setLowClaritySamples(0);
+        }, 20000);
       }
+    } else {
+      setLowClaritySamples(prev => Math.max(0, prev - 1));
     }
-  }, [confidenceScore, isListening, lowClarityDetected]);
+
+    return () => {
+      if (lowClarityTimeoutRef.current) {
+        clearTimeout(lowClarityTimeoutRef.current);
+      }
+    };
+  }, [confidenceScore, isListening, lowClaritySamples, lowClarityDetected]);
 
   // Check microphone permission and devices
   useEffect(() => {
     const checkMicPermission = async () => {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const mics = devices.filter((device) => device.kind === "audioinput");
+        const mics = devices.filter(device => device.kind === 'audioinput');
         setAudioDevices(mics);
         setLastDeviceList(mics);
 
         if (mics.length > 0 && mics[0].label) {
           setMicPermissionGranted(true);
 
-          const savedMicId = localStorage.getItem("preferredMic");
-          if (savedMicId && mics.some((m) => m.deviceId === savedMicId)) {
+          const savedMicId = localStorage.getItem('preferredMic');
+          if (savedMicId && mics.some(m => m.deviceId === savedMicId)) {
             setSelectedMicId(savedMicId);
           } else if (mics.length > 0) {
             setSelectedMicId(mics[0].deviceId);
@@ -671,37 +646,27 @@ const PremiumSpeechTranscription = ({
           return;
         }
 
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         audioStreamRef.current = stream;
         setMicPermissionGranted(true);
 
-        const devicesWithLabels =
-          await navigator.mediaDevices.enumerateDevices();
-        const micsWithLabels = devicesWithLabels.filter(
-          (device) => device.kind === "audioinput"
-        );
+        const devicesWithLabels = await navigator.mediaDevices.enumerateDevices();
+        const micsWithLabels = devicesWithLabels.filter(device => device.kind === 'audioinput');
         setAudioDevices(micsWithLabels);
         setLastDeviceList(micsWithLabels);
 
         if (micsWithLabels.length > 0) {
-          const savedMicId = localStorage.getItem("preferredMic");
-          if (
-            savedMicId &&
-            micsWithLabels.some((m) => m.deviceId === savedMicId)
-          ) {
+          const savedMicId = localStorage.getItem('preferredMic');
+          if (savedMicId && micsWithLabels.some(m => m.deviceId === savedMicId)) {
             setSelectedMicId(savedMicId);
           } else {
             setSelectedMicId(micsWithLabels[0].deviceId);
           }
         }
       } catch (err) {
-        console.error("Error accessing microphone:", err);
+        console.error('Error accessing microphone:', err);
         setMicPermissionGranted(false);
-        setErrorMessage(
-          "Microphone access denied. Please enable microphone access in your browser settings."
-        );
+        setErrorMessage('Microphone access denied. Please enable microphone access in your browser settings.');
       }
     };
 
@@ -710,23 +675,17 @@ const PremiumSpeechTranscription = ({
     const cleanupInterval = startDeviceChangeMonitoring();
 
     const handleDeviceChangeEvent = () => {
-      console.log("Device change event fired by browser");
+      console.log('Device change event fired by browser');
       handleDeviceChange();
     };
 
-    navigator.mediaDevices.addEventListener(
-      "devicechange",
-      handleDeviceChangeEvent
-    );
+    navigator.mediaDevices.addEventListener('devicechange', handleDeviceChangeEvent);
 
     return () => {
-      navigator.mediaDevices.removeEventListener(
-        "devicechange",
-        handleDeviceChangeEvent
-      );
+      navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChangeEvent);
 
       if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach((track) => track.stop());
+        audioStreamRef.current.getTracks().forEach(track => track.stop());
       }
 
       clearSilenceTimeout();
@@ -754,7 +713,7 @@ const PremiumSpeechTranscription = ({
   // Initialize speech recognition
   useEffect(() => {
     if (micPermissionGranted === false) {
-      setRecognitionState("error");
+      setRecognitionState('error');
       return;
     }
 
@@ -762,18 +721,14 @@ const PremiumSpeechTranscription = ({
       return;
     }
 
-    setRecognitionState("initializing");
+    setRecognitionState('initializing');
 
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    const SpeechGrammarList =
-      window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
 
     if (!SpeechRecognition) {
-      setRecognitionState("error");
-      setErrorMessage(
-        "Your browser does not support speech recognition. Please try Chrome or Edge."
-      );
+      setRecognitionState('error');
+      setErrorMessage('Your browser does not support speech recognition. Please try Chrome or Edge.');
       return;
     }
 
@@ -787,7 +742,7 @@ const PremiumSpeechTranscription = ({
 
       if (SpeechGrammarList) {
         const speechRecognitionList = new SpeechGrammarList();
-        let grammarWords = PHRASE_LIST.join(" | ");
+        let grammarWords = PHRASE_LIST.join(' | ');
         const grammar = `#JSGF V1.0; grammar interview; public <interview> = ${grammarWords};`;
         speechRecognitionList.addFromString(grammar, 1);
         recognition.grammars = speechRecognitionList;
@@ -795,8 +750,8 @@ const PremiumSpeechTranscription = ({
 
       recognition.onresult = (event) => {
         try {
-          let finalTranscript = "";
-          let currentInterim = "";
+          let finalTranscript = '';
+          let currentInterim = '';
           let highestConfidence = 0;
           let shouldProcessResults = false;
 
@@ -810,7 +765,7 @@ const PremiumSpeechTranscription = ({
               for (let j = 0; j < result.length; j++) {
                 alternatives.push({
                   transcript: result[j].transcript,
-                  confidence: result[j].confidence,
+                  confidence: result[j].confidence
                 });
               }
               resultAlternatives.push(alternatives);
@@ -834,26 +789,18 @@ const PremiumSpeechTranscription = ({
                 continuityBufferRef.current.shift();
               }
 
-              processedText = processedText.replace(/^(\s*\w)/, (match) =>
-                match.toUpperCase()
-              );
-              processedText = processedText.replace(/\.\s+(\w)/g, (match) =>
-                match.toUpperCase()
-              );
-              processedText = processedText.replace(/\?\s+(\w)/g, (match) =>
-                match.toUpperCase()
-              );
-              processedText = processedText.replace(/!\s+(\w)/g, (match) =>
-                match.toUpperCase()
-              );
+              processedText = processedText.replace(/^(\s*\w)/, (match) => match.toUpperCase());
+              processedText = processedText.replace(/\.\s+(\w)/g, (match) => match.toUpperCase());
+              processedText = processedText.replace(/\?\s+(\w)/g, (match) => match.toUpperCase());
+              processedText = processedText.replace(/!\s+(\w)/g, (match) => match.toUpperCase());
 
               processedText = fixCommonErrors(processedText);
 
               if (!/[.?!,;:]$/.test(processedText)) {
-                processedText += ".";
+                processedText += '.';
               }
 
-              finalTranscript += processedText + " ";
+              finalTranscript += processedText + ' ';
             } else {
               currentInterim += transcript;
             }
@@ -861,14 +808,12 @@ const PremiumSpeechTranscription = ({
 
           if (currentInterim) {
             currentInterim = currentInterim.trim();
-            currentInterim = currentInterim.replace(/^(\s*\w)/, (match) =>
-              match.toUpperCase()
-            );
+            currentInterim = currentInterim.replace(/^(\s*\w)/, (match) => match.toUpperCase());
             setInterimTranscript(currentInterim);
           }
 
           if (finalTranscript) {
-            setTranscript((prev) => {
+            setTranscript(prev => {
               const newTranscript = prev + finalTranscript;
               transcriptRef.current = newTranscript;
               onTranscriptUpdate(newTranscript);
@@ -884,27 +829,24 @@ const PremiumSpeechTranscription = ({
 
           setConfidenceScore(highestConfidence);
         } catch (error) {
-          console.error("Error processing speech recognition result:", error);
+          console.error('Error processing speech recognition result:', error);
           if (interimTranscript) {
-            setTranscript((prev) => prev + interimTranscript + " ");
-            setInterimTranscript("");
+            setTranscript(prev => prev + interimTranscript + ' ');
+            setInterimTranscript('');
           }
+          resetSilenceTimeout();
         }
       };
 
       recognition.onend = () => {
-        console.log("Recognition ended");
+        console.log('Recognition ended');
 
         if (isListening && isActiveRef.current) {
-          console.log(
-            "Recognition ended but isListening is still true - restarting"
-          );
+          console.log('Recognition ended but isListening is still true - restarting');
           restartRecognition();
         } else {
-          console.log(
-            "Recognition ended and not listening - setting state to ready"
-          );
-          setRecognitionState("ready");
+          console.log('Recognition ended and not listening - setting state to ready');
+          setRecognitionState('ready');
         }
       };
 
@@ -913,188 +855,128 @@ const PremiumSpeechTranscription = ({
       };
 
       recognition.onnomatch = () => {
-        console.log("Speech recognized but no match found");
+        console.log('Speech recognized but no match found');
       };
 
       recognition.onaudiostart = () => {
-        console.log("Audio capturing started");
+        console.log('Audio capturing started');
       };
 
       recognition.onaudioend = () => {
-        console.log(
-          "Audio capturing ended - this might indicate a device change or issue"
-        );
+        console.log('Audio capturing ended - this might indicate a device change or issue');
 
         if (isListening && autoRestartEnabled) {
-          console.log(
-            "Audio ended while listening - possible device change - checking devices"
-          );
+          console.log('Audio ended while listening - possible device change - checking devices');
 
-          navigator.mediaDevices
-            .enumerateDevices()
-            .then((devices) => {
-              const mics = devices.filter(
-                (device) => device.kind === "audioinput"
-              );
+          navigator.mediaDevices.enumerateDevices()
+            .then(devices => {
+              const mics = devices.filter(device => device.kind === 'audioinput');
               if (compareDeviceLists(lastDeviceList, mics)) {
-                console.log(
-                  "Device list changed after audio end event - handling as device change"
-                );
+                console.log('Device list changed after audio end event - handling as device change');
                 handleDeviceChange(mics);
               } else {
-                console.log(
-                  "No device list change detected after audio end - using timeout recovery"
-                );
+                console.log('No device list change detected after audio end - using timeout recovery');
                 setTimeout(() => {
                   if (isListening && isActiveRef.current) {
-                    console.log(
-                      "No audio recovery detected after timeout, performing force restart"
-                    );
+                    console.log('No audio recovery detected after timeout, performing force restart');
                     forceRestartRecognition();
                   }
                 }, 1000);
               }
             })
-            .catch((err) => {
-              console.error("Error checking devices after audio end:", err);
-              forceRestart;
+            .catch(err => {
+              console.error('Error checking devices after audio end:', err);
               forceRestartRecognition();
             });
         }
       };
 
       recognition.onerror = (event) => {
-        console.error("Recognition error:", event.error, event);
+        console.error('Recognition error:', event.error, event);
 
         switch (event.error) {
-          case "no-speech":
-            console.log("No speech detected, will auto-restart if needed");
+          case 'no-speech':
+            console.log('No speech detected, will auto-restart if needed');
             break;
 
-          case "audio-capture":
-            setErrorMessage(
-              "Microphone error. Please check your microphone connection or try selecting a different microphone."
-            );
+          case 'audio-capture':
+            setErrorMessage('Microphone error. Please check your microphone connection or try selecting a different microphone.');
+            showRestartPopup('Microphone connection issue detected. Transcription will restart automatically.');
+            
             if (autoRestartEnabled) {
-              console.log("Auto-restarting after audio-capture error");
-
-              navigator.mediaDevices
-                .enumerateDevices()
-                .then((devices) => {
-                  const mics = devices.filter(
-                    (device) => device.kind === "audioinput"
-                  );
+              navigator.mediaDevices.enumerateDevices()
+                .then(devices => {
+                  const mics = devices.filter(device => device.kind === 'audioinput');
                   if (compareDeviceLists(lastDeviceList, mics)) {
-                    console.log(
-                      "Device list changed after audio-capture error - handling as device change"
-                    );
+                    console.log('Device list changed after audio-capture error - handling as device change');
                     handleDeviceChange(mics);
                   } else {
-                    console.log(
-                      "No device list change detected after audio-capture error - forcing restart"
-                    );
-                    forceRestartRecognition();
+                    console.log('No device list change detected after audio-capture error - forcing restart');
+                    // Let the popup auto-close trigger the restart
                   }
                 })
-                .catch((err) => {
-                  console.error(
-                    "Error checking devices after audio-capture error:",
-                    err
-                  );
-                  forceRestartRecognition();
+                .catch(err => {
+                  console.error('Error checking devices after audio-capture error:', err);
+                  // Let the popup auto-close trigger the restart
                 });
             }
             break;
 
-          case "not-allowed":
-            setErrorMessage(
-              "Microphone access denied. Please allow microphone access in your browser settings."
-            );
+          case 'not-allowed':
+            setErrorMessage('Microphone access denied. Please allow microphone access in your browser settings.');
             setMicPermissionGranted(false);
             break;
 
-          case "aborted":
-            console.log("Recognition aborted");
+          case 'aborted':
+            console.log('Recognition aborted');
             break;
 
-          case "network":
-            setErrorMessage(
-              "Network error. Please check your internet connection."
-            );
-            showRestartPopup(
-              "Network error detected. Transcription will resume when your connection is restored."
-            );
-
-            // Set up a periodic check for network restoration
-            const checkNetworkInterval = setInterval(() => {
-              if (navigator.onLine) {
-                clearInterval(checkNetworkInterval);
-                if (isListening && isActiveRef.current && autoRestartEnabled) {
-                  forceRestartRecognition();
-                }
-              }
-            }, 3000); // Check every 3 seconds
-
-            // Clear interval after 2 minutes to prevent memory leaks
-            setTimeout(() => {
-              clearInterval(checkNetworkInterval);
-            }, 120000);
+          case 'network':
+            handleNetworkError();
             break;
 
-          case "service-not-allowed":
-            setErrorMessage(
-              "Speech service access was denied. Please reload and try again."
-            );
+          case 'service-not-allowed':
+            setErrorMessage('Speech service access was denied. Please reload and try again.');
             break;
 
-          case "bad-grammar":
-            console.log(
-              "Grammar error detected, continuing with default grammar"
-            );
+          case 'bad-grammar':
+            console.log('Grammar error detected, continuing with default grammar');
             break;
 
           default:
             setErrorMessage(`Recognition error: ${event.error}`);
+            showRestartPopup(`Speech recognition issue: ${event.error}. Transcription will restart automatically.`);
         }
 
-        if (isListening && isActiveRef.current) {
-          if (
-            autoRestartEnabled &&
-            event.error !== "not-allowed" &&
-            event.error !== "network"
-          ) {
-            setTimeout(() => {
-              if (isListening && isActiveRef.current) {
-                forceRestartRecognition();
-              }
-            }, 500);
-          } else if (event.error !== "network") {
-            handleRecognitionFailure();
-          }
+        // Don't handle failures for network errors - they are managed by the handleNetworkError function
+        // Don't auto-restart for permission issues
+        if (isListening && isActiveRef.current && 
+            event.error !== 'not-allowed' && 
+            event.error !== 'network') {
+          // Let the popup auto-close trigger the restart for other errors
         }
       };
 
       recognitionRef.current = recognition;
-      setRecognitionState("ready");
+      setRecognitionState('ready');
 
       if (isActive) {
         setTimeout(() => {
           try {
             recognition.start();
             setIsListening(true);
-            setRecognitionState("listening");
-            console.log("Initial recognition started");
+            setRecognitionState('listening');
+            console.log('Initial recognition started');
           } catch (e) {
-            console.error("Error starting initial recognition:", e);
+            console.error('Error starting initial recognition:', e);
           }
         }, 500);
       }
+
     } catch (error) {
-      console.error("Error initializing speech recognition:", error);
-      setRecognitionState("error");
-      setErrorMessage(
-        `Failed to initialize speech recognition: ${error.message}`
-      );
+      console.error('Error initializing speech recognition:', error);
+      setRecognitionState('error');
+      setErrorMessage(`Failed to initialize speech recognition: ${error.message}`);
     }
 
     return () => {
@@ -1122,7 +1004,7 @@ const PremiumSpeechTranscription = ({
         try {
           recognitionRef.current.stop();
         } catch (e) {
-          console.log("Error during recognition cleanup:", e);
+          console.log('Error during recognition cleanup:', e);
         }
       }
     };
@@ -1138,7 +1020,7 @@ const PremiumSpeechTranscription = ({
     for (let i = 0; i < result.length; i++) {
       alternatives.push({
         transcript: result[i].transcript,
-        confidence: result[i].confidence,
+        confidence: result[i].confidence
       });
     }
 
@@ -1163,10 +1045,7 @@ const PremiumSpeechTranscription = ({
   };
 
   const processResultAlternatives = (resultAlternatives) => {
-    resultHistoryRef.current = [
-      ...resultHistoryRef.current,
-      ...resultAlternatives,
-    ];
+    resultHistoryRef.current = [...resultHistoryRef.current, ...resultAlternatives];
     if (resultHistoryRef.current.length > 5) {
       resultHistoryRef.current = resultHistoryRef.current.slice(-5);
     }
@@ -1174,89 +1053,80 @@ const PremiumSpeechTranscription = ({
 
   const fixCommonErrors = (text) => {
     const corrections = {
-      "i'm a": "I am a",
-      "i've": "I have",
-      "i'd": "I would",
-      thats: "that's",
-      dont: "don't",
-      doesnt: "doesn't",
-      didnt: "didn't",
-      couldnt: "couldn't",
-      wouldnt: "wouldn't",
-      shouldnt: "shouldn't",
-      wont: "won't",
-      cant: "can't",
-      isnt: "isn't",
-      arent: "aren't",
-      werent: "weren't",
-      wasnt: "wasn't",
-      havent: "haven't",
-      hasnt: "hasn't",
-      hadnt: "hadn't",
-      theyre: "they're",
-      theyll: "they'll",
-      theyd: "they'd",
-      weve: "we've",
-      wed: "we'd",
-      well: "we'll",
-      youre: "you're",
-      youll: "you'll",
-      youd: "you'd",
-      youve: "you've",
-      shes: "she's",
-      shell: "she'll",
-      shed: "she'd",
-      hes: "he's",
-      hell: "he'll",
-      hed: "he'd",
-      its: "it's",
-      itll: "it'll",
-      itd: "it'd",
-      whats: "what's",
-      wheres: "where's",
-      whens: "when's",
-      hows: "how's",
-      whos: "who's",
-      whys: "why's",
-      im: "I'm",
-      ive: "I've",
-      id: "I'd",
-      ill: "I'll",
-      idk: "I don't know",
-      btw: "by the way",
-      fyi: "for your information",
-      asap: "as soon as possible",
+      'i\'m a': 'I am a',
+      'i\'ve': 'I have',
+      'i\'d': 'I would',
+      'thats': 'that\'s',
+      'dont': 'don\'t',
+      'doesnt': 'doesn\'t',
+      'didnt': 'didn\'t',
+      'couldnt': 'couldn\'t',
+      'wouldnt': 'wouldn\'t',
+      'shouldnt': 'shouldn\'t',
+      'wont': 'won\'t',
+      'cant': 'can\'t',
+      'isnt': 'isn\'t',
+      'arent': 'aren\'t',
+      'werent': 'weren\'t',
+      'wasnt': 'wasn\'t',
+      'havent': 'haven\'t',
+      'hasnt': 'hasn\'t',
+      'hadnt': 'hadn\'t',
+      'theyre': 'they\'re',
+      'theyll': 'they\'ll',
+      'theyd': 'they\'d',
+      'weve': 'we\'ve',
+      'wed': 'we\'d',
+      'well': 'we\'ll',
+      'youre': 'you\'re',
+      'youll': 'you\'ll',
+      'youd': 'you\'d',
+      'youve': 'you\'ve',
+      'shes': 'she\'s',
+      'shell': 'she\'ll',
+      'shed': 'she\'d',
+      'hes': 'he\'s',
+      'hell': 'he\'ll',
+      'hed': 'he\'d',
+      'its': 'it\'s',
+      'itll': 'it\'ll',
+      'itd': 'it\'d',
+      'whats': 'what\'s',
+      'wheres': 'where\'s',
+      'whens': 'when\'s',
+      'hows': 'how\'s',
+      'whos': 'who\'s',
+      'whys': 'why\'s',
+      'im': 'I\'m',
+      'ive': 'I\'ve',
+      'id': 'I\'d',
+      'ill': 'I\'ll',
+      'idk': 'I don\'t know',
+      'btw': 'by the way',
+      'fyi': 'for your information',
+      'asap': 'as soon as possible'
     };
 
     let correctedText = text;
     for (const [error, correction] of Object.entries(corrections)) {
-      const regex = new RegExp(`\\b${error}\\b`, "gi");
+      const regex = new RegExp(`\\b${error}\\b`, 'gi');
       correctedText = correctedText.replace(regex, correction);
     }
 
-    correctedText = correctedText.replace(/\s{2,}/g, " ");
+    correctedText = correctedText.replace(/\s{2,}/g, ' ');
 
     return correctedText;
   };
 
   // Handle active state changes
   useEffect(() => {
-    if (
-      recognitionState !== "ready" &&
-      recognitionState !== "listening" &&
-      recognitionState !== "error"
-    )
-      return;
+    if (recognitionState !== 'ready' && recognitionState !== 'listening' && recognitionState !== 'error') return;
 
     if (isActive && !isListening) {
-      console.log(
-        "isActive changed to true but not listening - starting transcription"
-      );
+      console.log('isActive changed to true but not listening - starting transcription');
       startTranscription();
     } else if (!isActive && isListening) {
-      console.log(
-        "isActive changed to false but still listening - stopping transcription"
-      );
+      console.log('isActive changed to false but still listening - stopping transcription');
       stopTranscription();
     }
   }, [isActive, isListening, recognitionState]);
@@ -1267,19 +1137,17 @@ const PremiumSpeechTranscription = ({
 
     setLastResetTrigger(resetTranscription);
 
-    console.log(
-      `Question/reset triggered. Question index: ${questionIndex}, Reset trigger: ${resetTranscription}`
-    );
+    console.log(`Question/reset triggered. Question index: ${questionIndex}, Reset trigger: ${resetTranscription}`);
 
-    if (recognitionState === "idle" || recognitionState === "initializing") {
-      console.log("Recognition not initialized yet, waiting...");
+    if (recognitionState === 'idle' || recognitionState === 'initializing') {
+      console.log('Recognition not initialized yet, waiting...');
       return;
     }
 
-    setTranscript("");
-    setInterimTranscript("");
-    transcriptRef.current = "";
-    onTranscriptUpdate("");
+    setTranscript('');
+    setInterimTranscript('');
+    transcriptRef.current = '';
+    onTranscriptUpdate('');
 
     continuityBufferRef.current = [];
     resultHistoryRef.current = [];
@@ -1291,19 +1159,25 @@ const PremiumSpeechTranscription = ({
     }
 
     if (isActive) {
-      console.log("Question changed - forcing recognition restart");
+      console.log('Question changed - forcing recognition restart');
       questionChangeTimeoutRef.current = setTimeout(() => {
         if (isActiveRef.current) {
           forceRestartRecognition();
         }
       }, QUESTION_CHANGE_DELAY);
     }
+
+    return () => {
+      if (questionChangeTimeoutRef.current) {
+        clearTimeout(questionChangeTimeoutRef.current);
+      }
+    };
   }, [questionIndex, resetTranscription]);
 
   // Handle microphone change
   const handleMicrophoneChange = (deviceId) => {
-    console.log("Changing microphone to:", deviceId);
-    localStorage.setItem("preferredMic", deviceId);
+    console.log('Changing microphone to:', deviceId);
+    localStorage.setItem('preferredMic', deviceId);
     setSelectedMicId(deviceId);
 
     if (isListening) {
@@ -1319,28 +1193,24 @@ const PremiumSpeechTranscription = ({
       setMicPermissionGranted(true);
 
       const devicesWithLabels = await navigator.mediaDevices.enumerateDevices();
-      const micsWithLabels = devicesWithLabels.filter(
-        (device) => device.kind === "audioinput"
-      );
+      const micsWithLabels = devicesWithLabels.filter(device => device.kind === 'audioinput');
       setAudioDevices(micsWithLabels);
 
       if (micsWithLabels.length > 0) {
         setSelectedMicId(micsWithLabels[0].deviceId);
       }
 
-      setErrorMessage("");
+      setErrorMessage('');
     } catch (err) {
-      console.error("Error requesting microphone access:", err);
+      console.error('Error requesting microphone access:', err);
       setMicPermissionGranted(false);
-      setErrorMessage(
-        "Unable to access microphone. Please check your browser settings and ensure you have a working microphone connected."
-      );
+      setErrorMessage('Unable to access microphone. Please check your browser settings and ensure you have a working microphone connected.');
     }
   };
 
   // Start transcription
   const startTranscription = () => {
-    if (recognitionState !== "ready" && recognitionState !== "error") return;
+    if (recognitionState !== 'ready' && recognitionState !== 'error') return;
 
     if (micPermissionGranted === false) {
       requestMicrophoneAccess();
@@ -1348,8 +1218,8 @@ const PremiumSpeechTranscription = ({
     }
 
     try {
-      if (recognitionState === "error") {
-        setErrorMessage("");
+      if (recognitionState === 'error') {
+        setErrorMessage('');
       }
 
       setRestartCount(0);
@@ -1361,19 +1231,19 @@ const PremiumSpeechTranscription = ({
 
       recognitionRef.current.start();
       setIsListening(true);
-      setRecognitionState("listening");
-      console.log("Speech recognition started");
+      setRecognitionState('listening');
+      console.log('Speech recognition started');
 
       resetSilenceTimeout();
     } catch (e) {
-      console.error("Error starting recognition:", e);
+      console.error('Error starting recognition:', e);
 
-      if (e.name === "InvalidStateError") {
+      if (e.name === 'InvalidStateError') {
         setIsListening(true);
-        setRecognitionState("listening");
+        setRecognitionState('listening');
       } else {
         setErrorMessage(`Failed to start: ${e.message}`);
-        setRecognitionState("error");
+        setRecognitionState('error');
       }
     }
   };
@@ -1402,19 +1272,19 @@ const PremiumSpeechTranscription = ({
     try {
       recognitionRef.current.stop();
       setIsListening(false);
-      console.log("Speech recognition stopped by user");
+      console.log('Speech recognition stopped by user');
     } catch (e) {
-      console.error("Error stopping recognition:", e);
+      console.error('Error stopping recognition:', e);
 
       setIsListening(false);
-      setRecognitionState("error");
+      setRecognitionState('error');
       setErrorMessage(`Failed to stop: ${e.message}`);
     }
   };
 
   // Toggle transcription
   const toggleTranscription = () => {
-    if (recognitionState === "initializing") return;
+    if (recognitionState === 'initializing') return;
 
     if (isListening) {
       stopTranscription();
@@ -1425,7 +1295,7 @@ const PremiumSpeechTranscription = ({
 
   // Manual restart
   const handleManualRestart = () => {
-    if (recognitionState === "initializing") return;
+    if (recognitionState === 'initializing') return;
 
     stopTranscription();
     setTimeout(() => {
@@ -1438,21 +1308,21 @@ const PremiumSpeechTranscription = ({
     if (!recognitionRef.current || !isListening || !isActiveRef.current) return;
 
     try {
-      setRestartCount((prev) => prev + 1);
+      setRestartCount(prev => prev + 1);
 
       recognitionRef.current.start();
-      setRecognitionState("listening");
-      console.log("Recognition restarted");
+      setRecognitionState('listening');
+      console.log('Recognition restarted');
 
       resetSilenceTimeout();
     } catch (e) {
-      console.error("Error restarting recognition:", e);
+      console.error('Error restarting recognition:', e);
 
-      if (e.name === "InvalidStateError") {
-        console.log("Recognition is already running");
+      if (e.name === 'InvalidStateError') {
+        console.log('Recognition is already running');
       } else {
         setErrorMessage(`Failed to restart: ${e.message}`);
-        setRecognitionState("error");
+        setRecognitionState('error');
       }
     }
   };
@@ -1461,48 +1331,41 @@ const PremiumSpeechTranscription = ({
   if (micPermissionGranted === false) {
     return (
       <div className="live-transcription-container">
-        <div
-          style={{
-            padding: "20px",
-            border: "1px solid #ffdddd",
-            borderRadius: "8px",
-            backgroundColor: "#fff6f6",
-            marginBottom: "15px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              color: "#d32f2f",
-              marginBottom: "10px",
-            }}
-          >
-            <ErrorOutlineIcon style={{ marginRight: "8px" }} />
-            <h3 style={{ margin: 0, fontSize: "16px" }}>
-              Microphone Access Required
-            </h3>
+        <div style={{
+          padding: '20px',
+          border: '1px solid #ffdddd',
+          borderRadius: '8px',
+          backgroundColor: '#fff6f6',
+          marginBottom: '15px'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            color: '#d32f2f',
+            marginBottom: '10px'
+          }}>
+            <ErrorOutlineIcon style={{ marginRight: '8px' }} />
+            <h3 style={{ margin: 0, fontSize: '16px' }}>Microphone Access Required</h3>
           </div>
 
-          <p style={{ margin: "10px 0", color: "#333" }}>
-            Microphone access is required for speech recognition. Please allow
-            microphone access in your browser settings.
+          <p style={{ margin: '10px 0', color: '#333' }}>
+            Microphone access is required for speech recognition. Please allow microphone access in your browser settings.
           </p>
 
-          <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
             <button
               onClick={requestMicrophoneAccess}
               style={{
-                padding: "8px 16px",
-                backgroundColor: "#4caf50",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "14px",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
+                padding: '8px 16px',
+                backgroundColor: '#4caf50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
               }}
             >
               <KeyboardVoiceIcon />
@@ -1515,20 +1378,18 @@ const PremiumSpeechTranscription = ({
   }
 
   // Render loading state
-  if (recognitionState === "initializing") {
+  if (recognitionState === 'initializing') {
     return (
       <div className="live-transcription-container">
-        <div
-          style={{
-            padding: "20px",
-            textAlign: "center",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "15px",
-          }}
-        >
+        <div style={{
+          padding: '20px',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '15px'
+        }}>
           <CircularProgress size={40} />
           <div>Initializing speech recognition...</div>
         </div>
@@ -1537,47 +1398,41 @@ const PremiumSpeechTranscription = ({
   }
 
   // Render error state
-  if (recognitionState === "error" && !isListening) {
+  if (recognitionState === 'error' && !isListening) {
     return (
       <div className="live-transcription-container">
-        <div
-          style={{
-            padding: "20px",
-            border: "1px solid #ffdddd",
-            borderRadius: "8px",
-            backgroundColor: "#fff6f6",
-            marginBottom: "15px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              color: "#d32f2f",
-              marginBottom: "10px",
-            }}
-          >
-            <ErrorOutlineIcon style={{ marginRight: "8px" }} />
-            <h3 style={{ margin: 0, fontSize: "16px" }}>
-              Speech Recognition Error
-            </h3>
+        <div style={{
+          padding: '20px',
+          border: '1px solid #ffdddd',
+          borderRadius: '8px',
+          backgroundColor: '#fff6f6',
+          marginBottom: '15px'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            color: '#d32f2f',
+            marginBottom: '10px'
+          }}>
+            <ErrorOutlineIcon style={{ marginRight: '8px' }} />
+            <h3 style={{ margin: 0, fontSize: '16px' }}>Speech Recognition Error</h3>
           </div>
 
-          <p style={{ margin: "10px 0", color: "#333" }}>
-            {errorMessage || "There was a problem with speech recognition."}
+          <p style={{ margin: '10px 0', color: '#333' }}>
+            {errorMessage || 'There was a problem with speech recognition.'}
           </p>
 
-          <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
             <button
               onClick={startTranscription}
               style={{
-                padding: "8px 16px",
-                backgroundColor: "#4caf50",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "14px",
+                padding: '8px 16px',
+                backgroundColor: '#4caf50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px'
               }}
             >
               Try Again
@@ -1586,13 +1441,13 @@ const PremiumSpeechTranscription = ({
             <button
               onClick={handleManualRestart}
               style={{
-                padding: "8px 16px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "14px",
+                padding: '8px 16px',
+                backgroundColor: '#2196f3',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px'
               }}
             >
               Reset Recognition
@@ -1605,33 +1460,28 @@ const PremiumSpeechTranscription = ({
 
   // Main UI
   return (
-    <div
-      className="live-transcription-container"
-      style={{
-        border: "1px solid #e0e0e0",
-        borderRadius: "8px",
-        padding: "15px",
-        marginTop: "20px",
-        backgroundColor: "#fafafa",
-        position: "relative",
-      }}
-    >
+    <div className="live-transcription-container" style={{
+      border: '1px solid #e0e0e0',
+      borderRadius: '8px',
+      padding: '15px',
+      marginTop: '20px',
+      backgroundColor: '#fafafa',
+      position: 'relative'
+    }}>
       {/* Device change notification */}
       {deviceChangeDetected && (
-        <div
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            backgroundColor: "#ff9800",
-            color: "white",
-            padding: "4px 8px",
-            borderRadius: "4px",
-            fontSize: "12px",
-            fontWeight: "bold",
-            zIndex: 100,
-          }}
-        >
+        <div style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          backgroundColor: '#ff9800',
+          color: 'white',
+          padding: '4px 8px',
+          borderRadius: '4px',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          zIndex: 100
+        }}>
           Device changing...
         </div>
       )}
@@ -1645,128 +1495,105 @@ const PremiumSpeechTranscription = ({
       />
 
       {/* Status bar */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "15px",
-          padding: "10px",
-          backgroundColor: "#fff",
-          borderRadius: "4px",
-          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '15px',
+        padding: '10px',
+        backgroundColor: '#fff',
+        borderRadius: '4px',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           {isListening ? (
-            <MicIcon
-              style={{
-                color: deviceChangeDetected ? "#ff9800" : "#FF4B4B",
-                marginRight: "10px",
-              }}
-            />
+            <MicIcon style={{
+              color: deviceChangeDetected ? '#ff9800' : '#FF4B4B',
+              marginRight: '10px'
+            }} />
           ) : (
-            <MicOffIcon style={{ color: "#888", marginRight: "10px" }} />
+            <MicOffIcon style={{ color: '#888', marginRight: '10px' }} />
           )}
           <span style={{ fontWeight: 500 }}>
-            {deviceChangeDetected
-              ? "Audio device changed - auto-restarting..."
-              : isListening
-              ? "Transcribing..."
-              : "Transcription paused"}
+            {deviceChangeDetected ? 'Audio device changed - auto-restarting...' :
+             isListening ? 'Transcribing...' : 'Transcription paused'}
           </span>
 
           {isListening && confidenceScore > 0 && (
-            <div style={{ marginLeft: "15px" }}>
+            <div style={{ marginLeft: '15px' }}>
               <ConfidenceIndicator score={confidenceScore} />
             </div>
           )}
         </div>
 
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button
             onClick={() => setShowControls(!showControls)}
             style={{
-              padding: "6px 12px",
-              backgroundColor: showControls ? "#f5f5f5" : "#fff",
-              color: "#555",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "12px",
+              padding: '6px 12px',
+              backgroundColor: showControls ? '#f5f5f5' : '#fff',
+              color: '#555',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '12px'
             }}
           >
-            {showControls ? "Hide Settings" : "Show Settings"}
+            {showControls ? 'Hide Settings' : 'Show Settings'}
           </button>
-          {/* The Stop Transcription button has been removed as requested */}
         </div>
       </div>
 
       {errorMessage && (
-        <div
-          style={{
-            color: "#D8000C",
-            backgroundColor: "#FFBABA",
-            padding: "10px",
-            borderRadius: "4px",
-            marginBottom: "15px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <WarningIcon style={{ marginRight: "10px" }} />
+        <div style={{
+          color: '#D8000C',
+          backgroundColor: '#FFBABA',
+          padding: '10px',
+          borderRadius: '4px',
+          marginBottom: '15px',
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+          <WarningIcon style={{ marginRight: '10px' }} />
           {errorMessage}
         </div>
       )}
 
-      <div
-        style={{
-          backgroundColor: "white",
-          border: "1px solid #e0e0e0",
-          borderRadius: "4px",
-          padding: "15px",
-          minHeight: "120px",
-          marginBottom: "15px",
-        }}
-      >
-        <h3
-          style={{
-            margin: "0 0 10px 0",
-            borderBottom: "1px solid #eee",
-            paddingBottom: "8px",
-            fontSize: "16px",
-            fontWeight: 500,
-          }}
-        >
-          Live Transcript
-        </h3>
+      <div style={{
+        backgroundColor: 'white',
+        border: '1px solid #e0e0e0',
+        borderRadius: '4px',
+        padding: '15px',
+        minHeight: '120px',
+        marginBottom: '15px'
+      }}>
+        <h3 style={{
+          margin: '0 0 10px 0',
+          borderBottom: '1px solid #eee',
+          paddingBottom: '8px',
+          fontSize: '16px',
+          fontWeight: 500
+        }}>Live Transcript</h3>
 
-        <div
-          style={{
-            lineHeight: "1.6",
-            fontSize: "15px",
-          }}
-        >
+        <div style={{
+          lineHeight: '1.6',
+          fontSize: '15px'
+        }}>
           {transcript ? (
-            <div style={{ color: "#333" }}>{transcript}</div>
+            <div style={{ color: '#333' }}>{transcript}</div>
           ) : (
-            <div style={{ color: "#888", fontStyle: "italic" }}>
-              {deviceChangeDetected
-                ? "Audio device changed, restarting microphone..."
-                : isListening
-                ? "Listening... speak now"
-                : "Your speech will appear here..."}
+            <div style={{ color: '#888', fontStyle: 'italic' }}>
+              {deviceChangeDetected ? 'Audio device changed, restarting microphone...' :
+               isListening ? 'Listening... speak now' : 'Your speech will appear here...'}
             </div>
           )}
 
           {interimTranscript && (
-            <div
-              style={{
-                color: "#888",
-                marginTop: "10px",
-                fontStyle: "italic",
-              }}
-            >
+            <div style={{
+              color: '#888',
+              marginTop: '10px',
+              fontStyle: 'italic'
+            }}>
               {interimTranscript}
             </div>
           )}
@@ -1775,215 +1602,150 @@ const PremiumSpeechTranscription = ({
 
       {showControls && (
         <>
-          <div
-            style={{
-              marginTop: "15px",
-              padding: "10px",
-              backgroundColor: "#e3f2fd",
-              borderRadius: "4px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ fontWeight: "bold" }}>
-                Auto-restart when audio devices change
-              </div>
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-              >
+          <div style={{
+            marginTop: '15px',
+            padding: '10px',
+            backgroundColor: '#e3f2fd',
+            borderRadius: '4px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ fontWeight: 'bold' }}>Auto-restart when audio devices change</div>
+              <label style={{
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer'
+              }}>
                 <input
                   type="checkbox"
                   checked={autoRestartEnabled}
                   onChange={() => setAutoRestartEnabled(!autoRestartEnabled)}
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: '5px' }}
                 />
-                {autoRestartEnabled ? "Enabled" : "Disabled"}
+                {autoRestartEnabled ? 'Enabled' : 'Disabled'}
               </label>
             </div>
-            <div style={{ fontSize: "12px", color: "#666", marginTop: "5px" }}>
-              When enabled, transcription will automatically restart when
-              unplugging headphones or changing audio devices
+            <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
+              When enabled, transcription will automatically restart when unplugging headphones or changing audio devices
             </div>
           </div>
 
           {audioDevices.length > 0 && (
-            <div
-              style={{
-                marginTop: "15px",
-                padding: "10px",
-                backgroundColor: "#f0f0f0",
-                borderRadius: "4px",
-              }}
-            >
-              <div style={{ fontWeight: "bold", marginBottom: "8px" }}>
-                Select Microphone
-              </div>
+            <div style={{
+              marginTop: '15px',
+              padding: '10px',
+              backgroundColor: '#f0f0f0',
+              borderRadius: '4px'
+            }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>Select Microphone</div>
               <select
                 value={selectedMicId}
                 onChange={(e) => handleMicrophoneChange(e.target.value)}
                 style={{
-                  padding: "6px 10px",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                  width: "100%",
-                  maxWidth: "300px",
+                  padding: '6px 10px',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc',
+                  width: '100%',
+                  maxWidth: '300px'
                 }}
               >
-                {audioDevices.map((device) => (
+                {audioDevices.map(device => (
                   <option key={device.deviceId} value={device.deviceId}>
-                    {device.label ||
-                      `Microphone ${device.deviceId.slice(0, 5)}...`}
+                    {device.label || `Microphone ${device.deviceId.slice(0, 5)}...`}
                   </option>
                 ))}
               </select>
-              <div
-                style={{ fontSize: "12px", color: "#666", marginTop: "5px" }}
-              >
-                If transcription stops working, try selecting your current
-                microphone here
+              <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
+                If transcription stops working, try selecting your current microphone here
               </div>
             </div>
           )}
 
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "15px",
-              fontSize: "13px",
-              color: "#666",
-              marginTop: "15px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ fontWeight: "bold", marginRight: "5px" }}>
-                Status:
-              </span>
-              {deviceChangeDetected
-                ? "Restarting"
-                : isActive
-                ? "Active"
-                : "Inactive"}
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '15px',
+            fontSize: '13px',
+            color: '#666',
+            marginTop: '15px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Status:</span>
+              {deviceChangeDetected ? 'Restarting' : isActive ? 'Active' : 'Inactive'}
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ fontWeight: "bold", marginRight: "5px" }}>
-                Listening:
-              </span>
-              {isListening ? "Yes" : "No"}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Listening:</span>
+              {isListening ? 'Yes' : 'No'}
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ fontWeight: "bold", marginRight: "5px" }}>
-                Question:
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Question:</span>
               {questionIndex + 1}
             </div>
             {restartCount > 0 && (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ fontWeight: "bold", marginRight: "5px" }}>
-                  Restarts:
-                </span>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Restarts:</span>
                 {restartCount}
               </div>
             )}
-            {languageDetected !== "en-US" && (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ fontWeight: "bold", marginRight: "5px" }}>
-                  Language:
-                </span>
+            {languageDetected !== 'en-US' && (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Language:</span>
                 {languageDetected}
               </div>
             )}
           </div>
 
           {!isListening && (
-            <div
-              style={{
-                marginTop: "15px",
-                padding: "10px",
-                backgroundColor: "#f0f0f0",
-                borderRadius: "4px",
-              }}
-            >
-              <div style={{ fontWeight: "bold", marginBottom: "8px" }}>
-                Speech Recognition Language
-              </div>
+            <div style={{
+              marginTop: '15px',
+              padding: '10px',
+              backgroundColor: '#f0f0f0',
+              borderRadius: '4px'
+            }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>Speech Recognition Language</div>
               <select
                 value={languageDetected}
                 onChange={(e) => setLanguageDetected(e.target.value)}
                 style={{
-                  padding: "6px 10px",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                  width: "100%",
-                  maxWidth: "300px",
+                  padding: '6px 10px',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc',
+                  width: '100%',
+                  maxWidth: '300px'
                 }}
               >
-                {SUPPORTED_LANGUAGES.map((lang) => (
+                {SUPPORTED_LANGUAGES.map(lang => (
                   <option key={lang} value={lang}>
-                    {lang === "en-US"
-                      ? "English (US)"
-                      : lang === "en-GB"
-                      ? "English (UK)"
-                      : lang === "es-ES"
-                      ? "Spanish"
-                      : lang === "fr-FR"
-                      ? "French"
-                      : lang === "de-DE"
-                      ? "German"
-                      : lang === "it-IT"
-                      ? "Italian"
-                      : lang === "zh-CN"
-                      ? "Chinese (Mandarin)"
-                      : lang === "ja-JP"
-                      ? "Japanese"
-                      : lang === "ko-KR"
-                      ? "Korean"
-                      : lang === "ru-RU"
-                      ? "Russian"
-                      : lang}
+                    {lang === 'en-US' ? 'English (US)' :
+                     lang === 'en-GB' ? 'English (UK)' :
+                     lang === 'es-ES' ? 'Spanish' :
+                     lang === 'fr-FR' ? 'French' :
+                     lang === 'de-DE' ? 'German' :
+                     lang === 'it-IT' ? 'Italian' :
+                     lang === 'zh-CN' ? 'Chinese (Mandarin)' :
+                     lang === 'ja-JP' ? 'Japanese' :
+                     lang === 'ko-KR' ? 'Korean' :
+                     lang === 'ru-RU' ? 'Russian' : lang}
                   </option>
                 ))}
               </select>
-              <div
-                style={{ fontSize: "12px", color: "#666", marginTop: "5px" }}
-              >
+              <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
                 Changing the language will restart speech recognition
               </div>
             </div>
           )}
 
-          <div
-            style={{
-              marginTop: "15px",
-              padding: "10px",
-              backgroundColor: "#e8f5e9",
-              borderRadius: "4px",
-              fontSize: "13px",
-            }}
-          >
-            <div style={{ fontWeight: "bold", marginBottom: "5px" }}>
-              Troubleshooting Tips:
-            </div>
-            <ul style={{ margin: "0", paddingLeft: "20px" }}>
-              <li>
-                Audio should automatically restart when disconnecting earphones
-              </li>
-              <li>
-                If automatic restart fails, use the 'Restart' option in the
-                popup
-              </li>
-              <li>
-                Try selecting a different microphone from the dropdown above
-              </li>
+          <div style={{
+            marginTop: '15px',
+            padding: '10px',
+            backgroundColor: '#e8f5e9',
+            borderRadius: '4px',
+            fontSize: '13px'
+          }}>
+            <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Troubleshooting Tips:</div>
+            <ul style={{ margin: '0', paddingLeft: '20px' }}>
+              <li>Audio should automatically restart when disconnecting earphones</li>
+              <li>If automatic restart fails, use the 'Restart' option in the popup</li>
+              <li>Try selecting a different microphone from the dropdown above</li>
               <li>Speak clearly and at a moderate pace</li>
               <li>Minimize background noise</li>
             </ul>
