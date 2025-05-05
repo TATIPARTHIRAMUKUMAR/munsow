@@ -20,6 +20,12 @@ const TranscriptionPopup = ({ isOpen, message, onRestart, onClose }) => {
   const alertTitle = isNetworkIssue ? 'Network Connection Issue' : 
                     isClarityIssue ? 'Voice Clarity Issue' : 'Speech Recognition Issue';
 
+  // Modified restart handler to clear transcript immediately before restarting
+  const handleRestart = () => {
+    // Force clear the transcripts directly before passing to the original handler
+    onRestart();
+  };
+
   return (
     <div style={{
       position: 'absolute',
@@ -72,7 +78,7 @@ const TranscriptionPopup = ({ isOpen, message, onRestart, onClose }) => {
           Dismiss
         </button>
         <button
-          onClick={onRestart}
+          onClick={handleRestart}
           style={{
             padding: '6px 12px',
             backgroundColor: '#4caf50',
@@ -140,9 +146,16 @@ const PremiumSpeechTranscription = ({
   const lowClarityTimeoutRef = useRef(null);
   const popupTimeoutRef = useRef(null);
   const popupDebounceTimeoutRef = useRef(null);
+  const lastSpeechTimeRef = useRef(Date.now());
+  const lastRestartTimeRef = useRef(0);
 
   // Inject popup styles
   useEffect(() => {
+    // Initialize lastSpeechTimeRef with current time
+    lastSpeechTimeRef.current = Date.now();
+    // Initialize lastRestartTimeRef with current time
+    lastRestartTimeRef.current = Date.now();
+
     const existingStyle = document.querySelector('style[data-popup-styles]');
     if (!existingStyle) {
       const styleSheet = document.createElement('style');
@@ -172,7 +185,7 @@ const PremiumSpeechTranscription = ({
   // Constants
   const MAX_RESTART_ATTEMPTS = 15;
   const RESTART_DELAY = 800;
-  const SPEECH_TIMEOUT = 8000;
+  const SPEECH_TIMEOUT = 10000; // Increase from 8000 to 10000 ms (10 seconds)
   const DEVICE_CHANGE_DEBOUNCE = 1000;
   const QUESTION_CHANGE_DELAY = 500;
   const DEVICE_CHECK_INTERVAL = 2000;
@@ -190,30 +203,44 @@ const PremiumSpeechTranscription = ({
     'manager', 'lead', 'mentor', 'coach', 'review', 'feedback', 'assessment', 'evaluation'
   ];
 
-  // Network status monitor
+  // Modified network status monitor section
   useEffect(() => {
     const handleOnline = () => {
-      console.log('Network connection restored by browser event');
-      setNetworkStatus({
-        isOnline: true,
-        lastChecked: Date.now()
-      });
-      
-      if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
-        console.log('Auto-closing network error popup on connection restore');
-        handleClosePopup();
+      try {
+        console.log('Network connection restored by browser event');
+        setNetworkStatus({
+          isOnline: true,
+          lastChecked: Date.now()
+        });
+        
+        // Clear error message specifically for network errors
+        if (errorMessage && errorMessage.toLowerCase().includes('network')) {
+          setErrorMessage('');
+        }
+        
+        // Directly close popup if it's a network error popup
+        if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
+          console.log('Auto-closing network error popup on connection restore');
+          handleClosePopup();
+        }
+      } catch (error) {
+        console.error('Error in handleOnline:', error);
       }
     };
     
     const handleOffline = () => {
-      console.log('Network connection lost by browser event');
-      setNetworkStatus({
-        isOnline: false,
-        lastChecked: Date.now()
-      });
-      
-      if (isListening && isActiveRef.current) {
-        handleNetworkError();
+      try {
+        console.log('Network connection lost by browser event');
+        setNetworkStatus({
+          isOnline: false,
+          lastChecked: Date.now()
+        });
+        
+        if (isListening && isActiveRef.current) {
+          handleNetworkError();
+        }
+      } catch (error) {
+        console.error('Error in handleOffline:', error);
       }
     };
     
@@ -221,29 +248,39 @@ const PremiumSpeechTranscription = ({
     window.addEventListener('offline', handleOffline);
     
     const networkCheckInterval = setInterval(() => {
-      if (isListening && isActiveRef.current) {
-        const isOnlineNow = navigator.onLine;
-        
-        if (!networkStatus.isOnline && isOnlineNow) {
-          console.log('Network connection restored by interval check');
-          setNetworkStatus({
-            isOnline: true,
-            lastChecked: Date.now()
-          });
+      try {
+        if (isListening && isActiveRef.current) {
+          const isOnlineNow = navigator.onLine;
           
-          if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
-            handleClosePopup();
+          if (!networkStatus.isOnline && isOnlineNow) {
+            console.log('Network connection restored by interval check');
+            setNetworkStatus({
+              isOnline: true,
+              lastChecked: Date.now()
+            });
+            
+            // Clear error message specifically for network errors
+            if (errorMessage && errorMessage.toLowerCase().includes('network')) {
+              setErrorMessage('');
+            }
+            
+            // Always directly close the popup if it's a network error
+            if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
+              handleClosePopup();
+            }
+          }
+          else if (networkStatus.isOnline && !isOnlineNow) {
+            console.log('Network connection lost by interval check');
+            setNetworkStatus({
+              isOnline: false,
+              lastChecked: Date.now()
+            });
+            
+            handleNetworkError();
           }
         }
-        else if (networkStatus.isOnline && !isOnlineNow) {
-          console.log('Network connection lost by interval check');
-          setNetworkStatus({
-            isOnline: false,
-            lastChecked: Date.now()
-          });
-          
-          handleNetworkError();
-        }
+      } catch (error) {
+        console.error('Error in network check interval:', error);
       }
     }, 5000);
     
@@ -386,7 +423,7 @@ const PremiumSpeechTranscription = ({
     }, 10000);
   };
 
-  // Enhanced handleClosePopup with auto-restart
+  // Enhanced handleClosePopup with network check
   const handleClosePopup = () => {
     // Clear timeouts
     if (popupTimeoutRef.current) {
@@ -400,31 +437,50 @@ const PremiumSpeechTranscription = ({
     
     // Hide the popup
     setShowPopup(false);
+    setPopupMessage('');
     
-    // Automatically restart transcription
-    if (isListening && isActiveRef.current) {
+    // Safely check all conditions before restarting
+    if (isListening && isActiveRef.current && recognitionRef.current) {
       console.log('Alert dismissed, automatically restarting transcription');
-      setTimeout(() => {
-        forceRestartRecognition();
-      }, 300);
+      try {
+        setTimeout(() => {
+          if (recognitionRef.current && isActiveRef.current) {
+            forceRestartRecognition();
+          }
+        }, 300);
+      } catch (error) {
+        console.error('Error restarting after popup close:', error);
+        // Fallback error handling
+        setErrorMessage('Error restarting transcription. Please try manually restarting.');
+        setRecognitionState('error');
+      }
     }
   };
 
-  // Network error handler
+  // Improved handleNetworkError function
   const handleNetworkError = () => {
     setErrorMessage('Network error. Please check your internet connection.');
     showRestartPopup('Network error detected. Transcription will resume automatically when your connection is restored.');
     
-    // Set up a periodic check for network restoration
+    // Set up a more reliable check for network restoration
     const checkNetworkInterval = setInterval(() => {
       if (navigator.onLine) {
         clearInterval(checkNetworkInterval);
-        if (isListening && isActiveRef.current && autoRestartEnabled) {
+        if (isListening && isActiveRef.current) {
           console.log('Network connection restored, restarting transcription');
-          handleClosePopup();
+          
+          // Clear error message specifically for network errors
+          if (errorMessage && errorMessage.toLowerCase().includes('network')) {
+            setErrorMessage('');
+          }
+          
+          // Directly close the popup
+          if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
+            handleClosePopup();
+          }
         }
       }
-    }, 3000);
+    }, 2000); // Check more frequently
     
     // Safety cleanup
     setTimeout(() => {
@@ -483,9 +539,19 @@ const PremiumSpeechTranscription = ({
 
   // Force restart recognition
   const forceRestartRecognition = () => {
-    console.log('Forcing recognition restart');
+    console.log('Force recognition restart');
+
+    // Record restart time to provide a grace period
+    lastRestartTimeRef.current = Date.now();
+    console.log('Setting restart time for grace period:', lastRestartTimeRef.current);
 
     setShowPopup(false);
+
+    // ALWAYS clear the transcript when restarting, not just for "no speech detected"
+    setTranscript('');
+    setInterimTranscript('');
+    transcriptRef.current = '';
+    onTranscriptUpdate('');
 
     clearSilenceTimeout();
     if (restartTimeoutRef.current) {
@@ -561,11 +627,58 @@ const PremiumSpeechTranscription = ({
     clearSilenceTimeout();
 
     if (isListening) {
+      // Add more debugging
+      console.log('Setting silence timeout. Current state:', {
+        interimTranscript: interimTranscript,
+        confidenceScore: confidenceScore,
+        timeSinceLastSpeech: Date.now() - lastSpeechTimeRef.current,
+        timeSinceLastRestart: Date.now() - lastRestartTimeRef.current,
+        isListening: isListening
+      });
+
       recognitionTimeoutRef.current = setTimeout(() => {
-        console.log('Silence timeout - no speech detected for a while');
+        console.log('Silence timeout check - checking if speech is being detected');
+        
+        // Calculate time since last detected speech
+        const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
+        console.log(`Time since last speech: ${timeSinceLastSpeech}ms`);
+        
+        // Calculate time since last restart
+        const timeSinceLastRestart = Date.now() - lastRestartTimeRef.current;
+        console.log(`Time since last restart: ${timeSinceLastRestart}ms`);
+        
+        // If we're in the grace period after restart (15 seconds), don't show popup
+        if (timeSinceLastRestart < 15000) {
+          console.log('Still in grace period after restart, resetting timeout');
+          resetSilenceTimeout();
+          return;
+        }
+        
+        // More aggressive approach: If interim transcript exists at all, consider it active speech
+        if (interimTranscript && interimTranscript.length > 0) {
+          console.log('Interim transcript exists, resetting timeout');
+          lastSpeechTimeRef.current = Date.now();
+          resetSilenceTimeout();
+          return;
+        }
+        
+        // REDUCE the time threshold to 3 seconds (was 5 seconds)
+        if (timeSinceLastSpeech < 3000) {
+          console.log('Recent speech detected, resetting timeout');
+          resetSilenceTimeout();
+          return;
+        }
+        
+        // Force the confidence score to zero after silence - this helps with future checks
+        if (confidenceScore > 0) {
+          console.log('Resetting confidence score due to silence');
+          setConfidenceScore(0);
+        }
+        
+        // Only show popup if we're still listening and not in grace period
         if (isListening && recognitionRef.current && isActiveRef.current) {
           try {
-            console.log('Silence detected, showing popup');
+            console.log('No speech detected for 3+ seconds, showing popup');
             showRestartPopup('No speech detected for a while. Would you like to restart?');
           } catch (e) {
             console.error('Error handling silence timeout:', e);
@@ -624,6 +737,51 @@ const PremiumSpeechTranscription = ({
       }
     };
   }, [confidenceScore, isListening, lowClaritySamples, lowClarityDetected]);
+
+  // Periodic silence check
+  useEffect(() => {
+    // Only run this when listening
+    if (!isListening) return;
+
+    console.log('Setting up silence monitor');
+    
+    // Check every 2 seconds if we're truly silent
+    const silenceMonitorInterval = setInterval(() => {
+      const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
+      const timeSinceLastRestart = Date.now() - lastRestartTimeRef.current;
+      
+      console.log(`Silence monitor check: ${timeSinceLastSpeech}ms since last speech, ${timeSinceLastRestart}ms since last restart`);
+      
+      // Only show popup if not in grace period (15 seconds after restart)
+      if (timeSinceLastRestart > 15000 && timeSinceLastSpeech > 8000 && !showPopup && isListening) {
+        console.log('Silence monitor detected long silence with no popup');
+        showRestartPopup('Long period without speech detected. Would you like to restart?');
+      }
+    }, 2000);
+    
+    return () => {
+      clearInterval(silenceMonitorInterval);
+    };
+  }, [isListening, lastSpeechTimeRef.current]);
+
+  // Speech reset functions
+  const forceSpeechReset = () => {
+    console.log('Forcing speech detection reset');
+    
+    // Reset the last speech time
+    lastSpeechTimeRef.current = Date.now() - 6000; // Set it to 6 seconds ago
+    
+    // Reset the silence timeout
+    resetSilenceTimeout();
+    
+    // Reset confidence score to zero
+    setConfidenceScore(0);
+  };
+
+  const debugForceSilence = () => {
+    lastSpeechTimeRef.current = Date.now() - 10000; // Set it to 10 seconds ago
+    resetSilenceTimeout();
+  };
 
   // Check microphone permission and devices
   useEffect(() => {
@@ -685,27 +843,52 @@ const PremiumSpeechTranscription = ({
       navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChangeEvent);
 
       if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach(track => track.stop());
+        try {
+          audioStreamRef.current.getTracks().forEach(track => track.stop());
+        } catch (err) {
+          console.error('Error stopping audio tracks:', err);
+        }
       }
 
       clearSilenceTimeout();
+      
       if (restartTimeoutRef.current) {
         clearTimeout(restartTimeoutRef.current);
+        restartTimeoutRef.current = null;
       }
+      
       if (questionChangeTimeoutRef.current) {
         clearTimeout(questionChangeTimeoutRef.current);
+        questionChangeTimeoutRef.current = null;
       }
+      
       if (deviceCheckIntervalRef.current) {
         clearInterval(deviceCheckIntervalRef.current);
+        deviceCheckIntervalRef.current = null;
       }
+      
       if (lowClarityTimeoutRef.current) {
         clearTimeout(lowClarityTimeoutRef.current);
+        lowClarityTimeoutRef.current = null;
       }
+      
       if (popupTimeoutRef.current) {
         clearTimeout(popupTimeoutRef.current);
+        popupTimeoutRef.current = null;
       }
+      
       if (popupDebounceTimeoutRef.current) {
         clearTimeout(popupDebounceTimeoutRef.current);
+        popupDebounceTimeoutRef.current = null;
+      }
+
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+          recognitionRef.current = null;
+        } catch (e) {
+          console.log('Error during recognition cleanup:', e);
+        }
       }
     };
   }, []);
@@ -750,6 +933,12 @@ const PremiumSpeechTranscription = ({
 
       recognition.onresult = (event) => {
         try {
+          // Record last speech time whenever we get any result
+          lastSpeechTimeRef.current = Date.now();
+          
+          // Reset silence timeout on ANY result (interim or final)
+          resetSilenceTimeout();
+          
           let finalTranscript = '';
           let currentInterim = '';
           let highestConfidence = 0;
@@ -819,8 +1008,6 @@ const PremiumSpeechTranscription = ({
               onTranscriptUpdate(newTranscript);
               return newTranscript;
             });
-
-            resetSilenceTimeout();
           }
 
           if (shouldProcessResults && resultAlternatives.length > 0) {
@@ -830,24 +1017,39 @@ const PremiumSpeechTranscription = ({
           setConfidenceScore(highestConfidence);
         } catch (error) {
           console.error('Error processing speech recognition result:', error);
-          if (interimTranscript) {
-            setTranscript(prev => prev + interimTranscript + ' ');
-            setInterimTranscript('');
-          }
           resetSilenceTimeout();
         }
       };
 
       recognition.onend = () => {
-        console.log('Recognition ended');
+        try {
+          console.log('Recognition ended');
 
-        if (isListening && isActiveRef.current) {
-          console.log('Recognition ended but isListening is still true - restarting');
-          restartRecognition();
-        } else {
-          console.log('Recognition ended and not listening - setting state to ready');
+          if (isListening && isActiveRef.current) {
+            console.log('Recognition ended but isListening is still true - restarting');
+            restartRecognition();
+          } else {
+            console.log('Recognition ended and not listening - setting state to ready');
+            setRecognitionState('ready');
+          }
+        } catch (error) {
+          console.error('Error in recognition.onend handler:', error);
+          // Fallback to safe state
           setRecognitionState('ready');
         }
+      };
+
+      recognition.onspeechstart = () => {
+        console.log('Speech started');
+        lastSpeechTimeRef.current = Date.now();
+        resetSilenceTimeout();
+      };
+
+      recognition.onspeechend = () => {
+        console.log('Speech ended');
+        // We don't update lastSpeechTime here because we want to
+        // give a buffer period after speech ends before showing the popup
+        resetSilenceTimeout();
       };
 
       recognition.onsoundstart = () => {
@@ -1305,7 +1507,14 @@ const PremiumSpeechTranscription = ({
 
   // Restart recognition
   const restartRecognition = () => {
-    if (!recognitionRef.current || !isListening || !isActiveRef.current) return;
+    if (!recognitionRef.current) {
+      console.error('Recognition reference is null in restartRecognition');
+      setRecognitionState('error');
+      setErrorMessage('Speech recognition reference is missing. Please refresh the page.');
+      return;
+    }
+    
+    if (!isListening || !isActiveRef.current) return;
 
     try {
       setRestartCount(prev => prev + 1);
@@ -1749,6 +1958,49 @@ const PremiumSpeechTranscription = ({
               <li>Speak clearly and at a moderate pace</li>
               <li>Minimize background noise</li>
             </ul>
+          </div>
+
+          <div style={{
+            marginTop: '15px',
+            padding: '10px',
+            backgroundColor: '#f8d7da',
+            borderRadius: '4px',
+            fontSize: '13px'
+          }}>
+            <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Debug Tools:</div>
+            <div style={{ fontSize: '12px', marginBottom: '10px' }}>
+              Last speech detected: {Math.round((Date.now() - lastSpeechTimeRef.current)/1000)}s ago
+            </div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={forceSpeechReset}
+                style={{
+                  padding: '4px 8px',
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                Force Reset Speech
+              </button>
+              <button
+                onClick={debugForceSilence}
+                style={{
+                  padding: '4px 8px',
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                Test Silence Detection
+              </button>
+            </div>
           </div>
         </>
       )}
