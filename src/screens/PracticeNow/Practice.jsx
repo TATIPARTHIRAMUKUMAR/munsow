@@ -1,3 +1,4 @@
+//new
 import LoadingOverlay from '../../Components/LoadingOverlay';
 import { Autocomplete, Divider, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -27,9 +28,6 @@ import { useDarkMode } from "./../../Dark";
 import interview from "../../assets/interview.jpeg";
 import JobDescriptionForm from "./JobDescription";
 import { useLoader } from '../../Components/LoaderContext';
-
-// Import the new LoadingPopup component
-import LoadingPopup from '../../Components/LoadingPopup';
 
 const QontoConnector = styled(StepConnector)(({ theme, linearGradientBackground }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -61,7 +59,6 @@ const StepperComponent = () => {
   const location = useLocation();
   const { entity_type } = location.state || {};
 
-  // Add loading state for popup
   const [isLoading, setIsLoading] = useState(false);
   const [questionsLoading, setQuestionsLoading] = useState(false);
 
@@ -128,7 +125,7 @@ const StepperComponent = () => {
         return true;
       }
     }
-    if ((selectedCategory == "jd"||selectedCategory == "cult")&&currentStep==1) {
+    if ((selectedCategory == "jd"||selectedCategory == "cult")&currentStep==1) {
       if (Object.keys(selectedOptions).length>=1) {
         return false;
       } else {
@@ -146,14 +143,12 @@ const StepperComponent = () => {
     colorTheme,
   } = useSelector((state) => state?.data);
 
-  // Monitor for questions being loaded and automatically navigate when they're available
   useEffect(() => {
     if (questionsList?.questions?.length > 0) {
       console.log("Questions loaded successfully:", questionsList.questions.length);
       setQuestions(questionsList);
-      setIsLoading(false); // Hide loading when questions are loaded
+      setIsLoading(false);
       
-      // If questions are loaded after step 1, proceed to step 2
       if (currentStep === 1 && questionsLoading) {
         setCurrentStep(2);
         setQuestionsLoading(false);
@@ -164,16 +159,25 @@ const StepperComponent = () => {
 
   const handleNext = async () => {
     if (currentStep === 0) {
-      // Move to next step
       setCurrentStep(currentStep + 1);
     }
     else if (currentStep === 1) {
-      // Show loading overlay
+      // Validate JD and cultural inputs
+      if (selectedCategory === "jd" && (!jdcompany.trim() || !jdrole.trim())) {
+        toast.error("Please enter both company name and role for Technical Mock.");
+        return;
+      }
+
+      if (selectedCategory === "cult" && (!cultcompany.trim() || !cultrole.trim())) {
+        toast.error("Please enter both company name and role for HR / Behavioural Mock.");
+        return;
+      }
+
       setShowLoading(true);
       setQuestionsLoading(true);
       
       let toastId = toast("Preparing your interview questions...", { 
-        autoClose: false 
+        autoClose: 5000
       });
       
       const payload = {
@@ -181,8 +185,8 @@ const StepperComponent = () => {
           level: experienceLevel || "",
           role: selectedRole?.label || "",
           company: selectedCompany?.label || "",
-          hard_skill: selectedHardskill?.map(skill => skill.label) || [],
-          soft_skill: selectedSoftskill?.map(skill => skill.label) || []
+          hard_skill: selectedHardskill ? selectedHardskill.map(skill => skill.label) : [],
+          soft_skill: selectedSoftskill ? selectedSoftskill.map(skill => skill.label) : []
         },
         interview_type: selectedCategory === "jd" ? "jd_interview" 
           : selectedCategory === "cult" ? "cultural_interview" 
@@ -190,9 +194,10 @@ const StepperComponent = () => {
           : "company_role_interview"
       };
   
-      // Handle JD specific case
       if (selectedCategory === "jd") {
-        payload.specifications.jd_skill = selectedOptions;
+        payload.specifications.jd_skill = Array.isArray(selectedOptions) 
+          ? selectedOptions 
+          : Object.values(selectedOptions);
         payload.specifications.company = jdcompany;
         payload.specifications.role = jdrole;
         delete payload.specifications.hard_skill;
@@ -200,9 +205,10 @@ const StepperComponent = () => {
         delete payload.specifications.level;
       }
   
-      // Handle cultural specific case
       if (selectedCategory === "cult") {
-        payload.specifications.cultural_skill = selectedOptions;
+        payload.specifications.cultural_skill = Array.isArray(selectedOptions) 
+          ? selectedOptions 
+          : Object.values(selectedOptions);
         payload.specifications.company = cultcompany;
         payload.specifications.role = cultrole;
         delete payload.specifications.hard_skill;
@@ -211,9 +217,10 @@ const StepperComponent = () => {
       }
       
       try {
-        await dispatch(loadQuestions(payload));
+        console.log("Sending payload:", JSON.stringify(payload));
+        const result = await dispatch(loadQuestions(payload));
+        console.log("Result from loadQuestions:", result);
         
-        // Check if questions loaded immediately
         if (questionsList?.questions?.length > 0) {
           toast.update(toastId, {
             render: "Questions loaded successfully!",
@@ -224,14 +231,12 @@ const StepperComponent = () => {
           setCurrentStep(2);
           setQuestionsLoading(false);
         } else {
-          // Keep showing loading until questions are loaded
           toast.update(toastId, {
             render: "Still preparing your questions...",
             type: "info",
             autoClose: 5000
           });
           
-          // Start a timer to check for questions
           const checkQuestionsInterval = setInterval(() => {
             if (questionsList?.questions?.length > 0) {
               clearInterval(checkQuestionsInterval);
@@ -241,12 +246,9 @@ const StepperComponent = () => {
                 type: "success",
                 autoClose: 2000
               });
-              
-              // Let the useEffect handle the navigation
             }
-          }, 2000); // Check every 2 seconds
+          }, 2000);
           
-          // Set timeout to prevent infinite loading
           setTimeout(() => {
             clearInterval(checkQuestionsInterval);
             if (!questionsList?.questions?.length > 0) {
@@ -259,12 +261,12 @@ const StepperComponent = () => {
                 autoClose: 5000
               });
             }
-          }, 60000); // 1 minute timeout
+          }, 60000);
         }
       } catch (error) {
         console.error('Error loading questions:', error);
         toast.update(toastId, {
-          render: "Failed to load questions. Please try again.",
+          render: error.message || "Failed to load questions. Please try again.",
           type: "error",
           autoClose: 5000
         });
@@ -274,48 +276,54 @@ const StepperComponent = () => {
       }
     }
     else if (currentStep === 2) {
-      // Only proceed if all validations pass
       if (chosenCompany && audioValidated && videoValidated) {
-        // Show toast and loading overlay
         let toastId = toast("Preparing your interview...", { 
           autoClose: 5000 
         });
         
-        // Show the loading overlay
         setShowLoading(true);
         
         try {
-          // First prepare the interview
-          await dispatch(prepare_interview());
+          let attempts = 0;
+          let success = false;
           
-          // Check if questions are available
+          while (attempts < 3 && !success) {
+            try {
+              attempts++;
+              await dispatch(prepare_interview());
+              success = true;
+            } catch (error) {
+              console.error(`Attempt ${attempts} failed:`, error);
+              if (attempts < 3) {
+                await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
+              } else {
+                throw error;
+              }
+            }
+          }
+          
           if (questionsList?.questions?.length > 0) {
-            // If questions are available, proceed to interview
             toast.update(toastId, {
               render: "Ready for your interview!",
               type: "success",
               autoClose: 2000
             });
             
-            // Navigate with a flag to start the interview
             setShowLoading(false);
             navigate("/interview", { 
               state: { 
-                startInterview: true // Add this flag to indicate user explicitly started the interview
+                startInterview: true
               } 
             });
           } else {
-            // If questions are not available yet, retry loading
             toast.update(toastId, {
               render: "Still preparing your questions...",
               type: "info",
               autoClose: 5000
             });
             
-            // Try to load questions again and automatically redirect when they're ready
             const checkQuestionsInterval = setInterval(() => {
               if (questionsList?.questions?.length > 0) {
-                // Once questions are available, navigate with start flag
                 clearInterval(checkQuestionsInterval);
                 
                 toast.update(toastId, {
@@ -327,13 +335,12 @@ const StepperComponent = () => {
                 setShowLoading(false);
                 navigate("/interview", { 
                   state: { 
-                    startInterview: true // Add this flag to indicate user explicitly started the interview
+                    startInterview: true
                   } 
                 });
               }
-            }, 1000); // Check every 1 second
+            }, 1000);
             
-            // Set a timeout to stop checking after 100 seconds
             setTimeout(() => {
               clearInterval(checkQuestionsInterval);
               if (!questionsList?.questions?.length > 0) {
@@ -347,8 +354,9 @@ const StepperComponent = () => {
             }, 100000);
           }
         } catch (error) {
+          console.error('Error preparing interview after retries:', error);
           toast.update(toastId, {
-            render: "Something went wrong. Please try again.",
+            render: `Something went wrong: ${error.message || "Please try again."}`,
             type: "error",
             autoClose: 5000
           });
@@ -423,13 +431,10 @@ const StepperComponent = () => {
         
         <Divider style={{ marginTop: "1rem" }} />
         
-        {/* Main content sections */}
         <div className="flex  p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
           
           {currentStep === 0 && (
             <>
-
-            {/* Render based on the entity_type */}
             {entity_type === "institution" ? (
               <div>
                 <div
@@ -474,11 +479,9 @@ const StepperComponent = () => {
                   className={
                     selectedCategory !== "skills"
                       ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-
                   }
                 >
                   <label className="flex items-center space-x-2 my-3 relative overflow-auto">
-
                     <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
                   </label>
                   <MutiSelect
@@ -501,7 +504,6 @@ const StepperComponent = () => {
                         label: o.name,
                         id: o.id,
                       }))}
-                      // onSelectionChange={(e) => testselection(e)}
                       selectedItems={selectedSoftskill}
                       onSelectionChange={setSelectedSoftskill}
                       label="Soft Skills"
@@ -521,7 +523,6 @@ const StepperComponent = () => {
                   setSelectedCompany(null);
                   setSelectedSoftskill(null);
                   setSelectedHardskill(null);
-
                   setCultcompany("");
                   setCultrole("");
                 }}
@@ -586,7 +587,6 @@ const StepperComponent = () => {
               </div>
             ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-auto p-2 md:p-8">
-
               <div
                 className={`bg-${selectedCategory === "skills" ? "gray-200" : "gray-100"
                   } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
@@ -629,11 +629,9 @@ const StepperComponent = () => {
                   className={
                     selectedCategory !== "skills"
                       ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-
                   }
                 >
                   <label className="flex items-center space-x-2 my-3 relative overflow-auto">
-
                     <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
                   </label>
                   <MutiSelect
@@ -656,7 +654,6 @@ const StepperComponent = () => {
                         label: o.name,
                         id: o.id,
                       }))}
-                      // onSelectionChange={(e) => testselection(e)}
                       selectedItems={selectedSoftskill}
                       onSelectionChange={setSelectedSoftskill}
                       label="Soft Skills"
@@ -692,11 +689,9 @@ const StepperComponent = () => {
                       outlineColor: linearGradientBackground
                     }}
                   />
-
                   <h2
                     style={{
                       fontSize: "1.5rem",
-
                       fontWeight: "600",
                       marginBottom: "0.5rem",
                       color: grayColors,
@@ -705,7 +700,6 @@ const StepperComponent = () => {
                     Role Specific
                   </h2>
                 </div>
-
                 <div
                   className={
                     selectedCategory !== "role"
@@ -714,8 +708,6 @@ const StepperComponent = () => {
                   }
                 >
                   <label className="flex items-center space-x-2 my-3">
-
-
                     <span className="font-bold pr-2" style={{ color: grayColors }}
                     >
                       Choose Company{" "}
@@ -738,7 +730,6 @@ const StepperComponent = () => {
                     label="Companies"
                   />
                 </div>
-
                 {selectedCompany != null && (
                   <div
                     className={
@@ -748,8 +739,6 @@ const StepperComponent = () => {
                     }
                   >
                     <label className="flex items-center space-x-2 my-3">
-
-
                       <span className="font-bold pr-2 ">
                         Choose Role{" "}
                         <span className="font-bold text-red-500 text-2xl">
@@ -781,7 +770,6 @@ const StepperComponent = () => {
                   setSelectedCompany(null);
                   setSelectedSoftskill(null);
                   setSelectedHardskill(null);
-
                   setCultcompany("");
                   setCultrole("");
                 }}
@@ -855,7 +843,6 @@ const StepperComponent = () => {
                   setSelectedHardskill(null);
                   setJdcompany("");
                   setJdrole("");
-
                 }}
               >
                 <div className="flex relative overflow-auto ">
@@ -915,14 +902,12 @@ const StepperComponent = () => {
                   </div>
                 </div>
               </div>
-
             </div>
             )}
             </>
           )}
 
           {currentStep === 1 && (
-
             <div>
                 {(selectedCategory == "jd" || selectedCategory == "cult") && (
               <JobDescriptionForm selectedCategory={selectedCategory} jdcompany={jdcompany} jdrole={jdrole} cultcompany={cultcompany} cultrole={cultrole} selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}/>)}
@@ -1025,14 +1010,12 @@ const StepperComponent = () => {
                         : "transparent",
                     }}
                   />
-
                   <span className="ml-3 text-sm">
-                    I&apos;m completing this check on this device and Wi-Fi
+                    I'm completing this check on this device and Wi-Fi
                     network where I will participate
                   </span>
                 </label>
               </div>
-
               <div className="bg-gray-200 rounded w-full">
                 <Audio_Video
                   audioValidated={audioValidated}
@@ -1046,7 +1029,6 @@ const StepperComponent = () => {
           )}
         </div>
 
-        {/* Navigation buttons */}
         <div className="mt-4 p-6 flex justify-end items-center">
           {currentStep > 0 && (
             <button
@@ -1122,7 +1104,6 @@ const StepperComponent = () => {
         </div>
       </div>
  
-      {/* Loading Overlay */}
       <LoadingOverlay 
         show={showLoading}
         message={
@@ -1138,6 +1119,3 @@ const StepperComponent = () => {
 };
 
 export default StepperComponent;
-
-
-
