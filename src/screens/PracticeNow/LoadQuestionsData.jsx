@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import NewGridLayout from "./NewGridLayout";
@@ -11,7 +10,7 @@ export default function LoadQuestionsData() {
 
     useEffect(() => {
         setQuestions(questionsList?.questions ? questionsList?.questions : [])
-        console.log("questions", questions1, questionsList)
+        // console.log("questions", questions1, questionsList)
         //questions = questionsList?.questions ? questionsList?.questions : []
     }, [questionsList])
 

@@ -46,6 +46,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   const [micPermissionGranted, setMicPermissionGranted] = useState(null);
   const [permissionError, setPermissionError] = useState('');
   const [componentInitialized, setComponentInitialized] = useState(false);
+  const [videoRecordingActive, setVideoRecordingActive] = useState(false);
   
   // Check if interview should start (from navigation state)
   const shouldStartInterview = location.state?.startInterview || false;
@@ -63,10 +64,8 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   useEffect(() => {
     // Check if questions have been passed as props or are in redux
     if ((questions && questions.length > 0) || (questionsList?.questions?.length > 0)) {
-      console.log("Questions available, ready for interview...");
       setIsQuestionsLoading(false);
     } else {
-      console.log("Waiting for questions to load...");
       setIsQuestionsLoading(true);
     }
   }, [questions, questionsList]);
@@ -113,10 +112,8 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   // Added: Track when questions are loaded - responding to both questions array and parent isLoading prop
   useEffect(() => {
     if (questions && questions.length > 0) {
-      console.log("Questions loaded successfully:", questions.length);
       setIsQuestionsLoading(false);
     } else {
-      console.log("Questions are still loading or empty");
       setIsQuestionsLoading(isLoading); // Use the parent loading state
     }
   }, [questions, isLoading]);
@@ -124,7 +121,6 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   // Only initialize when questions are loaded AND the user has clicked Submit
   useEffect(() => {
     if (!isQuestionsLoading && questions?.length > 0 && shouldStartInterview && !componentInitialized) {
-      console.log('Starting interview based on user submit action');
       
       // Show the environment setup loader for 7 seconds before starting the interview
       if (showEnvironmentLoader) {
@@ -185,7 +181,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   // Save current transcript to allTranscripts when it changes
   useEffect(() => {
     if (currentTranscript && questionIndex !== undefined) {
-      console.log(`Saving transcript for question ${questionIndex}:`, currentTranscript.substring(0, 50) + '...');
+      // console.log(`Saving transcript for question ${questionIndex}:`, currentTranscript.substring(0, 50) + '...');
       setAllTranscripts(prev => ({
         ...prev,
         [questionIndex]: currentTranscript
@@ -203,7 +199,6 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         stream.getTracks().forEach(track => track.stop());
         setMicPermissionGranted(true);
         setPermissionError('');
-        console.log('Microphone permission granted!');
       } catch (error) {
         console.error('Microphone permission error:', error);
         setMicPermissionGranted(false);
@@ -253,7 +248,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   };
 
   const handleTranscriptUpdate = (transcript) => {
-    console.log('Transcript updated from child component:', transcript.substring(0, 50) + '...');
+    // console.log('Transcript updated from child component:', transcript.substring(0, 50) + '...');
     setCurrentTranscript(transcript);
   };
 
@@ -337,20 +332,19 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       reader.readAsDataURL(videoBlob);
     } else {
       // Send payload without video
-      console.log('Sending unified submission without video');
-      console.log('Payload details (partial):', 
-        JSON.stringify({
-          ...basePayload,
-          transcript_count: formattedTranscripts.length
-        })
-      );
+      // console.log('Sending unified submission without video');
+      // console.log('Payload details (partial):', 
+      //   JSON.stringify({
+      //     ...basePayload,
+      //     transcript_count: formattedTranscripts.length
+      //   })
+      // );
       
       // Dispatch the action with just the base payload
       dispatch(submit_interview(basePayload, (resp) => {
-        console.log("Submission response:", resp);
+        // console.log("Submission response:", resp);
         
         if (status === "Completed") {
-          console.log("Interview completed, redirecting...");
           if (GLOBAL_CONSTANTS?.user_cred?.role_id === 5) {
             window.location.href = "./studentDashboardScreening";
           } else {
@@ -361,31 +355,39 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     }
   };
 
+  // OPTIMIZED: nextQuestion function to prevent buffering between questions
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
-      console.log(`Moving from question ${questionIndex} to question ${questionIndex + 1}`);
       
       // Save current transcript for this question before moving on
       if (currentTranscript) {
-        console.log(`Saving transcript for question ${questionIndex} before moving to next:`, currentTranscript.substring(0, 50) + '...');
+        // console.log(`Saving transcript for question ${questionIndex} before moving to next:`, currentTranscript.substring(0, 50) + '...');
         setAllTranscripts(prev => ({
           ...prev,
           [questionIndex]: currentTranscript
         }));
       }
       
-      stopRecording(false);
-      setRecordedChunks([]);
+      // IMPORTANT CHANGE: Instead of stopping and restarting recording,
+      // we continue recording while changing questions to avoid buffering
+      
+      // Update question index and timer
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       
       // Reset current transcript for the next question
       setCurrentTranscript('');
+      
+      // THIS IS THE KEY FIX: We don't change transcriptionActive, 
+      // we just trigger a reset while keeping transcription active
       setTranscriptResetTrigger(prev => prev + 1);
-      startStreamAndRecording();
+      
+      // No need to call stopRecording and startStreamAndRecording - those cause buffering
+      // Just let the transcription continue with the new question
     }
   };
 
+  // OPTIMIZED: skipQuestion function to prevent buffering between questions
   const skipQuestion = () => {
     if (questionIndex < questions.length - 1) {
       console.log(`Skipping question ${questionIndex}`);
@@ -399,16 +401,34 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         }));
       }
       
-      stopRecording(true);
-      setRecordedChunks([]);
+      // FIXED: Don't create or submit video blob when skipping - this causes buffering
+      // Just mark the question as skipped in the database
+      submitInterviewData(null, "Inprogress", true);
+      
+      // Update question index and timer
       setQuestionIndex((prevIndex) => prevIndex + 1);
       setQuestionTimeLeft(questions[questionIndex + 1].duration);
       
       // Reset current transcript for the next question
       setCurrentTranscript('');
+      
+      // KEY FIX: Same as in nextQuestion - just toggle the reset trigger
+      // without changing transcriptionActive state
       setTranscriptResetTrigger(prev => prev + 1);
-      startStreamAndRecording();
+      
+      // Log that we're maintaining transcription
+      console.log('Maintaining active transcription while skipping question');
+      
+      // No need to restart recording - just continue with current stream
     }
+  };
+
+  // Helper function to create a video blob from current chunks without stopping recorder
+  const createCurrentVideoBlob = () => {
+    if (recordedChunks.length > 0) {
+      return new Blob(recordedChunks, { type: "video/mp4" });
+    }
+    return null;
   };
 
   const confirmCancelInterview = () => {
@@ -459,12 +479,9 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   function startStreamAndRecording() {
     setRecordedChunks([]); // Reset the recordedChunks array here
     
-    console.log('Starting stream and recording...');
-    
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then(function (stream) {
-        console.log('Media access granted!');
         setMicPermissionGranted(true);
         setPermissionError('');
         
@@ -475,41 +492,38 @@ export default function NewGridLayout({ questions, isLoading = true }) {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.ondataavailable = function (event) {
             if (event.data.size > 0) {
-              console.log(`Received data chunk of size ${event.data.size} bytes`);
+              // console.log(`Received data chunk of size ${event.data.size} bytes`);
               setRecordedChunks((prevChunks) => [...prevChunks, event.data]);
             }
           };
           
           mediaRecorder.onstop = function () {
-            console.log('Media recorder stopped');
-            console.log(`Total recorded chunks: ${recordedChunks.length}`);
+            // console.log('Media recorder stopped');
+            // console.log(`Total recorded chunks: ${recordedChunks.length}`);
             
             if (recordedChunks.length > 0) {
               const blob = new Blob(recordedChunks, { type: "video/mp4" });
-              console.log(`Created video blob of size ${blob.size} bytes`);
+              // console.log(`Created video blob of size ${blob.size} bytes`);
               
-              const url = URL.createObjectURL(blob);
-              // Create a download link for the recorded video
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = "recorded-video.mp4";
-              a.style.display = "none";
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-
-              // Clear the recordedChunks array
-              setRecordedChunks([]);
+              // Send the combined data (transcript + video)
+              const status = interviewCompleted ? "Completed" : "Inprogress";
+              submitInterviewData(blob, status, false);
             } else {
               console.warn('No recorded chunks available to process');
+              
+              // If it's the end of the interview, ensure we still submit all data
+              if (interviewCompleted) {
+                console.log('Interview completed but no video chunks - still submitting data');
+                submitInterviewData(null, "Completed", false);
+              }
             }
           };
           
-          mediaRecorder.start();
-          console.log('Media recorder started');
+          // Set a timeslice to capture data more frequently (every 1 second)
+          mediaRecorder.start(1000);
+          setVideoRecordingActive(true);
           
           // Start transcription after media recorder is started
-          console.log('Activating transcription');
           setTranscriptionActive(true);
         } else {
           console.error('Video element not found');
@@ -524,37 +538,13 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
   function stopRecording(skipped = false) {
     // Stop transcription first
-    console.log('Stopping transcription');
     setTranscriptionActive(false);
+    setVideoRecordingActive(false);
     
     console.log(`Current recorded chunks: ${recordedChunks.length}`);
     
     if (mediaRecorder && mediaRecorder.state === "recording") {
-      console.log('Stopping media recorder');
       mediaRecorder.stop();
-      
-      mediaRecorder.onstop = function () {
-        console.log('Processing recording after stop');
-        console.log(`Recorded chunks size: ${recordedChunks.length}`);
-        
-        if (recordedChunks.length === 0) {
-          console.warn('No recorded chunks to process');
-          
-          // If it's the end of the interview, ensure we still submit all data
-          if (interviewCompleted) {
-            console.log('Interview completed but no video chunks - still submitting data');
-            submitInterviewData(null, "Completed", skipped);
-          }
-          return;
-        }
-        
-        const blob = new Blob(recordedChunks, { type: "video/mp4" });
-        console.log(`Video blob created: ${blob.size} bytes`);
-        
-        // Send the combined data (transcript + video)
-        const status = interviewCompleted ? "Completed" : "Inprogress";
-        submitInterviewData(blob, status, skipped);
-      };
     } else {
       console.warn("No active recording to stop.");
       
@@ -569,7 +559,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   // Simplified speech function that works across browsers
   const speakOut = (text) => {
     if ("speechSynthesis" in window && isSpeakerOn && !spokenQuestions.includes(text)) {
-      console.log(`Speaking question: ${text.substring(0, 30)}...`);
+      // console.log(`Speaking question: ${text.substring(0, 30)}...`);
       
       // Cancel any ongoing speech first (good practice)
       window.speechSynthesis.cancel();
@@ -583,13 +573,13 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       // Track that we've spoken this question
       setSpokenQuestions(prev => [...prev, text]);
       
-      console.log('Speech request sent');
     } else {
-      console.log('Speech not attempted:', {
-        synthAvailable: "speechSynthesis" in window,
-        speakerOn: isSpeakerOn,
-        alreadySpoken: spokenQuestions.includes(text)
-      });
+      // console.log('Speech not attempted:', {
+      //   synthAvailable: "speechSynthesis" in window,
+      //   speakerOn: isSpeakerOn,
+      //   alreadySpoken: spokenQuestions.includes(text)
+      // });
+      console.log();
     }
   };
   
@@ -600,13 +590,11 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         if (questionTimeLeft > 0) {
           setQuestionTimeLeft((prevTime) => prevTime - 1);
         } else {
-          console.log('Question time expired, moving to next question');
           nextQuestion();
         }
         if (totalTimeLeft > 0) {
           setTotalTimeLeft((prevTime) => prevTime - 1);
         } else {
-          console.log('Total interview time expired');
           stopRecording(false);
           setInterviewCompleted(true);
           
@@ -950,4 +938,3 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     </div>
   );
 }
-  

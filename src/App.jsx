@@ -1,6 +1,4 @@
-
-
-//new2
+//new
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import store from './redux/store';
@@ -56,7 +54,7 @@ function App() {
       <LoaderProvider>
         {isLoading && !checkIfPracticePage() && <Loader />}
         <Url_Routes />
-        {showVoiceWidget}
+        {/* {showVoiceWidget && <VoiceWidget />} */}
         <ToastContainer
           transition={Slide}
           autoClose={2000}
