@@ -324,7 +324,6 @@ const PremiumSpeechTranscription = ({
       if (document.visibilityState === 'visible' && isListening) {
         setTimeout(() => {
           if (!interimTranscript && isListening) {
-            console.log('Page visibility changed, ensuring recognition is active');
             forceRestartRecognition();
           }
         }, 2000);
@@ -441,7 +440,6 @@ const PremiumSpeechTranscription = ({
     
     // Safely check all conditions before restarting
     if (isListening && isActiveRef.current && recognitionRef.current) {
-      console.log('Alert dismissed, automatically restarting transcription');
       try {
         setTimeout(() => {
           if (recognitionRef.current && isActiveRef.current) {
@@ -539,11 +537,10 @@ const PremiumSpeechTranscription = ({
 
   // Force restart recognition
   const forceRestartRecognition = () => {
-    console.log('Force recognition restart');
 
     // Record restart time to provide a grace period
     lastRestartTimeRef.current = Date.now();
-    console.log('Setting restart time for grace period:', lastRestartTimeRef.current);
+    // console.log('Setting restart time for grace period:', lastRestartTimeRef.current);
 
     setShowPopup(false);
 
@@ -573,7 +570,6 @@ const PremiumSpeechTranscription = ({
     try {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
-        console.log('Successfully stopped recognition before force restart');
       }
     } catch (e) {
       console.log('Error stopping recognition during force restart:', e);
@@ -582,11 +578,9 @@ const PremiumSpeechTranscription = ({
     setTimeout(() => {
       if (recognitionRef.current && isActiveRef.current) {
         try {
-          console.log('Attempting to start recognition after force restart');
           recognitionRef.current.start();
           setIsListening(true);
           setRecognitionState('listening');
-          console.log('Successfully started recognition after force restart');
           resetSilenceTimeout();
 
           if (deviceChangeDetected) {
@@ -637,26 +631,23 @@ const PremiumSpeechTranscription = ({
       });
 
       recognitionTimeoutRef.current = setTimeout(() => {
-        console.log('Silence timeout check - checking if speech is being detected');
         
         // Calculate time since last detected speech
         const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
-        console.log(`Time since last speech: ${timeSinceLastSpeech}ms`);
+        // console.log(`Time since last speech: ${timeSinceLastSpeech}ms`);
         
         // Calculate time since last restart
         const timeSinceLastRestart = Date.now() - lastRestartTimeRef.current;
-        console.log(`Time since last restart: ${timeSinceLastRestart}ms`);
+        // console.log(`Time since last restart: ${timeSinceLastRestart}ms`);
         
         // If we're in the grace period after restart (15 seconds), don't show popup
         if (timeSinceLastRestart < 15000) {
-          console.log('Still in grace period after restart, resetting timeout');
           resetSilenceTimeout();
           return;
         }
         
         // More aggressive approach: If interim transcript exists at all, consider it active speech
         if (interimTranscript && interimTranscript.length > 0) {
-          console.log('Interim transcript exists, resetting timeout');
           lastSpeechTimeRef.current = Date.now();
           resetSilenceTimeout();
           return;
@@ -664,21 +655,18 @@ const PremiumSpeechTranscription = ({
         
         // REDUCE the time threshold to 3 seconds (was 5 seconds)
         if (timeSinceLastSpeech < 3000) {
-          console.log('Recent speech detected, resetting timeout');
           resetSilenceTimeout();
           return;
         }
         
         // Force the confidence score to zero after silence - this helps with future checks
         if (confidenceScore > 0) {
-          console.log('Resetting confidence score due to silence');
           setConfidenceScore(0);
         }
         
         // Only show popup if we're still listening and not in grace period
         if (isListening && recognitionRef.current && isActiveRef.current) {
           try {
-            console.log('No speech detected for 3+ seconds, showing popup');
             showRestartPopup('No speech detected for a while. Would you like to restart?');
           } catch (e) {
             console.error('Error handling silence timeout:', e);
@@ -699,7 +687,6 @@ const PremiumSpeechTranscription = ({
   // Handle recognition failure
   const handleRecognitionFailure = () => {
     if (restartCount >= MAX_RESTART_ATTEMPTS) {
-      console.log('Max restart attempts reached, stopping auto-restart');
       setErrorMessage('Speech recognition has failed multiple times. Please try manually restarting or selecting a different microphone.');
       setIsListening(false);
       setRecognitionState('error');
@@ -743,18 +730,16 @@ const PremiumSpeechTranscription = ({
     // Only run this when listening
     if (!isListening) return;
 
-    console.log('Setting up silence monitor');
     
     // Check every 2 seconds if we're truly silent
     const silenceMonitorInterval = setInterval(() => {
       const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
       const timeSinceLastRestart = Date.now() - lastRestartTimeRef.current;
       
-      console.log(`Silence monitor check: ${timeSinceLastSpeech}ms since last speech, ${timeSinceLastRestart}ms since last restart`);
+      // console.log(`Silence monitor check: ${timeSinceLastSpeech}ms since last speech, ${timeSinceLastRestart}ms since last restart`);
       
       // Only show popup if not in grace period (15 seconds after restart)
       if (timeSinceLastRestart > 15000 && timeSinceLastSpeech > 8000 && !showPopup && isListening) {
-        console.log('Silence monitor detected long silence with no popup');
         showRestartPopup('Long period without speech detected. Would you like to restart?');
       }
     }, 2000);
@@ -766,7 +751,6 @@ const PremiumSpeechTranscription = ({
 
   // Speech reset functions
   const forceSpeechReset = () => {
-    console.log('Forcing speech detection reset');
     
     // Reset the last speech time
     lastSpeechTimeRef.current = Date.now() - 6000; // Set it to 6 seconds ago
@@ -1023,13 +1007,10 @@ const PremiumSpeechTranscription = ({
 
       recognition.onend = () => {
         try {
-          console.log('Recognition ended');
 
           if (isListening && isActiveRef.current) {
-            console.log('Recognition ended but isListening is still true - restarting');
             restartRecognition();
           } else {
-            console.log('Recognition ended and not listening - setting state to ready');
             setRecognitionState('ready');
           }
         } catch (error) {
@@ -1040,13 +1021,11 @@ const PremiumSpeechTranscription = ({
       };
 
       recognition.onspeechstart = () => {
-        console.log('Speech started');
         lastSpeechTimeRef.current = Date.now();
         resetSilenceTimeout();
       };
 
       recognition.onspeechend = () => {
-        console.log('Speech ended');
         // We don't update lastSpeechTime here because we want to
         // give a buffer period after speech ends before showing the popup
         resetSilenceTimeout();
@@ -1061,14 +1040,12 @@ const PremiumSpeechTranscription = ({
       };
 
       recognition.onaudiostart = () => {
-        console.log('Audio capturing started');
+        console.log();
       };
 
       recognition.onaudioend = () => {
-        console.log('Audio capturing ended - this might indicate a device change or issue');
 
         if (isListening && autoRestartEnabled) {
-          console.log('Audio ended while listening - possible device change - checking devices');
 
           navigator.mediaDevices.enumerateDevices()
             .then(devices => {
@@ -1110,10 +1087,10 @@ const PremiumSpeechTranscription = ({
                 .then(devices => {
                   const mics = devices.filter(device => device.kind === 'audioinput');
                   if (compareDeviceLists(lastDeviceList, mics)) {
-                    console.log('Device list changed after audio-capture error - handling as device change');
+                    // console.log('Device list changed after audio-capture error - handling as device change');
                     handleDeviceChange(mics);
                   } else {
-                    console.log('No device list change detected after audio-capture error - forcing restart');
+                    console.log();
                     // Let the popup auto-close trigger the restart
                   }
                 })
@@ -1325,10 +1302,10 @@ const PremiumSpeechTranscription = ({
     if (recognitionState !== 'ready' && recognitionState !== 'listening' && recognitionState !== 'error') return;
 
     if (isActive && !isListening) {
-      console.log('isActive changed to true but not listening - starting transcription');
+      // console.log('isActive changed to true but not listening - starting transcription');
       startTranscription();
     } else if (!isActive && isListening) {
-      console.log('isActive changed to false but still listening - stopping transcription');
+      // console.log('isActive changed to false but still listening - stopping transcription');
       stopTranscription();
     }
   }, [isActive, isListening, recognitionState]);
@@ -1434,7 +1411,6 @@ const PremiumSpeechTranscription = ({
       recognitionRef.current.start();
       setIsListening(true);
       setRecognitionState('listening');
-      console.log('Speech recognition started');
 
       resetSilenceTimeout();
     } catch (e) {
