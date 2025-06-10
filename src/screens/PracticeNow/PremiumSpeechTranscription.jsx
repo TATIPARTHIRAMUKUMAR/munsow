@@ -583,6 +583,7 @@ const PremiumSpeechTranscription = ({
 
   // Force restart recognition
   const forceRestartRecognition = () => {
+
     // Record restart time to provide a grace period
     lastRestartTimeRef.current = Date.now();
 
@@ -1513,6 +1514,7 @@ const PremiumSpeechTranscription = ({
     if (isActive && !isListening) {
       startTranscription();
     } else if (!isActive && isListening) {
+
       stopTranscription();
     }
   }, [isActive, isListening, recognitionState]);

@@ -1409,8 +1409,6 @@ export const loadQuestions = (data) => {
     // Convert data to JSON string if it's not already
     const payload = typeof data === 'string' ? data : JSON.stringify(data);
     
-    console.log("Interview payload:", data); // For debugging
-    
     return axios
       .post(
         `${GLOBAL_CONSTANTS.backend_url}user/register_interview`,
@@ -1459,9 +1457,6 @@ export const prepare_interview = (data, callback) => {
         }
       });
     
-    console.log("Preparing interview with payload:", JSON.parse(payload));
-    console.log("Using headers:", headers);
-    
     return axios
       .post(
         `${GLOBAL_CONSTANTS.backend_url}user/register_interview`,
@@ -1469,7 +1464,6 @@ export const prepare_interview = (data, callback) => {
         { headers }
       )
       .then((resp) => {
-        console.log("Server response:", resp);
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,

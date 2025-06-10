@@ -732,7 +732,9 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       }); 
   }
 
+
   function stopRecording() {
+
     setTranscriptionActive(false);
     setVideoRecordingActive(false);
     
@@ -820,6 +822,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         if (totalTimeLeft > 0) {
           setTotalTimeLeft((prevTime) => prevTime - 1);
         } else {
+
           // Store final data locally
           storeDataLocally(questionIndex, currentTranscript, false);
           storeVideoChunksLocally();
