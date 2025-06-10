@@ -1,11 +1,9 @@
-//new
 import * as types from "./actionTypes";
 import axios from "axios";
 import GLOBAL_CONSTANTS from "../../GlobalConstants.js";
 
 // utils
 import { toast } from "react-toastify";
-
 export const user_login = (data, callback) => {
   return function (dispatch) {
     var headers = {
@@ -1138,6 +1136,88 @@ export const userStatUpdate = (id, endpoint, callback) => {
   };
 };
 
+// NEW ACTION: Get Interview Results
+const getInterviewResults = (data) => ({
+  type: types.INTERVIEW_RESULTS,
+  payload: data,
+});
+
+export const loadInterviewResults = (callback) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
+    };
+    
+    console.log("Fetching interview results...");
+    
+    axios
+      .get(`${GLOBAL_CONSTANTS.backend_url}user/list_interviews`, {
+        headers,
+      })
+      .then((resp) => {
+        console.log("Interview results API response:", resp?.data);
+        
+        if (resp?.data?.status || resp?.data?.satus) {
+          dispatch(getInterviewResults(resp?.data));
+          
+          if (callback) callback(resp?.data);
+        } else {
+          console.error("Failed to fetch interview results:", resp?.data);
+          if (callback) callback(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching interview results:", error);
+        toast.error("Failed to load interview results", {
+          autoClose: 3000,
+        });
+        if (callback) callback(null);
+      });
+  };
+};
+
+export const loadSpecificInterviewResult = (interviewId, callback) => {
+  return function (dispatch) {
+    var headers = {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
+    };
+
+    console.log("Fetching specific interview result for ID:", interviewId);
+
+    axios
+      .get(`${GLOBAL_CONSTANTS.backend_url}user/interview_result/${interviewId}`, {
+        headers,
+      })
+      .then((resp) => {
+        console.log("Specific interview result:", resp?.data);
+        
+        if (resp?.data?.status || resp?.data?.satus) {
+          dispatch(getInterviewResults(resp?.data));
+          
+          if (callback) callback(resp?.data);
+        } else {
+          console.error("Failed to fetch specific interview result:", resp?.data);
+          if (callback) callback(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching specific interview result:", error);
+        toast.error("Failed to load interview result", {
+          autoClose: 3000,
+        });
+        if (callback) callback(null);
+      });
+  };
+};
+
+export const clearInterviewResults = () => {
+  return {
+    type: types.CLEAR_INTERVIEW_RESULTS
+  };
+};
+
 // #endregion admin Stats
 
 // practice lists
@@ -1579,6 +1659,7 @@ const getAssignments = (data) => ({
   type: types.ASSIGNMENTS,
   payload: data,
 });
+
 export const loadAssignments = () => {
   return function (dispatch) {
     var headers = {

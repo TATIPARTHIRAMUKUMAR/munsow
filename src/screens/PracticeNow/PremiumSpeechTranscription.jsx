@@ -105,14 +105,13 @@ const PremiumSpeechTranscription = ({
   questionIndex,
   resetTranscription
 }) => {
-  // State
+  // Enhanced state management
   const [transcript, setTranscript] = useState('');
   const [interimTranscript, setInterimTranscript] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [recognitionState, setRecognitionState] = useState('idle'); // idle, initializing, ready, listening, error
+  const [recognitionState, setRecognitionState] = useState('idle');
   const [restartCount, setRestartCount] = useState(0);
-  const [languageDetected, setLanguageDetected] = useState('en-US');
   const [confidenceScore, setConfidenceScore] = useState(0);
   const [showControls, setShowControls] = useState(false);
   const [audioDevices, setAudioDevices] = useState([]);
@@ -130,8 +129,11 @@ const PremiumSpeechTranscription = ({
     isOnline: navigator.onLine,
     lastChecked: Date.now()
   });
+  const [noSpeechCount, setNoSpeechCount] = useState(0);
+  const [lowVoiceCount, setLowVoiceCount] = useState(0);
+  const [languageDetected, setLanguageDetected] = useState('en-US');
 
-  // Refs
+  // Enhanced refs
   const recognitionRef = useRef(null);
   const recognitionTimeoutRef = useRef(null);
   const restartTimeoutRef = useRef(null);
@@ -139,7 +141,7 @@ const PremiumSpeechTranscription = ({
   const resultHistoryRef = useRef([]);
   const continuityBufferRef = useRef([]);
   const audioStreamRef = useRef(null);
-  const lastDeviceChangeTimeRef = useRef(0);
+  const LastDeviceChangeTimeRef = useRef(0);
   const questionChangeTimeoutRef = useRef(null);
   const isActiveRef = useRef(isActive);
   const deviceCheckIntervalRef = useRef(null);
@@ -148,8 +150,56 @@ const PremiumSpeechTranscription = ({
   const popupDebounceTimeoutRef = useRef(null);
   const lastSpeechTimeRef = useRef(Date.now());
   const lastRestartTimeRef = useRef(0);
+  const noSpeechCountRef = useRef(0);
+  const lowVoiceCountRef = useRef(0);
 
-  // Inject popup styles
+  // Constants
+  const MAX_RESTART_ATTEMPTS = 15;
+  const RESTART_DELAY = 800;
+  const SPEECH_TIMEOUT = 10000; // Increase from 8000 to 10000 ms (10 seconds)
+  const DEVICE_CHANGE_DEBOUNCE = 1000;
+  const QUESTION_CHANGE_DELAY = 500;
+  const DEVICE_CHECK_INTERVAL = 2000;
+  const SUPPORTED_LANGUAGES = ['en-US', 'en-GB', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 'zh-CN', 'ja-JP', 'ko-KR', 'ru-RU'];
+
+  // Enhanced phrase list for better recognition
+  const PHRASE_LIST = [
+    // Technical terms - Core
+    'camber', 'chamber', 'caliber', 'calibre', 'timber', 'lumber', 'amber',
+    'key', 'keys', 'keyed', 'keychain', 'keyboard', 'keystone', 'keynote',
+    'query', 'queries', 'sequence', 'sequences', 'algorithm', 'algorithms',
+    'parameter', 'parameters', 'variable', 'variables', 'function', 'functions',
+    'method', 'methods', 'class', 'classes', 'object', 'objects',
+    'array', 'arrays', 'string', 'strings', 'integer', 'integers',
+    'boolean', 'booleans', 'float', 'doubles', 'byte', 'bytes',
+    
+    // Programming Languages & Technologies
+    'javascript', 'typescript', 'python', 'java', 'csharp', 'cplusplus',
+    'golang', 'rust', 'swift', 'kotlin', 'scala', 'clojure', 'haskell',
+    'ruby', 'perl', 'php', 'html', 'css', 'sass', 'scss', 'less',
+    'react', 'angular', 'vue', 'svelte', 'node', 'express', 'fastify',
+    'django', 'flask', 'spring', 'laravel', 'rails', 'gatsby', 'next',
+    'nuxt', 'webpack', 'vite', 'parcel', 'rollup', 'babel', 'eslint',
+    'prettier', 'jest', 'mocha', 'cypress', 'selenium', 'playwright',
+    
+    // Database & Storage
+    'database', 'databases', 'mysql', 'postgresql', 'mongodb', 'redis',
+    'elasticsearch', 'cassandra', 'dynamodb', 'firebase', 'supabase',
+    'sql', 'nosql', 'query', 'queries', 'index', 'indexes', 'indices',
+    'schema', 'schemas', 'table', 'tables', 'collection', 'collections',
+    'document', 'documents', 'record', 'records', 'field', 'fields',
+    'primary', 'foreign', 'constraint', 'constraints', 'transaction',
+    'transactions', 'rollback', 'commit', 'backup', 'restore',
+    
+    // Common interview/technical words
+    'experience', 'experiences', 'skill', 'skills', 'project', 'projects',
+    'education', 'challenge', 'challenges', 'leadership', 'teamwork',
+    'problem', 'problems', 'solution', 'solutions', 'development',
+    'management', 'technical', 'software', 'programming', 'application',
+    'applications', 'system', 'systems', 'network', 'networks'
+  ];
+
+  // Inject CSS styles
   useEffect(() => {
     // Initialize lastSpeechTimeRef with current time
     lastSpeechTimeRef.current = Date.now();
@@ -182,32 +232,10 @@ const PremiumSpeechTranscription = ({
     isActiveRef.current = isActive;
   }, [isActive]);
 
-  // Constants
-  const MAX_RESTART_ATTEMPTS = 15;
-  const RESTART_DELAY = 800;
-  const SPEECH_TIMEOUT = 10000; // Increase from 8000 to 10000 ms (10 seconds)
-  const DEVICE_CHANGE_DEBOUNCE = 1000;
-  const QUESTION_CHANGE_DELAY = 500;
-  const DEVICE_CHECK_INTERVAL = 2000;
-  const SUPPORTED_LANGUAGES = ['en-US', 'en-GB', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 'zh-CN', 'ja-JP', 'ko-KR', 'ru-RU'];
-  const PHRASE_LIST = [
-    'experience', 'skills', 'project', 'education', 'challenge', 'leadership',
-    'teamwork', 'problem', 'solution', 'development', 'management', 'technical',
-    'software', 'programming', 'application', 'algorithm', 'database', 'system',
-    'network', 'interface', 'component', 'architecture', 'framework', 'library',
-    'implementation', 'test', 'debugging', 'deployment', 'integration', 'analysis',
-    'design', 'performance', 'security', 'scalability', 'maintenance', 'optimization',
-    'documentation', 'collaboration', 'communication', 'requirement', 'specification',
-    'methodology', 'agile', 'scrum', 'waterfall', 'iteration', 'sprint', 'backlog',
-    'milestone', 'deadline', 'budget', 'resource', 'stakeholder', 'client', 'team',
-    'manager', 'lead', 'mentor', 'coach', 'review', 'feedback', 'assessment', 'evaluation'
-  ];
-
   // Modified network status monitor section
   useEffect(() => {
     const handleOnline = () => {
       try {
-        console.log('Network connection restored by browser event');
         setNetworkStatus({
           isOnline: true,
           lastChecked: Date.now()
@@ -220,17 +248,15 @@ const PremiumSpeechTranscription = ({
         
         // Directly close popup if it's a network error popup
         if (showPopup && popupMessage && popupMessage.toLowerCase().includes('network')) {
-          console.log('Auto-closing network error popup on connection restore');
           handleClosePopup();
         }
       } catch (error) {
-        console.error('Error in handleOnline:', error);
+        // Silent error handling
       }
     };
     
     const handleOffline = () => {
       try {
-        console.log('Network connection lost by browser event');
         setNetworkStatus({
           isOnline: false,
           lastChecked: Date.now()
@@ -240,7 +266,7 @@ const PremiumSpeechTranscription = ({
           handleNetworkError();
         }
       } catch (error) {
-        console.error('Error in handleOffline:', error);
+        // Silent error handling
       }
     };
     
@@ -253,7 +279,6 @@ const PremiumSpeechTranscription = ({
           const isOnlineNow = navigator.onLine;
           
           if (!networkStatus.isOnline && isOnlineNow) {
-            console.log('Network connection restored by interval check');
             setNetworkStatus({
               isOnline: true,
               lastChecked: Date.now()
@@ -270,7 +295,6 @@ const PremiumSpeechTranscription = ({
             }
           }
           else if (networkStatus.isOnline && !isOnlineNow) {
-            console.log('Network connection lost by interval check');
             setNetworkStatus({
               isOnline: false,
               lastChecked: Date.now()
@@ -280,7 +304,7 @@ const PremiumSpeechTranscription = ({
           }
         }
       } catch (error) {
-        console.error('Error in network check interval:', error);
+        // Silent error handling
       }
     }, 5000);
     
@@ -291,7 +315,7 @@ const PremiumSpeechTranscription = ({
     };
   }, [isListening, networkStatus.isOnline, showPopup, popupMessage]);
 
-  // Confidence indicator component
+  // Confidence indicator
   const ConfidenceIndicator = ({ score }) => {
     const confidence = score || 0;
     let color = '#f44336';
@@ -324,7 +348,6 @@ const PremiumSpeechTranscription = ({
       if (document.visibilityState === 'visible' && isListening) {
         setTimeout(() => {
           if (!interimTranscript && isListening) {
-            console.log('Page visibility changed, ensuring recognition is active');
             forceRestartRecognition();
           }
         }, 2000);
@@ -338,7 +361,6 @@ const PremiumSpeechTranscription = ({
   // Compare audio device lists
   const compareDeviceLists = (oldList, newList) => {
     if (oldList.length !== newList.length) {
-      console.log('Device list length changed:', oldList.length, '->', newList.length);
       return true;
     }
 
@@ -347,14 +369,12 @@ const PremiumSpeechTranscription = ({
 
     for (const [id, device] of oldDeviceMap.entries()) {
       if (!newDeviceMap.has(id)) {
-        console.log('Device removed:', device.label || id);
         return true;
       }
     }
 
     for (const [id, device] of newDeviceMap.entries()) {
       if (!oldDeviceMap.has(id)) {
-        console.log('Device added:', device.label || id);
         return true;
       }
     }
@@ -362,7 +382,6 @@ const PremiumSpeechTranscription = ({
     for (const [id, oldDevice] of oldDeviceMap.entries()) {
       const newDevice = newDeviceMap.get(id);
       if (newDevice && oldDevice.label !== newDevice.label) {
-        console.log('Device label changed:', oldDevice.label, '->', newDevice.label);
         return true;
       }
     }
@@ -384,13 +403,12 @@ const PremiumSpeechTranscription = ({
         const mics = devices.filter(device => device.kind === 'audioinput');
 
         if (compareDeviceLists(lastDeviceList, mics)) {
-          console.log('Device change detected by interval check!');
           handleDeviceChange(mics);
         }
 
         setLastDeviceList(mics);
       } catch (err) {
-        console.error('Error checking devices in interval:', err);
+        // Silent error handling
       }
     }, DEVICE_CHECK_INTERVAL);
 
@@ -401,8 +419,42 @@ const PremiumSpeechTranscription = ({
     };
   };
 
-  // Updated showRestartPopup function with consistent behavior
+  // Updated showRestartPopup function with threshold behavior
   const showRestartPopup = (message) => {
+    // Check if this is a low voice or no speech alert
+    const isLowVoiceAlert = message && message.toLowerCase().includes('low voice');
+    const isNoSpeechAlert = message && message.toLowerCase().includes('no speech');
+    
+    // Handle threshold-based alerts
+    if (isLowVoiceAlert) {
+      lowVoiceCountRef.current += 1;
+      setLowVoiceCount(lowVoiceCountRef.current);
+      
+      // Only show popup after 3 occurrences
+      if (lowVoiceCountRef.current < 3) {
+        return; // Don't show popup yet
+      }
+      
+      // Reset counter after showing popup
+      lowVoiceCountRef.current = 0;
+      setLowVoiceCount(0);
+    }
+    
+    if (isNoSpeechAlert) {
+      noSpeechCountRef.current += 1;
+      setNoSpeechCount(noSpeechCountRef.current);
+      
+      // Only show popup after 3 occurrences
+      if (noSpeechCountRef.current < 3) {
+        return; // Don't show popup yet
+      }
+      
+      // Reset counter after showing popup
+      noSpeechCountRef.current = 0;
+      setNoSpeechCount(0);
+    }
+
+    // For all other alerts (network, device change, etc.) - show immediately
     // Clear any existing timeouts
     if (popupDebounceTimeoutRef.current) {
       clearTimeout(popupDebounceTimeoutRef.current);
@@ -441,7 +493,6 @@ const PremiumSpeechTranscription = ({
     
     // Safely check all conditions before restarting
     if (isListening && isActiveRef.current && recognitionRef.current) {
-      console.log('Alert dismissed, automatically restarting transcription');
       try {
         setTimeout(() => {
           if (recognitionRef.current && isActiveRef.current) {
@@ -449,7 +500,6 @@ const PremiumSpeechTranscription = ({
           }
         }, 300);
       } catch (error) {
-        console.error('Error restarting after popup close:', error);
         // Fallback error handling
         setErrorMessage('Error restarting transcription. Please try manually restarting.');
         setRecognitionState('error');
@@ -467,8 +517,6 @@ const PremiumSpeechTranscription = ({
       if (navigator.onLine) {
         clearInterval(checkNetworkInterval);
         if (isListening && isActiveRef.current) {
-          console.log('Network connection restored, restarting transcription');
-          
           // Clear error message specifically for network errors
           if (errorMessage && errorMessage.toLowerCase().includes('network')) {
             setErrorMessage('');
@@ -490,14 +538,11 @@ const PremiumSpeechTranscription = ({
 
   // Handle device change
   const handleDeviceChange = async (newDevices = null) => {
-    console.log('Audio devices changed, updating device list');
-
     const now = Date.now();
-    if (now - lastDeviceChangeTimeRef.current < DEVICE_CHANGE_DEBOUNCE) {
-      console.log('Debouncing device change event');
+    if (now - LastDeviceChangeTimeRef.current < DEVICE_CHANGE_DEBOUNCE) {
       return;
     }
-    lastDeviceChangeTimeRef.current = now;
+    LastDeviceChangeTimeRef.current = now;
 
     try {
       setDeviceChangeDetected(true);
@@ -515,7 +560,6 @@ const PremiumSpeechTranscription = ({
       let newMicId = selectedMicId;
       const currentMicStillAvailable = mics.some(device => device.deviceId === selectedMicId);
       if (!currentMicStillAvailable && mics.length > 0) {
-        console.log('Currently selected microphone is no longer available');
         const newDefaultMic = mics.find(device => device.deviceId === 'default') || mics[0];
         newMicId = newDefaultMic.deviceId;
         setSelectedMicId(newMicId);
@@ -533,17 +577,14 @@ const PremiumSpeechTranscription = ({
         forceRestartRecognition();
       }
     } catch (err) {
-      console.error('Error handling device change:', err);
+      // Silent error handling
     }
   };
 
   // Force restart recognition
   const forceRestartRecognition = () => {
-    console.log('Force recognition restart');
-
     // Record restart time to provide a grace period
     lastRestartTimeRef.current = Date.now();
-    console.log('Setting restart time for grace period:', lastRestartTimeRef.current);
 
     setShowPopup(false);
 
@@ -552,6 +593,11 @@ const PremiumSpeechTranscription = ({
     setInterimTranscript('');
     transcriptRef.current = '';
     onTranscriptUpdate('');
+    // Reset threshold counters when restarting
+    noSpeechCountRef.current = 0;
+    lowVoiceCountRef.current = 0;
+    setNoSpeechCount(0);
+    setLowVoiceCount(0);
 
     clearSilenceTimeout();
     if (restartTimeoutRef.current) {
@@ -573,20 +619,17 @@ const PremiumSpeechTranscription = ({
     try {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
-        console.log('Successfully stopped recognition before force restart');
       }
     } catch (e) {
-      console.log('Error stopping recognition during force restart:', e);
+      // Silent error handling
     }
 
     setTimeout(() => {
       if (recognitionRef.current && isActiveRef.current) {
         try {
-          console.log('Attempting to start recognition after force restart');
           recognitionRef.current.start();
           setIsListening(true);
           setRecognitionState('listening');
-          console.log('Successfully started recognition after force restart');
           resetSilenceTimeout();
 
           if (deviceChangeDetected) {
@@ -595,10 +638,7 @@ const PremiumSpeechTranscription = ({
             }, 2000);
           }
         } catch (e) {
-          console.error('Failed to restart recognition:', e);
-
           if (e.name === 'InvalidStateError') {
-            console.log('Recognition is already running, updating state to match');
             setIsListening(true);
             setRecognitionState('listening');
           } else {
@@ -606,12 +646,10 @@ const PremiumSpeechTranscription = ({
             setTimeout(() => {
               if (recognitionRef.current && isActiveRef.current) {
                 try {
-                  console.log('Second attempt to start recognition');
                   recognitionRef.current.start();
                   setIsListening(true);
                   setRecognitionState('listening');
                 } catch (innerError) {
-                  console.error('Second attempt to restart recognition failed:', innerError);
                   showRestartPopup('Multiple restart attempts failed. Please try restarting manually.');
                 }
               }
@@ -627,36 +665,21 @@ const PremiumSpeechTranscription = ({
     clearSilenceTimeout();
 
     if (isListening) {
-      // Add more debugging
-      console.log('Setting silence timeout. Current state:', {
-        interimTranscript: interimTranscript,
-        confidenceScore: confidenceScore,
-        timeSinceLastSpeech: Date.now() - lastSpeechTimeRef.current,
-        timeSinceLastRestart: Date.now() - lastRestartTimeRef.current,
-        isListening: isListening
-      });
-
       recognitionTimeoutRef.current = setTimeout(() => {
-        console.log('Silence timeout check - checking if speech is being detected');
-        
         // Calculate time since last detected speech
         const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
-        console.log(`Time since last speech: ${timeSinceLastSpeech}ms`);
         
         // Calculate time since last restart
         const timeSinceLastRestart = Date.now() - lastRestartTimeRef.current;
-        console.log(`Time since last restart: ${timeSinceLastRestart}ms`);
         
         // If we're in the grace period after restart (15 seconds), don't show popup
         if (timeSinceLastRestart < 15000) {
-          console.log('Still in grace period after restart, resetting timeout');
           resetSilenceTimeout();
           return;
         }
         
         // More aggressive approach: If interim transcript exists at all, consider it active speech
         if (interimTranscript && interimTranscript.length > 0) {
-          console.log('Interim transcript exists, resetting timeout');
           lastSpeechTimeRef.current = Date.now();
           resetSilenceTimeout();
           return;
@@ -664,24 +687,21 @@ const PremiumSpeechTranscription = ({
         
         // REDUCE the time threshold to 3 seconds (was 5 seconds)
         if (timeSinceLastSpeech < 3000) {
-          console.log('Recent speech detected, resetting timeout');
           resetSilenceTimeout();
           return;
         }
         
         // Force the confidence score to zero after silence - this helps with future checks
         if (confidenceScore > 0) {
-          console.log('Resetting confidence score due to silence');
           setConfidenceScore(0);
         }
         
         // Only show popup if we're still listening and not in grace period
         if (isListening && recognitionRef.current && isActiveRef.current) {
           try {
-            console.log('No speech detected for 3+ seconds, showing popup');
             showRestartPopup('No speech detected for a while. Would you like to restart?');
           } catch (e) {
-            console.error('Error handling silence timeout:', e);
+            // Silent error handling
           }
         }
       }, SPEECH_TIMEOUT);
@@ -699,7 +719,6 @@ const PremiumSpeechTranscription = ({
   // Handle recognition failure
   const handleRecognitionFailure = () => {
     if (restartCount >= MAX_RESTART_ATTEMPTS) {
-      console.log('Max restart attempts reached, stopping auto-restart');
       setErrorMessage('Speech recognition has failed multiple times. Please try manually restarting or selecting a different microphone.');
       setIsListening(false);
       setRecognitionState('error');
@@ -742,19 +761,14 @@ const PremiumSpeechTranscription = ({
   useEffect(() => {
     // Only run this when listening
     if (!isListening) return;
-
-    console.log('Setting up silence monitor');
     
     // Check every 2 seconds if we're truly silent
     const silenceMonitorInterval = setInterval(() => {
       const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
       const timeSinceLastRestart = Date.now() - lastRestartTimeRef.current;
       
-      console.log(`Silence monitor check: ${timeSinceLastSpeech}ms since last speech, ${timeSinceLastRestart}ms since last restart`);
-      
       // Only show popup if not in grace period (15 seconds after restart)
       if (timeSinceLastRestart > 15000 && timeSinceLastSpeech > 8000 && !showPopup && isListening) {
-        console.log('Silence monitor detected long silence with no popup');
         showRestartPopup('Long period without speech detected. Would you like to restart?');
       }
     }, 2000);
@@ -764,10 +778,224 @@ const PremiumSpeechTranscription = ({
     };
   }, [isListening, lastSpeechTimeRef.current]);
 
+  // Enhanced word correction system
+  const fixCommonErrors = (text) => {
+    const corrections = {
+      // Specific word corrections - Technical terms
+      'camper': 'camber',
+      'campers': 'cambers',
+      'camping': 'camber',
+      'ki': 'key',
+      'kee': 'key',
+      'kay': 'key',
+      'kaye': 'key',
+      'keyz': 'keys',
+      'kees': 'keys',
+      'kays': 'keys',
+      'keis': 'keys',
+      'kys': 'keys',
+      'keying': 'keying',
+      'keyed': 'keyed',
+      
+      // Common misspellings and phonetic errors
+      'recieve': 'receive',
+      'beleive': 'believe',
+      'acheive': 'achieve',
+      'seperate': 'separate',
+      'definately': 'definitely',
+      'occured': 'occurred',
+      'occuring': 'occurring',
+      'begining': 'beginning',
+      'existance': 'existence',
+      'appearence': 'appearance',
+      'maintainence': 'maintenance',
+      'independance': 'independence',
+      'enviroment': 'environment',
+      'envirnoment': 'environment',
+      'goverment': 'government',
+      'managment': 'management',
+      'developement': 'development',
+      'arguement': 'argument',
+      'embarass': 'embarrass',
+      'harrass': 'harass',
+      'comittee': 'committee',
+      'neccessary': 'necessary',
+      'accomodate': 'accommodate',
+      'recomend': 'recommend',
+      'sucessful': 'successful',
+      'buisness': 'business',
+      'calander': 'calendar',
+      'collegue': 'colleague',
+      'concious': 'conscious',
+      'convinient': 'convenient',
+      'definate': 'definite',
+      'guarentee': 'guarantee',
+      'independant': 'independent',
+      'knowlege': 'knowledge',
+      'lisence': 'license',
+      'noticable': 'noticeable',
+      'occassion': 'occasion',
+      'persue': 'pursue',
+      'priviledge': 'privilege',
+      'reccomend': 'recommend',
+      'refered': 'referred',
+      'responsability': 'responsibility',
+      'responsable': 'responsible',
+      'rythm': 'rhythm',
+      'secratary': 'secretary',
+      'tommorow': 'tomorrow',
+      'wheather': 'whether',
+      'wierd': 'weird',
+      
+      // Common contractions - Standard forms
+      'dont': 'don\'t',
+      'doesnt': 'doesn\'t',
+      'didnt': 'didn\'t',
+      'couldnt': 'couldn\'t',
+      'wouldnt': 'wouldn\'t',
+      'shouldnt': 'shouldn\'t',
+      'wont': 'won\'t',
+      'cant': 'can\'t',
+      'isnt': 'isn\'t',
+      'arent': 'aren\'t',
+      'werent': 'weren\'t',
+      'wasnt': 'wasn\'t',
+      'havent': 'haven\'t',
+      'hasnt': 'hasn\'t',
+      'hadnt': 'hadn\'t',
+      'theyre': 'they\'re',
+      'theyll': 'they\'ll',
+      'theyd': 'they\'d',
+      'weve': 'we\'ve',
+      'wed': 'we\'d',
+      'well': 'we\'ll',
+      'youre': 'you\'re',
+      'youll': 'you\'ll',
+      'youd': 'you\'d',
+      'youve': 'you\'ve',
+      'shes': 'she\'s',
+      'shell': 'she\'ll',
+      'shed': 'she\'d',
+      'hes': 'he\'s',
+      'hell': 'he\'ll',
+      'hed': 'he\'d',
+      'its': 'it\'s',
+      'itll': 'it\'ll',
+      'itd': 'it\'d',
+      'whats': 'what\'s',
+      'wheres': 'where\'s',
+      'whens': 'when\'s',
+      'hows': 'how\'s',
+      'whos': 'who\'s',
+      'whys': 'why\'s',
+      'thats': 'that\'s',
+      'theres': 'there\'s',
+      'heres': 'here\'s',
+      
+      // Personal pronouns and common words
+      'im': 'I\'m',
+      'ive': 'I\'ve',
+      'id': 'I\'d',
+      'ill': 'I\'ll',
+      'iam': 'I am',
+      'ihave': 'I have',
+      'iwould': 'I would',
+      'iwill': 'I will',
+      'ican': 'I can',
+      'icould': 'I could',
+      'ishould': 'I should',
+      
+      // Text speak and abbreviations
+      'ur': 'your',
+      'ure': 'you\'re',
+      'bc': 'because',
+      'bcuz': 'because',
+      'cuz': 'because',
+      'cause': 'because',
+      'b4': 'before',
+      'btw': 'by the way',
+      'fyi': 'for your information',
+      'asap': 'as soon as possible',
+      'aka': 'also known as',
+      'etc': 'et cetera',
+      'vs': 'versus',
+      'thru': 'through',
+      'tho': 'though',
+      'gonna': 'going to',
+      'wanna': 'want to',
+      'gotta': 'got to',
+      'kinda': 'kind of',
+      'sorta': 'sort of',
+      'shoulda': 'should have',
+      'coulda': 'could have',
+      'woulda': 'would have'
+    };
+
+    let correctedText = text;
+    
+    // Apply word-by-word corrections
+    for (const [error, correction] of Object.entries(corrections)) {
+      const regex = new RegExp(`\\b${error}\\b`, 'gi');
+      correctedText = correctedText.replace(regex, correction);
+    }
+
+    // Clean up multiple spaces
+    correctedText = correctedText.replace(/\s{2,}/g, ' ');
+
+    return correctedText;
+  };
+
+  // Add phonetic similarity correction
+  const fixPhoneticErrors = (text) => {
+    const phoneticCorrections = {
+      // Phonetically similar words
+      'camper': 'camber',
+      'campers': 'cambers',
+      'camping': 'camber',
+      'ki': 'key',
+      'kee': 'key', 
+      'kay': 'key',
+      'kaye': 'key',
+      'keyed': 'keyed', // keep as is
+      'keys': 'keys', // keep as is
+      'timber': 'timber', // keep as is but watch for 'timbre'
+      'chamber': 'chamber', // keep as is but watch for 'camber'
+    };
+
+    // Apply corrections with context awareness
+    let correctedText = text;
+    
+    for (const [incorrect, correct] of Object.entries(phoneticCorrections)) {
+      // Use word boundaries to avoid partial replacements
+      const regex = new RegExp(`\\b${incorrect}\\b`, 'gi');
+      correctedText = correctedText.replace(regex, correct);
+    }
+    
+    return correctedText;
+  };
+
+  // Process low-confidence words
+  const processLowConfidenceWords = (transcript, confidence) => {
+    if (confidence < 0.5) {
+      // Apply more aggressive corrections for low-confidence results
+      const aggressiveCorrections = {
+        'camper': 'camber',
+        'ki': 'key',
+        'kee': 'key'
+      };
+      
+      let corrected = transcript;
+      for (const [wrong, right] of Object.entries(aggressiveCorrections)) {
+        const regex = new RegExp(`\\b${wrong}\\b`, 'gi');
+        corrected = corrected.replace(regex, right);
+      }
+      return corrected;
+    }
+    return transcript;
+  };
+
   // Speech reset functions
   const forceSpeechReset = () => {
-    console.log('Forcing speech detection reset');
-    
     // Reset the last speech time
     lastSpeechTimeRef.current = Date.now() - 6000; // Set it to 6 seconds ago
     
@@ -822,7 +1050,6 @@ const PremiumSpeechTranscription = ({
           }
         }
       } catch (err) {
-        console.error('Error accessing microphone:', err);
         setMicPermissionGranted(false);
         setErrorMessage('Microphone access denied. Please enable microphone access in your browser settings.');
       }
@@ -833,7 +1060,6 @@ const PremiumSpeechTranscription = ({
     const cleanupInterval = startDeviceChangeMonitoring();
 
     const handleDeviceChangeEvent = () => {
-      console.log('Device change event fired by browser');
       handleDeviceChange();
     };
 
@@ -846,7 +1072,7 @@ const PremiumSpeechTranscription = ({
         try {
           audioStreamRef.current.getTracks().forEach(track => track.stop());
         } catch (err) {
-          console.error('Error stopping audio tracks:', err);
+          // Silent error handling
         }
       }
 
@@ -887,13 +1113,13 @@ const PremiumSpeechTranscription = ({
           recognitionRef.current.stop();
           recognitionRef.current = null;
         } catch (e) {
-          console.log('Error during recognition cleanup:', e);
+          // Silent error handling
         }
       }
     };
   }, []);
 
-  // Initialize speech recognition
+  // Initialize enhanced speech recognition
   useEffect(() => {
     if (micPermissionGranted === false) {
       setRecognitionState('error');
@@ -920,8 +1146,15 @@ const PremiumSpeechTranscription = ({
 
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.maxAlternatives = 5;
+      recognition.maxAlternatives = 10; // Increase from 5 to 10
       recognition.lang = languageDetected;
+
+      // Add more specific audio settings
+      if (recognition.audioTrack) {
+        recognition.audioTrack.echoCancellation = true;
+        recognition.audioTrack.noiseSuppression = true;
+        recognition.audioTrack.autoGainControl = true;
+      }
 
       if (SpeechGrammarList) {
         const speechRecognitionList = new SpeechGrammarList();
@@ -970,8 +1203,16 @@ const PremiumSpeechTranscription = ({
 
             if (result.isFinal) {
               let bestTranscript = chooseBestTranscript(result);
-
               let processedText = bestTranscript;
+
+              // Apply phonetic corrections first
+              processedText = fixPhoneticErrors(processedText);
+              
+              // Then apply common error corrections
+              processedText = fixCommonErrors(processedText);
+
+              // Process low confidence words
+              processedText = processLowConfidenceWords(processedText, confidence);
 
               continuityBufferRef.current.push(processedText);
               if (continuityBufferRef.current.length > 5) {
@@ -982,8 +1223,6 @@ const PremiumSpeechTranscription = ({
               processedText = processedText.replace(/\.\s+(\w)/g, (match) => match.toUpperCase());
               processedText = processedText.replace(/\?\s+(\w)/g, (match) => match.toUpperCase());
               processedText = processedText.replace(/!\s+(\w)/g, (match) => match.toUpperCase());
-
-              processedText = fixCommonErrors(processedText);
 
               if (!/[.?!,;:]$/.test(processedText)) {
                 processedText += '.';
@@ -1005,6 +1244,32 @@ const PremiumSpeechTranscription = ({
             setTranscript(prev => {
               const newTranscript = prev + finalTranscript;
               transcriptRef.current = newTranscript;
+              
+              // Save transcript to localStorage based on question index
+              try {
+                // Create a key for saving transcripts
+                const transcriptsKey = 'interviewTranscripts';
+                
+                // Get existing transcripts or initialize empty object
+                let savedTranscripts = {};
+                const existingData = localStorage.getItem(transcriptsKey);
+                
+                if (existingData) {
+                  savedTranscripts = JSON.parse(existingData);
+                }
+                
+                // Use questionIndex as the key to store transcript
+                // This ensures each question's transcript is saved separately
+                const questionKey = questionIndex.toString();
+                savedTranscripts[questionKey] = newTranscript;
+                
+                // Save back to localStorage
+                localStorage.setItem(transcriptsKey, JSON.stringify(savedTranscripts));
+              } catch (error) {
+                // Silent error handling
+              }
+              
+              // Call the parent component's callback
               onTranscriptUpdate(newTranscript);
               return newTranscript;
             });
@@ -1016,37 +1281,29 @@ const PremiumSpeechTranscription = ({
 
           setConfidenceScore(highestConfidence);
         } catch (error) {
-          console.error('Error processing speech recognition result:', error);
           resetSilenceTimeout();
         }
       };
 
       recognition.onend = () => {
         try {
-          console.log('Recognition ended');
-
           if (isListening && isActiveRef.current) {
-            console.log('Recognition ended but isListening is still true - restarting');
             restartRecognition();
           } else {
-            console.log('Recognition ended and not listening - setting state to ready');
             setRecognitionState('ready');
           }
         } catch (error) {
-          console.error('Error in recognition.onend handler:', error);
           // Fallback to safe state
           setRecognitionState('ready');
         }
       };
 
       recognition.onspeechstart = () => {
-        console.log('Speech started');
         lastSpeechTimeRef.current = Date.now();
         resetSilenceTimeout();
       };
 
       recognition.onspeechend = () => {
-        console.log('Speech ended');
         // We don't update lastSpeechTime here because we want to
         // give a buffer period after speech ends before showing the popup
         resetSilenceTimeout();
@@ -1057,48 +1314,37 @@ const PremiumSpeechTranscription = ({
       };
 
       recognition.onnomatch = () => {
-        console.log('Speech recognized but no match found');
+        // Silent handling
       };
 
       recognition.onaudiostart = () => {
-        console.log('Audio capturing started');
+        // Silent handling
       };
 
       recognition.onaudioend = () => {
-        console.log('Audio capturing ended - this might indicate a device change or issue');
-
         if (isListening && autoRestartEnabled) {
-          console.log('Audio ended while listening - possible device change - checking devices');
-
           navigator.mediaDevices.enumerateDevices()
             .then(devices => {
               const mics = devices.filter(device => device.kind === 'audioinput');
               if (compareDeviceLists(lastDeviceList, mics)) {
-                console.log('Device list changed after audio end event - handling as device change');
                 handleDeviceChange(mics);
               } else {
-                console.log('No device list change detected after audio end - using timeout recovery');
                 setTimeout(() => {
                   if (isListening && isActiveRef.current) {
-                    console.log('No audio recovery detected after timeout, performing force restart');
                     forceRestartRecognition();
                   }
                 }, 1000);
               }
             })
             .catch(err => {
-              console.error('Error checking devices after audio end:', err);
               forceRestartRecognition();
             });
         }
       };
 
       recognition.onerror = (event) => {
-        console.error('Recognition error:', event.error, event);
-
         switch (event.error) {
           case 'no-speech':
-            console.log('No speech detected, will auto-restart if needed');
             break;
 
           case 'audio-capture':
@@ -1110,15 +1356,10 @@ const PremiumSpeechTranscription = ({
                 .then(devices => {
                   const mics = devices.filter(device => device.kind === 'audioinput');
                   if (compareDeviceLists(lastDeviceList, mics)) {
-                    console.log('Device list changed after audio-capture error - handling as device change');
                     handleDeviceChange(mics);
-                  } else {
-                    console.log('No device list change detected after audio-capture error - forcing restart');
-                    // Let the popup auto-close trigger the restart
                   }
                 })
                 .catch(err => {
-                  console.error('Error checking devices after audio-capture error:', err);
                   // Let the popup auto-close trigger the restart
                 });
             }
@@ -1130,7 +1371,6 @@ const PremiumSpeechTranscription = ({
             break;
 
           case 'aborted':
-            console.log('Recognition aborted');
             break;
 
           case 'network':
@@ -1142,7 +1382,6 @@ const PremiumSpeechTranscription = ({
             break;
 
           case 'bad-grammar':
-            console.log('Grammar error detected, continuing with default grammar');
             break;
 
           default:
@@ -1168,15 +1407,14 @@ const PremiumSpeechTranscription = ({
             recognition.start();
             setIsListening(true);
             setRecognitionState('listening');
-            console.log('Initial recognition started');
+            resetSilenceTimeout();
           } catch (e) {
-            console.error('Error starting initial recognition:', e);
+            // Silent error handling
           }
         }, 500);
       }
 
     } catch (error) {
-      console.error('Error initializing speech recognition:', error);
       setRecognitionState('error');
       setErrorMessage(`Failed to initialize speech recognition: ${error.message}`);
     }
@@ -1206,13 +1444,13 @@ const PremiumSpeechTranscription = ({
         try {
           recognitionRef.current.stop();
         } catch (e) {
-          console.log('Error during recognition cleanup:', e);
+          // Silent error handling
         }
       }
     };
   }, [micPermissionGranted, languageDetected, isActive]);
 
-  // Helper functions for speech recognition
+  // Enhanced alternative selection
   const chooseBestTranscript = (result) => {
     if (result.length === 1) {
       return result[0].transcript;
@@ -1228,16 +1466,31 @@ const PremiumSpeechTranscription = ({
 
     alternatives.sort((a, b) => b.confidence - a.confidence);
 
-    if (alternatives[0].confidence > alternatives[1].confidence * 1.2) {
+    // Check for known problematic words and prefer alternatives
+    const problematicWords = ['camper', 'ki', 'kee', 'kay'];
+    
+    for (let alt of alternatives) {
+      const hasProblematicWord = problematicWords.some(word => 
+        alt.transcript.toLowerCase().includes(word.toLowerCase())
+      );
+      
+      if (!hasProblematicWord && alt.confidence > 0.3) {
+        return alt.transcript;
+      }
+    }
+
+    // If high confidence difference, use the highest confidence
+    if (alternatives[0].confidence > alternatives[1]?.confidence * 1.5) {
       return alternatives[0].transcript;
     }
 
+    // Otherwise, prefer longer transcripts
     let highestWordCount = 0;
     let bestTranscript = alternatives[0].transcript;
 
-    for (let i = 0; i < Math.min(3, alternatives.length); i++) {
+    for (let i = 0; i < Math.min(5, alternatives.length); i++) {
       const wordCount = alternatives[i].transcript.split(/\s+/).length;
-      if (wordCount > highestWordCount) {
+      if (wordCount > highestWordCount && alternatives[i].confidence > 0.2) {
         highestWordCount = wordCount;
         bestTranscript = alternatives[i].transcript;
       }
@@ -1253,82 +1506,13 @@ const PremiumSpeechTranscription = ({
     }
   };
 
-  const fixCommonErrors = (text) => {
-    const corrections = {
-      'i\'m a': 'I am a',
-      'i\'ve': 'I have',
-      'i\'d': 'I would',
-      'thats': 'that\'s',
-      'dont': 'don\'t',
-      'doesnt': 'doesn\'t',
-      'didnt': 'didn\'t',
-      'couldnt': 'couldn\'t',
-      'wouldnt': 'wouldn\'t',
-      'shouldnt': 'shouldn\'t',
-      'wont': 'won\'t',
-      'cant': 'can\'t',
-      'isnt': 'isn\'t',
-      'arent': 'aren\'t',
-      'werent': 'weren\'t',
-      'wasnt': 'wasn\'t',
-      'havent': 'haven\'t',
-      'hasnt': 'hasn\'t',
-      'hadnt': 'hadn\'t',
-      'theyre': 'they\'re',
-      'theyll': 'they\'ll',
-      'theyd': 'they\'d',
-      'weve': 'we\'ve',
-      'wed': 'we\'d',
-      'well': 'we\'ll',
-      'youre': 'you\'re',
-      'youll': 'you\'ll',
-      'youd': 'you\'d',
-      'youve': 'you\'ve',
-      'shes': 'she\'s',
-      'shell': 'she\'ll',
-      'shed': 'she\'d',
-      'hes': 'he\'s',
-      'hell': 'he\'ll',
-      'hed': 'he\'d',
-      'its': 'it\'s',
-      'itll': 'it\'ll',
-      'itd': 'it\'d',
-      'whats': 'what\'s',
-      'wheres': 'where\'s',
-      'whens': 'when\'s',
-      'hows': 'how\'s',
-      'whos': 'who\'s',
-      'whys': 'why\'s',
-      'im': 'I\'m',
-      'ive': 'I\'ve',
-      'id': 'I\'d',
-      'ill': 'I\'ll',
-      'idk': 'I don\'t know',
-      'btw': 'by the way',
-      'fyi': 'for your information',
-      'asap': 'as soon as possible'
-    };
-
-    let correctedText = text;
-    for (const [error, correction] of Object.entries(corrections)) {
-      const regex = new RegExp(`\\b${error}\\b`, 'gi');
-      correctedText = correctedText.replace(regex, correction);
-    }
-
-    correctedText = correctedText.replace(/\s{2,}/g, ' ');
-
-    return correctedText;
-  };
-
   // Handle active state changes
   useEffect(() => {
     if (recognitionState !== 'ready' && recognitionState !== 'listening' && recognitionState !== 'error') return;
 
     if (isActive && !isListening) {
-      console.log('isActive changed to true but not listening - starting transcription');
       startTranscription();
     } else if (!isActive && isListening) {
-      console.log('isActive changed to false but still listening - stopping transcription');
       stopTranscription();
     }
   }, [isActive, isListening, recognitionState]);
@@ -1339,10 +1523,7 @@ const PremiumSpeechTranscription = ({
 
     setLastResetTrigger(resetTranscription);
 
-    console.log(`Question/reset triggered. Question index: ${questionIndex}, Reset trigger: ${resetTranscription}`);
-
     if (recognitionState === 'idle' || recognitionState === 'initializing') {
-      console.log('Recognition not initialized yet, waiting...');
       return;
     }
 
@@ -1360,8 +1541,10 @@ const PremiumSpeechTranscription = ({
       clearTimeout(questionChangeTimeoutRef.current);
     }
 
+    // Don't clear all transcripts when question changes
+    // We want to keep transcripts for other questions
+
     if (isActive) {
-      console.log('Question changed - forcing recognition restart');
       questionChangeTimeoutRef.current = setTimeout(() => {
         if (isActiveRef.current) {
           forceRestartRecognition();
@@ -1378,7 +1561,6 @@ const PremiumSpeechTranscription = ({
 
   // Handle microphone change
   const handleMicrophoneChange = (deviceId) => {
-    console.log('Changing microphone to:', deviceId);
     localStorage.setItem('preferredMic', deviceId);
     setSelectedMicId(deviceId);
 
@@ -1404,7 +1586,6 @@ const PremiumSpeechTranscription = ({
 
       setErrorMessage('');
     } catch (err) {
-      console.error('Error requesting microphone access:', err);
       setMicPermissionGranted(false);
       setErrorMessage('Unable to access microphone. Please check your browser settings and ensure you have a working microphone connected.');
     }
@@ -1434,12 +1615,9 @@ const PremiumSpeechTranscription = ({
       recognitionRef.current.start();
       setIsListening(true);
       setRecognitionState('listening');
-      console.log('Speech recognition started');
 
       resetSilenceTimeout();
     } catch (e) {
-      console.error('Error starting recognition:', e);
-
       if (e.name === 'InvalidStateError') {
         setIsListening(true);
         setRecognitionState('listening');
@@ -1474,10 +1652,7 @@ const PremiumSpeechTranscription = ({
     try {
       recognitionRef.current.stop();
       setIsListening(false);
-      console.log('Speech recognition stopped by user');
     } catch (e) {
-      console.error('Error stopping recognition:', e);
-
       setIsListening(false);
       setRecognitionState('error');
       setErrorMessage(`Failed to stop: ${e.message}`);
@@ -1499,6 +1674,24 @@ const PremiumSpeechTranscription = ({
   const handleManualRestart = () => {
     if (recognitionState === 'initializing') return;
 
+    // Save a blank transcript for this question to indicate it was manually restarted
+    try {
+      const transcriptsKey = 'interviewTranscripts';
+      let savedTranscripts = {};
+      const existingData = localStorage.getItem(transcriptsKey);
+      
+      if (existingData) {
+        savedTranscripts = JSON.parse(existingData);
+      }
+      
+      const questionKey = questionIndex.toString();
+      savedTranscripts[questionKey] = '';
+      
+      localStorage.setItem(transcriptsKey, JSON.stringify(savedTranscripts));
+    } catch (error) {
+      // Silent error handling
+    }
+
     stopTranscription();
     setTimeout(() => {
       startTranscription();
@@ -1508,7 +1701,6 @@ const PremiumSpeechTranscription = ({
   // Restart recognition
   const restartRecognition = () => {
     if (!recognitionRef.current) {
-      console.error('Recognition reference is null in restartRecognition');
       setRecognitionState('error');
       setErrorMessage('Speech recognition reference is missing. Please refresh the page.');
       return;
@@ -1521,18 +1713,24 @@ const PremiumSpeechTranscription = ({
 
       recognitionRef.current.start();
       setRecognitionState('listening');
-      console.log('Recognition restarted');
 
       resetSilenceTimeout();
     } catch (e) {
-      console.error('Error restarting recognition:', e);
-
       if (e.name === 'InvalidStateError') {
-        console.log('Recognition is already running');
+        // Silent handling
       } else {
         setErrorMessage(`Failed to restart: ${e.message}`);
         setRecognitionState('error');
       }
+    }
+  };
+
+  // Add a function to clear transcripts between interviews
+  const clearSavedTranscripts = () => {
+    try {
+      localStorage.removeItem('interviewTranscripts');
+    } catch (error) {
+      // Silent error handling
     }
   };
 
@@ -1901,6 +2099,10 @@ const PremiumSpeechTranscription = ({
                 {languageDetected}
               </div>
             )}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Network:</span>
+              {networkStatus.isOnline ? 'Connected' : 'Disconnected'}
+            </div>
           </div>
 
           {!isListening && (
@@ -1953,54 +2155,11 @@ const PremiumSpeechTranscription = ({
             <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Troubleshooting Tips:</div>
             <ul style={{ margin: '0', paddingLeft: '20px' }}>
               <li>Audio should automatically restart when disconnecting earphones</li>
-              <li>If automatic restart fails, use the 'Restart' option in the popup</li>
-              <li>Try selecting a different microphone from the dropdown above</li>
+              <li>Try selecting a different microphone from the dropdown</li>
               <li>Speak clearly and at a moderate pace</li>
-              <li>Minimize background noise</li>
+              <li>Minimize background noise for better accuracy</li>
+              <li>Ensure stable internet connection for best performance</li>
             </ul>
-          </div>
-
-          <div style={{
-            marginTop: '15px',
-            padding: '10px',
-            backgroundColor: '#f8d7da',
-            borderRadius: '4px',
-            fontSize: '13px'
-          }}>
-            <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Debug Tools:</div>
-            <div style={{ fontSize: '12px', marginBottom: '10px' }}>
-              Last speech detected: {Math.round((Date.now() - lastSpeechTimeRef.current)/1000)}s ago
-            </div>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button
-                onClick={forceSpeechReset}
-                style={{
-                  padding: '4px 8px',
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '12px'
-                }}
-              >
-                Force Reset Speech
-              </button>
-              <button
-                onClick={debugForceSilence}
-                style={{
-                  padding: '4px 8px',
-                  backgroundColor: '#6c757d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '12px'
-                }}
-              >
-                Test Silence Detection
-              </button>
-            </div>
           </div>
         </>
       )}
