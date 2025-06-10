@@ -145,6 +145,7 @@ const StepperComponent = () => {
 
   useEffect(() => {
     if (questionsList?.questions?.length > 0) {
+      // console.log("Questions loaded successfully:", questionsList.questions.length);
       setQuestions(questionsList);
       setIsLoading(false);
       
@@ -216,7 +217,9 @@ const StepperComponent = () => {
       }
       
       try {
+        // console.log("Sending payload:", JSON.stringify(payload));
         const result = await dispatch(loadQuestions(payload));
+        // console.log("Result from loadQuestions:", result);
         
         if (questionsList?.questions?.length > 0) {
           toast.update(toastId, {

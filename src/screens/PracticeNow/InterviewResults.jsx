@@ -1,4 +1,3 @@
-//src/Pages/Practice/InterviewResults.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from "react-redux";
 import { useDarkMode } from "./../../Dark";
@@ -15,6 +14,7 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 const InterviewResults = () => {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
     const navigate = useNavigate();
     const { isDarkMode } = useDarkMode();
     const pdfExportComponent = useRef(null);
@@ -48,31 +48,78 @@ const InterviewResults = () => {
                 duration: question.duration || 60,
                 confidence: calculateConfidence(question),
                 strengths: extractStrengths(question),
-                improvements: extractImprovements(question)
+                improvements: extractImprovements(question),
+                isAnalyzed: true // Flag to indicate this data has been analyzed
             }));
             setResults(processedResults);
+            setIsAnalysisLoading(false);
         } 
-        // Otherwise, use questions data and add mock results
+        // Use local transcript data if available before API response
         else if (questionsList?.questions) {
-            const mockResults = questionsList.questions.map(question => ({
-                question: question.question,
-                answer: "Your answer will be analyzed after submission",
-                predictedAnswer: question.suggested_answer || "This would typically show the suggested answer for reference.",
-                category: question.category,
-                duration: question.duration,
-                confidence: Math.floor(Math.random() * 40) + 60,
-                strengths: [
-                    "Analysis of your communication style",
-                    "Evaluation of examples provided",
-                    "Structure assessment"
-                ],
-                improvements: [
-                    "Areas where more details would help",
-                    "Suggestions for better metrics",
-                    "Ideas for implementation details"
-                ]
-            }));
-            setResults(mockResults);
+            try {
+                // Try to get saved transcripts from localStorage
+                let savedTranscripts = {};
+                try {
+                    const savedData = localStorage.getItem('interviewTranscripts');
+                    if (savedData) {
+                        savedTranscripts = JSON.parse(savedData);
+                    }
+                } catch (error) {
+                    console.error("Error parsing saved transcripts:", error);
+                }
+                
+                const resultsWithTranscripts = questionsList.questions.map((question, index) => {
+                    // Get the corresponding transcript if available
+                    const questionId = question.id || index.toString();
+                    const userAnswer = savedTranscripts[questionId] || "Your answer will be analyzed after submission";
+                    
+                    return {
+                        question: question.question,
+                        answer: userAnswer, // Use the actual transcript
+                        predictedAnswer: question.suggested_answer || "This would typically show the suggested answer for reference.",
+                        category: question.category,
+                        duration: question.duration,
+                        // Still use placeholder scores and feedback until analysis is complete
+                        confidence: Math.floor(Math.random() * 40) + 60,
+                        strengths: [
+                            "Analysis of your communication style",
+                            "Evaluation of examples provided",
+                            "Structure assessment"
+                        ],
+                        improvements: [
+                            "Areas where more details would help",
+                            "Suggestions for better metrics",
+                            "Ideas for implementation details"
+                        ],
+                        isAnalyzed: false // Flag to indicate this is preliminary data
+                    };
+                });
+                
+                setResults(resultsWithTranscripts);
+            } catch (error) {
+                console.error("Error processing question data:", error);
+                // Fall back to basic mock data if there's an error
+                const mockResults = questionsList.questions.map(question => ({
+                    question: question.question,
+                    answer: "Your answer will be analyzed after submission",
+                    predictedAnswer: question.suggested_answer || "This would typically show the suggested answer for reference.",
+                    category: question.category,
+                    duration: question.duration,
+                    confidence: Math.floor(Math.random() * 40) + 60,
+                    strengths: [
+                        "Analysis of your communication style",
+                        "Evaluation of examples provided",
+                        "Structure assessment"
+                    ],
+                    improvements: [
+                        "Areas where more details would help",
+                        "Suggestions for better metrics",
+                        "Ideas for implementation details"
+                    ],
+                    isAnalyzed: false
+                }));
+                setResults(mockResults);
+            }
         }
     }, [interviewResults, questionsList]);
 
@@ -126,6 +173,28 @@ const InterviewResults = () => {
         }, 1500);
     };
 
+    const submitForAnalysis = async () => {
+        if (!results.length) return;
+        
+        setIsAnalysisLoading(true);
+        try {
+            // Get the transcripts from results
+            const answersToSubmit = results.map(result => ({
+                questionId: result.id,
+                answer: result.answer,
+                question: result.question
+            }));
+            
+            setTimeout(() => {
+                setIsAnalysisLoading(false);
+            }, 2000);
+            
+        } catch (error) {
+            console.error("Error submitting answers for analysis:", error);
+            setIsAnalysisLoading(false);
+        }
+    };
+
     const navigateToVideoAnalysis = () => {
         navigate("/video-analysis");
     };
@@ -161,6 +230,24 @@ const InterviewResults = () => {
                     </button>
                     
                     <div className="flex flex-wrap gap-3">
+                        {/* Add Submit for Analysis button if not already analyzed */}
+                        {results.length > 0 && !results[0].isAnalyzed && (
+                            <button
+                                className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
+                                onClick={submitForAnalysis}
+                                disabled={isAnalysisLoading}
+                            >
+                                {isAnalysisLoading ? (
+                                    <>
+                                        <CircularProgress size={20} style={{ color: "#fff" }} />
+                                        Analyzing...
+                                    </>
+                                ) : (
+                                    <>Submit for Analysis</>
+                                )}
+                            </button>
+                        )}
+                        
                         <button
                             className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
                             onClick={navigateToAnswerAnalysis}
@@ -190,6 +277,14 @@ const InterviewResults = () => {
                     </div>
                 </div>
                 
+                {/* Global loading indicator */}
+                {isAnalysisLoading && (
+                    <div className="flex justify-center items-center p-6 mb-6 bg-white rounded-lg shadow">
+                        <CircularProgress size={40} style={{ color: "#6366f1" }} />
+                        <span className="ml-4 text-lg font-medium text-gray-700">Analyzing your interview responses...</span>
+                    </div>
+                )}
+                
                 {/* PDF Export Component */}
                 <PDFExport
                     ref={pdfExportComponent}
@@ -205,7 +300,7 @@ const InterviewResults = () => {
                             Interview Results Analysis
                         </h1>
 
-                        {/* Results Section */}
+                        {/* Results Section - modify to include preliminary indicator */}
                         <div className="grid gap-8">
                             {results.map((result, index) => (
                                 <div key={index} className={`bg-gray-50 p-6 rounded-lg shadow-md ${index !== 0 ? 'page-break' : ''}`}>
@@ -236,17 +331,31 @@ const InterviewResults = () => {
                                                         <h3 className="font-semibold text-blue-800">
                                                             Your Answer:
                                                         </h3>
-                                                        <span className={`font-bold ${getConfidenceColor(result.confidence)}`}>
-                                                            Score: {result.confidence}%
-                                                        </span>
+                                                        <div className="flex items-center">
+                                                            {!result.isAnalyzed && (
+                                                                <span className="mr-3 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">
+                                                                    Preliminary
+                                                                </span>
+                                                            )}
+                                                            <span className={`font-bold ${getConfidenceColor(result.confidence)}`}>
+                                                                {result.isAnalyzed ? `Score: ${result.confidence}%` : "Pending Analysis"}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                     <p className="text-gray-700">{result.answer}</p>
                                                 </div>
 
                                                 <div className="p-4 rounded-lg bg-green-50">
-                                                    <h3 className="font-semibold mb-2 text-green-800">
-                                                        Strengths:
-                                                    </h3>
+                                                    <div className="flex justify-between items-center mb-2">
+                                                        <h3 className="font-semibold text-green-800">
+                                                            Strengths:
+                                                        </h3>
+                                                        {!result.isAnalyzed && (
+                                                            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">
+                                                                Pending Analysis
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                     <ul className="text-sm text-gray-700 space-y-1">
                                                         {result.strengths.map((strength, idx) => (
                                                             <li key={idx} className="flex items-start">
@@ -260,16 +369,30 @@ const InterviewResults = () => {
 
                                             <div className="space-y-4">
                                                 <div className="p-4 rounded-lg bg-purple-50">
-                                                    <h3 className="font-semibold mb-2 text-purple-800">
-                                                        Sample Answer for Reference:
-                                                    </h3>
+                                                    <div className="flex justify-between items-center mb-2">
+                                                        <h3 className="font-semibold text-purple-800">
+                                                            Sample Answer for Reference:
+                                                        </h3>
+                                                        {!result.isAnalyzed && result.predictedAnswer === "This would typically show the suggested answer for reference." && (
+                                                            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">
+                                                                Not Available
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                     <p className="text-gray-700">{result.predictedAnswer}</p>
                                                 </div>
 
                                                 <div className="p-4 rounded-lg bg-orange-50">
-                                                    <h3 className="font-semibold mb-2 text-orange-800">
-                                                        Areas for Improvement:
-                                                    </h3>
+                                                    <div className="flex justify-between items-center mb-2">
+                                                        <h3 className="font-semibold text-orange-800">
+                                                            Areas for Improvement:
+                                                        </h3>
+                                                        {!result.isAnalyzed && (
+                                                            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">
+                                                                Pending Analysis
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                     <ul className="text-sm text-gray-700 space-y-1">
                                                         {result.improvements.map((improvement, idx) => (
                                                             <li key={idx} className="flex items-start">
@@ -289,6 +412,11 @@ const InterviewResults = () => {
                         {/* Footer Section */}
                         <div className="mt-8 page-break text-center pt-4 border-t text-gray-500">
                             <p>Generated on {new Date().toLocaleDateString()} • For your personal development</p>
+                            {results.length > 0 && !results[0].isAnalyzed && (
+                                <p className="mt-2 text-yellow-600">
+                                    Note: This is a preliminary report. Submit for analysis to receive detailed feedback.
+                                </p>
+                            )}
                         </div>
                     </div>
                 </PDFExport>
