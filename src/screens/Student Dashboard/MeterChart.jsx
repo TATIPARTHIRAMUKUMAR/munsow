@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import highchartsMore from "highcharts/highcharts-more";
+import accessibility from "highcharts/modules/accessibility";
 
 highchartsMore(Highcharts);
+accessibility(Highcharts);
 
 const MeterChart = (props) => {
     const { title, score, container, color } = props;
@@ -11,6 +13,18 @@ const MeterChart = (props) => {
   useEffect(() => {
     const initializeChart = () => {
       Highcharts.chart(container, {
+        accessibility: {
+          enabled: true,
+          description: `Gauge chart showing ${title} with a score of ${score} out of 10`,
+          announceNewData: {
+            announcementFormatter: function (allSeries, newSeries, newPoint) {
+              if (newPoint) {
+                return `New score ${newPoint.y} out of 10`;
+              }
+              return false;
+            }
+          }
+        },
         chart: {
           type: "gauge",
           plotBackgroundColor: null,

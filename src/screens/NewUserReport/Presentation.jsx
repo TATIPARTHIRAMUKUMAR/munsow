@@ -18,6 +18,13 @@ const Presentation = (props) => {
     }
   };
 
+  const formatScore = (score) => {
+    if (score <= 10) {
+      return score;
+    }
+    return formatScore(Math.floor(score / 10));
+  };
+
   return (
     
     <>
@@ -25,7 +32,7 @@ const Presentation = (props) => {
         <div className="flex justify-around items-center pb-4 lg:pb-8 munsow-dark-bg">
           <h1 className="mx-4 max-[375px]:text-xl text-2xl lg:text-4xl font-semibold text-white">Presentation and Grooming</h1>
           <div className="mx-4 text-center bg-white p-2 lg:p-6 rounded-b-3xl">
-            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(roundedScore)}`}>{roundedScore}/10</h1>
+            <h1 className={`max-[375px]:text-2xl text-3xl lg:text-4xl font-bold ${getScoreColor(formatScore(roundedScore))}`}>{roundedScore ? `${formatScore(roundedScore)}/10` : "0/10"}</h1>
             <p className="max-[375px]:text-lg text-xl font-semibold text-purple">Overall Score</p>
           </div>
         </div>
@@ -34,7 +41,7 @@ const Presentation = (props) => {
 
           {behavioral_presentation_and_grooming?.data?.map((value, index) => (
             <div className="">
-              <h1 className={`text-center text-4xl font-bold ${getScoreColor(value.secured_marks)}`}>{value.secured_marks}/10</h1>
+              <h1 className={`text-center text-4xl font-bold ${getScoreColor(formatScore(value.secured_marks))}`}>{value.secured_marks ? `${formatScore(value.secured_marks)}/10` : "0/10"}</h1>
               <h3 className="text-center text-lg font-semibold text-purple">{value.title}</h3>
               <p className="text-purple text-center">{value.notes}</p>
             </div>

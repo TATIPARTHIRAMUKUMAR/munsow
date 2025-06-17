@@ -29,6 +29,9 @@ import HelpSupportAdmin from "./screens/Help/AdminHelp";
 import SettingsPageAdmin from "./screens/AdminSettings/Settings";
 // import ReportIndex from "./screens/UserReport/ReportsList";
 import LoadQuestionsData from "./screens/PracticeNow/LoadQuestionsData";
+import LoadResultsData from "./screens/PracticeNow/LoadResultsData";
+import VideoAnalysis from "./screens/NewUserReport/VideoAnalysis";
+import SpeechAnalysis from "./screens/NewUserReport/SpeechAnalysis";
 import Configurations from "./screens/Admin/Configurations/Configurations";
 import QuestionBankForm from "./screens/Teacher/CreateQuestionBank/CreateQuestionBank";
 // import TopicandSubtopic from "./screens/Course/Topic/TopicandSubtopic";
@@ -62,6 +65,9 @@ import AssignmentView from "./screens/Quiz/ResultsView";
 import HardSkills from "./screens/Admin/Analysis/HardSkills";
 import SoftSkills from "./screens/Admin/Analysis/SoftSkills";
 
+import StudentMRCLM from "./screens/MRCLM/StudentMRCLM";
+import TopicBrief from "./screens/MRCLM/TopicBrief";
+import QuizBrief from "./screens/MRCLM/QuizBrief";
 
 function Url_Routes() {
   return (
@@ -97,13 +103,18 @@ function Url_Routes() {
                 <Route exact path="/reportView" element={<HeaderFooterLayout Component={<NewUserReport />} />} />
                 <Route exact path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
                 <Route exact path="/interview" element={<HeaderFooterLayout Component={<LoadQuestionsData />} />} />
+                <Route exact path="/interview-results" element={<HeaderFooterLayout Component={<LoadResultsData />} />} />
+                <Route exact path="/video-analysis" element={<HeaderFooterLayout Component={<VideoAnalysis />} />} />
+                <Route exact path="/speech-analysis" element={<HeaderFooterLayout Component={<SpeechAnalysis />} />} />
                 <Route exact path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
                 <Route exact path="/notifications" element={<HeaderFooterLayout Component={<NotificationsPage />} />} />
                 <Route exact path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
                 <Route exact path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
                 <Route exact path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
                 <Route exact path="/studentDashboardScreening" element={<HeaderFooterLayout Component={<StudentDashboardScreenig />} />} />
-
+                <Route exact path="/studentMRCLM" element={<HeaderFooterLayout Component={<StudentMRCLM />} />} />
+                <Route exact path="/studentMRCLM/view/:id" element={<HeaderFooterLayout Component={<TopicBrief />} />} /> 
+                <Route exact path="/studentMRCLM/quiz_view/:id" element={<HeaderFooterLayout Component={<QuizBrief />} />} /> 
               </>
             }
           </>
@@ -113,8 +124,8 @@ function Url_Routes() {
         <Route exact path="/screeningUsers/createLink" element={<HeaderFooterLayout Component={<CreateLink />} />} />
         <Route exact path="/placements" element={<HeaderFooterLayout Component={<Placements />} />} />
 
-        <Route exact path="/" element={<Login />} />
-        <Route exact path="/studentLogin" element={<StudentLogin />} />
+        <Route exact path="/" element={<StudentLogin />} />
+        <Route exact path="/institutionLogin" element={<Login />} />
         <Route exact path="/studentRegister" element={<StudentRegister />} />
         <Route exact path="/studentRegistration/:id" element={<ScreeningUserRegister />} />
         <Route exact path="/registration" element={<Register />} />

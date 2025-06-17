@@ -90,19 +90,18 @@ const columns = [
     numeric: true,
   },
   {
+    label: "Status",
+    id: "status",
+    cellRenderer: ActionButtonCellRenderer,
+    flex: 1,
+  },
+  {
     id: 'action',
-    label: 'Stauts',
+    label: 'Actions',
     // minWidth: 170,
     align: 'start',
     numeric: false,
   },
-  // {
-  //   id: 'action',
-  //   label: 'Actions',
-  //   // minWidth: 170,
-  //   align: 'start',
-  //   numeric: false,
-  // },
 ];
 
 const Students = () => {
@@ -193,10 +192,11 @@ const Students = () => {
       row.department_name,
       row.no_of_interviews,
       row.avg_score,
+      row.is_active,
     ]);
   
     // Adding headers to the data
-    const headers = ['Name', 'Branch', 'Course', 'Department', 'No of Interviews', 'Average Score'];
+    const headers = ['Name', 'Branch', 'Course', 'Department', 'No of Interviews', 'Average Score', 'Status'];
     data.unshift(headers);
   
     // Convert the data to Excel sheet
@@ -255,6 +255,9 @@ const Students = () => {
                       <TableCell>{row.department_name}</TableCell>
                       <TableCell>{row.no_of_interviews}</TableCell>
                       <TableCell>{row.avg_score}</TableCell>
+                      <TableCell>
+                        <ActionButtonCellRenderer deleteHandler={deleteHandler} node={{ data: row }} />
+                      </TableCell>
                       <TableCell padding="none">
                         
                         <Stack direction="row" spacing={0}>

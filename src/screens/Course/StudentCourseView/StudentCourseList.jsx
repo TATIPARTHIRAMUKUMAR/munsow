@@ -21,6 +21,7 @@ import { RadioButtonUnchecked } from '@mui/icons-material';
 import { CheckCircle } from '@mui/icons-material';
 import bannerImg from '../../../assets/thumbnail.png';
 import bannerImg2 from '../../../assets/virginiaBannner.png';
+import bannerImg3 from '../../../assets/banner.jpeg';
 import noData from '../../../assets/NoData.jpeg'
 
 const CourseCard = ({ course, onClick, title }) => {
@@ -254,7 +255,7 @@ const ScrollableContainer = ({ title, courses, handleCardClick, handleBannerClic
                                 className={`grid grid-cols-4 gap-8`}
                             >
                                 {courses.map((course) => (
-                                    <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
+                                    <CourseCard key={course?.course_id || course?.id} course={course} onClick={handleCardClick} title={title} />
                                 ))}
                             </motion.div>
                         </div>
@@ -286,7 +287,7 @@ const ScrollableContainer = ({ title, courses, handleCardClick, handleBannerClic
                                         <div className="flex flex-col justify-between mb-2">
                                             <h2 className="text-xl mb-2">Virginia Tech</h2>
                                             <p className="text-gray-600 text-sm mb-4 ">
-                                                Become A DECA, Govt of India certified Drone Pilot Course
+                                                Become A DGCA, Govt of India certified Drone Pilot Course
                                             </p>
                                         </div>
                                         <div className="flex justify-between items-center">
@@ -319,7 +320,7 @@ const ScrollableContainer = ({ title, courses, handleCardClick, handleBannerClic
                                 overflow-x-scroll overflow-y-hidden whitespace-nowrap `}
                             >
                                 {courses.slice(visibleStartIndex, visibleStartIndex + visibleCount).map((course) => (
-                                    <CourseCard key={course?.id} course={course} onClick={handleCardClick} title={title} />
+                                    <CourseCard key={course?.course_id || course?.id} course={course} onClick={handleCardClick} title={title} />
                                 ))}
                             </motion.div>
                         </div>

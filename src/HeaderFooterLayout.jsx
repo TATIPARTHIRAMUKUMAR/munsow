@@ -41,7 +41,7 @@ import {
   FaBook,
 } from "react-icons/fa";
 
-import { FaChartColumn, FaChartGantt, FaFileCircleCheck, FaHeartPulse } from "react-icons/fa6";
+import { FaFileCircleCheck, FaChartColumn, FaChartGantt, FaHeartPulse, FaClipboardList } from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
@@ -233,12 +233,13 @@ export default function HeaderFooterLayout({ Component }) {
               icon: <FaChalkboardTeacher size={20} className="" />,
               route: "/teachersList",
             },
-            {
-              label: "Screening Users",
-              icon: <FaChalkboardTeacher size={20} className="" />,
-              route: "/screeningUsers",
-            },
           ],
+        },
+        {
+          label: "Screening Users",
+          icon: <FaChalkboardTeacher size={20} className="" />,
+          route: "/screeningUsers",
+          subItems: [],
         },
         {
           label: "Configurations",
@@ -353,17 +354,34 @@ export default function HeaderFooterLayout({ Component }) {
     } else {
       setMenuData([
         {
-          label: "Dashboard",
-          icon: <FaThLarge size={20} className="" />,
-          route: "/studentDashboard",
-          subItems: [],
-        },
-        {
-          label: "Practice Now",
-          icon: <FaClone size={20} className="" />,
-          route: "/practice",
-          subItems: [],
-        },
+            label: "Dashboard",
+            icon: <FaThLarge size={20} className="" />,
+            route: "/studentDashboard",
+            subItems: [],
+          },
+          {
+            label: (
+              <div className="flex items-center gap-2">
+                Mock Interview
+                <svg viewBox="0 0 200 200" className="w-4 h-4">
+                  <defs>
+                    <linearGradient id="menuStarGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: "#00f5f5" }} />
+                      <stop offset="50%" style={{ stopColor: "#7fff00" }} />
+                      <stop offset="100%" style={{ stopColor: "#ffff00" }} />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M100,10 L135,80 L190,80 L145,125 L160,190 L100,155 L40,190 L55,125 L10,80 L65,80 Z"
+                    fill="url(#menuStarGradient)"
+                  />
+                </svg>
+              </div>
+            ),
+            icon: <FaClone size={20} className="" />,
+            route: "/practice",
+            subItems: [],
+          },
         {
           label: "My Interview Reports",
           icon: <FaChartLine size={20} className="" />,
@@ -374,6 +392,12 @@ export default function HeaderFooterLayout({ Component }) {
           label: "My Courses",
           icon: <FaBook size={20} className="" />,
           route: "/studentCourseList",
+          subItems: [],
+        },
+        {
+          label: "MRCLM",
+          icon: <FaClipboardList size={20} className="" />,
+          route: "/studentMRCLM",
           subItems: [],
         },
         {
@@ -799,7 +823,7 @@ export default function HeaderFooterLayout({ Component }) {
       />
 
       <div
-        className={`mt-[60px] overflow-y-scroll ${backgroundColorClass}`}
+        className={`mt-[60px] overflow-auto ${backgroundColorClass}`}
         style={{ flexGrow: 1 }}
       >
         {Component}

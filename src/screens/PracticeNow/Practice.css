@@ -1,4 +1,4 @@
-.modal{
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-.modal-content{
+.modal-content {
   background-color: white;
   border-radius: 15px;
   padding: 30px;
@@ -28,16 +28,14 @@
   opacity: 0; /* Hide content by setting opacity to 0 */
 }
 
-.modalCreateHead
-{
+.modalCreateHead {
   width: 500px;
   background-color: white;
   font-size: xx-large;
   font-weight: bold;
 }
 
-.close
-{
+.close {
   background-color: white;
   font-weight: bolder;
   font-size: 40px;
@@ -45,6 +43,7 @@
   margin-top: -10px;
   cursor: pointer;
 }
+
 input[type="range"]::-webkit-slider-thumb {
   width: 20px;
   height: 20px;
@@ -54,32 +53,10 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
   -webkit-appearance: none;
 }
+
 input[type="range"]:hover {
   cursor: pointer;
 }
-
-/* 
-.progressBar {
-  background: rgba(255,255,255,0.1);
-  justify-content: flex-start;
-  align-items: center;
-  position: relative;
-  display: flex;
-  width: 100%;
-}
-
-.progressBar-value {
-  animation: load 60s normal forwards;
-  box-shadow: 0 10px 40px -10px #fff;
-  background: #fff;
-  width: 0;
-}
-
-@keyframes load {
-  0% { width: 0; }
-  100% { width: 100%; }
-} */
-
 
 @keyframes progress-bar-animation {
   from {
@@ -105,4 +82,269 @@ input[type="range"]:hover {
   height: 100%;
   background-color: #38b2ac;
   animation: progress-bar-animation 0s linear forwards;
+}
+
+/* Warning Model Design */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(39, 39, 39, 0.5); /* Semi-transparent dark overlay */
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  background: #e7efee;
+  color: #252525;
+  width: 80%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-message {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.modal-close-button {
+  background-color: #0fe1d2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  background-color: #e7efee;
+  color: #0fe1d2;
+  border: 1px solid #0fe1d2;
+  transition: 0.3s ease;
+}
+
+/* Live Transcription Styles - Enhanced for Visibility */
+.live-transcription-container {
+  margin-top: 20px;
+  background-color: #f1f8ff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 2px solid #c0d6e4;
+}
+
+.transcription-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  background-color: #e6f3ff;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.transcription-status-text {
+  margin-left: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #444;
+}
+
+.transcript-box {
+  border: 1px solid #c0d6e4;
+  border-radius: 8px;
+  padding: 14px;
+  background-color: #fff;
+}
+
+.transcript-box h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.transcript-content {
+  min-height: 100px;
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #2d3748;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  word-wrap: break-word;
+}
+
+/* Animation for model loading */
+@keyframes loading {
+  0% { width: 10%; }
+  50% { width: 80%; }
+  100% { width: 10%; }
+}
+
+.model-loading-bar {
+  width: 100%; 
+  height: 10px; 
+  background: #f0f0f0; 
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.model-loading-progress {
+  width: 30%; 
+  height: 100%; 
+  background: #4a90e2;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+  animation: loading 2s infinite ease-in-out;
+}
+
+/* New styles for WhisperTranscription */
+.transcription-button {
+  margin-left: 10px;
+  padding: 4px 8px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.transcription-button-primary {
+  background-color: #4a90e2;
+}
+
+.transcription-button-primary:hover {
+  background-color: #3a7bc8;
+}
+
+.transcription-button-stop {
+  background-color: #f44336;
+}
+
+.transcription-button-stop:hover {
+  background-color: #d32f2f;
+}
+
+.transcription-button-toggle {
+  background-color: #FF9800;
+}
+
+.transcription-button-toggle:hover {
+  background-color: #F57C00;
+}
+
+.transcription-button-simulation {
+  background-color: #4CAF50;
+}
+
+.transcription-button-simulation:hover {
+  background-color: #388E3C;
+}
+
+.transcription-processing {
+  display: inline-block;
+  margin-left: 5px;
+  color: #f57c00;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.transcription-info {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.transcription-info-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.transcription-info-label {
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.transcription-simulation-badge {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.transcription-api-badge {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+/* Added styles for questions loading indicator */
+.questions-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  padding: 20px;
+}
+
+.loading-bar {
+  width: 300px;
+  height: 4px;
+  background-color: #f0f0f0;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-bar::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 30%;
+  background-color: #38b2ac;
+  animation: loading-animation 1.5s infinite ease-in-out;
+}
+
+@keyframes loading-animation {
+  0% { left: -30%; }
+  100% { left: 100%; }
+}
+
+.loading-text {
+  margin-top: 20px;
+  color: #666666;
+  font-size: 16px;
+}
+
+/* Override no-questions class to hide the text */
+.no-questions {
+  display: none !important;
 }

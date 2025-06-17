@@ -29,7 +29,11 @@ const StudentCourseView = () => {
     const { isDarkMode } = useDarkMode();
     const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
     const [currentSubtopicIndex, setCurrentSubtopicIndex] = useState(0);
+    const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+    const [selectedLanguage, setSelectedLanguage] = useState('en'); 
+    const [translatedContent, setTranslatedContent] = useState('');
 
+    
     const linearGradientBackground = isDarkMode
         ? colorTheme.dark.selectBackground
         : colorTheme.light.selectBackground;
@@ -52,11 +56,11 @@ const StudentCourseView = () => {
     useEffect(() => {
         const firstUncompletedSubtopic = detailedCourse?.content_data?.flatMap(topic => topic?.subtopics).find(subtopic => !subtopic?.completed);
         setSelectedSubtopic(firstUncompletedSubtopic);
-        handleSpeak(firstUncompletedSubtopic?.content);
+        // handleSpeak(firstUncompletedSubtopic?.content);
     }, [detailedCourse]);
 
     useEffect(() => {
-        handleSpeak(selectedSubtopic?.content);
+        // handleSpeak(selectedSubtopic?.content);
     }, [selectedSubtopic]);
 
     useEffect(() => {
@@ -73,65 +77,113 @@ const StudentCourseView = () => {
         return unlisten;
     }, [navigate]);
 
-    const handleSpeak = (text) => {
-        const description = text || selectedSubtopic?.content;
-        if (description) {
-            // Cancel any ongoing speech synthesis
-            window.speechSynthesis.cancel();
-
-            const sanitizedDescription = description.replace(/<[^>]*>/g, '');
-            const chunks = sanitizedDescription.match(/.{1,200}/g) || [];
-
-            let chunkIndex = 0;
-
-            const speakNextChunk = () => {
-                if (chunkIndex < chunks.length) {
-                    const chunk = chunks[chunkIndex++];
-                    const utterance = new SpeechSynthesisUtterance(chunk);
-                    utterance.rate = 1.0;
-                    setVoiceAndSpeak(utterance);
-                    utterance.onend = speakNextChunk;
-
-                    latestUtteranceRef.current = utterance;
-                } else {
-                    setIsSpeaking(false);
-                    setSpokenContent('');
-                }
+    const ensureVoicesLoaded = (callback) => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length !== 0) {
+            callback(); // Voices are loaded, proceed with the callback
+        } else {
+            window.speechSynthesis.onvoiceschanged = () => {
+                callback(); // Voices are loaded after the event
             };
-
-            const setVoiceAndSpeak = (utterance) => {
-                const voices = window.speechSynthesis.getVoices();
-                const femaleVoice = voices.find(voice => voice.gender === 'female' || voice.name.toLowerCase().includes('female'));
-                if (femaleVoice) {
-                    utterance.voice = femaleVoice;
-                } else {
-                    setTimeout(() => setVoiceAndSpeak(utterance), 50);
-                    return;
-                }
-
-                window.speechSynthesis.speak(utterance);
-                setIsSpeaking(true);
-            };
-
-            speakNextChunk();
         }
     };
+    
+
+    const parseHTMLContent = (htmlString) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlString, 'text/html');
+        const textContent = doc.body.textContent || ""; // Get text content from the HTML
+        return textContent.split(' '); // Split the text into words
+    };
+
+    const handleSpeak = (text) => {
+        const description = text || translatedContent || selectedSubtopic?.content;
+        if (description) {
+            ensureVoicesLoaded(() => {
+                window.speechSynthesis.cancel();
+    
+                const parsedWords = parseHTMLContent(description);
+                setCurrentWordIndex(0);
+    
+                const utterance = new SpeechSynthesisUtterance(parsedWords.join(' '));
+                utterance.rate = 1.0;
+    
+                utterance.addEventListener('boundary', (event) => {
+                    if (event.name === 'word') {
+                        const charIndex = event.charIndex;
+                        const currentWordIndex = utterance.text.substring(0, charIndex).split(' ').length - 1;
+                        setCurrentWordIndex(currentWordIndex);
+                    }
+                });
+    
+                utterance.onstart = () => setIsSpeaking(true);
+                utterance.onend = () => {
+                    setIsSpeaking(false);
+                    setCurrentWordIndex(-1);
+                };
+    
+                window.speechSynthesis.speak(utterance);
+                setIsSpeaking(true);
+            });
+        }
+    };
+    
+    
+    
+
+    // const handleSpeak = (text) => {
+    //     const description = text || selectedSubtopic?.content;
+    //     if (description) {
+    //         // Cancel any ongoing speech synthesis
+    //         window.speechSynthesis.cancel();
+
+    //         const sanitizedDescription = description.replace(/<[^>]*>/g, '');
+    //         const chunks = sanitizedDescription.match(/.{1,200}/g) || [];
+
+    //         let chunkIndex = 0;
+
+    //         const speakNextChunk = () => {
+    //             if (chunkIndex < chunks.length) {
+    //                 const chunk = chunks[chunkIndex++];
+    //                 const utterance = new SpeechSynthesisUtterance(chunk);
+    //                 utterance.rate = 1.0;
+    //                 setVoiceAndSpeak(utterance);
+    //                 utterance.onend = speakNextChunk;
+
+    //                 latestUtteranceRef.current = utterance;
+    //             } else {
+    //                 setIsSpeaking(false);
+    //                 setSpokenContent('');
+    //             }
+    //         };
+
+    //         const setVoiceAndSpeak = (utterance) => {
+    //             const voices = window.speechSynthesis.getVoices();
+    //             const femaleVoice = voices.find(voice => voice.gender === 'female' || voice.name.toLowerCase().includes('female'));
+    //             if (femaleVoice) {
+    //                 utterance.voice = femaleVoice;
+    //             } else {
+    //                 setTimeout(() => setVoiceAndSpeak(utterance), 50);
+    //                 return;
+    //             }
+
+    //             window.speechSynthesis.speak(utterance);
+    //             setIsSpeaking(true);
+    //         };
+
+    //         speakNextChunk();
+    //     }
+    // };
 
     const handleSelectSubtopic = (subtopic) => {
         if (subtopic !== selectedSubtopic) {
-            // Stop any current speech synthesis
             handleStop();
             setSelectedSubtopic(subtopic);
-            handleSpeak(subtopic.content);
-
-            // Find the new indices
-            const newTopicIndex = detailedCourse?.content_data?.findIndex(topic =>
-                topic.subtopics?.some(sub => sub.id === subtopic.id)
-            );
-            const newSubtopicIndex = detailedCourse?.content_data?.[newTopicIndex]?.subtopics?.findIndex(sub => sub.id === subtopic.id);
-
-            setCurrentTopicIndex(newTopicIndex);
-            setCurrentSubtopicIndex(newSubtopicIndex);
+    
+            // Translate the content if needed
+            translateText(subtopic.content, selectedLanguage).then((translatedText) => {
+                setTranslatedContent(translatedText);
+            });
         }
     };
 
@@ -218,14 +270,63 @@ const StudentCourseView = () => {
         pdfExportComponent.current.save();
     };
 
+    const translateText = async (text, targetLang) => {
+        if (targetLang === "en") {
+            return text;
+        }
+        const chunkSize = 500;
+        const chunks = text.match(new RegExp(`.{1,${chunkSize}}`, 'g')) || [];
+    
+        const translatedChunks = await Promise.all(
+            chunks.map(async (chunk) => {
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|${targetLang}`);
+                const data = await response.json();
+                return data.responseData.translatedText;
+            })
+        );
+    
+        return translatedChunks.join(' ');
+    };
+    
+    const handleLanguageChange = (event) => {
+        const selectedLang = event.target.value;
+        setSelectedLanguage(selectedLang);
+        if (selectedSubtopic) {
+            translateText(selectedSubtopic.content, selectedLang).then((translatedText) => {
+                setTranslatedContent(translatedText);
+            });
+        }
+    };    
+    
+
     return (
         <div className="p-4">
+            <select value={selectedLanguage} onChange={handleLanguageChange}>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="te">Telugu</option>
+            </select>
             <CourseOverview course={detailedCourse} show={true} text={"Back"} />
 
             <div className="flex w-full">
                 <div className="w-4/6 p-4 overflow-y-auto rounded-lg mr-4">
-                    {selectedSubtopic && (
+                    {/* {selectedSubtopic && (
                         <div dangerouslySetInnerHTML={{ __html: selectedSubtopic.content }} />
+                    )} */}
+                    {selectedSubtopic && (
+                        <div>
+                            {parseHTMLContent(translatedContent || selectedSubtopic.content).map((word, index) => (
+                                <span
+                                key={index}
+                                style={{
+                                backgroundColor: index === currentWordIndex ? linearGradientBackground : 'transparent', 
+                                transition: 'background-color 0.1s ease-in-out'
+                                }}
+                            >   
+                                {word}{' '}
+                            </span>
+                            ))}
+                        </div>
                     )}
 
                     <div className='flex justify-between mt-9'>
@@ -265,6 +366,19 @@ const StudentCourseView = () => {
                 </div>
 
                 <div className={`w-2/6 `} >
+                    <div className="flex items-center justify-center mb-4">
+                            {!isSpeaking ? (
+                                <VolumeOffIcon
+                                    style={{ cursor: 'pointer', fontSize: '3rem', color: textColor }}
+                                    onClick={() => handleSpeak(selectedSubtopic?.content)}
+                                />
+                            ) : (
+                                <VolumeUpIcon
+                                    style={{ cursor: 'pointer', fontSize: '3rem', color: linearGradientBackground }}
+                                    onClick={handleStop}
+                                />
+                            )}
+                    </div>
                     <div className={`p-5 bg-[#${cardColor}] rounded-xl`}>
                         {GLOBAL_CONSTANTS?.user_cred?.role_name === "Student" && (
                             <div className="flex flex-col bg-white p-3 rounded-xl shadow-lg">
@@ -300,19 +414,6 @@ const StudentCourseView = () => {
 
                             </div>
                         )}
-                        {/* <div className="flex items-center justify-end mb-4">
-                            {!isSpeaking ? (
-                                <VolumeOffIcon
-                                    style={{ cursor: 'pointer', fontSize: '3rem', color: textColor }}
-                                    onClick={() => handleSpeak(selectedSubtopic?.content)}
-                                />
-                            ) : (
-                                <VolumeUpIcon
-                                    style={{ cursor: 'pointer', fontSize: '3rem', color: linearGradientBackground }}
-                                    onClick={handleStop}
-                                />
-                            )}
-                        </div> */}
 
                         <div className='mt-5'>
                             <div className="flex justify-end mb-3">

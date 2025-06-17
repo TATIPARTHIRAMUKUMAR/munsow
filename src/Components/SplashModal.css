@@ -11,7 +11,7 @@
 }
 
 .progress-value {
-  animation: load 6s normal forwards;
+  /* animation: load 6s normal forwards; */
   box-shadow: 0 10px 40px -10px #fff;
   background: #fff;
   width: 0;
@@ -20,4 +20,26 @@
 @keyframes load {
   0% { width: 0; }
   100% { width: 100%; }
+}
+
+.modal-content-enter {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.modal-content-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+}
+
+.modal-content-exit {
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.modal-content-exit-active {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
 }
