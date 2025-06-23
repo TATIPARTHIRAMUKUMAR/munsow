@@ -1513,7 +1513,7 @@ export const submit_interview = (data, callback) => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
-      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
+      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
       .post(
