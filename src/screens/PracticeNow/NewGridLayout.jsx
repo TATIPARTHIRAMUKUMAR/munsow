@@ -70,7 +70,6 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       console.log("Questions available, ready for interview...");
       setIsQuestionsLoading(false);
     } else {
-      console.log("Waiting for questions to load...");
       setIsQuestionsLoading(true);
     }
   }, [questions, questionsList]);
@@ -119,10 +118,8 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   // Added: Track when questions are loaded - responding to both questions array and parent isLoading prop
   useEffect(() => {
     if (questions && questions.length > 0) {
-      console.log("Questions loaded successfully:", questions.length);
       setIsQuestionsLoading(false);
     } else {
-      console.log("Questions are still loading or empty");
       setIsQuestionsLoading(isLoading); // Use the parent loading state
     }
   }, [questions, isLoading]);
@@ -282,6 +279,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       !componentInitialized
     ) {
       console.log("Starting interview based on user submit action");
+
 
       // Show the environment setup loader for 7 seconds before starting the interview
       if (showEnvironmentLoader) {
@@ -724,6 +722,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   function stopRecording(skipped = false) {
     // Stop transcription first
     console.log("Stopping transcription");
+
     setTranscriptionActive(false);
 
     console.log(`Current recorded chunks: ${recordedChunks.length}`);
@@ -855,6 +854,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
           setTotalTimeLeft((prevTime) => prevTime - 1);
         } else {
           console.log("Total interview time expired");
+
           stopRecording(false);
           setInterviewCompleted(true);
 

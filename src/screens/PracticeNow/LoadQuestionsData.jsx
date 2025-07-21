@@ -10,7 +10,7 @@ export default function LoadQuestionsData() {
 
     useEffect(() => {
         setQuestions(questionsList?.questions ? questionsList?.questions : [])
-        console.log("questions", questions1, questionsList)
+        // console.log("questions", questions1, questionsList)
         //questions = questionsList?.questions ? questionsList?.questions : []
     }, [questionsList])
 

@@ -1411,6 +1411,7 @@ const PremiumSpeechTranscription = ({
 
       recognition.onend = () => {
         try {
+
           if (isListening && isActiveRef.current) {
             restartRecognition();
           } else {
