@@ -2292,3 +2292,5 @@ const PremiumSpeechTranscription = ({
 };
 
 export default PremiumSpeechTranscription;
+
+
