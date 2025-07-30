@@ -1,0 +1,46 @@
+# Query: reportView
+# ContextLines: 1
+
+11 results - 5 files
+
+src/Url_Routes.jsx:
+  102                  <Route exact path="/report" element={<HeaderFooterLayout Component={<ReportIndex />} />} />
+  103:                 <Route exact path="/answer-analysis" element={<HeaderFooterLayout Component={<NewUserReport />} />} />
+  104                  <Route exact path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
+
+src/screens/Admin/AppHeader.jsx:
+   21    
+   22:   const isReportView = location.pathname === '/answer-analysis';
+   23    const isVideoAnalysis = location.pathname === '/video-analysis';
+
+   26  
+   27:   const showAnalysisButtons = isReportView || isVideoAnalysis || isSpeechAnalysis;
+   28  
+
+   57      { label: "Help & Support", url: "/help" },
+   58:     { label: "Reports View", url: "/answer-analysis" },
+   59      { label: "Video Analysis", url: "/video-analysis" },
+
+  110              <button
+  111:               className={`flex items-center gap-1 ${isReportView ? 'bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white py-1 px-3 rounded-full text-sm transition-colors`}
+  112:               onClick={() => navigate('/answer-analysis')}
+  113              >
+
+src/screens/NewUserReport/AnalysisNavigation.jsx:
+  17              setLoading(false);
+  18:             navigate('/answer-analysis');
+  19          }, 1000);
+
+  26                      className="bg-gradient-to-r mb-3 sm:mb-0 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
+  27:                     onClick={() => navigate('/answer-analysis')}>
+  28                      <ArrowBackIcon fontSize="small" />
+
+src/screens/NewUserReport/ReportsList.jsx:
+  241              localStorage.setItem('reportData', JSON.stringify(data));
+  242:             navigate('/answer-analysis');
+  243              console.log("Report Data:", data);
+
+src/screens/UserReport/ReportsList.jsx:
+  83              localStorage.setItem('reportData', JSON.stringify(data));
+  84:             navigate('/answer-analysis');
+  85              console.log("Report Data:", data);

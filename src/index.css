@@ -36,6 +36,13 @@
     box-shadow: none !important;
   }
 
+  .grid-cols-16 {
+    grid-template-columns: repeat(16, minmax(0, 1fr));
+  }
+  
+  .grid-rows-12 {
+    grid-template-rows: repeat(12, minmax(0, 1fr));
+  }
   *{
     margin: 0;
     padding: 0;

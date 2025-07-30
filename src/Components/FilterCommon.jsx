@@ -1,103 +1,112 @@
-import React, {useState, useEffect} from "react";
-import { styled, alpha } from "@mui/material/styles";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
-import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
-const StyledMenu = styled((props) => (
-    <Menu
-      elevation={0}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "right",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      {...props}
-    />
-  ))(({ theme }) => ({
-    "& .MuiPaper-root": {
-      borderRadius: 6,
-      marginTop: theme.spacing(1),
-      minWidth: 180,
-      color:
-        theme.palette.mode === "light"
-          ? "rgb(55, 65, 81)"
-          : theme.palette.grey[300],
-      boxShadow:
-        "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
-      "& .MuiMenu-list": {
-        padding: "4px 0",
-      },
-      "& .MuiMenuItem-root": {
-        "& .MuiSvgIcon-root": {
-          fontSize: 18,
-          color: theme.palette.text.secondary,
-          marginRight: theme.spacing(1.5),
-        },
-        "&:active": {
-          backgroundColor: alpha(
-            theme.palette.primary.main,
-            theme.palette.action.selectedOpacity
-          ),
-        },
-      },
-    },
-  }));
-const FilterCommon = (props) => {
-    return (
-        <div>
-        <Button
-          id="demo-customized-button"
-          aria-controls={props.open ? "demo-customized-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={props.open ? "true" : undefined}
-          // variant="contained"
-          disableElevation
-          onClick={props.handleClick}
-          startIcon={<FilterAltRoundedIcon />}
-          sx={{
-            textTransform: "none",
-            fontSize: "1rem",
-            marginRight: "2rem",
-            fontWeight: 600,
-          }}
-        >
-          {props.active}
-        </Button>
-        <StyledMenu
-          id="demo-customized-menu"
-          MenuListProps={{
-            "aria-labelledby": "demo-customized-button",
-          }}
-          anchorEl={props.anchorEl}
-          open={props.open}
-          onClose={props.handleClose}
-        >
-          <MenuItem
-            onClick={() => {
-              props.handleMenuItemClick(props.defaultValue);
-            }}
-            disableRipple
-          >
-            {props.defaultValue}
-          </MenuItem>
-          {props.data?.map((item) => (
-            <MenuItem
-              key={item?.name}
-              onClick={() => {
-                props.handleMenuItemClick(item?.name);
-              }}
-              disableRipple
-            >
-              {item?.name}
-            </MenuItem>
-          ))}
-        </StyledMenu>
-      </div>
-    )
-}
+import React, { useState, useEffect, useRef } from 'react';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import format from 'date-fns/format';
+import CloseIcon from '@mui/icons-material/Close';
+import DateRangeIcon from '@mui/icons-material/DateRange'; 
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
-export default FilterCommon
+const CustomDateRangePicker = ({ startDate, endDate, setEndDate, setStartDate, onDateSelect }) => {
+    const [dateRange, setDateRange] = useState([
+        {
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            key: 'selection',
+        },
+    ]);
+    const [showPicker, setShowPicker] = useState(false);
+    const [focusInput, setFocusInput] = useState('startDate');
+
+    const startDateInputRef = useRef(null);
+    const endDateInputRef = useRef(null);
+
+    const handleSelect = (ranges) => {
+        setDateRange([ranges.selection]);
+        setShowPicker(false);
+        if (onDateSelect) {
+            onDateSelect(ranges.selection);
+        }
+    };
+
+    useEffect(() => {
+        if (showPicker) {
+            if (focusInput === 'startDate') {
+                startDateInputRef.current.focus();
+            } else {
+                endDateInputRef.current.focus();
+            }
+        }
+        if (startDateInputRef?.current?.value) {
+            setStartDate(startDateInputRef?.current?.value);
+        }
+        if (endDateInputRef?.current?.value) {
+            setEndDate(endDateInputRef.current?.value);
+        }
+    }, [showPicker, focusInput]);
+
+    const formattedStartDate = format(dateRange[0].startDate, 'yyyy-MM-dd');
+    const formattedEndDate = format(dateRange[0].endDate, 'yyyy-MM-dd');
+
+    return (
+        <div className="App">
+            <div className="flex items-center space-x-4">
+                <TextField
+                    InputProps={{
+                        readOnly: true,
+                        startAdornment: ( 
+                            <InputAdornment position="start">
+                                <DateRangeIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    inputRef={startDateInputRef}
+                    variant="outlined"
+                    value={formattedStartDate}
+                    onFocus={() => {
+                        setShowPicker(true);
+                        setFocusInput('startDate');
+                    }}
+                />
+                <TextField
+                    InputProps={{
+                        readOnly: true,
+                        startAdornment: ( 
+                            <InputAdornment position="start">
+                                <DateRangeIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    inputRef={endDateInputRef}
+                    variant="outlined"
+                    value={formattedEndDate}
+                    onFocus={() => {
+                        setShowPicker(true);
+                        setFocusInput('endDate');
+                    }}
+                />
+                {showPicker && (
+                    <CloseIcon
+                        onClick={() => setShowPicker(false)}
+                        style={{ cursor: 'pointer', fontSize: 24, color: 'gray' }}
+                    />
+                )}
+            </div>
+            {showPicker && (
+                <div className='border p-5 my-2' style={{ borderRadius: '8px', padding: '5px', background: 'gray' }}>
+                    <DateRangePicker
+                        ranges={dateRange}
+                        onChange={handleSelect}
+                        className="dateRangePicker"
+                        moveRangeOnFirstSelection={false}
+                        rangeColors={['#3d91ff']}
+                        focusedRange={[0, focusInput === 'startDate' ? 0 : 1]}
+                    />
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default CustomDateRangePicker;
