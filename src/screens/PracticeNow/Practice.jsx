@@ -1,4 +1,3 @@
-//new
 import LoadingOverlay from '../../Components/LoadingOverlay';
 import { Autocomplete, Divider, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -216,7 +215,10 @@ const StepperComponent = () => {
       }
       
       try {
+        // console.log("Sending payload:", JSON.stringify(payload));
         const result = await dispatch(loadQuestions(payload));
+        // console.log("Result from loadQuestions:", result);
+
         
         if (questionsList?.questions?.length > 0) {
           toast.update(toastId, {
