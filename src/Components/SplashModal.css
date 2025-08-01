@@ -1,6 +1,5 @@
-
 .progress {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   justify-content: flex-start;
   align-items: center;
   position: relative;
@@ -18,8 +17,12 @@
 }
 
 @keyframes load {
-  0% { width: 0; }
-  100% { width: 100%; }
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
 }
 
 .modal-content-enter {
@@ -30,7 +33,9 @@
 .modal-content-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+  transition:
+    opacity 0.5s ease-in,
+    transform 0.5s ease-in;
 }
 
 .modal-content-exit {
@@ -41,5 +46,7 @@
 .modal-content-exit-active {
   opacity: 0;
   transform: translateX(20px);
-  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+  transition:
+    opacity 0.5s ease-in,
+    transform 0.5s ease-in;
 }

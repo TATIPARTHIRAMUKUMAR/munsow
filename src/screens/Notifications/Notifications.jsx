@@ -1,20 +1,20 @@
-import React from 'react';
+import React from "react";
 
 const notifications = [
   {
-    type: 'Interview Scheduled',
-    message: 'You have an interview scheduled with XYZ Corp on 15th Oct, 2023 at 10:00 AM.',
-    date: '14th Oct, 2023',
+    type: "Interview Scheduled",
+    message: "You have an interview scheduled with XYZ Corp on 15th Oct, 2023 at 10:00 AM.",
+    date: "14th Oct, 2023",
   },
   {
-    type: 'Interview Score',
-    message: 'Your interview score with ABC Corp is 8/10.',
-    date: '13th Oct, 2023',
+    type: "Interview Score",
+    message: "Your interview score with ABC Corp is 8/10.",
+    date: "13th Oct, 2023",
   },
   {
-    type: 'Interview Report',
-    message: 'Your interview report with ABC Corp is now available.',
-    date: '13th Oct, 2023',
+    type: "Interview Report",
+    message: "Your interview report with ABC Corp is now available.",
+    date: "13th Oct, 2023",
   },
 ];
 

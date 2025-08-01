@@ -18,21 +18,21 @@ import MunsowLogo from "./../../assets/Munsow-logo-Transparent.svg";
 import StudentLoginHero from "./../../assets/student-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
-  flexDirection: 'row',
-  justifyContent: 'center',
-  marginBottom: '30px',
+  flexDirection: "row",
+  justifyContent: "center",
+  marginBottom: "30px",
 });
 
 const StyledFormControlLabel = styled(FormControlLabel)({
   fontSize: "50px",
-  '& .MuiSvgIcon-root': {
-    color: '#4A90E2',
+  "& .MuiSvgIcon-root": {
+    color: "#4A90E2",
   },
-  '& .MuiTypography-root': {
-    color: '#333',
+  "& .MuiTypography-root": {
+    color: "#333",
     fontSize: "20px",
-    paddingRight: "30px"
-  }
+    paddingRight: "30px",
+  },
 });
 
 const style = {
@@ -48,9 +48,8 @@ const style = {
 };
 
 const StudentLogin = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [loginType, setLoginType] = useState("student");
-
 
   const [universityId, setUniversityId] = useState("");
   const [password, setPassword] = useState("");
@@ -59,12 +58,12 @@ const StudentLogin = () => {
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
-  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const { colorTheme: reduxColorTheme } = useSelector(state => state?.data);
   const BackgroundColor = isDarkMode
     ? reduxColorTheme.dark.selectBackground
     : reduxColorTheme.light.selectBackground;
 
-  const loginInputHandler = (e) => {
+  const loginInputHandler = e => {
     const { name = "", value = "" } = e.target;
     if (name === "universityId") {
       setUniversityId(value);
@@ -81,30 +80,30 @@ const StudentLogin = () => {
     setOpen(false);
   };
 
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const payload = {
       email: universityId,
       password: password,
-      role: "student"
-
-    }
-    dispatch(user_login(payload, (resp) => {
-      if(resp?.data?.role_id==5){
-        window.location.href = "./studentDashboardScreening";
-      }else{
-        window.location.href = "./studentDashboard";
-      }
-    }))
+      role: "student",
+    };
+    dispatch(
+      user_login(payload, resp => {
+        if (resp?.data?.role_id == 5) {
+          window.location.href = "./studentDashboardScreening";
+        } else {
+          window.location.href = "./studentDashboard";
+        }
+      })
+    );
   };
 
-  const handleRadioChange = (event) => {
+  const handleRadioChange = event => {
     const selectedType = event.target.value;
     setLoginType(selectedType);
-    if (selectedType === 'institution') {
+    if (selectedType === "institution") {
       navigate("/institutionLogin");
-    } else if (selectedType === 'teacher') {
+    } else if (selectedType === "teacher") {
       navigate("/teacherLogin");
     }
     // Add more conditions for other types if necessary
@@ -112,7 +111,7 @@ const StudentLogin = () => {
 
   // Click handler for the span
   const handleInstitutionClick = () => {
-    navigate('/institutionLogin');
+    navigate("/institutionLogin");
   };
 
   return (
@@ -120,7 +119,6 @@ const StudentLogin = () => {
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/6 p-5 lg:p-20 rounded-none md:rounded-r-[84px] login-bg-gradient h-screen overflow-visible">
           <div className="rounded-lg p-6">
-
             {/* <FormControl component="fieldset">
               <StyledRadioGroup row value={loginType} onChange={handleRadioChange}>
                 <StyledFormControlLabel value="institution" control={<Radio />} label="Institution" />
@@ -130,7 +128,7 @@ const StudentLogin = () => {
             </FormControl> */}
 
             <div className="mb-4">
-              <img src={MunsowLogo} height="54px" width="54px"/>
+              <img src={MunsowLogo} height="54px" width="54px" />
             </div>
             <h2 className="text-3xl font-semibold mb-2 text-white">Student Login</h2>
             <p className="mb-8 text-white">Enter Your Details Below To Login Into Your Account</p>
@@ -182,7 +180,8 @@ const StudentLogin = () => {
                 Login
               </button> */}
                 </div>
-              </div></form>
+              </div>
+            </form>
             {/* <div className="mt-3 text-center">
               <span className="text-blue-600 hover:underline cursor-pointer" onClick={handleClickOpen}>
                 Forget Password?
@@ -257,25 +256,27 @@ const StudentLogin = () => {
               </span>
             </div> */}
             <div className="mt-5 text-white">
-              <span>
-                Not Registered?&nbsp;
-              </span>
-              <a href="https://www.munsow.com/contact" target="_blank"><span className="underline" style={{ color: BackgroundColor }}>Contact Us</span></a>              
+              <span>Not Registered?&nbsp;</span>
+              <a href="https://www.munsow.com/contact" target="_blank">
+                <span className="underline" style={{ color: BackgroundColor }}>
+                  Contact Us
+                </span>
+              </a>
             </div>
             <div className="mt-16 text-center text-white">
-              <span>
-                Not a Job Seeker?&nbsp;Organisation Login&nbsp;
+              <span>Not a Job Seeker?&nbsp;Organisation Login&nbsp;</span>
+              <span
+                className="underline cursor-pointer"
+                style={{ color: BackgroundColor }}
+                onClick={handleInstitutionClick}
+              >
+                Here
               </span>
-              <span className="underline cursor-pointer" style={{ color: BackgroundColor }} onClick={handleInstitutionClick}>Here</span>            
             </div>
           </div>
         </div>
         <div className="hidden md:flex justify-center items-center w-3/6">
-          <img
-            src={StudentLoginHero}
-            className="object-cover w-full"
-            alt="Login"
-          />
+          <img src={StudentLoginHero} className="object-cover w-full" alt="Login" />
         </div>
       </div>
     </div>

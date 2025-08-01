@@ -20,7 +20,7 @@ import {
   loadBehaviourAnalysis,
   setReduxState,
   getCourseList,
-  getDepartmentList
+  getDepartmentList,
 } from "../../../redux/action";
 import FilterCommon from "../../../Components/FilterCommon";
 import { branchesList } from "./mockbranchesdata";
@@ -29,16 +29,13 @@ import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
 
 const BehaviourAnalysis = () => {
-  window.onbeforeunload = ()=>{
+  window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
     localStorage.setItem("user", "All Users");
-
-  }
-  const { behaviourAnalysis } = useSelector(
-    (state) => state?.data
-  );
+  };
+  const { behaviourAnalysis } = useSelector(state => state?.data);
   const dispatch = useDispatch();
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -46,7 +43,9 @@ const BehaviourAnalysis = () => {
   const open = Boolean(anchorEl);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const {institutionStats, branchList, departmentList, courseList} = useSelector((state)=>state?.data)
+  const { institutionStats, branchList, departmentList, courseList } = useSelector(
+    state => state?.data
+  );
 
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -58,25 +57,22 @@ const BehaviourAnalysis = () => {
   const legendFormatter = (value, entry) => {
     return (
       <div className={"flex items-center"}>
-        <div
-          className={"h-4 w-4 mr-2"}
-          style={{ backgroundColor: entry.color }}
-        />
+        <div className={"h-4 w-4 mr-2"} style={{ backgroundColor: entry.color }} />
         <div>{value}</div>
       </div>
     );
   };
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuItemClick = (item) => {
+  const handleMenuItemClick = item => {
     if (item == "All Branches") {
       dispatch(loadBehaviourAnalysis());
     } else {
       //  write filter code
       const emotions = ["Anger", "Contempt", "Disgust", "Fear", "Happiness", "Sadness", "Surprise"];
-      const filteredBehaviourAnalysis = behaviourAnalysis.map((data) => {
+      const filteredBehaviourAnalysis = behaviourAnalysis.map(data => {
         for (const emotion of emotions) {
           const randomValue = Math.floor(Math.random() * 100) + 1;
           data[emotion] = randomValue;
@@ -85,7 +81,7 @@ const BehaviourAnalysis = () => {
       });
 
       //here name is the name of the state which you want to set in reducer and value is the value which you want to set
-      dispatch(setReduxState({name: 'behaviourAnalysis', value: filteredBehaviourAnalysis}))
+      dispatch(setReduxState({ name: "behaviourAnalysis", value: filteredBehaviourAnalysis }));
     }
     setActive(item);
     handleClose();
@@ -94,14 +90,7 @@ const BehaviourAnalysis = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const stroke = [
-    "#1F77B4",
-    "#FF7F0E",
-    "#2CA02C",
-    "#D62728",
-    "#9467BD",
-    "#8C564B",
-  ];
+  const stroke = ["#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#9467BD", "#8C564B"];
   return (
     <div className="flex-grow p-5">
       <div className="container mx-auto">
@@ -117,21 +106,38 @@ const BehaviourAnalysis = () => {
                 </span> */}
                 <span className="text-xs uppercase text-gray-600"></span>
                 <span>
-                <div className="flex justify-end mr-10 mb-3">
-                  <div className="">
-                    <PopUpFilter route="BehaviourAnanlysis" list="Branches" dependencyList={branchList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="BehaviourAnanlysis" list="Courses" dependencyList={courseList}/>
-                  </div>
-                  <div className="">
-                    <PopUpFilter route="BehaviourAnanlysis" list="Departments" dependencyList={departmentList}/>
-                  </div>
-                  <div className="">
-                      <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate}/>
+                  <div className="flex justify-end mr-10 mb-3">
+                    <div className="">
+                      <PopUpFilter
+                        route="BehaviourAnanlysis"
+                        list="Branches"
+                        dependencyList={branchList}
+                      />
                     </div>
-                </div>
-                {/* <FilterCommon
+                    <div className="">
+                      <PopUpFilter
+                        route="BehaviourAnanlysis"
+                        list="Courses"
+                        dependencyList={courseList}
+                      />
+                    </div>
+                    <div className="">
+                      <PopUpFilter
+                        route="BehaviourAnanlysis"
+                        list="Departments"
+                        dependencyList={departmentList}
+                      />
+                    </div>
+                    <div className="">
+                      <CustomDateRangePicker
+                        startDate={startDate}
+                        endDate={endDate}
+                        setEndDate={setEndDate}
+                        setStartDate={setStartDate}
+                      />
+                    </div>
+                  </div>
+                  {/* <FilterCommon
                     handleClose={handleClose}
                     handleMenuItemClick={handleMenuItemClick}
                     handleClick={handleClick}
@@ -166,18 +172,11 @@ const BehaviourAnalysis = () => {
                       <Label value="TIME" position="bottom" dy={20} />
                     </XAxis>
                     <YAxis axisLine={false} tickLine={false} dx={-5}>
-                      <Label
-                        value="EMOTIONS"
-                        position="middle"
-                        angle={-90}
-                        dx={-25}
-                      />
+                      <Label value="EMOTIONS" position="middle" angle={-90} dx={-25} />
                     </YAxis>
                     <Tooltip />
                     <Legend
-                      formatter={(value, entry) =>
-                        legendFormatter(value, entry)
-                      }
+                      formatter={(value, entry) => legendFormatter(value, entry)}
                       layout="horizontal"
                       iconSize={0}
                       wrapperStyle={{

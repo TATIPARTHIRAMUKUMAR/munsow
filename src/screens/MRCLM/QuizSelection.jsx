@@ -23,19 +23,19 @@
 //         {
 //           name: "Easy",
 //           totalCards: 60,
-//           border: "#f7ca02", 
+//           border: "#f7ca02",
 //           gradient: "linear-gradient(to top, #b59205, #f5d349)"
 //         },
 //         {
 //           name: "Medium",
 //           totalCards: 60,
-//           border: "#f77002", 
+//           border: "#f77002",
 //           gradient: "radial-gradient(circle at center, #f53f02, #f0a890)"
 //         },
 //         {
 //           name: "Hard",
 //           totalCards: 60,
-//           border: "#f70251", 
+//           border: "#f70251",
 //           gradient: "linear-gradient(to bottom, #f75e8f, #913351)"
 //         },
 //       ];
@@ -49,7 +49,7 @@
 //         console.warn("No level selected");
 //         return;
 //       }
-    
+
 //       try {
 //         await dispatch(
 //           create_mrclm_quiz({
@@ -63,7 +63,6 @@
 //         console.warn("Ignoring API response error due to buffer size issue:", error);
 //       }
 //     };
-    
 
 //   return (
 //     <div className="flex flex-col text-center justify-center">
@@ -114,7 +113,7 @@
 //         ))}
 //       </div>
 
-//       <button className="p-1 py-2 text-md font-bold w-[100px] rounded-md mt-[30px]" 
+//       <button className="p-1 py-2 text-md font-bold w-[100px] rounded-md mt-[30px]"
 //         style={{
 //             color: textColor,
 //             background: linearGradientBackground,
@@ -135,11 +134,11 @@ import { useNavigate } from "react-router-dom";
 import "./FlashcardSelection.css";
 import "./QuizSelection.css";
 import { useDarkMode } from "./../../Dark";
-import { useSelector, useDispatch } from 'react-redux';
-import { create_mrclm_quiz } from '../../redux/action';
+import { useSelector, useDispatch } from "react-redux";
+import { create_mrclm_quiz } from "../../redux/action";
 
-const QuizSelection = ({selectedSubtopicName, selectedTopicName, selectedCourseId}) => {
-  const { colorTheme } = useSelector((state) => state?.data);
+const QuizSelection = ({ selectedSubtopicName, selectedTopicName, selectedCourseId }) => {
+  const { colorTheme } = useSelector(state => state?.data);
   const { isDarkMode } = useDarkMode();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -149,32 +148,30 @@ const QuizSelection = ({selectedSubtopicName, selectedTopicName, selectedCourseI
     ? colorTheme.dark.selectBackground
     : colorTheme.light.selectBackground;
 
-  const textColor = isDarkMode
-    ? colorTheme.dark.background
-    : colorTheme.light.background;
+  const textColor = isDarkMode ? colorTheme.dark.background : colorTheme.light.background;
 
   const levels = [
     {
       name: "Easy",
       totalCards: 5,
       border: "#f7ca02",
-      gradient: "linear-gradient(to top, #b59205, #f5d349)"
+      gradient: "linear-gradient(to top, #b59205, #f5d349)",
     },
     {
       name: "Medium",
       totalCards: 7,
       border: "#f77002",
-      gradient: "radial-gradient(circle at center, #f53f02, #f0a890)"
+      gradient: "radial-gradient(circle at center, #f53f02, #f0a890)",
     },
     {
       name: "Hard",
       totalCards: 10,
       border: "#f70251",
-      gradient: "linear-gradient(to bottom, #f75e8f, #913351)"
+      gradient: "linear-gradient(to bottom, #f75e8f, #913351)",
     },
   ];
 
-  const handleCardSelect = (level) => {
+  const handleCardSelect = level => {
     setSelectedLevel(level);
   };
 
@@ -222,10 +219,7 @@ const QuizSelection = ({selectedSubtopicName, selectedTopicName, selectedCourseI
           >
             <div className="quiz-details">
               <div className="card-info">
-                <div
-                  className="card-count float-left"
-                  style={{ borderColor: level.border }}
-                >
+                <div className="card-count float-left" style={{ borderColor: level.border }}>
                   {level.totalCards} Cards
                 </div>
                 <h3 className="card-title">{level.name}</h3>
@@ -254,11 +248,12 @@ const QuizSelection = ({selectedSubtopicName, selectedTopicName, selectedCourseI
         ))}
       </div>
 
-      <button className="p-1 py-2 text-md font-bold w-[100px] rounded-md mt-[30px]" 
+      <button
+        className="p-1 py-2 text-md font-bold w-[100px] rounded-md mt-[30px]"
         style={{
           color: textColor,
           background: linearGradientBackground,
-          marginLeft: '45%'
+          marginLeft: "45%",
         }}
         onClick={handleStartClick}
       >

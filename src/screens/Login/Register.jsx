@@ -19,7 +19,7 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 const Register = () => {
   const dispatch = useDispatch();
-  const { countryList } = useSelector((state) => state?.data);
+  const { countryList } = useSelector(state => state?.data);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,11 +29,8 @@ const Register = () => {
   const [mainData, setMainData] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
 
-
   const handleSubmit = () => {
-    console.info(
-      mainData?.time?.map((o) => dayjs(o)?.format("hh A")).join(" to ")
-    );
+    console.info(mainData?.time?.map(o => dayjs(o)?.format("hh A")).join(" to "));
     const payload = {
       institution_name: mainData?.institution_name,
       contact_name: mainData?.contact_name,
@@ -46,12 +43,12 @@ const Register = () => {
       number_of_departments: Number(mainData?.number_of_departments),
       domains: mainData?.domains,
       preference_days: days
-        ?.filter((o) => o?.checked)
-        ?.map((o) => o?.value)
+        ?.filter(o => o?.checked)
+        ?.map(o => o?.value)
         ?.join(", "),
       preference_time: "10 AM to 6 PM",
       password: mainData.password,
-      registration_number: mainData.registration_number
+      registration_number: mainData.registration_number,
     };
 
     dispatch(registerInstitute(payload));
@@ -64,90 +61,87 @@ const Register = () => {
       key: "institution_name",
       value: mainData?.institution_name ?? "",
       type: "text",
-      required: true
+      required: true,
     },
     {
       label: "Contact Name",
       key: "contact_name",
       value: mainData?.contact_name ?? "",
       type: "text",
-      required: true
+      required: true,
     },
     {
       label: "Email",
       key: "email",
       value: mainData?.email ?? "",
       type: "email",
-      required: true
+      required: true,
     },
     {
       key: "mobile_number",
       label: "Mobile Number",
       value: mainData?.mobile_number ?? "",
       type: "tel",
-      required: true
+      required: true,
     },
     {
       label: "Domains",
       key: "domains",
       value: mainData?.domains ?? "",
       type: "text",
-      required: true
+      required: true,
     },
     {
       label: "Desiganation",
       key: "desiganation",
       value: mainData?.desiganation ?? "",
       type: "text",
-      required: true
+      required: true,
     },
     {
       label: "Number of Students",
       key: "number_of_students",
       value: mainData?.number_of_students ?? "",
       type: "number",
-      required: true
+      required: true,
     },
     {
       label: "Number of Departments",
       key: "number_of_departments",
       value: mainData?.number_of_departments ?? "",
       type: "number",
-      required:true
+      required: true,
     },
     {
       label: "Password",
       key: "password",
       value: mainData?.password ?? "",
       type: "text",
-      required: true
+      required: true,
     },
     {
       label: "City",
       key: "city",
       value: mainData?.city ?? "",
       type: "text",
-      required: true
+      required: true,
     },
     {
       label: "Country",
       key: "country",
       value: mainData?.country ?? null,
       type: "select",
-      required:true,
-      options:
-        countryList?.map((o) => ({ label: o?.name ?? "--", value: o?.id })) ??
-        [],
+      required: true,
+      options: countryList?.map(o => ({ label: o?.name ?? "--", value: o?.id })) ?? [],
     },
     {
       label: "Registration Number",
       key: "registration_number",
       value: mainData?.registration_number ?? "",
       type: "text",
-      required: true
+      required: true,
     },
-
-  ]
+  ];
 
   const [days, setDays] = useState([
     { label: "Monday", value: "Mon", checked: false },
@@ -172,10 +166,11 @@ const Register = () => {
   };
 
   useEffect(() => {
-    const requiredFields = userFeilds.filter((field) => field.required);
+    const requiredFields = userFeilds.filter(field => field.required);
     const isValid =
-      requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) &&
-      days.some((day) => day.checked);
+      requiredFields.every(field => mainData[field.key] !== "") &&
+      requiredFields.every(field => mainData[field.key] !== undefined) &&
+      days.some(day => day.checked);
     setIsFormValid(isValid);
   }, [mainData, days]);
 
@@ -190,18 +185,18 @@ const Register = () => {
     >
       <div
         className="rounded-xl overflow-hidden bg-white "
-        style={{ width: "60%", boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', borderRadius: '20px' }}
+        style={{ width: "60%", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)", borderRadius: "20px" }}
       >
         <div className="px-4 py-2 border-b-2">
           <h2 className="text-2xl font-medium">Join Us Form</h2>
           <p className="registration-sub-header py-2">
-            Kick start your journey to get access to our expert insights about
-            your students across departments, branches, and cities today!
+            Kick start your journey to get access to our expert insights about your students across
+            departments, branches, and cities today!
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-6 p-6">
-          {userFeilds?.map((o) => (
+          {userFeilds?.map(o => (
             <>
               {o?.type === "select" ? (
                 <>
@@ -210,19 +205,20 @@ const Register = () => {
                     fullWidth
                     multiple={o?.multiple ?? false}
                     options={o?.options ?? []}
-                    getOptionLabel={(option) => option?.label}
+                    getOptionLabel={option => option?.label}
                     defaultValue={o?.value}
                     filterSelectedOptions={true}
                     value={o?.value}
-                    renderInput={(params) => (
-                      <TextField {...params} label={(
-                        <div>
-                          {o?.label}
-                          {o?.required && (
-                            <span style={{ color: 'red' }}>*</span>
-                          )}
-                        </div>
-                      )} />
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label={
+                          <div>
+                            {o?.label}
+                            {o?.required && <span style={{ color: "red" }}>*</span>}
+                          </div>
+                        }
+                      />
                     )}
                     onChange={(e, value) => {
                       handleInputChange(o?.key, value);
@@ -234,18 +230,16 @@ const Register = () => {
                   <TextField
                     key={o?.key}
                     type={o?.type}
-                    label={(
+                    label={
                       <div>
                         {o?.label}
-                        {o?.required && (
-                          <span style={{ color: 'red' }}>*</span>
-                        )}
+                        {o?.required && <span style={{ color: "red" }}>*</span>}
                       </div>
-                    )}
+                    }
                     value={o?.value}
                     size="small"
                     style={{ borderRadius: "15px" }}
-                    onChange={(e) => {
+                    onChange={e => {
                       handleInputChange(o?.key, e.target.value);
                     }}
                     // required={o?.required}
@@ -263,22 +257,25 @@ const Register = () => {
                     </span>
                   )} */}
                 </>
-
               )}
             </>
           ))}
         </div>
 
         <div className="p-4 grid gap-4 ">
-          <div className="font-medium"> Prefered Days For Contact  <span className="text-red-500">*</span> </div>
+          <div className="font-medium">
+            {" "}
+            Prefered Days For Contact <span className="text-red-500">*</span>{" "}
+          </div>
           <div className="flex gap-4 flex-wrap">
             {days?.map((o, i) => (
               <div
                 key={o?.value}
-                className={`p-2 px-4 border rounded-full text-center cursor-pointer ${o?.checked
-                  ? "bg-blue-500 text-white"
-                  : "bg-white text-black border border-gray-500"
-                  }`}
+                className={`p-2 px-4 border rounded-full text-center cursor-pointer ${
+                  o?.checked
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-black border border-gray-500"
+                }`}
                 onClick={() => {
                   onDaySelect(i, !o?.checked);
                 }}
@@ -299,7 +296,7 @@ const Register = () => {
               showTime={{ format: "hh A", hourStep: 1, minuteStep: 5 }}
               format="hh A"
               value={mainData?.time}
-              onChange={(value) => {
+              onChange={value => {
                 handleInputChange("time", value);
               }}
               popupClassName="timepicker-background"
@@ -328,8 +325,6 @@ const Register = () => {
           >
             Register Institute
           </Button>
-
-
         </div>
       </div>
     </div>

@@ -10,14 +10,12 @@ import { useDarkMode } from "./../../Dark";
 const Carousel = () => {
   const { isDarkMode, colorTheme } = useDarkMode();
 
-  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
-  const textColor = isDarkMode
-    ? reduxColorTheme.dark.textColor2
-    : reduxColorTheme.light.textColor2;
+  const { colorTheme: reduxColorTheme } = useSelector(state => state?.data);
+  const textColor = isDarkMode ? reduxColorTheme.dark.textColor2 : reduxColorTheme.light.textColor2;
   const backgroundColor = isDarkMode
     ? reduxColorTheme.dark.selectBackground
     : reduxColorTheme.light.selectBackground;
-    const textColor2 = isDarkMode
+  const textColor2 = isDarkMode
     ? reduxColorTheme.dark.textColor3
     : reduxColorTheme.light.textColor3;
 
@@ -45,9 +43,7 @@ const Carousel = () => {
   const goToPrevious = () => {
     setSlideDirection("left");
     setTimeout(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? objects.length - 1 : prevIndex - 1
-      );
+      setCurrentIndex(prevIndex => (prevIndex === 0 ? objects.length - 1 : prevIndex - 1));
       setSlideDirection(null);
     }, 300); // Adjust the duration of the animation (in milliseconds)
   };
@@ -55,9 +51,7 @@ const Carousel = () => {
   const goToNext = () => {
     setSlideDirection("right");
     setTimeout(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === objects.length - 1 ? 0 : prevIndex + 1
-      );
+      setCurrentIndex(prevIndex => (prevIndex === objects.length - 1 ? 0 : prevIndex + 1));
       setSlideDirection(null);
     }, 300); // Adjust the duration of the animation (in milliseconds)
   };
@@ -84,8 +78,8 @@ const Carousel = () => {
             slideDirection === "left"
               ? "-translate-x-full"
               : slideDirection === "right"
-              ? "translate-x-full"
-              : ""
+                ? "translate-x-full"
+                : ""
           }`}
         >
           <div className="text-center">

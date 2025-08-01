@@ -7,8 +7,8 @@ import accessibility from "highcharts/modules/accessibility";
 highchartsMore(Highcharts);
 accessibility(Highcharts);
 
-const MeterChart = (props) => {
-    const { title, score, container, color } = props;
+const MeterChart = props => {
+  const { title, score, container, color } = props;
 
   useEffect(() => {
     const initializeChart = () => {
@@ -22,8 +22,8 @@ const MeterChart = (props) => {
                 return `New score ${newPoint.y} out of 10`;
               }
               return false;
-            }
-          }
+            },
+          },
         },
         chart: {
           type: "gauge",
@@ -31,7 +31,7 @@ const MeterChart = (props) => {
           plotBackgroundImage: null,
           plotBorderWidth: 0,
           plotShadow: false,
-          height: "120%"
+          height: "120%",
         },
         title: {
           text: title,
@@ -49,8 +49,7 @@ const MeterChart = (props) => {
           max: 10,
           tickPixelInterval: 72,
           tickPosition: "inside",
-          tickColor:
-            Highcharts.defaultOptions.chart.backgroundColor || "#FFFFFF",
+          tickColor: Highcharts.defaultOptions.chart.backgroundColor || "#FFFFFF",
           tickLength: 20,
           tickWidth: 2,
           minorTickInterval: null,
@@ -77,7 +76,7 @@ const MeterChart = (props) => {
           ],
         },
         credits: {
-            enabled: false
+          enabled: false,
         },
         series: [
           {
@@ -113,19 +112,21 @@ const MeterChart = (props) => {
           },
         ],
         responsive: {
-          rules: [{
-            condition: {
-              maxWidth: 10
+          rules: [
+            {
+              condition: {
+                maxWidth: 10,
+              },
+              chartOptions: {
+                legend: {
+                  align: "center",
+                  verticalAlign: "bottom",
+                  layout: "horizontal",
+                },
+              },
             },
-            chartOptions: {
-              legend: {
-                align: 'center',
-                verticalAlign: 'bottom',
-                layout: 'horizontal'
-              }
-            }
-          }]
-        }
+          ],
+        },
       });
     };
 

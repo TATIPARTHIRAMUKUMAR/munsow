@@ -7,7 +7,7 @@ const UserReportTitle = ({ userData }) => {
             <div className="p-4">
               <div className="mt-5">
                 <div className="text-2xl font-semibold report1-header">
-                MUNSOW INTERVIEW FEEDBACK REPORT
+                  MUNSOW INTERVIEW FEEDBACK REPORT
                 </div>
               </div>
             </div>
@@ -15,9 +15,7 @@ const UserReportTitle = ({ userData }) => {
               <div className="md:flex mt-5">
                 <div className="md:w-6/12">
                   <div>
-                    <span className="text-2xl font-semibold report1-title">
-                      REPORT FOR
-                    </span>
+                    <span className="text-2xl font-semibold report1-title">REPORT FOR</span>
                   </div>
                   <div className="mt-2">
                     <span className="text-2xl font-semibold">{userData?.user_name}</span>
@@ -45,39 +43,38 @@ const UserReportTitle = ({ userData }) => {
               </div>
             </div>
 
-
-
             {userData?.report_type === "role based report" ? (
               <div className="p-4 mt-3">
                 <div className="mb-4 report1-footer">
                   <span className="report1-footer-txt text-xl">
-                    Position Interviewed for: {userData?.interview_position} | {userData?.interview_company}
+                    Position Interviewed for: {userData?.interview_position} |{" "}
+                    {userData?.interview_company}
                   </span>
                 </div>
               </div>
             ) : userData?.report_type === "skill based report" ? (
               <div className="p-4 mt-3">
                 <div className="mb-4">
-                <div className="mb-4 report1-footer">
-                  <span className="report1-footer-txt text-xl">
-                  Skills Interviewed for: {Object.keys(userData?.hard_and_soft_skill_dic?.hard_skill || {}).map((skill, index) => (
-                      <>
-                        {skill} <span className="px-2">|</span> 
-                      </>
-                    ))}
-                    {Object.keys(userData?.hard_and_soft_skill_dic?.soft_skill || {}).map((skill, index) => (
-                      <>
-                          {skill}
-                      </>
-                    ))}
-                  </span>
+                  <div className="mb-4 report1-footer">
+                    <span className="report1-footer-txt text-xl">
+                      Skills Interviewed for:{" "}
+                      {Object.keys(userData?.hard_and_soft_skill_dic?.hard_skill || {}).map(
+                        (skill, index) => (
+                          <>
+                            {skill} <span className="px-2">|</span>
+                          </>
+                        )
+                      )}
+                      {Object.keys(userData?.hard_and_soft_skill_dic?.soft_skill || {}).map(
+                        (skill, index) => (
+                          <>{skill}</>
+                        )
+                      )}
+                    </span>
                   </div>
                 </div>
               </div>
             ) : null}
-
-
-
 
             {/* {userData?.report_type == "role based report" && (
               <div className="p-4 mt-3">

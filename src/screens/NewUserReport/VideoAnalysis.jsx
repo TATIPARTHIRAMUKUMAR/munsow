@@ -10,14 +10,14 @@
 //         <div className="flex flex-col min-h-screen bg-gray-50">
 //             {/* Header */}
 //             <div className="container mx-auto p-4">
-//                 <button         
+//                 <button
 //                     className="bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
 //                     onClick={() => navigate(-1)}>
 //                     <ArrowBackIcon fontSize="small" />
 //                     Back to Report
 //                 </button>
 //             </div>
-            
+
 //             {/* Content */}
 //             <div className="flex-grow flex flex-col items-center justify-center p-6">
 //                 <div className="text-center max-w-lg">
@@ -27,16 +27,16 @@
 //                             <VideocamIcon style={{ color: 'white', fontSize: 36 }} />
 //                         </div>
 //                     </div>
-                    
+
 //                     <h1 className="text-4xl font-bold mb-4 text-gray-800">
 //                         Coming Soon
 //                     </h1>
-                    
+
 //                     <p className="text-xl mb-8 text-gray-600">
-//                         Our video analysis feature is currently under development. This advanced tool will provide 
+//                         Our video analysis feature is currently under development. This advanced tool will provide
 //                         in-depth insights about your body language, facial expressions, and visual presentation during interviews.
 //                     </p>
-                    
+
 //                     <div className="bg-purple-100 p-5 rounded-lg shadow-md">
 //                         <h3 className="font-bold text-purple-800 mb-3 text-lg">Future Video Analysis Features</h3>
 //                         <ul className="text-left text-gray-700 space-y-3">
@@ -65,7 +65,7 @@
 //                     </div>
 //                 </div>
 //             </div>
-            
+
 //             {/* Footer */}
 //             <div className="container mx-auto p-4 text-center text-gray-500 mt-4">
 //                 <p>We're working hard to bring you this feature soon!</p>
@@ -148,7 +148,7 @@
 //                 ],
 //                 candidateName: "Sameera Hazel"
 //             };
-            
+
 //             setVideoMetrics(sampleVideoMetrics);
 //             setLoading(false);
 //         }, 1500); // Simulate loading delay
@@ -168,13 +168,13 @@
 //             {/* Navigation Bar */}
 //             <div className="container mx-auto p-4">
 //                 <div className="flex flex-col sm:flex-row justify-between items-start mb-4">
-//                     <button         
+//                     <button
 //                         className="bg-gradient-to-r mb-3 sm:mb-0 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
 //                         onClick={() => navigate('/report')}>
 //                         <ArrowBackIcon fontSize="small" />
 //                         Back to Report
 //                     </button>
-                    
+
 //                     <div className="flex flex-wrap gap-2">
 //                         <button
 //                             type="button"
@@ -183,7 +183,7 @@
 //                             <DescriptionIcon fontSize="small" />
 //                             Answer Analysis
 //                         </button>
-                        
+
 //                         <button
 //                             type="button"
 //                             disabled
@@ -191,7 +191,7 @@
 //                             <VideocamIcon fontSize="small" />
 //                             Video Analysis
 //                         </button>
-                        
+
 //                         <button
 //                             type="button"
 //                             className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full transition-colors"
@@ -202,7 +202,7 @@
 //                     </div>
 //                 </div>
 //             </div>
-            
+
 //             {loading ? (
 //                 <div className="flex justify-center items-center h-64">
 //                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -218,7 +218,7 @@
 //                                 <div className="text-sm font-medium text-center">Overall Score</div>
 //                             </div>
 //                         </div>
-                        
+
 //                         {/* Metrics Grid */}
 //                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
 //                             {videoMetrics.metrics.map((metric, index) => (
@@ -235,7 +235,7 @@
 //                                 </div>
 //                             ))}
 //                         </div>
-                        
+
 //                         {/* Summary Section */}
 //                         <div className="bg-gray-100 p-6">
 //                             <h2 className="text-xl font-semibold mb-3">Video Analysis Summary</h2>
@@ -244,7 +244,7 @@
 //                                 to enhance your overall presentation. While your grooming and audio quality are excellent, focus on improving
 //                                 your eye contact, posture, hand gestures, and ensuring a better background setup for future interviews.
 //                             </p>
-                            
+
 //                             <div className="mt-4">
 //                                 <h3 className="font-medium text-gray-800 mb-2">Key Improvement Areas:</h3>
 //                                 <ul className="list-disc list-inside text-gray-700 space-y-1">
@@ -283,23 +283,22 @@
 // import MicIcon from '@mui/icons-material/Mic';
 // import DescriptionIcon from '@mui/icons-material/Description';
 
-
 // const VideoAnalysis = () => {
 //   let userReport = {};
 //   const reportTemplateRef = useRef(null);
 //   const [loading, setLoading] = useState(false);
- 
+
 //   const navigate = useNavigate();
 //   const storedReportData = localStorage.getItem('reportData');
-    
+
 //   if (storedReportData) {
 //     userReport = JSON?.parse(storedReportData);
 //   } else {
 //     console.log('No report data found in local storage');
 //   }
-  
+
 //   console.log(userReport, 'userReport..') // use this data to show in reports
-  
+
 //   const pdfExportComponent = useRef(null);
 
 //   const handleGeneratePdf = () => {
@@ -309,7 +308,7 @@
 //       setLoading(false);
 //     }, 1500);
 //   };
-  
+
 //   const navigateToAnswerAnalysis = () => {
 //     navigate('/reportView');
 //   };
@@ -326,12 +325,12 @@
 //       <div className="container mx-auto">
 //         {/* Navigation and Action Buttons */}
 //         <div className="flex flex-col sm:flex-row justify-between items-start mb-4 relative overflow-auto max-w-full h-auto">
-//           <button         
+//           <button
 //             className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-2 transition-all duration-300"
 //             onClick={() => navigate('/report')}>
 //             ← View All Reports
 //           </button>
-          
+
 //           {/* Analysis Action Buttons */}
 //           <div className="flex flex-wrap gap-2 mt-5 mr-5">
 //             <button
@@ -341,7 +340,7 @@
 //               <DescriptionIcon fontSize="small" />
 //               Answer Analysis {loading && (<CircularProgress size={20} style={{ color: "#fff" }} />)}
 //             </button>
-            
+
 //             <button
 //               type="button"
 //               className="flex items-center gap-2 bg-purple-600 text-white hover:bg-purple-700 py-2 px-4 rounded-full transition-colors"
@@ -349,7 +348,7 @@
 //               <VideocamIcon fontSize="small" />
 //               Video Analysis
 //             </button>
-            
+
 //             <button
 //               type="button"
 //               className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full transition-colors"
@@ -359,7 +358,7 @@
 //             </button>
 //           </div>
 //         </div>
-        
+
 //         <PDFExport
 //           ref={pdfExportComponent}
 //           paperSize="A4"
@@ -369,7 +368,7 @@
 //           forcePageBreak=".page-break"
 //         >
 //         <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
-          
+
 //           {/* <div>
 //             <Intro
 //               user={userReport?.user_name}
@@ -378,17 +377,15 @@
 //             />
 //           </div> */}
 
-    
 //           <div className="page-break">
-//             <Presentation              
+//             <Presentation
 //               behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
 //               presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
 //             />
 //           </div>
-          
 
 //       </div>
-//         </PDFExport> 
+//         </PDFExport>
 //       </div>
 //     </div>
 //   );
@@ -400,7 +397,7 @@
 import React, { useRef, useState } from "react";
 import "./UserReport.css";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import Presentation from "./Presentation";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import Intro2 from "./Intro2";
@@ -410,16 +407,16 @@ const VideoAnalysis = () => {
   let userReport = {};
   const reportTemplateRef = useRef(null);
   const [loading, setLoading] = useState(false);
- 
+
   const navigate = useNavigate();
-  const storedReportData = localStorage.getItem('reportData');
-    
+  const storedReportData = localStorage.getItem("reportData");
+
   if (storedReportData) {
     userReport = JSON?.parse(storedReportData);
   } else {
-    console.log('No report data found in local storage');
+    console.log("No report data found in local storage");
   }
-  
+
   const pdfExportComponent = useRef(null);
 
   const handleGeneratePdf = () => {
@@ -435,20 +432,25 @@ const VideoAnalysis = () => {
       <div className="container mx-auto">
         {/* Navigation and PDF Download Buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start mb-4 relative overflow-auto max-w-full h-auto">
-          <button         
+          <button
             className="bg-gradient-to-r m-5 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md mb-2 transition-all duration-300"
-            onClick={() => navigate('/report')}>
+            onClick={() => navigate("/report")}
+          >
             ← View All Reports
           </button>
-          
+
           <button
             type="button"
             className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded-full transition-colors mt-5 mr-5"
-            onClick={handleGeneratePdf}>
-            DOWNLOAD AS PDF {loading && (<CircularProgress size={20} style={{ color: "#fff", marginLeft: "10px" }} />)}
+            onClick={handleGeneratePdf}
+          >
+            DOWNLOAD AS PDF{" "}
+            {loading && (
+              <CircularProgress size={20} style={{ color: "#fff", marginLeft: "10px" }} />
+            )}
           </button>
         </div>
-        
+
         <PDFExport
           ref={pdfExportComponent}
           paperSize="A4"
@@ -457,25 +459,27 @@ const VideoAnalysis = () => {
           fileName="Video_Analysis.pdf"
           forcePageBreak=".page-break"
         >
-        <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
+          <div ref={reportTemplateRef} className="bg-white" id="pdf-content">
             <div>
-            <Intro2
-              user={userReport?.user_name}
-              report_data={userReport}
-              interview_type={userReport?.interview_type}
-            />
-            </div>          
-            <div className="page-break">
-            <Presentation              
-              behavioral_presentation_and_grooming={userReport?.behavioral_presentation_and_grooming}
-              presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
-            />
-          </div>
-            <div className="page-break">
-                <Extro/>
+              <Intro2
+                user={userReport?.user_name}
+                report_data={userReport}
+                interview_type={userReport?.interview_type}
+              />
             </div>
-        </div>
-        </PDFExport> 
+            <div className="page-break">
+              <Presentation
+                behavioral_presentation_and_grooming={
+                  userReport?.behavioral_presentation_and_grooming
+                }
+                presentation_and_grooming_score={userReport?.presentation_and_grooming_score}
+              />
+            </div>
+            <div className="page-break">
+              <Extro />
+            </div>
+          </div>
+        </PDFExport>
       </div>
     </div>
   );

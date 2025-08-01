@@ -1,24 +1,24 @@
 //new
-import React, { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
-import store from './redux/store';
-import Url_Routes from './Url_Routes';
-import { Slide, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
-import axios from 'axios';
-import Loader from './Components/Loader';
-import { LoaderProvider } from './Components/LoaderContext';
+import React, { useEffect, useState } from "react";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import Url_Routes from "./Url_Routes";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import axios from "axios";
+import Loader from "./Components/Loader";
+import { LoaderProvider } from "./Components/LoaderContext";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [showVoiceWidget, setShowVoiceWidget] = useState(false);
 
   const checkIfPracticePage = () => {
-    return window.location.pathname.includes('/practice');
+    return window.location.pathname.includes("/practice");
   };
 
   useEffect(() => {
-    const requestInterceptor = axios.interceptors.request.use((config) => {
+    const requestInterceptor = axios.interceptors.request.use(config => {
       // Show loader when a request is made, except for practice page
       if (!checkIfPracticePage()) {
         setIsLoading(true);
@@ -27,12 +27,12 @@ function App() {
     });
 
     const responseInterceptor = axios.interceptors.response.use(
-      (response) => {
+      response => {
         // Hide loader when a response is received
         setIsLoading(false);
         return response;
       },
-      (error) => {
+      error => {
         // Hide loader on error as well
         setIsLoading(false);
         return Promise.reject(error);
@@ -47,7 +47,7 @@ function App() {
       axios.interceptors.request.eject(requestInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [window.location.pathname]); 
+  }, [window.location.pathname]);
 
   return (
     <Provider store={store}>

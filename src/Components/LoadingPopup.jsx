@@ -56,7 +56,7 @@
 //   return (
 //     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
 //       <div className="absolute inset-0 bg-[#1A1F29] opacity-95"></div>
-      
+
 //       <div className="relative z-10 flex flex-col items-center space-y-8 p-8 rounded-xl">
 //         <div className="flex items-center justify-center">
 //           <h2 className="text-[#00F5D4] text-3xl font-medium tracking-wide">
@@ -64,7 +64,7 @@
 //           </h2>
 //           <GradientStar />
 //         </div>
-        
+
 //         <InteractiveGrid />
 //       </div>
 //     </div>
@@ -73,16 +73,16 @@
 
 // export default LoadingPopup;
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const GradientStar = () => (
   <div className="inline-flex items-center ml-3">
     <svg width="35" height="35" viewBox="0 0 200 200" className="animate-spin-slow">
       <defs>
         <linearGradient id="starGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#40E0D0' }} />
-          <stop offset="50%" style={{ stopColor: '#7FFF00' }} />
-          <stop offset="100%" style={{ stopColor: '#FFFF00' }} />
+          <stop offset="0%" style={{ stopColor: "#40E0D0" }} />
+          <stop offset="50%" style={{ stopColor: "#7FFF00" }} />
+          <stop offset="100%" style={{ stopColor: "#FFFF00" }} />
         </linearGradient>
       </defs>
       <path
@@ -104,7 +104,9 @@ const InteractiveGrid = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const newGridCells = Array(25).fill(false).map(() => Math.random() > 0.7);
+      const newGridCells = Array(25)
+        .fill(false)
+        .map(() => Math.random() > 0.7);
       setGridCells(newGridCells);
     }, 150);
 
@@ -117,7 +119,7 @@ const InteractiveGrid = () => {
         <div
           key={i}
           className={`w-12 h-12 rounded-lg transition-colors duration-150 ${
-            active ? 'bg-[#00F5D4]' : 'bg-[#1E2431]'
+            active ? "bg-[#00F5D4]" : "bg-[#1E2431]"
           }`}
         />
       ))}
@@ -127,20 +129,20 @@ const InteractiveGrid = () => {
 
 const LoadingPopup = ({ isOpen, message = "Your Interview is Loading" }) => {
   if (!isOpen) return null;
-  
+
   // Split the message into individual words
-  const words = message.split(' ');
+  const words = message.split(" ");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
       <div className="absolute inset-0 bg-[#1A1F29] opacity-95"></div>
-      
+
       <div className="relative z-10 flex flex-col items-center space-y-8 p-8 rounded-xl">
         <div className="flex items-center justify-center">
           <h2 className="text-3xl font-medium tracking-wide flex flex-wrap">
             {words.map((word, index) => (
-              <span 
-                key={index} 
+              <span
+                key={index}
                 className="text-[#00F5D4] hover:text-white transition-colors duration-300"
               >
                 {word}
@@ -150,7 +152,7 @@ const LoadingPopup = ({ isOpen, message = "Your Interview is Loading" }) => {
           </h2>
           <GradientStar />
         </div>
-        
+
         <InteractiveGrid />
       </div>
     </div>

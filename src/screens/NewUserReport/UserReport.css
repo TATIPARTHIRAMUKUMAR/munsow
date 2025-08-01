@@ -20,7 +20,7 @@
 .report1-title {
   color: #b49fd8;
 }
-.report1-header{
+.report1-header {
   margin-left: 120px;
   color: #46315b;
 }
@@ -30,9 +30,9 @@
   width: 55%;
 }
 
-.report1-cap-container-middle{
-  margin-top:2rem;;
-  margin-left:120px;
+.report1-cap-container-middle {
+  margin-top: 2rem;
+  margin-left: 120px;
 }
 .report1-cap {
   color: #452b4e;
@@ -41,7 +41,7 @@
 }
 .report1-footer {
   padding: 8px;
-  background: #0EE1D2;
+  background: #0ee1d2;
   border-radius: 20px;
   margin-left: 120px;
   width: 70%;
@@ -51,7 +51,7 @@
   /* font-family: 'Poppins'; */
 }
 
-.line-bar{
+.line-bar {
   width: 100px;
   height: 10px;
   border-radius: 5px;
@@ -130,7 +130,7 @@
 }
 .report3-description-container {
   padding: 15px;
-  background: #856FAB;
+  background: #856fab;
 }
 .report3-description {
   color: #fff;
@@ -356,7 +356,7 @@
   color: #fff;
 }
 .report7-wrapper {
-  background: #856FAB;
+  background: #856fab;
 }
 .report7-text-clr {
   color: #fff;
@@ -387,28 +387,23 @@
 .purple-horizontal-box {
   width: 99px;
   height: 1300px;
-  background:  #B49FD8;
+  background: #b49fd8;
   border-radius: 0 20px 20px 0;
 }
 
-.purple-horizontal-box-reverse{
+.purple-horizontal-box-reverse {
   width: 199px;
   border-radius: 20px 0px 0px 20px;
 }
 
-.page-container{
+.page-container {
   display: flex;
   align-items: center;
-  border: 1px solid black
+  border: 1px solid black;
 }
 
 /* 595 x 842 pt'. PDF Size */
 /** report8 end */
-
-
-
-
-
 
 /* SkillsDisplay.css */
 .fade-in {
@@ -429,65 +424,65 @@
 }
 
 /* Report overview styles */
-.bg-purple{
-  background-color: #EBD8EC;
+.bg-purple {
+  background-color: #ebd8ec;
 }
-.bg-green{
-  background-color: #D5E6D0;
+.bg-green {
+  background-color: #d5e6d0;
 }
-.bg-orange{
-  background-color: #FDE0BE;
+.bg-orange {
+  background-color: #fde0be;
 }
-.text-purple{
-  color: #462C4C;
+.text-purple {
+  color: #462c4c;
 }
-.text-red{
-  color: #FF555B;
+.text-red {
+  color: #ff555b;
 }
-.text-orange{
-  color: #FE9663;
+.text-orange {
+  color: #fe9663;
 }
-.text-green{
-  color: #00BF6F;
+.text-green {
+  color: #00bf6f;
 }
-.text-darkgreen{
-  color: #1A7C39;
+.text-darkgreen {
+  color: #1a7c39;
 }
-.text-darkred{
-  color: #AC241D;
+.text-darkred {
+  color: #ac241d;
 }
-.bg-lightgreen{
-  background-color: #EFFDF3;
+.bg-lightgreen {
+  background-color: #effdf3;
 }
-.bg-lightred{
-  background-color: #FDF5F6;
+.bg-lightred {
+  background-color: #fdf5f6;
 }
-.text-sky{
-  color: #2BBDD4;
+.text-sky {
+  color: #2bbdd4;
 }
-.munsow-light-bg{
-  background-color: #0EE1D2;
+.munsow-light-bg {
+  background-color: #0ee1d2;
 }
-.munsow-dark-bg{
-  background-color: #212E3E;
+.munsow-dark-bg {
+  background-color: #212e3e;
 }
-.munsow-light-text{
-  color: #0EE1D2;
+.munsow-light-text {
+  color: #0ee1d2;
 }
-.munsow-dark-text{
-  color: #212E3E;
+.munsow-dark-text {
+  color: #212e3e;
 }
-.bar-red-bg{
-  background-color: #FF555B;
+.bar-red-bg {
+  background-color: #ff555b;
 }
-.bar-orange-bg{
-  background-color: #FE9663;  
+.bar-orange-bg {
+  background-color: #fe9663;
 }
-.bar-green-bg{
-  background-color: #00BF6F;  
+.bar-green-bg {
+  background-color: #00bf6f;
 }
-.bg-grey{
-  background-color: #F1F4F5;
+.bg-grey {
+  background-color: #f1f4f5;
 }
 .bg-img {
   background-image: url("./../../assets/report-bg.jpg");
@@ -496,5 +491,4 @@
   background-size: cover;
   /* width: 100%; */
   height: 150vh;
-  
 }

@@ -18,41 +18,41 @@ import AdminIcon from "./../../assets/icons/admin-login-icon.svg";
 import AdminLoginHero from "./../../assets/admin-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
-  flexDirection: 'row',
-  marginBottom: '30px',
+  flexDirection: "row",
+  marginBottom: "30px",
 });
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => ({
-  border: '2px solid',
-  borderRadius: '20px',
-  padding: '10px 15px 10px 0px',
-  margin: '0 0px',
-  width: '250px',
-  transition: 'border-color 0.3s, background-color 0.3s',
-  borderColor: checked ? '#2BE2D0' : '#ddd',
-  backgroundColor: checked ? '#F0FCFF' : '#fff',
-  '& .MuiSvgIcon-root': {
-    display: 'block', 
-    color: '#2BE2D0',
+  border: "2px solid",
+  borderRadius: "20px",
+  padding: "10px 15px 10px 0px",
+  margin: "0 0px",
+  width: "250px",
+  transition: "border-color 0.3s, background-color 0.3s",
+  borderColor: checked ? "#2BE2D0" : "#ddd",
+  backgroundColor: checked ? "#F0FCFF" : "#fff",
+  "& .MuiSvgIcon-root": {
+    display: "block",
+    color: "#2BE2D0",
   },
-  '& .custom-icon': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '24px',
-    height: '24px',
-    borderRadius: '50%',
-    
-    color: checked ? '#fff' : '#ddd',
+  "& .custom-icon": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "24px",
+    height: "24px",
+    borderRadius: "50%",
+
+    color: checked ? "#fff" : "#ddd",
   },
-  '& .MuiTypography-root': {
-    fontWeight: checked ? 'bold' : 'normal',
-    color: checked ? '#333' : '#333',
-    fontSize: '16px',
+  "& .MuiTypography-root": {
+    fontWeight: checked ? "bold" : "normal",
+    color: checked ? "#333" : "#333",
+    fontSize: "16px",
   },
-  '&:hover': {
-    cursor: 'pointer',
-    borderColor: '#2BE2D0',
+  "&:hover": {
+    cursor: "pointer",
+    borderColor: "#2BE2D0",
   },
 }));
 
@@ -70,9 +70,8 @@ const style = {
 };
 
 const TeacherLogin = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [loginType, setLoginType] = useState("teacher");
-
 
   const [universityId, setUniversityId] = useState("");
   const [password, setPassword] = useState("");
@@ -81,12 +80,12 @@ const TeacherLogin = () => {
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
-  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const { colorTheme: reduxColorTheme } = useSelector(state => state?.data);
   const BackgroundColor = isDarkMode
     ? reduxColorTheme.dark.selectBackground
     : reduxColorTheme.light.selectBackground;
 
-  const loginInputHandler = (e) => {
+  const loginInputHandler = e => {
     const { name = "", value = "" } = e.target;
     if (name === "universityId") {
       setUniversityId(value);
@@ -103,126 +102,132 @@ const TeacherLogin = () => {
     setOpen(false);
   };
 
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const payload = {
       email: universityId,
       password: password,
-      role:"teacher"
-    }
-    dispatch(user_login(payload, () => {
-      window.location.href = "./adminDashboard";
-    }))
+      role: "teacher",
+    };
+    dispatch(
+      user_login(payload, () => {
+        window.location.href = "./adminDashboard";
+      })
+    );
   };
 
-  const handleRadioChange = (event) => {
+  const handleRadioChange = event => {
     const selectedType = event.target.value;
     setLoginType(selectedType);
-    if (selectedType === 'institution') {
+    if (selectedType === "institution") {
       navigate("/institutionLogin");
-    } else if (selectedType === 'student') {
+    } else if (selectedType === "student") {
       navigate("/");
     }
     // Add more conditions for other types if necessary
   };
   // Click handler for the span
   const handleStudentClick = () => {
-    navigate('/');
+    navigate("/");
   };
   return (
     <div className="bg-[#F1F8F8] h-screen overflow-auto">
       <div className="flex flex-col md:flex-row items-center">
         <div className="hidden md:flex justify-center items-center w-3/6">
-          <img
-            src={AdminLoginHero}
-            className=""
-            alt="Login"
-          />
+          <img src={AdminLoginHero} className="" alt="Login" />
         </div>
         <div className="w-full md:w-3/6 p-5 md:p-20 ">
           <div className="rounded-lg p-6">
-
-          <div className="mb-4">
-            <h2 className="text-3xl font-semibold mb-4">Professor Login</h2>
-            <FormControl component="fieldset">
-              <StyledRadioGroup row value={loginType} onChange={handleRadioChange} className="flex justify-start gap-3">
-              <StyledFormControlLabel
-                value="institution"
-                className="justify-center"
-                label={
-                  <div className="flex flex-col justify-center items-center">
-                    <span className="custom-icon"><img src={AdminIcon}  alt="Login"/></span>
-                    Organisation Admin
-                  </div>
-                }
-                control={<Radio />}
-                checked={loginType === 'institution'}
-              />
-              <StyledFormControlLabel
-                value="teacher"
-                className="justify-center"
-                label={
-                  <div className="flex flex-col justify-center items-center">
-                    <span className="custom-icon"><img src={TeacherIcon}  alt="Login"/></span>
-                    Department’s Professor 
-                  </div>
-                }
-                control={<Radio />}
-                checked={loginType === 'teacher'}
-              />
-              </StyledRadioGroup>
+            <div className="mb-4">
+              <h2 className="text-3xl font-semibold mb-4">Professor Login</h2>
+              <FormControl component="fieldset">
+                <StyledRadioGroup
+                  row
+                  value={loginType}
+                  onChange={handleRadioChange}
+                  className="flex justify-start gap-3"
+                >
+                  <StyledFormControlLabel
+                    value="institution"
+                    className="justify-center"
+                    label={
+                      <div className="flex flex-col justify-center items-center">
+                        <span className="custom-icon">
+                          <img src={AdminIcon} alt="Login" />
+                        </span>
+                        Organisation Admin
+                      </div>
+                    }
+                    control={<Radio />}
+                    checked={loginType === "institution"}
+                  />
+                  <StyledFormControlLabel
+                    value="teacher"
+                    className="justify-center"
+                    label={
+                      <div className="flex flex-col justify-center items-center">
+                        <span className="custom-icon">
+                          <img src={TeacherIcon} alt="Login" />
+                        </span>
+                        Department’s Professor
+                      </div>
+                    }
+                    control={<Radio />}
+                    checked={loginType === "teacher"}
+                  />
+                </StyledRadioGroup>
               </FormControl>
-          </div>
-             <form onSubmit={handleSubmit}>
-              <div>
-              <div className="space-y-4">
-              <div className="mb-2">
-                <label htmlFor="universityId" className="text-sm font-bold text-black">
-                  Email Address
-                </label>
-                <input
-                  type="text"
-                  className="mt-2 w-full border border-gray-400 bg-[#EDEDED] rounded-lg py-2 px-3 focus:outline-none focus:border-blue-400"
-                  id="universityId"
-                  name="universityId"
-                  placeholder="Enter Email Address"
-                  value={universityId}
-                  onChange={loginInputHandler}
-                />
-              </div>
-              <div className="mb-2">
-                <label htmlFor="password" className="text-sm font-bold text-black">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="mt-2 w-full border border-gray-400 bg-[#EDEDED] rounded-lg py-2 px-3 focus:outline-none focus:border-stone-300"
-                  id="password"
-                  name="password"
-                  placeholder="Enter Password"
-                  value={password}
-                  onChange={loginInputHandler}
-                />
-              </div>
             </div>
-            <div className="mt-8">
-            <button
+            <form onSubmit={handleSubmit}>
+              <div>
+                <div className="space-y-4">
+                  <div className="mb-2">
+                    <label htmlFor="universityId" className="text-sm font-bold text-black">
+                      Email Address
+                    </label>
+                    <input
+                      type="text"
+                      className="mt-2 w-full border border-gray-400 bg-[#EDEDED] rounded-lg py-2 px-3 focus:outline-none focus:border-blue-400"
+                      id="universityId"
+                      name="universityId"
+                      placeholder="Enter Email Address"
+                      value={universityId}
+                      onChange={loginInputHandler}
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label htmlFor="password" className="text-sm font-bold text-black">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="mt-2 w-full border border-gray-400 bg-[#EDEDED] rounded-lg py-2 px-3 focus:outline-none focus:border-stone-300"
+                      id="password"
+                      name="password"
+                      placeholder="Enter Password"
+                      value={password}
+                      onChange={loginInputHandler}
+                    />
+                  </div>
+                </div>
+                <div className="mt-8">
+                  <button
                     type="submit"
                     className="w-full text-black rounded-lg py-2 px-4"
                     style={{ background: BackgroundColor }}
                   >
                     Login
                   </button>
-              {/* <button
+                  {/* <button
                 type="button"
                 className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                 onClick={handleSubmit}
               >
                 Login
               </button> */}
-            </div>
-            </div></form>
+                </div>
+              </div>
+            </form>
             {/* <div className="mt-3 text-center">
               <span className="text-blue-600 hover:underline cursor-pointer" onClick={handleClickOpen}>
                 Forget Password?
@@ -278,16 +283,19 @@ const TeacherLogin = () => {
               </div>
             </div> */}
             <div className="mt-5 text-black">
-              <span>
-                Not Registered?&nbsp;
-              </span>
-              <a href="https://www.munsow.com/contact" target="_blank"><span className="underline text-[#81007F]">Contact Us</span></a>              
+              <span>Not Registered?&nbsp;</span>
+              <a href="https://www.munsow.com/contact" target="_blank">
+                <span className="underline text-[#81007F]">Contact Us</span>
+              </a>
             </div>
             <div className="mt-16 text-center text-black">
-              <span>
-                Not an Organisation?&nbsp;Jobseeker Login&nbsp;
+              <span>Not an Organisation?&nbsp;Jobseeker Login&nbsp;</span>
+              <span
+                className="underline cursor-pointer text-[#81007F]"
+                onClick={handleStudentClick}
+              >
+                Here
               </span>
-              <span className="underline cursor-pointer text-[#81007F]" onClick={handleStudentClick}>Here</span>            
             </div>
           </div>
         </div>

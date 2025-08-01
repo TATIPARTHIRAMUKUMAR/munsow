@@ -73,56 +73,200 @@ function Url_Routes() {
   return (
     <BrowserRouter>
       <Routes>
-        {
-          (GLOBAL_CONSTANTS?.loggedIn || true) &&
+        {(GLOBAL_CONSTANTS?.loggedIn || true) && (
           <>
-            {
-              GLOBAL_CONSTANTS?.user_cred?.role_id == 1 ? <>
-                <Route exact path="/quiz" element={<HeaderFooterLayout Component={<QuizListing />} />} />
+            {GLOBAL_CONSTANTS?.user_cred?.role_id == 1 ? (
+              <>
+                <Route
+                  exact
+                  path="/quiz"
+                  element={<HeaderFooterLayout Component={<QuizListing />} />}
+                />
                 <Route exact path="/users" element={<HeaderFooterLayout Component={<Users />} />} />
-                <Route exact path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
-                <Route exact path="/studentList" element={<HeaderFooterLayout Component={<Students />} />} />
-                <Route exact path="/teachersList" element={<HeaderFooterLayout Component={<Teachers />} />} />
+                <Route
+                  exact
+                  path="/profile"
+                  element={<HeaderFooterLayout Component={<Profile />} />}
+                />
+                <Route
+                  exact
+                  path="/studentList"
+                  element={<HeaderFooterLayout Component={<Students />} />}
+                />
+                <Route
+                  exact
+                  path="/teachersList"
+                  element={<HeaderFooterLayout Component={<Teachers />} />}
+                />
                 {/* <Route exact path="/adminDashboard" element={<HeaderFooterLayout Component={<AdminDashboard />} />} /> */}
-                <Route exact path="/addStudent" element={<HeaderFooterLayout Component={<AddStudents />} />} />
-                <Route exact path="/addTeacher" element={<HeaderFooterLayout Component={<AddTeachers />} />} />
-                <Route exact path="/summary" element={<HeaderFooterLayout Component={<Summary />} />} />
-                <Route exact path="/emotionSensing" element={<HeaderFooterLayout Component={<EmotionSensing />} />} />
+                <Route
+                  exact
+                  path="/addStudent"
+                  element={<HeaderFooterLayout Component={<AddStudents />} />}
+                />
+                <Route
+                  exact
+                  path="/addTeacher"
+                  element={<HeaderFooterLayout Component={<AddTeachers />} />}
+                />
+                <Route
+                  exact
+                  path="/summary"
+                  element={<HeaderFooterLayout Component={<Summary />} />}
+                />
+                <Route
+                  exact
+                  path="/emotionSensing"
+                  element={<HeaderFooterLayout Component={<EmotionSensing />} />}
+                />
                 {/* <Route exact path="/ksanalysis" element={<HeaderFooterLayout Component={<KSAnalysis />} />} /> */}
-                <Route exact path="/hardskills" element={<HeaderFooterLayout Component={<HardSkills />} />} />
-                <Route exact path="/softskills" element={<HeaderFooterLayout Component={<SoftSkills />} />} />
-                <Route exact path="/skills" element={<HeaderFooterLayout Component={<Skills />} />} />
-                <Route exact path="/behaviourAnalysis" element={<HeaderFooterLayout Component={<BehaviourAnalysis />} />} />
-                <Route exact path="/practicalThinking" element={<HeaderFooterLayout Component={<PracticalThinking />} />} />
-                <Route exact path="/adminHelp" element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />} />
-                <Route exact path="/adminSettings" element={<HeaderFooterLayout Component={<SettingsPageAdmin />} />} />
-                <Route exact path="/configurations" element={<HeaderFooterLayout Component={<Configurations />} />} />
-
-              </> : <>
-                <Route exact path="/report" element={<HeaderFooterLayout Component={<ReportIndex />} />} />
-                <Route exact path="/reportView" element={<HeaderFooterLayout Component={<NewUserReport />} />} />
-                <Route exact path="/profile" element={<HeaderFooterLayout Component={<Profile />} />} />
-                <Route exact path="/interview" element={<HeaderFooterLayout Component={<LoadQuestionsData />} />} />
-                <Route exact path="/interview-results" element={<HeaderFooterLayout Component={<LoadResultsData />} />} />
-                <Route exact path="/video-analysis" element={<HeaderFooterLayout Component={<VideoAnalysis />} />} />
-                <Route exact path="/speech-analysis" element={<HeaderFooterLayout Component={<SpeechAnalysis />} />} />
-                <Route exact path="/practice" element={<HeaderFooterLayout Component={<StepperComponent />} />} />
-                <Route exact path="/notifications" element={<HeaderFooterLayout Component={<NotificationsPage />} />} />
-                <Route exact path="/help" element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />} />
-                <Route exact path="/settings" element={<HeaderFooterLayout Component={<SettingsPage />} />} />
-                <Route exact path="/studentDashboard" element={<HeaderFooterLayout Component={<StudentDashboard />} />} />
-                <Route exact path="/studentDashboardScreening" element={<HeaderFooterLayout Component={<StudentDashboardScreenig />} />} />
-                <Route exact path="/studentMRCLM" element={<HeaderFooterLayout Component={<StudentMRCLM />} />} />
-                <Route exact path="/studentMRCLM/view/:id" element={<HeaderFooterLayout Component={<TopicBrief />} />} /> 
-                <Route exact path="/studentMRCLM/quiz_view/:id" element={<HeaderFooterLayout Component={<QuizBrief />} />} /> 
+                <Route
+                  exact
+                  path="/hardskills"
+                  element={<HeaderFooterLayout Component={<HardSkills />} />}
+                />
+                <Route
+                  exact
+                  path="/softskills"
+                  element={<HeaderFooterLayout Component={<SoftSkills />} />}
+                />
+                <Route
+                  exact
+                  path="/skills"
+                  element={<HeaderFooterLayout Component={<Skills />} />}
+                />
+                <Route
+                  exact
+                  path="/behaviourAnalysis"
+                  element={<HeaderFooterLayout Component={<BehaviourAnalysis />} />}
+                />
+                <Route
+                  exact
+                  path="/practicalThinking"
+                  element={<HeaderFooterLayout Component={<PracticalThinking />} />}
+                />
+                <Route
+                  exact
+                  path="/adminHelp"
+                  element={<HeaderFooterLayout Component={<HelpSupportAdmin />} />}
+                />
+                <Route
+                  exact
+                  path="/adminSettings"
+                  element={<HeaderFooterLayout Component={<SettingsPageAdmin />} />}
+                />
+                <Route
+                  exact
+                  path="/configurations"
+                  element={<HeaderFooterLayout Component={<Configurations />} />}
+                />
               </>
-            }
+            ) : (
+              <>
+                <Route
+                  exact
+                  path="/report"
+                  element={<HeaderFooterLayout Component={<ReportIndex />} />}
+                />
+                <Route
+                  exact
+                  path="/reportView"
+                  element={<HeaderFooterLayout Component={<NewUserReport />} />}
+                />
+                <Route
+                  exact
+                  path="/profile"
+                  element={<HeaderFooterLayout Component={<Profile />} />}
+                />
+                <Route
+                  exact
+                  path="/interview"
+                  element={<HeaderFooterLayout Component={<LoadQuestionsData />} />}
+                />
+                <Route
+                  exact
+                  path="/interview-results"
+                  element={<HeaderFooterLayout Component={<LoadResultsData />} />}
+                />
+                <Route
+                  exact
+                  path="/video-analysis"
+                  element={<HeaderFooterLayout Component={<VideoAnalysis />} />}
+                />
+                <Route
+                  exact
+                  path="/speech-analysis"
+                  element={<HeaderFooterLayout Component={<SpeechAnalysis />} />}
+                />
+                <Route
+                  exact
+                  path="/practice"
+                  element={<HeaderFooterLayout Component={<StepperComponent />} />}
+                />
+                <Route
+                  exact
+                  path="/notifications"
+                  element={<HeaderFooterLayout Component={<NotificationsPage />} />}
+                />
+                <Route
+                  exact
+                  path="/help"
+                  element={<HeaderFooterLayout Component={<HelpAndSupportPage />} />}
+                />
+                <Route
+                  exact
+                  path="/settings"
+                  element={<HeaderFooterLayout Component={<SettingsPage />} />}
+                />
+                <Route
+                  exact
+                  path="/studentDashboard"
+                  element={<HeaderFooterLayout Component={<StudentDashboard />} />}
+                />
+                <Route
+                  exact
+                  path="/studentDashboardScreening"
+                  element={<HeaderFooterLayout Component={<StudentDashboardScreenig />} />}
+                />
+                <Route
+                  exact
+                  path="/studentMRCLM"
+                  element={<HeaderFooterLayout Component={<StudentMRCLM />} />}
+                />
+                <Route
+                  exact
+                  path="/studentMRCLM/view/:id"
+                  element={<HeaderFooterLayout Component={<TopicBrief />} />}
+                />
+                <Route
+                  exact
+                  path="/studentMRCLM/quiz_view/:id"
+                  element={<HeaderFooterLayout Component={<QuizBrief />} />}
+                />
+              </>
+            )}
           </>
-        }
-        <Route exact path="/adminDashboard" element={<HeaderFooterLayout Component={<AdminDashboard />} />} />
-        <Route exact path="/screeningUsers" element={<HeaderFooterLayout Component={<LinksList />} />} />
-        <Route exact path="/screeningUsers/createLink" element={<HeaderFooterLayout Component={<CreateLink />} />} />
-        <Route exact path="/placements" element={<HeaderFooterLayout Component={<Placements />} />} />
+        )}
+        <Route
+          exact
+          path="/adminDashboard"
+          element={<HeaderFooterLayout Component={<AdminDashboard />} />}
+        />
+        <Route
+          exact
+          path="/screeningUsers"
+          element={<HeaderFooterLayout Component={<LinksList />} />}
+        />
+        <Route
+          exact
+          path="/screeningUsers/createLink"
+          element={<HeaderFooterLayout Component={<CreateLink />} />}
+        />
+        <Route
+          exact
+          path="/placements"
+          element={<HeaderFooterLayout Component={<Placements />} />}
+        />
 
         <Route exact path="/" element={<StudentLogin />} />
         <Route exact path="/institutionLogin" element={<Login />} />
@@ -130,30 +274,91 @@ function Url_Routes() {
         <Route exact path="/studentRegistration/:id" element={<ScreeningUserRegister />} />
         <Route exact path="/registration" element={<Register />} />
         {/* <Route path="*" element={<Navigate to="/" />} /> */}
-        <Route exact path="/questionBanksList/questionBank" element={<HeaderFooterLayout Component={<QuestionBankForm />} />} />
-        <Route exact path="/questionBanksList" element={<HeaderFooterLayout Component={<QuestionBanksList />} />} />
-        <Route exact path="/questionBanksList/view/:id" element={<HeaderFooterLayout Component={<QuestionBankView />} />} />
-
-
+        <Route
+          exact
+          path="/questionBanksList/questionBank"
+          element={<HeaderFooterLayout Component={<QuestionBankForm />} />}
+        />
+        <Route
+          exact
+          path="/questionBanksList"
+          element={<HeaderFooterLayout Component={<QuestionBanksList />} />}
+        />
+        <Route
+          exact
+          path="/questionBanksList/view/:id"
+          element={<HeaderFooterLayout Component={<QuestionBankView />} />}
+        />
 
         {/* <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicandSubtopic />} />} /> */}
-        <Route exact path="/topics" element={<HeaderFooterLayout Component={<TopicSubtopic />} />} />
-        <Route exact path="/courseList/create" element={<HeaderFooterLayout Component={<CustomStepperComponent />} />} />
+        <Route
+          exact
+          path="/topics"
+          element={<HeaderFooterLayout Component={<TopicSubtopic />} />}
+        />
+        <Route
+          exact
+          path="/courseList/create"
+          element={<HeaderFooterLayout Component={<CustomStepperComponent />} />}
+        />
         <Route exact path="/teacherLogin" element={<TeacherLogin />} />
-        <Route exact path="/comingSoon"  element={<HeaderFooterLayout Component={<ComingSoonPage />} />} />
-        <Route exact path="/courseList"  element={<HeaderFooterLayout Component={<CourseList />} />} />
-        <Route exact path="/courseList/view/:id" element={<HeaderFooterLayout Component={<CourseView />} />} />
+        <Route
+          exact
+          path="/comingSoon"
+          element={<HeaderFooterLayout Component={<ComingSoonPage />} />}
+        />
+        <Route
+          exact
+          path="/courseList"
+          element={<HeaderFooterLayout Component={<CourseList />} />}
+        />
+        <Route
+          exact
+          path="/courseList/view/:id"
+          element={<HeaderFooterLayout Component={<CourseView />} />}
+        />
 
-        <Route exact path="/studentCourseList"  element={<HeaderFooterLayout Component={<StudentCourseList />} />} />
-        <Route exact path="/studentCourseList/view/:id" element={<HeaderFooterLayout Component={<StudentCourseView />} />} />
-        <Route exact path="/studentCourseList/edit/:id" element={<HeaderFooterLayout Component={<CourseEdit />} />} />
-        <Route exact path="/assignments"  element={<HeaderFooterLayout Component={<AssignmentList />} />} />
-        <Route exact path="/assignments/createAssignment"  element={<HeaderFooterLayout Component={<CreateAssignment />} />} />
-        <Route exact path="/assignments/view/:id" element={<HeaderFooterLayout Component={<AssignmentView />} />} />
+        <Route
+          exact
+          path="/studentCourseList"
+          element={<HeaderFooterLayout Component={<StudentCourseList />} />}
+        />
+        <Route
+          exact
+          path="/studentCourseList/view/:id"
+          element={<HeaderFooterLayout Component={<StudentCourseView />} />}
+        />
+        <Route
+          exact
+          path="/studentCourseList/edit/:id"
+          element={<HeaderFooterLayout Component={<CourseEdit />} />}
+        />
+        <Route
+          exact
+          path="/assignments"
+          element={<HeaderFooterLayout Component={<AssignmentList />} />}
+        />
+        <Route
+          exact
+          path="/assignments/createAssignment"
+          element={<HeaderFooterLayout Component={<CreateAssignment />} />}
+        />
+        <Route
+          exact
+          path="/assignments/view/:id"
+          element={<HeaderFooterLayout Component={<AssignmentView />} />}
+        />
 
-        <Route exact path="/studentQuizList"  element={<HeaderFooterLayout Component={<StudentQuizList />} />} />
-        <Route exact path="/studentQuizList/view/:id"  element={<HeaderFooterLayout Component={<QuizPage />} />} />
-
+        <Route
+          exact
+          path="/studentQuizList"
+          element={<HeaderFooterLayout Component={<StudentQuizList />} />}
+        />
+        <Route
+          exact
+          path="/studentQuizList/view/:id"
+          element={<HeaderFooterLayout Component={<QuizPage />} />}
+        />
       </Routes>
     </BrowserRouter>
   );

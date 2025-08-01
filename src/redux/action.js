@@ -13,7 +13,7 @@ export const user_login = (data, callback) => {
       .post(`${GLOBAL_CONSTANTS.backend_url}user/login`, JSON.stringify(data), {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         if (!resp?.data?.status) {
           toast.error(resp?.data?.message);
         } else {
@@ -28,7 +28,7 @@ export const user_login = (data, callback) => {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -42,14 +42,10 @@ export const institution_login = (data, callback) => {
       "Content-type": "application/json",
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}institution/login`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}institution/login`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (!resp?.data?.status) {
           toast.error(resp?.data?.message);
         } else {
@@ -64,7 +60,7 @@ export const institution_login = (data, callback) => {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -78,14 +74,10 @@ export const user_signup = (data, callback) => {
       "Content-type": "application/json",
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}user/register`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/register`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         console.log("resp", resp);
         if (resp?.data?.status == false) {
           toast.error(resp?.data?.message);
@@ -95,7 +87,7 @@ export const user_signup = (data, callback) => {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -109,14 +101,10 @@ export const screeining_user_signup = (data, callback) => {
       "Content-type": "application/json",
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}user/register_screening_user`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/register_screening_user`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         console.log("resp", resp);
         if (resp?.data?.status == false) {
           toast.error(resp?.data?.message);
@@ -126,7 +114,7 @@ export const screeining_user_signup = (data, callback) => {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -134,7 +122,7 @@ export const screeining_user_signup = (data, callback) => {
   };
 };
 
-const getQuizList = (data) => ({
+const getQuizList = data => ({
   type: types.QUIZ_LIST,
   payload: data,
 });
@@ -147,19 +135,19 @@ export const loadQuizList = () => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/quiz/full_list`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getQuizList(resp?.data?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getQuizView = (data) => ({
+const getQuizView = data => ({
   type: types.QUIZ_DATA,
   payload: data,
 });
 
-export const loadQuizQuestions = (id) => {
+export const loadQuizQuestions = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -167,14 +155,14 @@ export const loadQuizQuestions = (id) => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/assignment/get/${id}`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getQuizView(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getLessonList = (data) => ({
+const getLessonList = data => ({
   type: types.LESSON_LIST,
   payload: data,
 });
@@ -185,33 +173,32 @@ export const loadLessonList = () => {
       "Content-type": "application/json",
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/lesson/${GLOBAL_CONSTANTS?.user_cred?.user_id}/list`,
-        { headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/lesson/${GLOBAL_CONSTANTS?.user_cred?.user_id}/list`, {
+        headers,
+      })
+      .then(resp => {
         dispatch(getLessonList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getLessonView = (data) => ({
+const getLessonView = data => ({
   type: types.LESSON_VIEW,
   payload: data,
 });
 
-export const loadLessonView = (id) => {
+export const loadLessonView = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/lesson/${id}/get`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getLessonView(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
@@ -222,17 +209,13 @@ export const quizSubmit = (data, callback) => {
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}assignment/submit`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}assignment/submit`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         callback(resp?.data);
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -249,10 +232,10 @@ export const quizCreate = (data, callback) => {
       .post(`${GLOBAL_CONSTANTS.backend_url}quiz/upsert_quiz`, data, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         callback(resp?.data);
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -260,7 +243,7 @@ export const quizCreate = (data, callback) => {
   };
 };
 
-const getUserList = (data) => ({
+const getUserList = data => ({
   type: types.USERS_LIST,
   payload: data,
 });
@@ -272,10 +255,10 @@ export const loadUserList = () => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/auth/user_list`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getUserList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
@@ -289,7 +272,7 @@ export const activateUser = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}auth/${id}/activate`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         callback(resp?.data);
         toast.update(note, {
           render: "User Activated",
@@ -298,7 +281,7 @@ export const activateUser = (id, callback) => {
           autoClose: 2000,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         toast.update(note, {
           render: "Something went wrong",
           type: "success",
@@ -320,7 +303,7 @@ export const deactivateUser = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}auth/${id}/deactivate`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         callback(resp?.data);
         toast.update(note, {
           render: "User Deactivated",
@@ -329,7 +312,7 @@ export const deactivateUser = (id, callback) => {
           autoClose: 2000,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         toast.update(note, {
           render: "Something went wrong",
           type: "success",
@@ -350,7 +333,7 @@ export const activateQuiz = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}quiz/${id}/activate`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         callback(resp?.data);
         toast.update(note, {
           render: "Quiz Activated",
@@ -359,7 +342,7 @@ export const activateQuiz = (id, callback) => {
           autoClose: 2000,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         toast.update(note, {
           render: "Something went wrong",
           type: "success",
@@ -381,7 +364,7 @@ export const deactivateQuiz = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}quiz/${id}/deactivate`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         callback(resp?.data);
         toast.update(note, {
           render: "Quiz Deactivated",
@@ -390,7 +373,7 @@ export const deactivateQuiz = (id, callback) => {
           autoClose: 2000,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         toast.update(note, {
           render: "Something went wrong",
           type: "success",
@@ -413,7 +396,7 @@ export const deleteQuiz = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}assignment/delete/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         callback(resp?.data);
         toast.update(note, {
           render: "Assignment deleted",
@@ -422,7 +405,7 @@ export const deleteQuiz = (id, callback) => {
           autoClose: 2000,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(note, {
           render: "Something went wrong",
           type: "success",
@@ -442,14 +425,14 @@ export const downloadQuiz = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}quiz/${id}/download_quiz`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         callback(resp?.data);
       })
-      .catch((error) => {});
+      .catch(error => {});
   };
 };
 
-const getUserStats = (data) => ({
+const getUserStats = data => ({
   type: types.USER_STATS,
   payload: data,
 });
@@ -462,14 +445,14 @@ export const loadUserStats = () => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/user/statistics`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getUserStats(resp?.data?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getAdminStats = (data) => ({
+const getAdminStats = data => ({
   type: types.ADMIN_STATS,
   payload: data,
 });
@@ -483,10 +466,10 @@ export const loadAdminStats = () => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}/auth/admin_statistics`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getAdminStats(resp?.data?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
@@ -496,14 +479,10 @@ export const user_update = (data, callback) => {
       "Content-type": "application/json",
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}auth/update_user`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}auth/update_user`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.error(resp?.data?.error);
         } else {
@@ -511,7 +490,7 @@ export const user_update = (data, callback) => {
         }
         callback(resp?.data);
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -525,14 +504,10 @@ export const forgot_password = (data, callback) => {
       "Content-type": "application/json",
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}user/reset_password`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/reset_password`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.error(resp?.data?.error);
         } else {
@@ -540,7 +515,7 @@ export const forgot_password = (data, callback) => {
         }
         callback(resp?.data);
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -550,12 +525,12 @@ export const forgot_password = (data, callback) => {
 
 //---------------------------------------------
 
-const getInstituteData = (data) => ({
+const getInstituteData = data => ({
   type: types.INSTITUTE_LIST,
   payload: data,
 });
 
-export const registerInstitute = (data) => {
+export const registerInstitute = data => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -565,14 +540,14 @@ export const registerInstitute = (data) => {
       .post(`${GLOBAL_CONSTANTS.backend_url}institution/register`, data, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getInstituteData(resp.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getcountriesData = (data) => ({
+const getcountriesData = data => ({
   type: types.COUNTRIES_LIST,
   payload: data,
 });
@@ -588,21 +563,21 @@ export const getcountries = () => {
       .get(`${GLOBAL_CONSTANTS.backend_url}institution/country_list`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getcountriesData(resp.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
 // #region admin Stats
 
-const getInstitutionStats = (data) => ({
+const getInstitutionStats = data => ({
   type: types.INSTITUTION_STATS,
   payload: data,
 });
 
-export const loadInstitutionStats = (params) => {
+export const loadInstitutionStats = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -613,28 +588,24 @@ export const loadInstitutionStats = (params) => {
         headers,
         params,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getInstitutionStats(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getStudentList = (data) => ({
+const getStudentList = data => ({
   type: types.STUDENTS_LIST,
   payload: data,
 });
 
-export const loadStudentList = (param) => {
+export const loadStudentList = param => {
   return function (dispatch) {
     let params = {};
 
     for (const key in param) {
-      if (
-        param[key] !== undefined &&
-        param[key] !== null &&
-        param[key] != ""
-      ) {
+      if (param[key] !== undefined && param[key] !== null && param[key] != "") {
         params[key] = param[key];
       }
     }
@@ -645,19 +616,19 @@ export const loadStudentList = (param) => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/user/list`, { params, headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getStudentList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getTeachersList = (data) => ({
+const getTeachersList = data => ({
   type: types.TEACHERS_LIST,
   payload: data,
 });
 
-export const loadTeachersList = (params) => {
+export const loadTeachersList = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -665,14 +636,14 @@ export const loadTeachersList = (params) => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/user/list`, { params, headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getTeachersList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-export const uploadUser = (data) => {
+export const uploadUser = data => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -680,58 +651,51 @@ export const uploadUser = (data) => {
     };
     axios
       .post(`${GLOBAL_CONSTANTS?.backend_url}/user/upload`, data, { headers })
-      .then((resp) => {
+      .then(resp => {
         console.log(resp);
         toast.success(resp?.data?.message);
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-export const uploadConfigurations = (data) => {
+export const uploadConfigurations = data => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/upload_configurations`,
-        data,
-        { headers }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS?.backend_url}/institution/upload_configurations`, data, { headers })
+      .then(resp => {
         console.log(resp);
         toast.success(resp?.data?.message);
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-export const getCourseList = (data) => ({
+export const getCourseList = data => ({
   type: types.COURSE_LIST,
   payload: data,
 });
 
-export const loadCourseList = (params) => {
+export const loadCourseList = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/course_list?${params}`,
-        { headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/course_list?${params}`, { headers })
+      .then(resp => {
         dispatch(getCourseList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getBrachList = (data) => ({
+const getBrachList = data => ({
   type: types.BRANCH_LIST,
   payload: data,
 });
@@ -743,69 +707,60 @@ export const loadBrachList = (params = {}) => {
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/branch_list?${params}`,
-        { headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/branch_list?${params}`, { headers })
+      .then(resp => {
         dispatch(getBrachList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-export const getDepartmentList = (data) => ({
+export const getDepartmentList = data => ({
   type: types.DEPARTMENT_LIST,
   payload: data,
 });
 
-export const loadDepartmentList = (params) => {
+export const loadDepartmentList = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/department_list?${params}`,
-        { headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/department_list?${params}`, { headers })
+      .then(resp => {
         dispatch(getDepartmentList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-export const getUsersList = (data) => ({
+export const getUsersList = data => ({
   type: types.USERS_LIST_BY_DEPARTMENT,
   payload: data,
 });
 
-export const loadUsersList = (params) => {
+export const loadUsersList = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/user/user_by_department_list?${params}`,
-        { headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/user/user_by_department_list?${params}`, { headers })
+      .then(resp => {
         dispatch(getUsersList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getInstitutionList = (data) => ({
+const getInstitutionList = data => ({
   type: types.INSTITUTION_LIST,
   payload: data,
 });
 
-export const loadInstitutionList = (params) => {
+export const loadInstitutionList = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -816,19 +771,19 @@ export const loadInstitutionList = (params) => {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getInstitutionList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getCountryList = (data) => ({
+const getCountryList = data => ({
   type: types.COUNTRY_LIST,
   payload: data,
 });
 
-export const loadCountryList = (params) => {
+export const loadCountryList = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -839,19 +794,19 @@ export const loadCountryList = (params) => {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getCountryList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getPracticalThinking = (data) => ({
+const getPracticalThinking = data => ({
   type: types.PRACTICAL_THINKING,
   payload: data,
 });
 
-export const loadPracticalThinking = (params) => {
+export const loadPracticalThinking = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -862,10 +817,10 @@ export const loadPracticalThinking = (params) => {
         `${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/practical_thinking_analysis`,
         { params, headers }
       )
-      .then((resp) => {
+      .then(resp => {
         dispatch(getPracticalThinking(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
@@ -877,15 +832,11 @@ export const user_create = (data, params, callback) => {
     };
     let toastId = toast("Creating User", { autoClose: false });
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}user/admin_create_user`,
-        JSON.stringify(data),
-        {
-          params,
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/admin_create_user`, JSON.stringify(data), {
+        params,
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -901,7 +852,7 @@ export const user_create = (data, params, callback) => {
           callback();
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -921,7 +872,7 @@ export const user_delete = (params, callback) => {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -937,7 +888,7 @@ export const user_delete = (params, callback) => {
           callback();
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         toast.update(toastId, {
           render: "Something bad happend ",
@@ -960,11 +911,8 @@ export const updateLinkStatus = (id, param_text, callback) => {
       autoClose: false,
     });
     axios
-      .get(
-        `${GLOBAL_CONSTANTS.backend_url}institution/screening/${id}/${param_text}`,
-        { headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS.backend_url}institution/screening/${id}/${param_text}`, { headers })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -983,7 +931,7 @@ export const updateLinkStatus = (id, param_text, callback) => {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         toast.update(toastId, {
           render: "Something bad happend ",
@@ -1004,7 +952,7 @@ export const interviewAllowed = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}user/is_interview_allowed`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         if (resp?.data?.error) {
           let toastId = toast("Checking...", {
             type: "loading",
@@ -1019,7 +967,7 @@ export const interviewAllowed = (id, callback) => {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -1032,17 +980,16 @@ export const getLinkUsers = (id, callback) => {
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS.backend_url}institution/screening_user_list?screening_code=${id}`,
-        { headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS.backend_url}institution/screening_user_list?screening_code=${id}`, {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
         } else {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -1059,12 +1006,10 @@ export const createLink = (payload, callback) => {
       autoClose: false,
     });
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}institution/generate_screening_link`,
-        payload,
-        { headers }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}institution/generate_screening_link`, payload, {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -1081,7 +1026,7 @@ export const createLink = (payload, callback) => {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         toast.update(toastId, {
           render: "Something bad happend ",
@@ -1102,14 +1047,14 @@ export const interviewSkills = (payload, callback) => {
       .post(`${GLOBAL_CONSTANTS.backend_url}user/process_jd`, payload, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         if (resp?.data?.error) {
         } else {
           console.log("resp", resp);
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -1125,49 +1070,49 @@ export const userStatUpdate = (id, endpoint, callback) => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}user/${id}/${endpoint}`, {
         headers: headers,
       })
-      .then((resp) => {
+      .then(resp => {
         console.log("resp", resp);
         if (resp?.data?.status) {
           window.location.reload();
           callback();
         }
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
 // NEW ACTION: Get Interview Results
-const getInterviewResults = (data) => ({
+const getInterviewResults = data => ({
   type: types.INTERVIEW_RESULTS,
   payload: data,
 });
 
-export const loadInterviewResults = (callback) => {
+export const loadInterviewResults = callback => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
-    
+
     console.log("Fetching interview results...");
-    
+
     axios
       .get(`${GLOBAL_CONSTANTS.backend_url}user/list_interviews`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         console.log("Interview results API response:", resp?.data);
-        
+
         if (resp?.data?.status || resp?.data?.satus) {
           dispatch(getInterviewResults(resp?.data));
-          
+
           if (callback) callback(resp?.data);
         } else {
           console.error("Failed to fetch interview results:", resp?.data);
           if (callback) callback(null);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching interview results:", error);
         toast.error("Failed to load interview results", {
           autoClose: 3000,
@@ -1190,19 +1135,19 @@ export const loadSpecificInterviewResult = (interviewId, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}user/interview_result/${interviewId}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         console.log("Specific interview result:", resp?.data);
-        
+
         if (resp?.data?.status || resp?.data?.satus) {
           dispatch(getInterviewResults(resp?.data));
-          
+
           if (callback) callback(resp?.data);
         } else {
           console.error("Failed to fetch specific interview result:", resp?.data);
           if (callback) callback(null);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching specific interview result:", error);
         toast.error("Failed to load interview result", {
           autoClose: 3000,
@@ -1214,7 +1159,7 @@ export const loadSpecificInterviewResult = (interviewId, callback) => {
 
 export const clearInterviewResults = () => {
   return {
-    type: types.CLEAR_INTERVIEW_RESULTS
+    type: types.CLEAR_INTERVIEW_RESULTS,
   };
 };
 
@@ -1222,7 +1167,7 @@ export const clearInterviewResults = () => {
 
 // practice lists
 
-const getHardSkillsList = (data) => ({
+const getHardSkillsList = data => ({
   type: types.HARD_SKILLS_LIST,
   payload: data,
 });
@@ -1238,14 +1183,14 @@ export const loadHardSkillsList = (params = {}) => {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getHardSkillsList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getPlacementTracker = (data) => ({
+const getPlacementTracker = data => ({
   type: types.PLACEMENT_TRCKER,
   payload: data,
 });
@@ -1261,14 +1206,14 @@ export const loadPlacementTracker = (params = {}) => {
         `${GLOBAL_CONSTANTS?.backend_url}institution/placement_tracker/${GLOBAL_CONSTANTS?.user_cred?.id}`,
         { params, headers }
       )
-      .then((resp) => {
+      .then(resp => {
         dispatch(getPlacementTracker(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getSoftSkillsList = (data) => ({
+const getSoftSkillsList = data => ({
   type: types.SOFT_SKILLS_LIST,
   payload: data,
 });
@@ -1284,14 +1229,14 @@ export const loadSoftSkillsList = (params = {}) => {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getSoftSkillsList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getInterviewRolesList = (data) => ({
+const getInterviewRolesList = data => ({
   type: types.INTERVIEW_ROLES_LIST,
   payload: data,
 });
@@ -1303,18 +1248,15 @@ export const loadInterviewRolesList = (params = {}) => {
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/interview_roles_list`,
-        { params, headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/interview_roles_list`, { params, headers })
+      .then(resp => {
         dispatch(getInterviewRolesList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getCompaniesList = (data) => ({
+const getCompaniesList = data => ({
   type: types.COMPANIES_LIST,
   payload: data,
 });
@@ -1330,14 +1272,14 @@ export const loadCompaniesList = (params = {}) => {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getCompaniesList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getReportsList = (data) => ({
+const getReportsList = data => ({
   type: types.USER_REPORT_LIST,
   payload: data,
 });
@@ -1353,69 +1295,65 @@ export const loadReportsList = (params = {}) => {
         `${GLOBAL_CONSTANTS?.backend_url}user/list_interviews?status=completed,report_inprogress,report_generated&user_id=${GLOBAL_CONSTANTS?.user_cred?.id}`,
         { params, headers }
       )
-      .then((resp) => {
+      .then(resp => {
         dispatch(getReportsList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getEmotionStats = (data) => ({
+const getEmotionStats = data => ({
   type: types.EMOTION_STATS,
   payload: data,
 });
 
-export const loadEmotionStats = (params) => {
+export const loadEmotionStats = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/emotion_sensing`,
-        { headers, params }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/emotion_sensing`, {
+        headers,
+        params,
+      })
+      .then(resp => {
         dispatch(getEmotionStats(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getUserReport = (data) => ({
+const getUserReport = data => ({
   type: types.USER_REPORT,
   payload: data,
 });
 
-export const loadUserReport = (report) => {
+export const loadUserReport = report => {
   return function (dispatch) {
     dispatch(getUserReport(report));
   };
 };
 
-const getInterviewQuestions = (data) => ({
+const getInterviewQuestions = data => ({
   type: types.INTERVIEW_QUESTIONS,
   payload: data,
 });
 
-export const loadQuestions = (data) => {
+export const loadQuestions = data => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
-      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
-    
+
     // Convert data to JSON string if it's not already
-    const payload = typeof data === 'string' ? data : JSON.stringify(data);
-    
+    const payload = typeof data === "string" ? data : JSON.stringify(data);
+
     return axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}user/register_interview`,
-        payload,
-        { headers }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/register_interview`, payload, { headers })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.error(resp?.data?.error);
           return Promise.reject(new Error(resp?.data?.error));
@@ -1424,11 +1362,10 @@ export const loadQuestions = (data) => {
           return Promise.resolve(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error loading questions:", error.response || error);
         toast.error(
-          error?.response?.data?.message || 
-          "Something went wrong with loading questions",
+          error?.response?.data?.message || "Something went wrong with loading questions",
           { autoClose: 3000 }
         );
         return Promise.reject(error);
@@ -1440,30 +1377,28 @@ export const prepare_interview = (data, callback) => {
   return function () {
     var headers = {
       "Content-type": "application/json",
-      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
-    
+
     let toastId = toast("Wait .. redirecting to Interview Section", {
       autoClose: 5000,
     });
-    
+
     // If no data is provided, use a minimal payload
-    const payload = data ? 
-      (typeof data === 'string' ? data : JSON.stringify(data)) : 
-      JSON.stringify({
-        interview_type: "skill_interview",
-        specifications: {
-          level: "medium"
-        }
-      });
-    
+    const payload = data
+      ? typeof data === "string"
+        ? data
+        : JSON.stringify(data)
+      : JSON.stringify({
+          interview_type: "skill_interview",
+          specifications: {
+            level: "medium",
+          },
+        });
+
     return axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}user/register_interview`,
-        payload,
-        { headers }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/register_interview`, payload, { headers })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -1481,13 +1416,16 @@ export const prepare_interview = (data, callback) => {
         }
         return resp;
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Full error object:", error);
         if (error.response) {
           console.error("Response status:", error.response.status);
           console.error("Response headers:", error.response.headers);
-          if (typeof error.response.data === 'string') {
-            console.error("Response data (first 200 chars):", error.response.data.substring(0, 200));
+          if (typeof error.response.data === "string") {
+            console.error(
+              "Response data (first 200 chars):",
+              error.response.data.substring(0, 200)
+            );
           } else {
             console.error("Response data:", error.response.data);
           }
@@ -1507,24 +1445,20 @@ export const submit_interview = (data, callback) => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
-      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`,
+      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}user/submit_answer`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}user/submit_answer`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (!resp?.data?.status) {
           toast.error(resp?.data?.message);
         } else {
           callback(resp?.data);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -1532,86 +1466,86 @@ export const submit_interview = (data, callback) => {
   };
 };
 
-const getBehaviourAnalysis = (data) => ({
+const getBehaviourAnalysis = data => ({
   type: types.BEHAVIOUR_ANALYSIS,
   payload: data,
 });
 
-export const loadBehaviourAnalysis = (params) => {
+export const loadBehaviourAnalysis = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/behavioral_analysis`,
-        { params, headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/behavioral_analysis`, {
+        params,
+        headers,
+      })
+      .then(resp => {
         dispatch(getBehaviourAnalysis(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getKSAnalysis = (data) => ({
+const getKSAnalysis = data => ({
   type: types.KS_ANALYSIS,
   payload: data,
 });
 
-export const loadKSAnalysis = (params) => {
+export const loadKSAnalysis = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/ks_analysis`,
-        { params, headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/deep_analysis/ks_analysis`, {
+        params,
+        headers,
+      })
+      .then(resp => {
         dispatch(getKSAnalysis(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getStatus = (data) => ({
+const getStatus = data => ({
   type: types.STATUS_LIST,
   payload: data,
 });
 
-export const loadStatus = (params) => {
+export const loadStatus = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
       Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
-      .get(
-        `${GLOBAL_CONSTANTS?.backend_url}/admin/entity/mapping/interview_mode`,
-        { params, headers }
-      )
-      .then((resp) => {
+      .get(`${GLOBAL_CONSTANTS?.backend_url}/admin/entity/mapping/interview_mode`, {
+        params,
+        headers,
+      })
+      .then(resp => {
         dispatch(getStatus(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-export const setReduxState = (data) => ({
+export const setReduxState = data => ({
   type: types.SET_REDUX_STATE,
   payload: data,
 });
 
-const getSummmaryData = (data) => ({
+const getSummmaryData = data => ({
   type: types.SUMMARY_DATA,
   payload: data,
 });
 
-export const loadSummaryData = (params) => {
+export const loadSummaryData = params => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1622,14 +1556,14 @@ export const loadSummaryData = (params) => {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getSummmaryData(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getCourses = (data) => ({
+const getCourses = data => ({
   type: types.COURSES,
   payload: data,
 });
@@ -1642,14 +1576,14 @@ export const loadcourses = () => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS.backend_url}course/list`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getCourses(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getAssignments = (data) => ({
+const getAssignments = data => ({
   type: types.ASSIGNMENTS,
   payload: data,
 });
@@ -1662,14 +1596,14 @@ export const loadAssignments = () => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}assignment/list`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getAssignments(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getQuestionBanks = (data) => ({
+const getQuestionBanks = data => ({
   type: types.QUESTIONBANKS,
   payload: data,
 });
@@ -1682,19 +1616,19 @@ export const loadQuestionBanks = () => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}question_bank/list`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getQuestionBanks(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getCourseDetails = (data) => ({
+const getCourseDetails = data => ({
   type: types.DETAILED_COURSES,
   payload: data,
 });
 
-export const loadDetailedCourse = (id) => {
+export const loadDetailedCourse = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1702,19 +1636,19 @@ export const loadDetailedCourse = (id) => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}course/get/${id}`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getCourseDetails(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getQuestionBankDetails = (data) => ({
+const getQuestionBankDetails = data => ({
   type: types.DETAILED_QUESTIONBANK,
   payload: data,
 });
 
-export const loadDetailedQuestionBanks = (id) => {
+export const loadDetailedQuestionBanks = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1724,19 +1658,19 @@ export const loadDetailedQuestionBanks = (id) => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}question_bank/get/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getQuestionBankDetails(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getAssignmentDetails = (data) => ({
+const getAssignmentDetails = data => ({
   type: types.DETAILED_ASSIGNMENT,
   payload: data,
 });
 
-export const loadDetailedAssignment = (id) => {
+export const loadDetailedAssignment = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1744,19 +1678,19 @@ export const loadDetailedAssignment = (id) => {
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}assignment/get/${id}`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getAssignmentDetails(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getAssignmentResult = (data) => ({
+const getAssignmentResult = data => ({
   type: types.RESULT_ASSIGNMENT,
   payload: data,
 });
 
-export const loadResultAssignment = (id) => {
+export const loadResultAssignment = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1766,19 +1700,19 @@ export const loadResultAssignment = (id) => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}assignment/result/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getAssignmentResult(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getAssignedUsers = (data) => ({
+const getAssignedUsers = data => ({
   type: types.ASSIGNED_USERS,
   payload: data,
 });
 
-export const loadAssignedUsers = (id) => {
+export const loadAssignedUsers = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1788,14 +1722,14 @@ export const loadAssignedUsers = (id) => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}course/get_users/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getAssignedUsers(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getLinks = (data) => ({
+const getLinks = data => ({
   type: types.SCREENING_USER_LINKS_LIST,
   payload: data,
 });
@@ -1810,10 +1744,10 @@ export const loadLinks = () => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}institution/screening_link_list`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getLinks(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
@@ -1825,14 +1759,10 @@ export const create_course = (data, callback) => {
     };
     let toastId = toast("Creating Course .. please wait", { autoClose: false });
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}course/create`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/create`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -1848,7 +1778,7 @@ export const create_course = (data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -1856,7 +1786,7 @@ export const create_course = (data, callback) => {
   };
 };
 
-export const create_mrclm_course = (data) => {
+export const create_mrclm_course = data => {
   return function (dispatch) {
     const headers = {
       "Content-type": "application/json",
@@ -1866,12 +1796,10 @@ export const create_mrclm_course = (data) => {
     const toastId = toast("Creating Tree .. please wait", { autoClose: false });
 
     return axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}topic_tree/create_course`,
-        JSON.stringify(data),
-        { headers }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/create_course`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.status) {
           toast.update(toastId, {
             render:
@@ -1888,7 +1816,7 @@ export const create_mrclm_course = (data) => {
           });
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.update(toastId, {
           render: "Error creating tree. Please try again.",
           type: "error",
@@ -1900,7 +1828,7 @@ export const create_mrclm_course = (data) => {
   };
 };
 
-export const create_mrclm_quiz = (data) => {
+export const create_mrclm_quiz = data => {
   return function (dispatch) {
     const headers = {
       "Content-type": "application/json",
@@ -1909,14 +1837,10 @@ export const create_mrclm_quiz = (data) => {
     const toastId = toast("Creating Quiz .. please wait", { autoClose: false });
 
     return axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}topic_tree/generate_quiz`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}topic_tree/generate_quiz`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: "Quiz Created",
@@ -1932,11 +1856,9 @@ export const create_mrclm_quiz = (data) => {
           return resp.data;
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.update(toastId, {
-          render:
-            "Error creating quiz: " +
-            (error?.response?.data?.message || "Unknown error"),
+          render: "Error creating quiz: " + (error?.response?.data?.message || "Unknown error"),
           type: "error",
           autoClose: 2000,
         });
@@ -1945,7 +1867,7 @@ export const create_mrclm_quiz = (data) => {
   };
 };
 
-const getTrees = (data) => ({
+const getTrees = data => ({
   type: types.TREE_LIST,
   payload: data,
 });
@@ -1960,19 +1882,19 @@ export const loadTrees = () => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}topic_tree/get_course`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getTrees(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getTreeDetails = (data) => ({
+const getTreeDetails = data => ({
   type: types.DETAILED_TREE,
   payload: data,
 });
 
-export const loadDetailedTree = (id) => {
+export const loadDetailedTree = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -1982,34 +1904,34 @@ export const loadDetailedTree = (id) => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}topic_tree/get_course_tree/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getTreeDetails(resp?.data?.course));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getQuizDetails = (data) => ({
+const getQuizDetails = data => ({
   type: types.DETAILED_QUIZ,
   payload: data,
 });
 
-export const loadDetailedQuiz = (id) => {
+export const loadDetailedQuiz = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
-      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`
+      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}topic_tree/get_quiz/${id}`, { headers })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getQuizDetails(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getGlitchersList = (data) => ({
+const getGlitchersList = data => ({
   type: types.GLITCHERS_LIST,
   payload: data,
 });
@@ -2018,26 +1940,26 @@ export const loadGlitchersList = (params = {}) => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
-      "Authorization": `Bearer ${GLOBAL_CONSTANTS?.token}`,
+      Authorization: `Bearer ${GLOBAL_CONSTANTS?.token}`,
     };
     axios
       .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/glitchers_list`, {
         params,
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getGlitchersList(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
-const getGlitcherDetails = (data) => ({
+const getGlitcherDetails = data => ({
   type: types.GLITCHER_DETAILS,
   payload: data,
 });
 
-export const loadGlitcherDetails = (id) => {
+export const loadGlitcherDetails = id => {
   return function (dispatch) {
     var headers = {
       "Content-type": "application/json",
@@ -2047,10 +1969,10 @@ export const loadGlitcherDetails = (id) => {
       .get(`${GLOBAL_CONSTANTS?.backend_url}/institution/glitcher/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         dispatch(getGlitcherDetails(resp?.data));
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 };
 
@@ -2062,14 +1984,10 @@ export const create_assignment = (data, callback) => {
     };
     let toastId = toast.loading("Creating Assignment .. please wait");
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}assignment/create`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}assignment/create`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2087,7 +2005,7 @@ export const create_assignment = (data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2105,14 +2023,10 @@ export const assign_users = (data, callback) => {
       autoClose: false,
     });
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}course/assign`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/assign`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2128,7 +2042,7 @@ export const assign_users = (data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2144,14 +2058,10 @@ export const assign_assignment = (data, callback) => {
     };
     let toastId = toast.loading("Assigning to users .. please wait");
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}assignment/assign`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}assignment/assign`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2169,7 +2079,7 @@ export const assign_assignment = (data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2187,14 +2097,10 @@ export const course_content = (data, callback) => {
       autoClose: false,
     });
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}course/create_content`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/create_content`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2210,7 +2116,7 @@ export const course_content = (data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2226,14 +2132,10 @@ export const assignment_update = (data, callback) => {
     };
     let toastId = toast.loading("updating assignment .. please wait");
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}assignment/update`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}assignment/update`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2251,7 +2153,7 @@ export const assignment_update = (data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2272,7 +2174,7 @@ export const delete_course = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}course/delete/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2288,7 +2190,7 @@ export const delete_course = (id, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2309,7 +2211,7 @@ export const delete_question_bank = (id, callback) => {
       .get(`${GLOBAL_CONSTANTS.backend_url}question_bank/delete/${id}`, {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2325,7 +2227,7 @@ export const delete_question_bank = (id, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2343,14 +2245,10 @@ export const track_course = (data, callback) => {
       autoClose: false,
     });
     axios
-      .post(
-        `${GLOBAL_CONSTANTS.backend_url}course/update_task`,
-        JSON.stringify(data),
-        {
-          headers,
-        }
-      )
-      .then((resp) => {
+      .post(`${GLOBAL_CONSTANTS.backend_url}course/update_task`, JSON.stringify(data), {
+        headers,
+      })
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2366,7 +2264,7 @@ export const track_course = (data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });
@@ -2387,7 +2285,7 @@ export const updateUsers = (url, data, callback) => {
       .post(`${GLOBAL_CONSTANTS.backend_url}${url}`, JSON.stringify(data), {
         headers,
       })
-      .then((resp) => {
+      .then(resp => {
         if (resp?.data?.error) {
           toast.update(toastId, {
             render: resp?.data?.error,
@@ -2403,7 +2301,7 @@ export const updateUsers = (url, data, callback) => {
           callback(resp);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(error ?? "Something went wrong", {
           autoClose: 2000,
         });

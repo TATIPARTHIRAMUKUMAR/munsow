@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useDarkMode } from "./../../Dark";
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { create_mrclm_course, loadTrees } from '../../redux/action';
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { create_mrclm_course, loadTrees } from "../../redux/action";
 import { IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const options = [
-  { value: 'images', label: 'Images', color: 'border-red-500', hash: '#EF4444' },
-  { value: 'urls', label: 'URLs', color: 'border-blue-500', hash: '#3B82F6' },
-  { value: 'documents', label: 'PDFs, PPT, Doc', color: 'border-green-500', hash: '#10B981' },
-  { value: 'search', label: 'Search', color: 'border-purple-500', hash: '#8B5CF6' },
+  { value: "images", label: "Images", color: "border-red-500", hash: "#EF4444" },
+  { value: "urls", label: "URLs", color: "border-blue-500", hash: "#3B82F6" },
+  { value: "documents", label: "PDFs, PPT, Doc", color: "border-green-500", hash: "#10B981" },
+  { value: "search", label: "Search", color: "border-purple-500", hash: "#8B5CF6" },
 ];
 
-const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuizClick, textColor, visibleCount }) => {
+const ScrollableCardContainer = ({
+  courses,
+  quizzes,
+  handleCardClick,
+  handleQuizClick,
+  textColor,
+  visibleCount,
+}) => {
   const [visibleStartIndex, setVisibleStartIndex] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const [quizVisibleStartIndex, setQuizVisibleStartIndex] = useState(0);
@@ -29,19 +36,21 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
   };
 
   const handleNext = () => {
-    setVisibleStartIndex((prevIndex) => Math.min(prevIndex + visibleCount, courses.length - visibleCount));
+    setVisibleStartIndex(prevIndex =>
+      Math.min(prevIndex + visibleCount, courses.length - visibleCount)
+    );
   };
 
   const handlePrev = () => {
-    setVisibleStartIndex((prevIndex) => Math.max(prevIndex - visibleCount, 0));
+    setVisibleStartIndex(prevIndex => Math.max(prevIndex - visibleCount, 0));
   };
 
   const handleQuizNext = () => {
-    setQuizVisibleStartIndex((prevIndex) => Math.min(prevIndex + 3, quizzes.length - 3));
+    setQuizVisibleStartIndex(prevIndex => Math.min(prevIndex + 3, quizzes.length - 3));
   };
 
   const handleQuizPrev = () => {
-    setQuizVisibleStartIndex((prevIndex) => Math.max(prevIndex - 3, 0));
+    setQuizVisibleStartIndex(prevIndex => Math.max(prevIndex - 3, 0));
   };
 
   const handleSeeAllQuizzesClick = () => {
@@ -56,21 +65,15 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
     <div className="max-w-7xl p-8">
       <div className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <div className='flex'>
+          <div className="flex">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Continue Learning...</h2>
             {!showAll && courses.length > 4 && (
-              <a
-                className="ml-3 mt-2 cursor-pointer underline"
-                onClick={handleSeeAllClick}
-              >
+              <a className="ml-3 mt-2 cursor-pointer underline" onClick={handleSeeAllClick}>
                 See All
               </a>
             )}
             {showAll && (
-              <a
-                className="ml-3 mt-2 cursor-pointer underline"
-                onClick={handleBackClick}
-              >
+              <a className="ml-3 mt-2 cursor-pointer underline" onClick={handleBackClick}>
                 Go Back
               </a>
             )}
@@ -78,7 +81,7 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
           {courses.length > 4 && !showAll && (
             <div className="flex space-x-2">
               <IconButton
-              className={`group ${visibleStartIndex === 0 ? 'cursor-not-allowed' : ''} 
+                className={`group ${visibleStartIndex === 0 ? "cursor-not-allowed" : ""} 
               w-7 h-7 flex items-center justify-center `}
                 onClick={handlePrev}
                 disabled={visibleStartIndex === 0}
@@ -87,7 +90,7 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
                 <ArrowBackIosIcon className="pl-[5px] text-gray-300" />
               </IconButton>
               <IconButton
-                className={`group ${quizVisibleStartIndex >= courses.length - visibleCount ? 'cursor-not-allowed' : ''} 
+                className={`group ${quizVisibleStartIndex >= courses.length - visibleCount ? "cursor-not-allowed" : ""} 
                 w-7 h-7 flex items-center justify-center `}
                 onClick={handleNext}
                 disabled={visibleStartIndex >= courses.length - visibleCount}
@@ -100,7 +103,7 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {showAll
-            ? courses.map((course) => (
+            ? courses.map(course => (
                 <div
                   key={course.course_id}
                   onClick={() => handleCardClick(course.course_id)}
@@ -108,7 +111,7 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
                 >
                   <h3 className="text-xl font-bold">{course.course_name}</h3>
                   <button
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation(); // Prevent card click from triggering
                       handleCardClick(course.course_id);
                     }}
@@ -118,26 +121,24 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
                   </button>
                 </div>
               ))
-            : courses
-                .slice(visibleStartIndex, visibleStartIndex + visibleCount)
-                .map((course) => (
-                  <div
-                    key={course.course_id}
-                    onClick={() => handleCardClick(course.course_id)}
-                    className="flex justify-between items-center bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-xl transition-shadow"
+            : courses.slice(visibleStartIndex, visibleStartIndex + visibleCount).map(course => (
+                <div
+                  key={course.course_id}
+                  onClick={() => handleCardClick(course.course_id)}
+                  className="flex justify-between items-center bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-xl transition-shadow"
+                >
+                  <h3 className="text-xl font-bold">{course.course_name}</h3>
+                  <button
+                    onClick={e => {
+                      e.stopPropagation(); // Prevent card click from triggering
+                      handleCardClick(course.course_id);
+                    }}
+                    className="bg-teal-400 p-2 w-[40px] rounded-full text-white hover:bg-teal-500 transition-all"
                   >
-                    <h3 className="text-xl font-bold">{course.course_name}</h3>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent card click from triggering
-                        handleCardClick(course.course_id);
-                      }}
-                      className="bg-teal-400 p-2 w-[40px] rounded-full text-white hover:bg-teal-500 transition-all"
-                    >
-                      ▶
-                    </button>
-                  </div>
-                ))}
+                    ▶
+                  </button>
+                </div>
+              ))}
         </div>
       </div>
 
@@ -147,28 +148,25 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
           <div className="flex items-center justify-between mb-4">
             <div className="flex">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">Take a Quiz</h2>
-                {!showAllQuizzes && quizzes.length > 4 && (
-                  <a
-                    className="ml-3 mt-2 cursor-pointer underline"
-                    onClick={handleSeeAllQuizzesClick}
-                  >
-                    See All
-                  </a>
-                )}
-                {showAllQuizzes && (
-                  <a
-                    className="ml-3 mt-2 cursor-pointer underline"
-                    onClick={handleBackQuizzesClick}
-                  >
-                    Go Back
-                  </a>
-                )}
+              {!showAllQuizzes && quizzes.length > 4 && (
+                <a
+                  className="ml-3 mt-2 cursor-pointer underline"
+                  onClick={handleSeeAllQuizzesClick}
+                >
+                  See All
+                </a>
+              )}
+              {showAllQuizzes && (
+                <a className="ml-3 mt-2 cursor-pointer underline" onClick={handleBackQuizzesClick}>
+                  Go Back
+                </a>
+              )}
             </div>
 
             {quizzes.length > 3 && !showAllQuizzes && (
               <div className="flex space-x-2">
                 <IconButton
-                  className={`group ${quizVisibleStartIndex === 0 ? 'cursor-not-allowed' : ''} 
+                  className={`group ${quizVisibleStartIndex === 0 ? "cursor-not-allowed" : ""} 
                   w-7 h-7 flex items-center justify-center `}
                   onClick={handleQuizPrev}
                   disabled={quizVisibleStartIndex === 0}
@@ -177,7 +175,7 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
                   <ArrowBackIosIcon className="pl-[5px] text-gray-300" />
                 </IconButton>
                 <IconButton
-                  className={`group ${quizVisibleStartIndex >= quizzes.length - 3 ? 'cursor-not-allowed' : ''} 
+                  className={`group ${quizVisibleStartIndex >= quizzes.length - 3 ? "cursor-not-allowed" : ""} 
                   w-7 h-7 flex items-center justify-center `}
                   onClick={handleQuizNext}
                   disabled={quizVisibleStartIndex >= quizzes.length - 3}
@@ -262,22 +260,21 @@ const ScrollableCardContainer = ({ courses, quizzes, handleCardClick, handleQuiz
 };
 
 const StudentMRCLM = () => {
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const [descriptionText, setDescriptionText] = useState('');
+  const [searchText, setSearchText] = useState("");
+  const [descriptionText, setDescriptionText] = useState("");
   const [isAddClicked, setIsAddClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { colorTheme } = useSelector((state) => state?.data);
-  const trees = useSelector((state) => state?.data?.treeList?.courses);
+  const { colorTheme } = useSelector(state => state?.data);
+  const trees = useSelector(state => state?.data?.treeList?.courses);
   const reversedTrees = [...(trees || [])].reverse();
-  const quizzes = useSelector((state) => state?.data?.treeList?.quizzes || []);
+  const quizzes = useSelector(state => state?.data?.treeList?.quizzes || []);
   const reversedQuiz = [...(quizzes || [])].reverse();
   const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     dispatch(loadTrees());
@@ -295,7 +292,7 @@ const StudentMRCLM = () => {
   // //     const latestCourseId = trees[trees.length - 1]?.course_id;
   // //     if (latestCourseId) {
   // //       navigate(`/studentMRCLM/view/${latestCourseId}`);
-  // //       setIsAddClicked(false); 
+  // //       setIsAddClicked(false);
   // //     }
   // //   }
   // // }, [trees, isAddClicked, navigate]);
@@ -314,19 +311,16 @@ const StudentMRCLM = () => {
   //     setIsAddClicked(true);
   //   }
   // };
-  
 
   useEffect(() => {
     if (isAddClicked) {
       dispatch(loadTrees());
     }
   }, [dispatch, isAddClicked]);
-  
+
   useEffect(() => {
     if (trees?.length > 0 && isAddClicked) {
-      const latestCourse = trees.find(
-        (course) => course.course_name === searchText
-      );
+      const latestCourse = trees.find(course => course.course_name === searchText);
       if (latestCourse) {
         navigate(`/studentMRCLM/view/${latestCourse.course_id}`);
         setIsAddClicked(false);
@@ -334,11 +328,13 @@ const StudentMRCLM = () => {
       }
     }
   }, [trees, isAddClicked, navigate, searchText]);
-  
+
   const handleAddClick = async () => {
     try {
       setIsLoading(true);
-      const response = await dispatch(create_mrclm_course({ name: searchText, description: descriptionText }));
+      const response = await dispatch(
+        create_mrclm_course({ name: searchText, description: descriptionText })
+      );
       if (response) {
         setIsAddClicked(true);
       }
@@ -349,36 +345,36 @@ const StudentMRCLM = () => {
       closeModal();
     }
   };
-  
-  const handleInputChange = (event) => {
+
+  const handleInputChange = event => {
     setSearchText(event.target.value);
   };
 
-  const handleDescriptionChange = (event) => { 
+  const handleDescriptionChange = event => {
     setDescriptionText(event.target.value);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSearchText(''); 
-    setDescriptionText('');
+    setSearchText("");
+    setDescriptionText("");
   };
 
-  const handleRadioChange = (value) => {
+  const handleRadioChange = value => {
     setSelectedOption(value);
   };
 
   const handleGenerateClick = () => {
-    if (selectedOption === 'search') {
+    if (selectedOption === "search") {
       setIsModalOpen(true);
     }
   };
 
-  const handleCardClick = (courseId) => {
+  const handleCardClick = courseId => {
     navigate(`/studentMRCLM/view/${courseId}`);
   };
 
-  const handleQuizClick = (quizId) => {
+  const handleQuizClick = quizId => {
     navigate(`/studentMRCLM/quiz_view/${quizId}`);
   };
 
@@ -386,9 +382,7 @@ const StudentMRCLM = () => {
     ? colorTheme.dark.selectBackground
     : colorTheme.light.selectBackground;
 
-  const textColor = isDarkMode
-    ? colorTheme.dark.background
-    : colorTheme.light.background;
+  const textColor = isDarkMode ? colorTheme.dark.background : colorTheme.light.background;
 
   return (
     <div className="bg-gradient-to-b from-[#E0F7FA] to-white min-h-screen p-8">
@@ -397,8 +391,11 @@ const StudentMRCLM = () => {
       </h1>
 
       <div className="flex justify-center gap-6 mb-8">
-        {options?.map((option) => (
-          <label key={option?.value} className={`flex items-center ${option?.color} rounded-full border pl-4 p-2 bg-white border-2 cursor-pointer transition-all`}>
+        {options?.map(option => (
+          <label
+            key={option?.value}
+            className={`flex items-center ${option?.color} rounded-full border pl-4 p-2 bg-white border-2 cursor-pointer transition-all`}
+          >
             <span className="px-[50px]">{option?.label}</span>
             <input
               type="radio"
@@ -408,7 +405,7 @@ const StudentMRCLM = () => {
               onChange={() => handleRadioChange(option?.value)}
               className={`w-4 h-4 mr-4`}
               style={{
-                color: option?.hash
+                color: option?.hash,
               }}
             />
           </label>
@@ -416,12 +413,12 @@ const StudentMRCLM = () => {
       </div>
 
       <div className="flex justify-center mb-10">
-        <button 
+        <button
           onClick={handleGenerateClick}
           className="px-8 py-2 rounded-lg shadow-md hover:bg-teal-500 transition-all"
           style={{
             background: linearGradientBackground,
-            color: textColor
+            color: textColor,
           }}
         >
           Generate
@@ -431,10 +428,13 @@ const StudentMRCLM = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="fixed inset-x-[430px] top-[100px] bg-gradient-to-b from-purple-50 to-white border border-2 border-purple-500 rounded-xl p-8 w-[400px] md:w-[80%] lg:w-[53%]">
-            <button onClick={closeModal} className="text-gray-500 hover:text-gray-700 text-3xl float-right">
+            <button
+              onClick={closeModal}
+              className="text-gray-500 hover:text-gray-700 text-3xl float-right"
+            >
               &times;
             </button>
-            <div className='my-[10px] px-[50px] mt-[30px]'>
+            <div className="my-[10px] px-[50px] mt-[30px]">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Enter Your Concept Title</h2>
               </div>
@@ -452,12 +452,12 @@ const StudentMRCLM = () => {
                 onChange={handleDescriptionChange}
               />
               <div className="flex justify-center mt-10">
-                <button 
+                <button
                   onClick={handleAddClick}
                   className="px-20 py-2 rounded-md shadow-lg hover:bg-teal-600 text-bold transition-all"
                   style={{
                     background: linearGradientBackground,
-                    color: textColor
+                    color: textColor,
                   }}
                 >
                   Add
@@ -469,12 +469,12 @@ const StudentMRCLM = () => {
       )}
 
       <ScrollableCardContainer
-        courses={reversedTrees} 
-        quizzes={reversedQuiz} 
-        handleCardClick={handleCardClick} 
-        handleQuizClick={handleQuizClick} 
+        courses={reversedTrees}
+        quizzes={reversedQuiz}
+        handleCardClick={handleCardClick}
+        handleQuizClick={handleQuizClick}
         textColor={textColor}
-        visibleCount={4} 
+        visibleCount={4}
       />
     </div>
   );

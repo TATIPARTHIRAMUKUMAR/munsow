@@ -16,8 +16,9 @@ import { toast } from "react-toastify";
 const StudentRegister = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseList, departmentList, branchList, institutionList } =
-    useSelector((state) => state.data);
+  const { courseList, departmentList, branchList, institutionList } = useSelector(
+    state => state.data
+  );
 
   const [mainData, setMainData] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
@@ -28,51 +29,51 @@ const StudentRegister = () => {
       key: "first_name",
       value: mainData?.first_name ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Last Name",
       key: "last_name",
       value: mainData?.last_name ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Email",
       key: "email",
       value: mainData?.email ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       key: "mobile_number",
       label: "Mobile Number",
       value: mainData?.mobile_number ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Address",
       key: "address",
       value: mainData?.address ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Password",
       key: "password",
       value: mainData?.password ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Institution",
       key: "institution",
       value: mainData?.institution ?? null,
       type: "select",
-      required:true,
+      required: true,
       options:
-        institutionList?.map((o) => ({
+        institutionList?.map(o => ({
           label: o?.institution_name ?? "-",
           value: o?.id,
         })) ?? [],
@@ -81,32 +82,31 @@ const StudentRegister = () => {
       label: "Branch",
       key: "branch",
       value: mainData?.branch ?? null,
-      options: branchList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
+      options: branchList?.map(o => ({ label: o?.name, value: o?.id })) ?? [],
       type: "select",
-      required:true
+      required: true,
     },
     {
       label: "Course",
       key: "course",
       value: mainData?.course ?? null,
       type: "select",
-      required:true,
-      options: courseList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
+      required: true,
+      options: courseList?.map(o => ({ label: o?.name, value: o?.id })) ?? [],
     },
     {
       label: "Department",
       key: "department",
       value: mainData?.department ?? null,
-      options:
-        departmentList?.map((o) => ({ label: o?.name, value: o?.id })) ?? [],
+      options: departmentList?.map(o => ({ label: o?.name, value: o?.id })) ?? [],
       type: "select",
-      required:true
+      required: true,
     },
   ];
 
   const handleInputChange = (key, value) => {
     let temp = { ...mainData };
-  
+
     // When an institution is selected
     if (key === "institution") {
       // Update the institution, reset branch, course, and department
@@ -140,37 +140,25 @@ const StudentRegister = () => {
       // For all other fields, just update the value
       temp[key] = value;
     }
-  
+
     setMainData(temp);
   };
-  
-  
-  
 
   const handleSelectionError = (key, value) => {
     if (key == "branch" && !mainData.institution) {
-      toast.error(
-        "Institution not selected",
-        {
-          autoClose: 2000,
-        }
-      );
+      toast.error("Institution not selected", {
+        autoClose: 2000,
+      });
     } else if (key == "course" && !mainData.branch) {
-      toast.error(
-        "Branch not selected",
-        {
-          autoClose: 2000,
-        }
-      );
+      toast.error("Branch not selected", {
+        autoClose: 2000,
+      });
     } else if (key == "department" && !mainData.course) {
-      toast.error(
-        "Course not selected",
-        {
-          autoClose: 2000,
-        }
-      );
+      toast.error("Course not selected", {
+        autoClose: 2000,
+      });
     }
-  }
+  };
   useEffect(() => {
     // dispatch(loadBrachList());
     // dispatch(loadCourseList());
@@ -191,18 +179,20 @@ const StudentRegister = () => {
       password: mainData?.password,
       course_id: mainData?.course?.value,
     };
-    dispatch(user_signup(payload, (test) => {
-      setMainData({});
-      console.log("test", test);
-      navigate("../", { replace: true });
-    }));
-
+    dispatch(
+      user_signup(payload, test => {
+        setMainData({});
+        console.log("test", test);
+        navigate("../", { replace: true });
+      })
+    );
   };
 
   useEffect(() => {
-    const requiredFields = userFeilds.filter((field) => field.required);
+    const requiredFields = userFeilds.filter(field => field.required);
     const isValid =
-      requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) 
+      requiredFields.every(field => mainData[field.key] !== "") &&
+      requiredFields.every(field => mainData[field.key] !== undefined);
     setIsFormValid(isValid);
   }, [mainData]);
 
@@ -212,12 +202,9 @@ const StudentRegister = () => {
       style={{ backdropFilter: "" }}
     >
       <div className="bg-white  flex flex-col justify-center p-4 rounded-xl shadow-2xl min-w-[70%] max-w-[80%]">
-        <div className="p-4 font-medium text-2xl">
-          {" "}
-          Student Registration Form{" "}
-        </div>
+        <div className="p-4 font-medium text-2xl"> Student Registration Form </div>
         <div className="grid grid-cols-2 gap-8 bg-white p-4">
-          {userFeilds?.map((o) => (
+          {userFeilds?.map(o => (
             <>
               {o?.type === "select" ? (
                 <>
@@ -225,22 +212,20 @@ const StudentRegister = () => {
                     size="small"
                     fullWidth
                     disablePortal
-                    value={o?.value || null}  
+                    value={o?.value || null}
                     // value={o?.value}
                     defaultValue={o?.value}
                     id="combo-box-demo"
                     options={o?.options ?? []}
-                    renderInput={(params) => (
+                    renderInput={params => (
                       <TextField
                         {...params}
-                        label={(
+                        label={
                           <div>
                             {o?.label}
-                            {o?.required && (
-                              <span style={{ color: 'red' }}>*</span>
-                            )}
+                            {o?.required && <span style={{ color: "red" }}>*</span>}
                           </div>
-                        )}
+                        }
                         InputProps={{
                           ...params.InputProps,
                           style: {
@@ -261,17 +246,15 @@ const StudentRegister = () => {
                 <TextField
                   key={o?.key}
                   type={o?.type}
-                  label={(
+                  label={
                     <div>
                       {o?.label}
-                      {o?.required && (
-                        <span style={{ color: 'red' }}>*</span>
-                      )}
+                      {o?.required && <span style={{ color: "red" }}>*</span>}
                     </div>
-                  )}
+                  }
                   value={o?.value}
                   size="small"
-                  onChange={(e) => {
+                  onChange={e => {
                     handleInputChange(o?.key, e.target.value);
                   }}
                   InputProps={{
@@ -279,7 +262,6 @@ const StudentRegister = () => {
                       borderRadius: "0.4rem",
                     },
                   }}
-
                 />
               )}
             </>
@@ -289,7 +271,7 @@ const StudentRegister = () => {
           <Button
             variant="outlined"
             onClick={() => {
-              navigate(-1)
+              navigate(-1);
             }}
           >
             Back

@@ -19,13 +19,14 @@ const ScreeningUserRegister = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseList, departmentList, branchList, institutionList } =
-    useSelector((state) => state.data);
+  const { courseList, departmentList, branchList, institutionList } = useSelector(
+    state => state.data
+  );
 
   const [mainData, setMainData] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
-  const [entityType, setEntityType] = useState(""); 
-  const { linksList } = useSelector((state) => state?.data);
+  const [entityType, setEntityType] = useState("");
+  const { linksList } = useSelector(state => state?.data);
 
   const userFeilds = [
     {
@@ -33,42 +34,42 @@ const ScreeningUserRegister = () => {
       key: "first_name",
       value: mainData?.first_name ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Last Name",
       key: "last_name",
       value: mainData?.last_name ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Email",
       key: "email",
       value: mainData?.email ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       key: "mobile_number",
       label: "Mobile Number",
       value: mainData?.mobile_number ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Address",
       key: "address",
       value: mainData?.address ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     {
       label: "Password",
       key: "password",
       value: mainData?.password ?? "",
       type: "text",
-      required:true
+      required: true,
     },
     // {
     //   label: "Institution",
@@ -127,7 +128,7 @@ const ScreeningUserRegister = () => {
 
   const handleInputChange = (key, value) => {
     let temp = { ...mainData };
-  
+
     // // When an institution is selected
     // if (key === "institution") {
     //   // Update the institution, reset branch, course, and department
@@ -161,38 +162,26 @@ const ScreeningUserRegister = () => {
     //   // For all other fields, just update the value
     //   temp[key] = value;
     // }
-    
+
     temp[key] = value;
     setMainData(temp);
   };
-  
-  
-  
 
   const handleSelectionError = (key, value) => {
     if (key == "branch" && !mainData.institution) {
-      toast.error(
-        "Institution not selected",
-        {
-          autoClose: 2000,
-        }
-      );
+      toast.error("Institution not selected", {
+        autoClose: 2000,
+      });
     } else if (key == "course" && !mainData.branch) {
-      toast.error(
-        "Branch not selected",
-        {
-          autoClose: 2000,
-        }
-      );
+      toast.error("Branch not selected", {
+        autoClose: 2000,
+      });
     } else if (key == "department" && !mainData.course) {
-      toast.error(
-        "Course not selected",
-        {
-          autoClose: 2000,
-        }
-      );
+      toast.error("Course not selected", {
+        autoClose: 2000,
+      });
     }
-  }
+  };
   useEffect(() => {
     // dispatch(loadBrachList());
     // dispatch(loadCourseList());
@@ -204,13 +193,13 @@ const ScreeningUserRegister = () => {
   // Set entityType based on the link from linksList
   useEffect(() => {
     if (linksList && id) {
-      const selectedLink = linksList.find((link) => link.unique_code === id);
+      const selectedLink = linksList.find(link => link.unique_code === id);
       if (selectedLink) {
         setEntityType(selectedLink.entity_type); // Set entityType based on the selected link
       }
     }
   }, [linksList, id]);
-  
+
   const onHandleCreate = () => {
     const payload = {
       first_name: mainData?.first_name,
@@ -229,37 +218,36 @@ const ScreeningUserRegister = () => {
       course_name: entityType === "corporate" ? "Not Required" : mainData?.course,
     };
 
-    dispatch(screeining_user_signup(payload, (test) => {
-      setMainData({});
-      console.log("test", test);
-      navigate("../", { replace: true });
-    }));
-
+    dispatch(
+      screeining_user_signup(payload, test => {
+        setMainData({});
+        console.log("test", test);
+        navigate("../", { replace: true });
+      })
+    );
   };
 
   useEffect(() => {
-    const requiredFields = userFeilds.filter((field) => field.required);
+    const requiredFields = userFeilds.filter(field => field.required);
     const isValid =
-      requiredFields.every((field) => mainData[field.key] !== "") && requiredFields.every((field) => mainData[field.key]!==undefined) 
+      requiredFields.every(field => mainData[field.key] !== "") &&
+      requiredFields.every(field => mainData[field.key] !== undefined);
     setIsFormValid(isValid);
   }, [mainData]);
 
-   return (
+  return (
     <div className="p-4 bg-[#f5f5f5] h-[100vh] flex flex-col justify-center items-center">
       <div className="bg-white flex flex-col justify-center p-4 rounded-xl shadow-2xl min-w-[70%] max-w-[80%]">
-        <div className="p-4 font-medium text-2xl">
-          {" "}
-          Screening User Registration Form{" "}
-        </div>
+        <div className="p-4 font-medium text-2xl"> Screening User Registration Form </div>
         <div className="grid grid-cols-2 gap-8 bg-white p-4">
-          {userFeilds?.map((o) => (
+          {userFeilds?.map(o => (
             <TextField
               key={o?.key}
               type={o?.type}
               label={o?.label}
               value={o?.value}
               size="small"
-              onChange={(e) => handleInputChange(o?.key, e.target.value)}
+              onChange={e => handleInputChange(o?.key, e.target.value)}
               InputProps={{
                 style: {
                   borderRadius: "0.4rem",
@@ -270,14 +258,14 @@ const ScreeningUserRegister = () => {
 
           {/* Conditionally render the fields for institution */}
           {entityType === "institution" &&
-            institutionFields?.map((o) => (
+            institutionFields?.map(o => (
               <TextField
                 key={o?.key}
                 type={o?.type}
                 label={o?.label}
                 value={o?.value}
                 size="small"
-                onChange={(e) => handleInputChange(o?.key, e.target.value)}
+                onChange={e => handleInputChange(o?.key, e.target.value)}
                 InputProps={{
                   style: {
                     borderRadius: "0.4rem",

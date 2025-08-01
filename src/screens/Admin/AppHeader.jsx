@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from "react";
-import {
-  AppBar,
-  Divider,
-  Toolbar,
-  Typography,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
-import VideocamIcon from '@mui/icons-material/Videocam';
-import MicIcon from '@mui/icons-material/Mic';
-import DescriptionIcon from '@mui/icons-material/Description';
+import { AppBar, Divider, Toolbar, Typography, IconButton, Tooltip } from "@mui/material";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import MicIcon from "@mui/icons-material/Mic";
+import DescriptionIcon from "@mui/icons-material/Description";
 import { useDarkMode } from "../../Dark";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const AppHeader = ({ open, role1 }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   // Check if we're on any analysis page
-  const isReportView = location.pathname === '/reportView';
-  const isVideoAnalysis = location.pathname === '/video-analysis';
-  const isSpeechAnalysis = location.pathname === '/speech-analysis';
-  
+  const isReportView = location.pathname === "/reportView";
+  const isVideoAnalysis = location.pathname === "/video-analysis";
+  const isSpeechAnalysis = location.pathname === "/speech-analysis";
+
   // Show analysis buttons on any analysis page
   const showAnalysisButtons = isReportView || isVideoAnalysis || isSpeechAnalysis;
 
   // Replace the names array with:
   const names = [
     { label: "Dashboard", url: "/studentDashboard" },
-    { 
+    {
       label: (
         <div className="flex items-center gap-2">
           Mock Interview
@@ -47,7 +40,7 @@ const AppHeader = ({ open, role1 }) => {
           </svg>
         </div>
       ),
-      url: "/practice" 
+      url: "/practice",
     },
     { label: "My Interview Reports", url: "/report" },
     { label: "My Courses", url: "/studentCourseList" },
@@ -61,15 +54,10 @@ const AppHeader = ({ open, role1 }) => {
 
   const { isDarkMode, toggleDarkMode, color, colorTheme } = useDarkMode();
 
-  const backgroundColor = isDarkMode
-    ? colorTheme.dark.background
-    : colorTheme.light.background;
-  const textColor = isDarkMode
-    ? colorTheme.dark.textColor
-    : colorTheme.light.textColor;
+  const backgroundColor = isDarkMode ? colorTheme.dark.background : colorTheme.light.background;
+  const textColor = isDarkMode ? colorTheme.dark.textColor : colorTheme.light.textColor;
 
-  const roleBackgroundColor =
-    role1?.role_id === 1 ? "#242D36" : backgroundColor;
+  const roleBackgroundColor = role1?.role_id === 1 ? "#242D36" : backgroundColor;
   const roleTextColor = role1?.role_id === 1 ? "#eceef0" : textColor;
 
   return (
@@ -100,31 +88,31 @@ const AppHeader = ({ open, role1 }) => {
           })}
           {role1?.role_id === 1 ? `${role1?.institution_name}` : ""}
         </Typography>
-        
+
         <div className="flex-grow" />
-        
+
         {/* Analysis buttons - show on any analysis page */}
         {showAnalysisButtons && (
           <div className="flex items-center gap-2 mr-4">
             <button
-              className={`flex items-center gap-1 ${isReportView ? 'bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white py-1 px-3 rounded-full text-sm transition-colors`}
-              onClick={() => navigate('/reportView')}
+              className={`flex items-center gap-1 ${isReportView ? "bg-blue-700" : "bg-blue-500 hover:bg-blue-600"} text-white py-1 px-3 rounded-full text-sm transition-colors`}
+              onClick={() => navigate("/reportView")}
             >
               <DescriptionIcon sx={{ fontSize: 16 }} />
               <span>Answer</span>
             </button>
-            
+
             <button
-              className={`flex items-center gap-1 ${isVideoAnalysis ? 'bg-purple-700' : 'bg-purple-600 hover:bg-purple-700'} text-white py-1 px-3 rounded-full text-sm transition-colors`}
-              onClick={() => navigate('/video-analysis')}
+              className={`flex items-center gap-1 ${isVideoAnalysis ? "bg-purple-700" : "bg-purple-600 hover:bg-purple-700"} text-white py-1 px-3 rounded-full text-sm transition-colors`}
+              onClick={() => navigate("/video-analysis")}
             >
               <VideocamIcon sx={{ fontSize: 16 }} />
               <span>Video</span>
             </button>
-            
+
             <button
-              className={`flex items-center gap-1 ${isSpeechAnalysis ? 'bg-green-700' : 'bg-green-600 hover:bg-green-700'} text-white py-1 px-3 rounded-full text-sm transition-colors`}
-              onClick={() => navigate('/speech-analysis')}
+              className={`flex items-center gap-1 ${isSpeechAnalysis ? "bg-green-700" : "bg-green-600 hover:bg-green-700"} text-white py-1 px-3 rounded-full text-sm transition-colors`}
+              onClick={() => navigate("/speech-analysis")}
             >
               <MicIcon sx={{ fontSize: 16 }} />
               <span>Speech</span>

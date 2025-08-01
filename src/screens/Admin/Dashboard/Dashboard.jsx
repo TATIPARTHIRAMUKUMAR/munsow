@@ -21,19 +21,20 @@ import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from "@mui/icons-material/Groups";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
 import { useDispatch, useSelector } from "react-redux";
-import { loadDepartmentList, loadInstitutionStats, loadBrachList, loadCourseList, getCourseList, getDepartmentList } from "../../../redux/action";
+import {
+  loadDepartmentList,
+  loadInstitutionStats,
+  loadBrachList,
+  loadCourseList,
+  getCourseList,
+  getDepartmentList,
+} from "../../../redux/action";
 import { classNames, legendFormatter } from "../../../utils/generalUtils";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
-import format from 'date-fns/format';
+import format from "date-fns/format";
 import NewCard from "./NewCard.jsx";
 import CulturalInterviews from "../../Student Dashboard/CulturalInterviews.jsx";
 import JDInterviews from "../../Student Dashboard/JDInterviews.jsx";
@@ -44,7 +45,7 @@ const AdminDashboard = () => {
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
     localStorage.setItem("user", "All Users");
-  }
+  };
 
   const [barChartFullScreen, setBarChartFullScreen] = useState(false);
   const [pieChartFullScreen, setPieChartFullScreen] = useState(false);
@@ -56,7 +57,8 @@ const AdminDashboard = () => {
   const [pie, setPie] = useState([]);
 
   const dispatch = useDispatch();
-  const { institutionStats, institutionFilters, branchList, departmentList, courseList } = useSelector((state) => state?.data);
+  const { institutionStats, institutionFilters, branchList, departmentList, courseList } =
+    useSelector(state => state?.data);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -69,16 +71,18 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (institutionStats?.cards?.length) {
-      setCardsList(institutionStats?.cards?.map(o => ({
-        cardContent: o?.name,
-        cardValue: o?.value,
-        icon: <PersonIcon style={{ color: "white", fontSize: 40 }} />,
-        subValues: o?.sub_values
-      })));
+      setCardsList(
+        institutionStats?.cards?.map(o => ({
+          cardContent: o?.name,
+          cardValue: o?.value,
+          icon: <PersonIcon style={{ color: "white", fontSize: 40 }} />,
+          subValues: o?.sub_values,
+        }))
+      );
     }
 
     if (institutionStats?.graphs) {
-      institutionStats?.graphs?.forEach((o) => {
+      institutionStats?.graphs?.forEach(o => {
         switch (o?.name) {
           case "Departments wise participation":
             setBarPlot(o?.data || []);
@@ -113,16 +117,16 @@ const AdminDashboard = () => {
   const handleViewPieChartClick = () => setPieChartFullScreen(true);
   const handleClosePieChartFullScreen = () => setPieChartFullScreen(false);
 
-  const onDateSelect = (value) => {
-    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
-    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+  const onDateSelect = value => {
+    const formattedStartDate = format(value.startDate, "yyyy-MM-dd");
+    const formattedEndDate = format(value.endDate, "yyyy-MM-dd");
     let params = {
       branch: localStorage.getItem("branch"),
       course: localStorage.getItem("course"),
       department: localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
       start_date: formattedStartDate,
-      end_date: formattedEndDate
+      end_date: formattedEndDate,
     };
 
     if (formattedStartDate && formattedEndDate) {
@@ -134,8 +138,20 @@ const AdminDashboard = () => {
     <div className="h-[100vh] p-4 pb-16 overflow-y-scroll" style={{ background: "#E7EFEE" }}>
       <div className="container">
         <div className="flex justify-start mr-10 mb-3">
-          <PopUpFilter route="AdminDashboard" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate} />
-          <PopUpFilter route="AdminDashboard" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate} />
+          <PopUpFilter
+            route="AdminDashboard"
+            list="Branches"
+            dependencyList={branchList}
+            startDate={startDate}
+            endDate={endDate}
+          />
+          <PopUpFilter
+            route="AdminDashboard"
+            list="Courses"
+            dependencyList={courseList}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </div>
 
         <div className="p-7">
@@ -144,10 +160,16 @@ const AdminDashboard = () => {
 
         <div className="flex flex-col sm:flex-row justify-evenly w-[100%] gap-4 relative overflow-auto max-w-full">
           <div className="w-[100%] sm:w-[50%] relative bg-white overflow-auto max-w-full rounded-lg">
-            <CulturalInterviews interviewData={institutionStats?.graphs?.[3]?.data || []} type={"admin"} />
+            <CulturalInterviews
+              interviewData={institutionStats?.graphs?.[3]?.data || []}
+              type={"admin"}
+            />
           </div>
           <div className="w-[100%] sm:w-[50%] relative bg-white overflow-auto max-w-full rounded-lg">
-            <JDInterviews interviewData={institutionStats?.graphs?.[4]?.data || []} type={"admin"} />
+            <JDInterviews
+              interviewData={institutionStats?.graphs?.[4]?.data || []}
+              type={"admin"}
+            />
           </div>
         </div>
 
@@ -158,7 +180,10 @@ const AdminDashboard = () => {
                 <span className="text-lg font-normal">Department wise Participation</span>
                 <span>
                   {barPlot.length > 5 && !barChartFullScreen && (
-                    <div className="text-center font-bold cursor-pointer text-blue-500" onClick={handleViewMoreClick}>
+                    <div
+                      className="text-center font-bold cursor-pointer text-blue-500"
+                      onClick={handleViewMoreClick}
+                    >
                       View More
                     </div>
                   )}
@@ -168,16 +193,38 @@ const AdminDashboard = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barPlot}>
                     <CartesianGrid vertical={false} strokeDasharray="0 0" />
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} className="text axis-data">
+                    <XAxis
+                      dataKey="name"
+                      axisLine={false}
+                      tickLine={false}
+                      className="text axis-data"
+                    >
                       <Label className="text" value="DEPARTMENT" position="bottom" dy={10} />
                     </XAxis>
                     <YAxis axisLine={false} tickLine={false} className="text axis-data">
-                      <Label className="text" value="PARTICIPATION RATE" position="middle" angle={-90} dx={-25} />
+                      <Label
+                        className="text"
+                        value="PARTICIPATION RATE"
+                        position="middle"
+                        angle={-90}
+                        dx={-25}
+                      />
                     </YAxis>
                     <Tooltip />
-                    <Legend formatter={(value, entry) => legendFormatter(value, entry, "line")} layout="horizontal" iconSize={0} wrapperStyle={{ paddingTop: "1rem" }} />
+                    <Legend
+                      formatter={(value, entry) => legendFormatter(value, entry, "line")}
+                      layout="horizontal"
+                      iconSize={0}
+                      wrapperStyle={{ paddingTop: "1rem" }}
+                    />
                     <Bar dataKey="Participated" stackId={"a"} fill="#6CE5E8" barSize={60} />
-                    <Bar dataKey="Not yet Participated" stackId={"a"} fill="#5271FF" barSize={60} radius={[15, 15, 0, 0]} />
+                    <Bar
+                      dataKey="Not yet Participated"
+                      stackId={"a"}
+                      fill="#5271FF"
+                      barSize={60}
+                      radius={[15, 15, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -243,7 +290,6 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div> */}
-
         </div>
 
         <Dialog open={barChartFullScreen} onClose={handleCloseFullScreen} fullScreen>
@@ -256,12 +302,29 @@ const AdminDashboard = () => {
                   <Label className="text" value="DEPARTMENT" position="bottom" dy={10} />
                 </XAxis>
                 <YAxis axisLine={false} tickLine={false} className="text axis-data">
-                  <Label className="text" value="PARTICIPATION RATE" position="middle" angle={-90} dx={-25} />
+                  <Label
+                    className="text"
+                    value="PARTICIPATION RATE"
+                    position="middle"
+                    angle={-90}
+                    dx={-25}
+                  />
                 </YAxis>
                 <Tooltip />
-                <Legend formatter={(value, entry) => legendFormatter(value, entry, "line")} layout="horizontal" iconSize={0} wrapperStyle={{ paddingTop: "1rem" }} />
+                <Legend
+                  formatter={(value, entry) => legendFormatter(value, entry, "line")}
+                  layout="horizontal"
+                  iconSize={0}
+                  wrapperStyle={{ paddingTop: "1rem" }}
+                />
                 <Bar dataKey="Participated" stackId={"a"} fill="#6CE5E8" barSize={60} />
-                <Bar dataKey="Not yet Participated" stackId={"a"} fill="#5271FF" barSize={60} radius={[15, 15, 0, 0]} />
+                <Bar
+                  dataKey="Not yet Participated"
+                  stackId={"a"}
+                  fill="#5271FF"
+                  barSize={60}
+                  radius={[15, 15, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </DialogContent>

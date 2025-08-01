@@ -12,17 +12,13 @@ import {
 } from "recharts";
 import "./EmotionSensing.css";
 
-const PositiveEmotionsChart = (props) => {
-  const {data, name} = props;
-
+const PositiveEmotionsChart = props => {
+  const { data, name } = props;
 
   const legendFormatter = (value, entry) => {
     return (
       <div className={"line-legend-item"}>
-        <div
-          className={"line-legend-color"}
-          style={{ backgroundColor: entry.color }}
-        />
+        <div className={"line-legend-color"} style={{ backgroundColor: entry.color }} />
         <div className="line-legend-text">{value}</div>
       </div>
     );
@@ -53,11 +49,7 @@ const PositiveEmotionsChart = (props) => {
             bottom: 5,
           }}
         >
-          <CartesianGrid
-            vertical={false}
-            horizontal={true}
-            strokeDasharray="0 0"
-          />
+          <CartesianGrid vertical={false} horizontal={true} strokeDasharray="0 0" />
           <XAxis
             dataKey="name"
             axisLine={false}
@@ -74,12 +66,7 @@ const PositiveEmotionsChart = (props) => {
               dy={20} // Adjust the distance from the X-axis
             />
           </XAxis>
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            className="text axis-data"
-            dx={-5}
-          >
+          <YAxis axisLine={false} tickLine={false} className="text axis-data" dx={-5}>
             <Label
               className="text"
               value="EMOTIONS"

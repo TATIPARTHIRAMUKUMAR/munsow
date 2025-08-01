@@ -12,15 +12,14 @@ export default function CheckboxesTags(props) {
   const { options, label, selectedItems, onSelectionChange } = props;
   return (
     <Autocomplete
-    size="small"
+      size="small"
       // multiple
       id="checkboxes-tags-demo"
       options={options}
-      disableCloseOnSelect
+      disableCloseOnSelect={false}
       value={selectedItems}
       onChange={(event, newValue) => onSelectionChange(newValue)}
-      getOptionLabel={(option) => option.label}
-      disableCloseOnSelect={false}
+      getOptionLabel={option => option.label}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           {/* <Checkbox
@@ -33,18 +32,18 @@ export default function CheckboxesTags(props) {
         </li>
       )}
       style={{ width: "20rem" }}
-      renderInput={(params) => (
+      renderInput={params => (
         <TextField
-        {...params} 
-        placeholder={label} 
-        InputProps={{
-        ...params.InputProps,
-        style: {
-            borderRadius: "0.4rem",
-        },
-        }}
+          {...params}
+          placeholder={label}
+          InputProps={{
+            ...params.InputProps,
+            style: {
+              borderRadius: "0.4rem",
+            },
+          }}
         />
-    )}
+      )}
     />
   );
 }

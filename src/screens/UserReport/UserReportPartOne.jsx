@@ -1,10 +1,9 @@
 const UserReportPartOne = ({ userData }) => {
-
   function getScoreClass(secured, total) {
     const scorePercentage = (secured / total) * 100;
-    if (scorePercentage <= 33) return 'text-red-600';  
-    if (scorePercentage <= 66) return 'text-orange-500';
-    return 'text-green-600'; 
+    if (scorePercentage <= 33) return "text-red-600";
+    if (scorePercentage <= 66) return "text-orange-500";
+    return "text-green-600";
   }
 
   return (
@@ -20,9 +19,7 @@ const UserReportPartOne = ({ userData }) => {
       </div>
       <div className="bg-white">
         <div className="p-3 pt-7">
-          <span className="text-3xl font-semibold">
-            1. {userData?.title}
-          </span>
+          <span className="text-3xl font-semibold">1. {userData?.title}</span>
         </div>
       </div>
 
@@ -33,7 +30,9 @@ const UserReportPartOne = ({ userData }) => {
               <div className="col-span-1">
                 <div className="mt-2">
                   <div>
-                    <span className={`text-4xl font-bold ${getScoreClass(o?.secured_marks, o?.total_marks)}`}>
+                    <span
+                      className={`text-4xl font-bold ${getScoreClass(o?.secured_marks, o?.total_marks)}`}
+                    >
                       {o?.secured_marks}/{o?.total_marks}
                     </span>
                   </div>
@@ -41,18 +40,13 @@ const UserReportPartOne = ({ userData }) => {
                     <span className="text-xl font-semibold">{o?.title}</span>
                   </div>
                   <div className="mt-3">
-                    <p className="text-lg font-normal break-words ">
-                      {o?.notes}
-                    </p>
+                    <p className="text-lg font-normal break-words ">{o?.notes}</p>
                   </div>
                 </div>
               </div>
-
             </>
-          )
-        }
-        )
-        }
+          );
+        })}
       </div>
     </div>
   );

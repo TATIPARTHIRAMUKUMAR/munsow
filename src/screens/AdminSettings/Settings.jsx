@@ -1,53 +1,59 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const SettingsPageAdmin = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
     twoFactorAuth: false,
     emailNotifications: false,
     smsNotifications: false,
   });
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('user_data'));
+    const userData = JSON.parse(localStorage.getItem("user_data"));
 
     if (userData) {
       setFormData({
-        name: userData?.data?.contact_name || '',
-        email: userData?.data?.email || '',
-        password: '', 
-        twoFactorAuth: false, 
-        emailNotifications: false, 
+        name: userData?.data?.contact_name || "",
+        email: userData?.data?.email || "",
+        password: "",
+        twoFactorAuth: false,
+        emailNotifications: false,
         smsNotifications: false,
       });
     }
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleCheckChange = (e) => {
+  const handleCheckChange = e => {
     const { name, checked } = e.target;
     setFormData({ ...formData, [name]: checked });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     // Handle form submission here
   };
 
   return (
     <>
-    <div className="m-6">
-      <div class="p-4 bg-yellow-100 rounded-2">
-        <p class="text-yellow-800">Please note that the values on this page are not editable at the moment. Kindly contact our team at <a href="mailto:admin@munsow.com" class="font-bold">admin@munsow.com</a></p>
+      <div className="m-6">
+        <div class="p-4 bg-yellow-100 rounded-2">
+          <p class="text-yellow-800">
+            Please note that the values on this page are not editable at the moment. Kindly contact
+            our team at{" "}
+            <a href="mailto:admin@munsow.com" class="font-bold">
+              admin@munsow.com
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
-    <div className="max-w-4xl mx-auto mt-10 p-4 bg-white rounded-md">
+      <div className="max-w-4xl mx-auto mt-10 p-4 bg-white rounded-md">
         <h1 className="text-3xl font-semibold mb-8">Settings</h1>
 
         <form onSubmit={handleSubmit}>
@@ -61,14 +67,16 @@ const SettingsPageAdmin = () => {
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-2/3 p-3 border rounded-md" />
+                className="w-2/3 p-3 border rounded-md"
+              />
               <input
                 type="email"
                 name="email"
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-2/3 p-3 border rounded-md" />
+                className="w-2/3 p-3 border rounded-md"
+              />
             </div>
           </section>
 
@@ -81,7 +89,8 @@ const SettingsPageAdmin = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-2/3 p-3 border rounded-md" />
+              className="w-2/3 p-3 border rounded-md"
+            />
           </section>
 
           {/* Security */}
@@ -90,11 +99,12 @@ const SettingsPageAdmin = () => {
             <label className="flex items-center space-x-3">
               <input
                 type="checkbox"
-                style={{ color: '#2BE2D0' }}
+                style={{ color: "#2BE2D0" }}
                 name="twoFactorAuth"
                 checked={formData.twoFactorAuth}
                 onChange={handleCheckChange}
-                className="rounded" />
+                className="rounded"
+              />
               <span>Enable Two-Factor Authentication</span>
             </label>
           </section>
@@ -105,27 +115,33 @@ const SettingsPageAdmin = () => {
             <label className="flex items-center space-x-3 mb-3">
               <input
                 type="checkbox"
-                style={{ color: '#2BE2D0' }}
+                style={{ color: "#2BE2D0" }}
                 name="emailNotifications"
                 checked={formData.emailNotifications}
                 onChange={handleCheckChange}
-                className="rounded" />
+                className="rounded"
+              />
               <span>Email Notifications</span>
             </label>
             <label className="flex items-center space-x-3">
               <input
                 type="checkbox"
                 name="smsNotifications"
-                style={{ color: '#2BE2D0' }}
+                style={{ color: "#2BE2D0" }}
                 checked={formData.smsNotifications}
                 onChange={handleCheckChange}
-                className="rounded" />
+                className="rounded"
+              />
               <span>SMS Notifications</span>
             </label>
           </section>
 
           {/* Submit Button */}
-          <button type="submit" style={{ background: '#2BE2D0', color: '#252525' }} className="bg-blue-500 text-white py-2 px-4 rounded">
+          <button
+            type="submit"
+            style={{ background: "#2BE2D0", color: "#252525" }}
+            className="bg-blue-500 text-white py-2 px-4 rounded"
+          >
             Save Changes
           </button>
         </form>

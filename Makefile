@@ -9,16 +9,18 @@ RM := rm -rf
 MKDIR := mkdir -p
 
 # npm script commands
-DEV := npm run dev
+DEV := npm start
 BUILD := npm run build
-SERVE := npm run serve
+SERVE := npm run preview
 DEPS := npm install
+FORMAT := npm run format
+LINT := npm run lint
 TREE := tree -I "node_modules"
 
 # File targets
 DIRECTORY_TREE := directory_tree.txt
 
-.PHONY: install clean dev build serve tree
+.PHONY: install clean dev build serve tree format lint
 
 # Install all dependencies
 install:
@@ -35,6 +37,14 @@ build:
 # Serve the build directory
 serve:
 	$(SERVE)
+
+# Format code with Prettier
+format:
+	$(FORMAT)
+
+# Lint code with ESLint
+lint:
+	$(LINT)
 
 # Generate directory tree
 tree:

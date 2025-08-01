@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getCourseList, getDepartmentList, loadKSAnalysis, loadBrachList } from "../../../redux/action";
+import {
+  getCourseList,
+  getDepartmentList,
+  loadKSAnalysis,
+  loadBrachList,
+} from "../../../redux/action";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 
-const transformData = (data) => {
+const transformData = data => {
   const departments = [...new Set(data?.flatMap(skill => skill.data.map(entry => entry.x)))];
   const skills = data?.map(skill => skill.id);
 
@@ -21,7 +34,7 @@ const transformData = (data) => {
   return { departments, skills, departmentDataMap };
 };
 
-const getColorCode = (value) => {
+const getColorCode = value => {
   if (value > 75) return "bg-green-300";
   if (value > 50) return "bg-yellow-300";
   if (value > 25) return "bg-orange-300";
@@ -34,13 +47,19 @@ const renderTable = (data, title) => {
   return (
     <div className="">
       <span className="text-2xl font-normal text-gray-900">{title}</span>
-      <TableContainer component={Paper} sx={{ maxHeight: 750 }} className="mt-5 max-w-full overflow-x-auto">
+      <TableContainer
+        component={Paper}
+        sx={{ maxHeight: 750 }}
+        className="mt-5 max-w-full overflow-x-auto"
+      >
         <Table className="min-w-full" stickyHeader aria-label="sticky table">
           <TableHead className="bg-gray-200">
             <TableRow>
               <TableCell className="sticky left-0 bg-gray-200">Department</TableCell>
               {skills?.map(skill => (
-                <TableCell key={skill} className="border-r">{skill}</TableCell>
+                <TableCell key={skill} className="border-r">
+                  {skill}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -49,7 +68,7 @@ const renderTable = (data, title) => {
               <TableRow key={department}>
                 <TableCell className="sticky left-0 bg-white">{department}</TableCell>
                 {data.map(skill => {
-                  const value = skill?.data?.find(item => item.x === department)?.y || '-';
+                  const value = skill?.data?.find(item => item.x === department)?.y || "-";
                   const colorClass = typeof value === "number" ? getColorCode(value) : "bg-white";
                   return (
                     <TableCell key={skill} className={`border-r ${colorClass}`}>
@@ -73,7 +92,7 @@ const HardSkills = () => {
   const [endDate, setEndDate] = useState("");
   const dispatch = useDispatch();
 
-  const { ksAnalysis, ksFilters, courseList, branchList } = useSelector((state) => state?.data);
+  const { ksAnalysis, ksFilters, courseList, branchList } = useSelector(state => state?.data);
 
   useEffect(() => {
     dispatch(getDepartmentList());
@@ -100,8 +119,20 @@ const HardSkills = () => {
               <div className="bg-white mb-3 flex justify-between">
                 <div>
                   <div className="flex justify-end mr-10 mb-3">
-                    <PopUpFilter route="KSAnalysis" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate} />
-                    <PopUpFilter route="KSAnalysis" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate} />
+                    <PopUpFilter
+                      route="KSAnalysis"
+                      list="Branches"
+                      dependencyList={branchList}
+                      startDate={startDate}
+                      endDate={endDate}
+                    />
+                    <PopUpFilter
+                      route="KSAnalysis"
+                      list="Courses"
+                      dependencyList={courseList}
+                      startDate={startDate}
+                      endDate={endDate}
+                    />
                   </div>
                 </div>
               </div>

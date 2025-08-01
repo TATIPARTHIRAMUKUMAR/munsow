@@ -1,34 +1,38 @@
-import React, { createContext, useContext, useState } from 'react';
-import Loader from './Loader';
+import React, { createContext, useContext, useState } from "react";
+import Loader from "./Loader";
 
 const LoaderContext = createContext();
 
 export const useLoader = () => {
-    return useContext(LoaderContext);
+  return useContext(LoaderContext);
 };
 
 export const LoaderProvider = ({ children }) => {
-    const [loaderType, setLoaderType] = useState(null);
-    const [questionsList, setQuestionsList] = useState(null);
+  const [loaderType, setLoaderType] = useState(null);
+  const [questionsList, setQuestionsList] = useState(null);
 
-    const showLoader = (type) => {
-        setLoaderType(type);
-    };
+  const showLoader = type => {
+    setLoaderType(type);
+  };
 
-    const hideLoader = () => {
-        setLoaderType(null); // Corrected to remove `setLoading(false);` as it was undefined
-    };
+  const hideLoader = () => {
+    setLoaderType(null); // Corrected to remove `setLoading(false);` as it was undefined
+  };
 
-    const setQuestions = (questions) => {
-        setQuestionsList(questions);
-    };
-    
-    return (
-        <LoaderContext.Provider value={{ loaderType, showLoader, hideLoader, questionsList, setQuestions }}>
-            {children}
-            {loaderType && <Loader type={loaderType} hideLoader={hideLoader} questionsList={questionsList} />}
-        </LoaderContext.Provider>
-    );
+  const setQuestions = questions => {
+    setQuestionsList(questions);
+  };
+
+  return (
+    <LoaderContext.Provider
+      value={{ loaderType, showLoader, hideLoader, questionsList, setQuestions }}
+    >
+      {children}
+      {loaderType && (
+        <Loader type={loaderType} hideLoader={hideLoader} questionsList={questionsList} />
+      )}
+    </LoaderContext.Provider>
+  );
 };
 
 export default LoaderProvider;

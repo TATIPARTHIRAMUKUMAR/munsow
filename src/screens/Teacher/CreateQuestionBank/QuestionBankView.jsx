@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
   Paper,
   Typography,
@@ -15,19 +15,19 @@ import {
   Button,
   Container,
   IconButton,
-} from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { loadDetailedQuestionBanks } from '../../../redux/action';
-import QuizIcon from '@mui/icons-material/Quiz';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+} from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loadDetailedQuestionBanks } from "../../../redux/action";
+import QuizIcon from "@mui/icons-material/Quiz";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const QuestionBankView = () => {
   const { id } = useParams();
   const history = useNavigate();
   const dispatch = useDispatch();
-  const { detailedQuestionBank } = useSelector((state) => state.data);
+  const { detailedQuestionBank } = useSelector(state => state.data);
 
   useEffect(() => {
     dispatch(loadDetailedQuestionBanks(id));
@@ -38,7 +38,7 @@ const QuestionBankView = () => {
   };
 
   return (
-    <Box className="min-h-screen pt-5 pb-20" sx={{ background: '#f0f2f5' }}>
+    <Box className="min-h-screen pt-5 pb-20" sx={{ background: "#f0f2f5" }}>
       <Container>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={10} lg={8}>
@@ -52,7 +52,7 @@ const QuestionBankView = () => {
                 </Typography>
               </Box>
               <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 2 }}>
-                Description : {(detailedQuestionBank?.description)}
+                Description : {detailedQuestionBank?.description}
               </Typography>
               <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 2 }}>
                 Created on : {new Date(detailedQuestionBank?.created_date).toLocaleDateString()}
@@ -76,15 +76,15 @@ const QuestionBankView = () => {
                             p: 1,
                             borderRadius: 2,
                             mb: 1,
-                            backgroundColor: '#f9f9f9',
-                            '&:hover': { backgroundColor: '#e0e0e0' },
+                            backgroundColor: "#f9f9f9",
+                            "&:hover": { backgroundColor: "#e0e0e0" },
                           }}
                         >
                           <ListItemIcon>
                             <Avatar
                               sx={{
-                                bgcolor: 'primary.main',
-                                color: 'white',
+                                bgcolor: "primary.main",
+                                color: "white",
                                 width: 28,
                                 height: 28,
                                 fontSize: 16,
@@ -98,7 +98,8 @@ const QuestionBankView = () => {
                       ))}
                     </List>
                     <Typography variant="body2" color="success.main" sx={{ mt: 2 }}>
-                      <CheckCircleOutlineIcon sx={{ mr: 1 }} /> Correct Answer: {question.correctAnswer.join(', ')}
+                      <CheckCircleOutlineIcon sx={{ mr: 1 }} /> Correct Answer:{" "}
+                      {question.correctAnswer.join(", ")}
                     </Typography>
                   </CardContent>
                 </Card>

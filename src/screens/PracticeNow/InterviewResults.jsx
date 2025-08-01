@@ -19,12 +19,12 @@
 //     const { isDarkMode } = useDarkMode();
 //     const pdfExportComponent = useRef(null);
 
-//     const { 
-//         colorTheme: reduxColorTheme, 
+//     const {
+//         colorTheme: reduxColorTheme,
 //         questionsList,
 //         interviewResults // The interview results from the API
 //     } = useSelector((state) => state?.data);
-    
+
 //     const backgroundColor = isDarkMode
 //         ? reduxColorTheme.dark.foreground
 //         : reduxColorTheme.light.foreground;
@@ -43,7 +43,7 @@
 //             const processedResults = interviewResults.interview_questions.map(question => ({
 //                 question: question.question,
 //                 answer: question.answer || "No answer recorded",
-//                 predictedAnswer: question.suggested_answer || "No suggested answer available", 
+//                 predictedAnswer: question.suggested_answer || "No suggested answer available",
 //                 category: question.category || "General",
 //                 duration: question.duration || 60,
 //                 confidence: calculateConfidence(question),
@@ -53,7 +53,7 @@
 //             }));
 //             setResults(processedResults);
 //             setIsAnalysisLoading(false);
-//         } 
+//         }
 //         // Use local transcript data if available before API response
 //         else if (questionsList?.questions) {
 //             try {
@@ -67,12 +67,12 @@
 //                 } catch (error) {
 //                     console.error("Error parsing saved transcripts:", error);
 //                 }
-                
+
 //                 const resultsWithTranscripts = questionsList.questions.map((question, index) => {
 //                     // Get the corresponding transcript if available
 //                     const questionId = question.id || index.toString();
 //                     const userAnswer = savedTranscripts[questionId] || "Your answer will be analyzed after submission";
-                    
+
 //                     return {
 //                         question: question.question,
 //                         answer: userAnswer, // Use the actual transcript
@@ -94,7 +94,7 @@
 //                         isAnalyzed: false // Flag to indicate this is preliminary data
 //                     };
 //                 });
-                
+
 //                 setResults(resultsWithTranscripts);
 //             } catch (error) {
 //                 console.error("Error processing question data:", error);
@@ -175,7 +175,7 @@
 
 //     const submitForAnalysis = async () => {
 //         if (!results.length) return;
-        
+
 //         setIsAnalysisLoading(true);
 //         try {
 //             // Get the transcripts from results
@@ -184,11 +184,11 @@
 //                 answer: result.answer,
 //                 question: result.question
 //             }));
-            
+
 //             setTimeout(() => {
 //                 setIsAnalysisLoading(false);
 //             }, 2000);
-            
+
 //         } catch (error) {
 //             console.error("Error submitting answers for analysis:", error);
 //             setIsAnalysisLoading(false);
@@ -222,13 +222,13 @@
 //             <div className="container mx-auto p-4">
 //                 {/* Action buttons row */}
 //                 <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
-//                     <button         
+//                     <button
 //                         className="bg-gradient-to-r mb-4 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
 //                         onClick={goToDashboard}>
 //                         <ArrowBackIcon fontSize="small" />
 //                         Back to Dashboard
 //                     </button>
-                    
+
 //                     <div className="flex flex-wrap gap-3">
 //                         {/* Add Submit for Analysis button if not already analyzed */}
 //                         {results.length > 0 && !results[0].isAnalyzed && (
@@ -247,36 +247,36 @@
 //                                 )}
 //                             </button>
 //                         )}
-                        
+
 //                         <button
 //                             className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
 //                             onClick={navigateToAnswerAnalysis}
 //                         >
-//                             <DescriptionIcon /> 
+//                             <DescriptionIcon />
 //                             Answer Analysis
 //                             {loading && (
 //                                 <CircularProgress size={20} style={{ color: "#fff" }} />
 //                             )}
 //                         </button>
-                        
+
 //                         <button
 //                             className="flex items-center gap-2 bg-purple-600 text-white hover:bg-purple-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
 //                             onClick={navigateToVideoAnalysis}
 //                         >
-//                             <VideocamIcon /> 
+//                             <VideocamIcon />
 //                             Video Analysis
 //                         </button>
-                        
+
 //                         <button
 //                             className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
 //                             onClick={navigateToSpeechAnalysis}
 //                         >
-//                             <MicIcon /> 
+//                             <MicIcon />
 //                             Speech Analysis
 //                         </button>
 //                     </div>
 //                 </div>
-                
+
 //                 {/* Global loading indicator */}
 //                 {isAnalysisLoading && (
 //                     <div className="flex justify-center items-center p-6 mb-6 bg-white rounded-lg shadow">
@@ -284,7 +284,7 @@
 //                         <span className="ml-4 text-lg font-medium text-gray-700">Analyzing your interview responses...</span>
 //                     </div>
 //                 )}
-                
+
 //                 {/* PDF Export Component */}
 //                 <PDFExport
 //                     ref={pdfExportComponent}
@@ -427,7 +427,7 @@
 
 // export default InterviewResults;
 
-//13 june 
+//13 june
 // import React, { useState, useEffect, useRef } from 'react';
 // import { useSelector } from "react-redux";
 // import { useDarkMode } from "./../../Dark";
@@ -449,12 +449,12 @@
 //     const { isDarkMode } = useDarkMode();
 //     const pdfExportComponent = useRef(null);
 
-//     const { 
-//         colorTheme: reduxColorTheme, 
+//     const {
+//         colorTheme: reduxColorTheme,
 //         questionsList,
 //         interviewResults // The interview results from the API
 //     } = useSelector((state) => state?.data);
-    
+
 //     const backgroundColor = isDarkMode
 //         ? reduxColorTheme.dark.foreground
 //         : reduxColorTheme.light.foreground;
@@ -478,7 +478,7 @@
 //             }));
 //             setResults(processedResults);
 //             setIsAnalysisLoading(false);
-//         } 
+//         }
 //         // Use local transcript data if available before API response
 //         else if (questionsList?.questions) {
 //             try {
@@ -492,12 +492,12 @@
 //                 } catch (error) {
 //                     console.error("Error parsing saved transcripts:", error);
 //                 }
-                
+
 //                 const resultsWithTranscripts = questionsList.questions.map((question, index) => {
 //                     // Get the corresponding transcript if available
 //                     const questionId = question.id || index.toString();
 //                     const userAnswer = savedTranscripts[questionId] || "Your answer will be analyzed after submission";
-                    
+
 //                     return {
 //                         question: question.question,
 //                         answer: userAnswer, // Use the actual transcript
@@ -505,7 +505,7 @@
 //                         isAnalyzed: false // Flag to indicate this is preliminary data
 //                     };
 //                 });
-                
+
 //                 setResults(resultsWithTranscripts);
 //             } catch (error) {
 //                 console.error("Error processing question data:", error);
@@ -535,7 +535,7 @@
 
 //     const submitForAnalysis = async () => {
 //         if (!results.length) return;
-        
+
 //         setIsAnalysisLoading(true);
 //         try {
 //             // Get the transcripts from results
@@ -544,11 +544,11 @@
 //                 answer: result.answer,
 //                 question: result.question
 //             }));
-            
+
 //             setTimeout(() => {
 //                 setIsAnalysisLoading(false);
 //             }, 2000);
-            
+
 //         } catch (error) {
 //             console.error("Error submitting answers for analysis:", error);
 //             setIsAnalysisLoading(false);
@@ -582,13 +582,13 @@
 //             <div className="container mx-auto p-4">
 //                 {/* Action buttons row */}
 //                 <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
-//                     <button         
+//                     <button
 //                         className="bg-gradient-to-r mb-4 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
 //                         onClick={goToDashboard}>
 //                         <ArrowBackIcon fontSize="small" />
 //                         Back to Dashboard
 //                     </button>
-                    
+
 //                     <div className="flex flex-wrap gap-3">
 //                         {/* Add Submit for Analysis button if not already analyzed */}
 //                         {results.length > 0 && !results[0].isAnalyzed && (
@@ -607,36 +607,36 @@
 //                                 )}
 //                             </button>
 //                         )}
-                        
+
 //                         <button
 //                             className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
 //                             onClick={navigateToAnswerAnalysis}
 //                         >
-//                             <DescriptionIcon /> 
+//                             <DescriptionIcon />
 //                             Answer Analysis
 //                             {loading && (
 //                                 <CircularProgress size={20} style={{ color: "#fff" }} />
 //                             )}
 //                         </button>
-                        
+
 //                         <button
 //                             className="flex items-center gap-2 bg-purple-600 text-white hover:bg-purple-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
 //                             onClick={navigateToVideoAnalysis}
 //                         >
-//                             <VideocamIcon /> 
+//                             <VideocamIcon />
 //                             Video Analysis
 //                         </button>
-                        
+
 //                         <button
 //                             className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
 //                             onClick={navigateToSpeechAnalysis}
 //                         >
-//                             <MicIcon /> 
+//                             <MicIcon />
 //                             Speech Analysis
 //                         </button>
 //                     </div>
 //                 </div>
-                
+
 //                 {/* Global loading indicator */}
 //                 {isAnalysisLoading && (
 //                     <div className="flex justify-center items-center p-6 mb-6 bg-white rounded-lg shadow">
@@ -644,7 +644,7 @@
 //                         <span className="ml-4 text-lg font-medium text-gray-700">Analyzing your interview responses...</span>
 //                     </div>
 //                 )}
-                
+
 //                 {/* PDF Export Component */}
 //                 <PDFExport
 //                     ref={pdfExportComponent}
@@ -724,367 +724,368 @@
 
 // export default InterviewResults;
 
-//16 june 
-import React, { useState, useEffect, useRef } from 'react';
+//16 june
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useDarkMode } from "./../../Dark";
-import { useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import MicIcon from '@mui/icons-material/Mic';
-import DescriptionIcon from '@mui/icons-material/Description';
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import MicIcon from "@mui/icons-material/Mic";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 // Import for PDF export
 import { PDFExport } from "@progress/kendo-react-pdf";
 
 const InterviewResults = () => {
-    const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
-    const navigate = useNavigate();
-    const { isDarkMode } = useDarkMode();
-    const pdfExportComponent = useRef(null);
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
+  const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
+  const pdfExportComponent = useRef(null);
 
-    const { 
-        colorTheme: reduxColorTheme, 
-        questionsList,
-        interviewResults // The interview results from the API
-    } = useSelector((state) => state?.data);
-    
-    const backgroundColor = isDarkMode
-        ? reduxColorTheme.dark.foreground
-        : reduxColorTheme.light.foreground;
+  const {
+    colorTheme: reduxColorTheme,
+    questionsList,
+    interviewResults, // The interview results from the API
+  } = useSelector(state => state?.data);
 
-    const textColor = isDarkMode
-        ? reduxColorTheme.dark.textColor3
-        : reduxColorTheme.light.textColor3;
+  const backgroundColor = isDarkMode
+    ? reduxColorTheme.dark.foreground
+    : reduxColorTheme.light.foreground;
 
-    const linearGradientBackground = isDarkMode
-        ? reduxColorTheme.dark.selectBackground
-        : reduxColorTheme.light.selectBackground;
+  const textColor = isDarkMode ? reduxColorTheme.dark.textColor3 : reduxColorTheme.light.textColor3;
 
-    useEffect(() => {
-        // If we have real data from the API, use it
-        if (interviewResults?.interview_questions) {
-            const processedResults = interviewResults.interview_questions.map(question => ({
-                question: question.question,
-                answer: question.answer || "No answer recorded",
-                sampleAnswer: question.suggested_answer || "No sample answer available",
-                isAnalyzed: true // Flag to indicate this data has been analyzed
-            }));
-            setResults(processedResults);
-            setIsAnalysisLoading(false);
-        } 
-        // Use local transcript data if available before API response
-        else if (questionsList?.questions) {
-            try {
-                // Try to get saved transcripts from localStorage
-                let savedTranscripts = {};
-                try {
-                    const savedData = localStorage.getItem('interviewTranscripts');
-                    if (savedData) {
-                        savedTranscripts = JSON.parse(savedData);
-                    }
-                } catch (error) {
-                    console.error("Error parsing saved transcripts:", error);
-                }
-                
-                // Filter questions to only include those that have been answered
-                const answeredQuestions = questionsList.questions.filter((question, index) => {
-                    const questionId = question.id || index.toString();
-                    const userAnswer = savedTranscripts[questionId];
-                    // Only include questions that have a non-empty answer
-                    return userAnswer && userAnswer.trim() !== "" && 
-                           userAnswer !== "Your answer will be analyzed after submission";
-                });
-                
-                const resultsWithTranscripts = answeredQuestions.map((question, index) => {
-                    // Get the corresponding transcript
-                    const questionId = question.id || questionsList.questions.indexOf(question).toString();
-                    const userAnswer = savedTranscripts[questionId];
-                    
-                    return {
-                        question: question.question,
-                        answer: userAnswer,
-                        sampleAnswer: question.suggested_answer || "This would typically show the sample answer for reference.",
-                        isAnalyzed: false, // Flag to indicate this is preliminary data
-                        questionId: questionId // Keep track of question ID for analysis
-                    };
-                });
-                
-                setResults(resultsWithTranscripts);
-            } catch (error) {
-                console.error("Error processing question data:", error);
-                // If there's an error, set empty results instead of mock data
-                setResults([]);
-            }
-        }
-    }, [interviewResults, questionsList]);
+  const linearGradientBackground = isDarkMode
+    ? reduxColorTheme.dark.selectBackground
+    : reduxColorTheme.light.selectBackground;
 
-    const goToDashboard = () => {
-        navigate("/studentDashboard");
-    };
-
-    const handleGeneratePdf = () => {
-        setLoading(true);
-        pdfExportComponent.current.save();
-        setTimeout(() => {
-            setLoading(false);
-        }, 1500);
-    };
-
-    const submitForAnalysis = async () => {
-        if (!results.length) return;
-        
-        setIsAnalysisLoading(true);
-        try {
-            // Get the transcripts from results
-            const answersToSubmit = results.map(result => ({
-                questionId: result.questionId,
-                answer: result.answer,
-                question: result.question
-            }));
-            
-            setTimeout(() => {
-                setIsAnalysisLoading(false);
-            }, 2000);
-            
-        } catch (error) {
-            console.error("Error submitting answers for analysis:", error);
-            setIsAnalysisLoading(false);
-        }
-    };
-
-    const navigateToVideoAnalysis = () => {
-        navigate("/video-analysis");
-    };
-
-    const navigateToSpeechAnalysis = () => {
-        navigate("/speech-analysis");
-    };
-
-    const navigateToAnswerAnalysis = () => {
-        navigate("/interview-results")
-    };
-
-    // Show message if no questions have been answered yet
-    if (!results.length) {
-        return (
-            <div className="body flex-grow-1 overflow-y-scroll" style={{ background: backgroundColor }}>
-                <div className="container mx-auto p-4">
-                    <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
-                        <button         
-                            className="bg-gradient-to-r mb-4 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
-                            onClick={goToDashboard}>
-                            <ArrowBackIcon fontSize="small" />
-                            Back to Dashboard
-                        </button>
-                    </div>
-                    
-                    <div className="flex items-center justify-center h-96">
-                        <div className="text-center p-8 bg-white rounded-lg shadow-lg">
-                            <div className="text-6xl mb-4">📝</div>
-                            <h2 className="text-2xl font-bold mb-2 text-gray-700">
-                                No Interview Answers Yet
-                            </h2>
-                            <p className="text-gray-500 mb-4">
-                                Complete some interview questions to see your instant report here.
-                            </p>
-                            <p className="text-sm text-gray-400">
-                                Your answered questions will appear automatically as you complete them.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+  useEffect(() => {
+    // If we have real data from the API, use it
+    if (interviewResults?.interview_questions) {
+      const processedResults = interviewResults.interview_questions.map(question => ({
+        question: question.question,
+        answer: question.answer || "No answer recorded",
+        sampleAnswer: question.suggested_answer || "No sample answer available",
+        isAnalyzed: true, // Flag to indicate this data has been analyzed
+      }));
+      setResults(processedResults);
+      setIsAnalysisLoading(false);
     }
+    // Use local transcript data if available before API response
+    else if (questionsList?.questions) {
+      try {
+        // Try to get saved transcripts from localStorage
+        let savedTranscripts = {};
+        try {
+          const savedData = localStorage.getItem("interviewTranscripts");
+          if (savedData) {
+            savedTranscripts = JSON.parse(savedData);
+          }
+        } catch (error) {
+          console.error("Error parsing saved transcripts:", error);
+        }
 
+        // Filter questions to only include those that have been answered
+        const answeredQuestions = questionsList.questions.filter((question, index) => {
+          const questionId = question.id || index.toString();
+          const userAnswer = savedTranscripts[questionId];
+          // Only include questions that have a non-empty answer
+          return (
+            userAnswer &&
+            userAnswer.trim() !== "" &&
+            userAnswer !== "Your answer will be analyzed after submission"
+          );
+        });
+
+        const resultsWithTranscripts = answeredQuestions.map((question, index) => {
+          // Get the corresponding transcript
+          const questionId = question.id || questionsList.questions.indexOf(question).toString();
+          const userAnswer = savedTranscripts[questionId];
+
+          return {
+            question: question.question,
+            answer: userAnswer,
+            sampleAnswer:
+              question.suggested_answer ||
+              "This would typically show the sample answer for reference.",
+            isAnalyzed: false, // Flag to indicate this is preliminary data
+            questionId: questionId, // Keep track of question ID for analysis
+          };
+        });
+
+        setResults(resultsWithTranscripts);
+      } catch (error) {
+        console.error("Error processing question data:", error);
+        // If there's an error, set empty results instead of mock data
+        setResults([]);
+      }
+    }
+  }, [interviewResults, questionsList]);
+
+  const goToDashboard = () => {
+    navigate("/studentDashboard");
+  };
+
+  const handleGeneratePdf = () => {
+    setLoading(true);
+    pdfExportComponent.current.save();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  };
+
+  const submitForAnalysis = async () => {
+    if (!results.length) return;
+
+    setIsAnalysisLoading(true);
+    try {
+      // Get the transcripts from results
+      const answersToSubmit = results.map(result => ({
+        questionId: result.questionId,
+        answer: result.answer,
+        question: result.question,
+      }));
+
+      setTimeout(() => {
+        setIsAnalysisLoading(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting answers for analysis:", error);
+      setIsAnalysisLoading(false);
+    }
+  };
+
+  const navigateToVideoAnalysis = () => {
+    navigate("/video-analysis");
+  };
+
+  const navigateToSpeechAnalysis = () => {
+    navigate("/speech-analysis");
+  };
+
+  const navigateToAnswerAnalysis = () => {
+    navigate("/interview-results");
+  };
+
+  // Show message if no questions have been answered yet
+  if (!results.length) {
     return (
-        <div className="body flex-grow-1 overflow-y-scroll" style={{ background: backgroundColor }}>
-            <div className="container mx-auto p-4">
-                {/* Action buttons row */}
-                <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
-                    <button         
-                        className="bg-gradient-to-r mb-4 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
-                        onClick={goToDashboard}>
-                        <ArrowBackIcon fontSize="small" />
-                        Back to Dashboard
-                    </button>
-                    
-                    <div className="flex flex-wrap gap-3">
-                        {/* Add Submit for Analysis button if not already analyzed */}
-                        {results.length > 0 && !results[0].isAnalyzed && (
-                            <button
-                                className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
-                                onClick={submitForAnalysis}
-                                disabled={isAnalysisLoading}
-                            >
-                                {isAnalysisLoading ? (
-                                    <>
-                                        <CircularProgress size={20} style={{ color: "#fff" }} />
-                                        Analyzing...
-                                    </>
-                                ) : (
-                                    <>Submit for Analysis</>
-                                )}
-                            </button>
-                        )}
-                        
-                        <button
-                            className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
-                            onClick={navigateToAnswerAnalysis}
-                        >
-                            <DescriptionIcon /> 
-                            Answer Analysis
-                            {loading && (
-                                <CircularProgress size={20} style={{ color: "#fff" }} />
-                            )}
-                        </button>
-                        
-                        <button
-                            className="flex items-center gap-2 bg-purple-600 text-white hover:bg-purple-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
-                            onClick={navigateToVideoAnalysis}
-                        >
-                            <VideocamIcon /> 
-                            Video Analysis
-                        </button>
-                        
-                        <button
-                            className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
-                            onClick={navigateToSpeechAnalysis}
-                        >
-                            <MicIcon /> 
-                            Speech Analysis
-                        </button>
-                        
-                        <button
-                            className="flex items-center gap-2 bg-orange-600 text-white hover:bg-orange-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
-                            onClick={handleGeneratePdf}
-                            disabled={loading}
-                        >
-                            <DescriptionIcon />
-                            {loading ? (
-                                <>
-                                    <CircularProgress size={20} style={{ color: "#fff" }} />
-                                    Generating PDF...
-                                </>
-                            ) : (
-                                'Download PDF Report'
-                            )}
-                        </button>
-                    </div>
-                </div>
-                
-                {/* Questions answered counter */}
-                <div className="mb-6 p-4 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg shadow">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-700">
-                                Instant Report Ready
-                            </h3>
-                            <p className="text-gray-600">
-                                {results.length} question{results.length !== 1 ? 's' : ''} answered and ready for review
-                            </p>
-                        </div>
-                        <div className="text-3xl font-bold text-green-600">
-                            {results.length}
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Global loading indicator */}
-                {isAnalysisLoading && (
-                    <div className="flex justify-center items-center p-6 mb-6 bg-white rounded-lg shadow">
-                        <CircularProgress size={40} style={{ color: "#6366f1" }} />
-                        <span className="ml-4 text-lg font-medium text-gray-700">Analyzing your interview responses...</span>
-                    </div>
-                )}
-                
-                {/* PDF Export Component */}
-                <PDFExport
-                    ref={pdfExportComponent}
-                    paperSize="A4"
-                    scale={0.6}
-                    margin="1cm"
-                    fileName="InterviewResults.pdf"
-                    forcePageBreak=".page-break"
-                >
-                    <div className="bg-white rounded-lg shadow-lg p-6 mb-8" id="pdf-content">
-                        {/* Title Section */}
-                        <h1 className="text-3xl font-bold mb-8 text-center text-purple-700 pb-4 border-b">
-                            Interview Results Analysis - Instant Report
-                        </h1>
+      <div className="body flex-grow-1 overflow-y-scroll" style={{ background: backgroundColor }}>
+        <div className="container mx-auto p-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
+            <button
+              className="bg-gradient-to-r mb-4 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
+              onClick={goToDashboard}
+            >
+              <ArrowBackIcon fontSize="small" />
+              Back to Dashboard
+            </button>
+          </div>
 
-                        {/* Summary Section */}
-                        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                            <h2 className="text-xl font-semibold mb-2 text-gray-800">Summary</h2>
-                            <p className="text-gray-700">
-                                This report contains {results.length} answered question{results.length !== 1 ? 's' : ''} 
-                                from your interview session. Each question shows your response alongside a sample answer for reference.
-                            </p>
-                        </div>
-
-                        {/* Results Section */}
-                        <div className="grid gap-8">
-                            {results.map((result, index) => (
-                                <div key={index} className={`bg-gray-50 p-6 rounded-lg shadow-md ${index !== 0 ? 'page-break' : ''}`}>
-                                    <div className="flex justify-between items-center mb-4 pb-3 border-b">
-                                        <h2 className="text-xl font-bold flex items-center">
-                                            <span className="w-8 h-8 bg-purple-100 rounded-full mr-2 flex items-center justify-center text-purple-800">
-                                                {index + 1}
-                                            </span>
-                                            Question
-                                        </h2>
-                                        {!result.isAnalyzed && (
-                                            <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
-                                                ✓ Answered
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    <div className="space-y-5">
-                                        <div className="p-4 rounded-lg bg-gray-100">
-                                            <h3 className="font-semibold mb-2 text-gray-800">
-                                                Question:
-                                            </h3>
-                                            <p className="text-gray-700">{result.question}</p>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="p-4 rounded-lg bg-blue-50">
-                                                <h3 className="font-semibold text-blue-800 mb-2">
-                                                    Your Answer:
-                                                </h3>
-                                                <p className="text-gray-700">{result.answer}</p>
-                                            </div>
-
-                                            <div className="p-4 rounded-lg bg-purple-50">
-                                                <h3 className="font-semibold text-purple-800 mb-2">
-                                                    Sample Answer for Reference:
-                                                </h3>
-                                                <p className="text-gray-700">{result.sampleAnswer}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Footer Section */}
-                        <div className="mt-8 page-break text-center pt-4 border-t text-gray-500">
-                            <p>Generated on {new Date().toLocaleDateString()} • For your personal development</p>
-                            {results.length > 0 && !results[0].isAnalyzed && (
-                                <p className="mt-2 text-blue-600">
-                                    Note: This is an instant report showing {results.length} answered questions. Submit for analysis to receive detailed feedback.
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </PDFExport>
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center p-8 bg-white rounded-lg shadow-lg">
+              <div className="text-6xl mb-4">📝</div>
+              <h2 className="text-2xl font-bold mb-2 text-gray-700">No Interview Answers Yet</h2>
+              <p className="text-gray-500 mb-4">
+                Complete some interview questions to see your instant report here.
+              </p>
+              <p className="text-sm text-gray-400">
+                Your answered questions will appear automatically as you complete them.
+              </p>
             </div>
+          </div>
         </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="body flex-grow-1 overflow-y-scroll" style={{ background: backgroundColor }}>
+      <div className="container mx-auto p-4">
+        {/* Action buttons row */}
+        <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
+          <button
+            className="bg-gradient-to-r mb-4 from-blue-500 to-purple-500 text-white hover:from-purple-500 hover:to-blue-500 py-2 px-4 rounded-full shadow-md transition-all duration-300 flex items-center gap-2"
+            onClick={goToDashboard}
+          >
+            <ArrowBackIcon fontSize="small" />
+            Back to Dashboard
+          </button>
+
+          <div className="flex flex-wrap gap-3">
+            {/* Add Submit for Analysis button if not already analyzed */}
+            {results.length > 0 && !results[0].isAnalyzed && (
+              <button
+                className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
+                onClick={submitForAnalysis}
+                disabled={isAnalysisLoading}
+              >
+                {isAnalysisLoading ? (
+                  <>
+                    <CircularProgress size={20} style={{ color: "#fff" }} />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>Submit for Analysis</>
+                )}
+              </button>
+            )}
+
+            <button
+              className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
+              onClick={navigateToAnswerAnalysis}
+            >
+              <DescriptionIcon />
+              Answer Analysis
+              {loading && <CircularProgress size={20} style={{ color: "#fff" }} />}
+            </button>
+
+            <button
+              className="flex items-center gap-2 bg-purple-600 text-white hover:bg-purple-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
+              onClick={navigateToVideoAnalysis}
+            >
+              <VideocamIcon />
+              Video Analysis
+            </button>
+
+            <button
+              className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
+              onClick={navigateToSpeechAnalysis}
+            >
+              <MicIcon />
+              Speech Analysis
+            </button>
+
+            <button
+              className="flex items-center gap-2 bg-orange-600 text-white hover:bg-orange-700 py-2 px-4 rounded-full shadow-md transition-all duration-300"
+              onClick={handleGeneratePdf}
+              disabled={loading}
+            >
+              <DescriptionIcon />
+              {loading ? (
+                <>
+                  <CircularProgress size={20} style={{ color: "#fff" }} />
+                  Generating PDF...
+                </>
+              ) : (
+                "Download PDF Report"
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Questions answered counter */}
+        <div className="mb-6 p-4 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700">Instant Report Ready</h3>
+              <p className="text-gray-600">
+                {results.length} question{results.length !== 1 ? "s" : ""} answered and ready for
+                review
+              </p>
+            </div>
+            <div className="text-3xl font-bold text-green-600">{results.length}</div>
+          </div>
+        </div>
+
+        {/* Global loading indicator */}
+        {isAnalysisLoading && (
+          <div className="flex justify-center items-center p-6 mb-6 bg-white rounded-lg shadow">
+            <CircularProgress size={40} style={{ color: "#6366f1" }} />
+            <span className="ml-4 text-lg font-medium text-gray-700">
+              Analyzing your interview responses...
+            </span>
+          </div>
+        )}
+
+        {/* PDF Export Component */}
+        <PDFExport
+          ref={pdfExportComponent}
+          paperSize="A4"
+          scale={0.6}
+          margin="1cm"
+          fileName="InterviewResults.pdf"
+          forcePageBreak=".page-break"
+        >
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8" id="pdf-content">
+            {/* Title Section */}
+            <h1 className="text-3xl font-bold mb-8 text-center text-purple-700 pb-4 border-b">
+              Interview Results Analysis - Instant Report
+            </h1>
+
+            {/* Summary Section */}
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">Summary</h2>
+              <p className="text-gray-700">
+                This report contains {results.length} answered question
+                {results.length !== 1 ? "s" : ""}
+                from your interview session. Each question shows your response alongside a sample
+                answer for reference.
+              </p>
+            </div>
+
+            {/* Results Section */}
+            <div className="grid gap-8">
+              {results.map((result, index) => (
+                <div
+                  key={index}
+                  className={`bg-gray-50 p-6 rounded-lg shadow-md ${index !== 0 ? "page-break" : ""}`}
+                >
+                  <div className="flex justify-between items-center mb-4 pb-3 border-b">
+                    <h2 className="text-xl font-bold flex items-center">
+                      <span className="w-8 h-8 bg-purple-100 rounded-full mr-2 flex items-center justify-center text-purple-800">
+                        {index + 1}
+                      </span>
+                      Question
+                    </h2>
+                    {!result.isAnalyzed && (
+                      <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+                        ✓ Answered
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-5">
+                    <div className="p-4 rounded-lg bg-gray-100">
+                      <h3 className="font-semibold mb-2 text-gray-800">Question:</h3>
+                      <p className="text-gray-700">{result.question}</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-4 rounded-lg bg-blue-50">
+                        <h3 className="font-semibold text-blue-800 mb-2">Your Answer:</h3>
+                        <p className="text-gray-700">{result.answer}</p>
+                      </div>
+
+                      <div className="p-4 rounded-lg bg-purple-50">
+                        <h3 className="font-semibold text-purple-800 mb-2">
+                          Sample Answer for Reference:
+                        </h3>
+                        <p className="text-gray-700">{result.sampleAnswer}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer Section */}
+            <div className="mt-8 page-break text-center pt-4 border-t text-gray-500">
+              <p>Generated on {new Date().toLocaleDateString()} • For your personal development</p>
+              {results.length > 0 && !results[0].isAnalyzed && (
+                <p className="mt-2 text-blue-600">
+                  Note: This is an instant report showing {results.length} answered questions.
+                  Submit for analysis to receive detailed feedback.
+                </p>
+              )}
+            </div>
+          </div>
+        </PDFExport>
+      </div>
+    </div>
+  );
 };
 
 export default InterviewResults;

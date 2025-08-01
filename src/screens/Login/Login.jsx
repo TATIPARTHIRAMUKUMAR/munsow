@@ -18,41 +18,41 @@ import AdminIcon from "./../../assets/icons/admin-login-icon.svg";
 import AdminLoginHero from "./../../assets/admin-login-hero-img.png";
 
 const StyledRadioGroup = styled(RadioGroup)({
-  flexDirection: 'row',
-  marginBottom: '30px',
+  flexDirection: "row",
+  marginBottom: "30px",
 });
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => ({
-  border: '2px solid',
-  borderRadius: '20px',
-  padding: '10px 15px 10px 0px',
-  margin: '0 0px',
-  width: '250px',
-  transition: 'border-color 0.3s, background-color 0.3s',
-  borderColor: checked ? '#2BE2D0' : '#ddd',
-  backgroundColor: checked ? '#F0FCFF' : '#fff',
-  '& .MuiSvgIcon-root': {
-    display: 'block', 
-    color: '#2BE2D0',
+  border: "2px solid",
+  borderRadius: "20px",
+  padding: "10px 15px 10px 0px",
+  margin: "0 0px",
+  width: "250px",
+  transition: "border-color 0.3s, background-color 0.3s",
+  borderColor: checked ? "#2BE2D0" : "#ddd",
+  backgroundColor: checked ? "#F0FCFF" : "#fff",
+  "& .MuiSvgIcon-root": {
+    display: "block",
+    color: "#2BE2D0",
   },
-  '& .custom-icon': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '24px',
-    height: '24px',
-    borderRadius: '50%',
-    
-    color: checked ? '#fff' : '#ddd',
+  "& .custom-icon": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "24px",
+    height: "24px",
+    borderRadius: "50%",
+
+    color: checked ? "#fff" : "#ddd",
   },
-  '& .MuiTypography-root': {
-    fontWeight: checked ? 'bold' : 'normal',
-    color: checked ? '#333' : '#333',
-    fontSize: '16px',
+  "& .MuiTypography-root": {
+    fontWeight: checked ? "bold" : "normal",
+    color: checked ? "#333" : "#333",
+    fontSize: "16px",
   },
-  '&:hover': {
-    cursor: 'pointer',
-    borderColor: '#2BE2D0',
+  "&:hover": {
+    cursor: "pointer",
+    borderColor: "#2BE2D0",
   },
 }));
 
@@ -78,12 +78,12 @@ const LoginPage = () => {
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
-  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const { colorTheme: reduxColorTheme } = useSelector(state => state?.data);
   const BackgroundColor = isDarkMode
     ? reduxColorTheme.dark.selectBackground
     : reduxColorTheme.light.selectBackground;
 
-  const loginInputHandler = (e) => {
+  const loginInputHandler = e => {
     const { name = "", value = "" } = e.target;
     if (name === "universityId") {
       setUniversityId(value);
@@ -100,34 +100,36 @@ const LoginPage = () => {
     setOpen(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const payload = {
       email: universityId,
       password: password,
     };
-    dispatch(institution_login(payload, () => {
-      localStorage.setItem("branch", "All Branches");
-      localStorage.setItem("course", "All Courses");
-      localStorage.setItem("department", "All Departments");
-      localStorage.setItem("user", "All Users");
-      window.location.href = "./adminDashboard";
-    }));
+    dispatch(
+      institution_login(payload, () => {
+        localStorage.setItem("branch", "All Branches");
+        localStorage.setItem("course", "All Courses");
+        localStorage.setItem("department", "All Departments");
+        localStorage.setItem("user", "All Users");
+        window.location.href = "./adminDashboard";
+      })
+    );
   };
 
-  const handleLoginTypeChange = (type) => {
+  const handleLoginTypeChange = type => {
     setLoginType(type);
-    if (type == 'student') {
-      navigate("/studentLogin")
+    if (type == "student") {
+      navigate("/studentLogin");
     }
   };
 
-  const handleRadioChange = (event) => {
+  const handleRadioChange = event => {
     const selectedType = event.target.value;
     setLoginType(selectedType);
-    if (selectedType === 'student') {
+    if (selectedType === "student") {
       navigate("/");
-    } else if (selectedType === 'teacher') {
+    } else if (selectedType === "teacher") {
       navigate("/teacherLogin");
     }
     // Add more conditions for other types if necessary
@@ -135,51 +137,54 @@ const LoginPage = () => {
 
   // Click handler for the span
   const handleStudentClick = () => {
-    navigate('/');
+    navigate("/");
   };
   return (
     <div className="bg-[#F1F8F8] h-screen overflow-auto">
-
       <div className="flex flex-col md:flex-row items-center">
         <div className="hidden md:flex justify-center items-center w-3/6 ">
-          <img
-            src={AdminLoginHero}
-            className=""
-            alt="Login"
-          />
+          <img src={AdminLoginHero} className="" alt="Login" />
         </div>
         <div className="w-full md:w-3/6 p-5 lg:p-20 ">
           <div className="rounded-lg p-6">
-
             <div className="mb-4">
               <h2 className="text-3xl font-semibold  mb-4">Institution Login</h2>
               <FormControl component="fieldset">
-              <StyledRadioGroup row value={loginType} onChange={handleRadioChange} className="flex justify-start gap-3">
-              <StyledFormControlLabel
-                value="institution"
-                className="justify-center"
-                label={
-                  <div className="flex flex-col justify-center items-center">
-                    <span className="custom-icon"><img src={AdminIcon}  alt="Login"/></span>
-                    Organisation Admin
-                  </div>
-                }
-                control={<Radio />}
-                checked={loginType === 'institution'}
-              />
-              <StyledFormControlLabel
-                value="teacher"
-                className="justify-center"
-                label={
-                  <div className="flex flex-col justify-center items-center">
-                    <span className="custom-icon"><img src={TeacherIcon}  alt="Login"/></span>
-                    Department’s Professor 
-                  </div>
-                }
-                control={<Radio />}
-                checked={loginType === 'teacher'}
-              />
-              </StyledRadioGroup>
+                <StyledRadioGroup
+                  row
+                  value={loginType}
+                  onChange={handleRadioChange}
+                  className="flex justify-start gap-3"
+                >
+                  <StyledFormControlLabel
+                    value="institution"
+                    className="justify-center"
+                    label={
+                      <div className="flex flex-col justify-center items-center">
+                        <span className="custom-icon">
+                          <img src={AdminIcon} alt="Login" />
+                        </span>
+                        Organisation Admin
+                      </div>
+                    }
+                    control={<Radio />}
+                    checked={loginType === "institution"}
+                  />
+                  <StyledFormControlLabel
+                    value="teacher"
+                    className="justify-center"
+                    label={
+                      <div className="flex flex-col justify-center items-center">
+                        <span className="custom-icon">
+                          <img src={TeacherIcon} alt="Login" />
+                        </span>
+                        Department’s Professor
+                      </div>
+                    }
+                    control={<Radio />}
+                    checked={loginType === "teacher"}
+                  />
+                </StyledRadioGroup>
               </FormControl>
             </div>
             <form onSubmit={handleSubmit}>
@@ -251,16 +256,19 @@ const LoginPage = () => {
               </div>
             </div> */}
             <div className="mt-5 text-black">
-              <span>
-                Not Registered?&nbsp;
-              </span>
-              <a href="https://www.munsow.com/contact" target="_blank"><span className="underline text-[#81007F]" >Contact Us</span></a>              
+              <span>Not Registered?&nbsp;</span>
+              <a href="https://www.munsow.com/contact" target="_blank">
+                <span className="underline text-[#81007F]">Contact Us</span>
+              </a>
             </div>
             <div className="mt-16 text-center text-black">
-              <span>
-                Not an Organisation?&nbsp;Jobseeker Login&nbsp;
+              <span>Not an Organisation?&nbsp;Jobseeker Login&nbsp;</span>
+              <span
+                className="underline cursor-pointer text-[#81007F]"
+                onClick={handleStudentClick}
+              >
+                Here
               </span>
-              <span className="underline cursor-pointer text-[#81007F]" onClick={handleStudentClick}>Here</span>            
             </div>
           </div>
         </div>

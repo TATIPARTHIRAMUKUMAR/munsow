@@ -29,7 +29,7 @@ export default function QuizResults({ questions, answers, pass, total_score, tot
       </div>
       <div className="space-y-4">
         {questions?.map((question, index) => {
-          const answer = answers.find((a) => a.question_id === question.id);
+          const answer = answers.find(a => a.question_id === question.id);
           return (
             <div key={question.id} className="p-4 rounded-lg bg-white shadow-md">
               <div className="flex justify-between ">
@@ -49,16 +49,25 @@ export default function QuizResults({ questions, answers, pass, total_score, tot
                   const isCorrect = answer?.correct_answers.includes(option);
                   const isSelected = answer?.selected_options.includes(ind + 1);
                   return (
-                    <div key={ind} className={`flex items-center gap-2 p-2 ${isSelected ? "bg-gray-200 rounded-lg" : ""}`}>
+                    <div
+                      key={ind}
+                      className={`flex items-center gap-2 p-2 ${isSelected ? "bg-gray-200 rounded-lg" : ""}`}
+                    >
                       <CircleIcon
                         fontSize="small"
                         className={`${
-                          isCorrect ? "text-green-500" : isSelected ? "text-red-500" : "text-gray-400"
+                          isCorrect
+                            ? "text-green-500"
+                            : isSelected
+                              ? "text-red-500"
+                              : "text-gray-400"
                         }`}
                       />
                       {option}
                       {isCorrect && <CorrectIcon className="text-green-500" fontSize="small" />}
-                      {isSelected && !isCorrect && <ClearIcon className="text-red-500" fontSize="small" />}
+                      {isSelected && !isCorrect && (
+                        <ClearIcon className="text-red-500" fontSize="small" />
+                      )}
                     </div>
                   );
                 })}

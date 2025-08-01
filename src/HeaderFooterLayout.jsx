@@ -23,7 +23,7 @@ import { Collapse } from "@mui/material";
 import AppHeader from "./screens/Admin/AppHeader";
 import { IoMdSettings } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
-import  munsowLogo  from "../src/assets/MunsowLogo.png";
+import munsowLogo from "../src/assets/MunsowLogo.png";
 
 import {
   FaThLarge,
@@ -41,13 +41,17 @@ import {
   FaBook,
 } from "react-icons/fa";
 
-import { FaFileCircleCheck, FaChartColumn, FaChartGantt, FaHeartPulse, FaClipboardList } from "react-icons/fa6";
+import {
+  FaFileCircleCheck,
+  FaChartColumn,
+  FaChartGantt,
+  FaHeartPulse,
+  FaClipboardList,
+} from "react-icons/fa6";
 
 import { BiSolidReport } from "react-icons/bi";
 import { classNames } from "./utils/generalUtils";
 import { useDarkMode } from "./Dark";
-
-
 
 const drawerWidth = 270;
 
@@ -93,7 +97,7 @@ const DrawerFooter = styled("div")(({ theme }) => ({
 }));
 
 const CustomDrawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: prop => prop !== "open",
 })(({ theme, open, role1, color }) => ({
   width: drawerWidth,
   flexShrink: 0,
@@ -112,9 +116,8 @@ const CustomDrawer = styled(MuiDrawer, {
 export default function HeaderFooterLayout({ Component }) {
   const navigate = useNavigate();
   const location = useLocation();
-  
-  const [interviewStarted, setInterviewStarted] = useState(false);
 
+  const [interviewStarted, setInterviewStarted] = useState(false);
 
   useEffect(() => {
     if (location.pathname === "/interview") {
@@ -150,13 +153,9 @@ export default function HeaderFooterLayout({ Component }) {
     ? colorTheme.dark.selectBackground
     : colorTheme.light.selectBackground;
 
-  const selectedIcon = isDarkMode
-    ? colorTheme.dark.selectIcon
-    : colorTheme.light.selectIcon;
+  const selectedIcon = isDarkMode ? colorTheme.dark.selectIcon : colorTheme.light.selectIcon;
 
-  const textColor = isDarkMode
-    ? colorTheme.dark.textColor
-    : colorTheme.light.textColor;
+  const textColor = isDarkMode ? colorTheme.dark.textColor : colorTheme.light.textColor;
 
   const selectTextColor = isDarkMode
     ? colorTheme.dark.selectTextColor
@@ -311,8 +310,7 @@ export default function HeaderFooterLayout({ Component }) {
         //   subItems: [],
         // },
       ]);
-    } 
-     else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 2) {
+    } else if (GLOBAL_CONSTANTS?.user_cred?.role_id === 2) {
       setMenuData([
         {
           label: "Dashboard",
@@ -354,34 +352,34 @@ export default function HeaderFooterLayout({ Component }) {
     } else {
       setMenuData([
         {
-            label: "Dashboard",
-            icon: <FaThLarge size={20} className="" />,
-            route: "/studentDashboard",
-            subItems: [],
-          },
-          {
-            label: (
-              <div className="flex items-center gap-2">
-                Mock Interview
-                <svg viewBox="0 0 200 200" className="w-4 h-4">
-                  <defs>
-                    <linearGradient id="menuStarGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" style={{ stopColor: "#00f5f5" }} />
-                      <stop offset="50%" style={{ stopColor: "#7fff00" }} />
-                      <stop offset="100%" style={{ stopColor: "#ffff00" }} />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M100,10 L135,80 L190,80 L145,125 L160,190 L100,155 L40,190 L55,125 L10,80 L65,80 Z"
-                    fill="url(#menuStarGradient)"
-                  />
-                </svg>
-              </div>
-            ),
-            icon: <FaClone size={20} className="" />,
-            route: "/practice",
-            subItems: [],
-          },
+          label: "Dashboard",
+          icon: <FaThLarge size={20} className="" />,
+          route: "/studentDashboard",
+          subItems: [],
+        },
+        {
+          label: (
+            <div className="flex items-center gap-2">
+              Mock Interview
+              <svg viewBox="0 0 200 200" className="w-4 h-4">
+                <defs>
+                  <linearGradient id="menuStarGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: "#00f5f5" }} />
+                    <stop offset="50%" style={{ stopColor: "#7fff00" }} />
+                    <stop offset="100%" style={{ stopColor: "#ffff00" }} />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M100,10 L135,80 L190,80 L145,125 L160,190 L100,155 L40,190 L55,125 L10,80 L65,80 Z"
+                  fill="url(#menuStarGradient)"
+                />
+              </svg>
+            </div>
+          ),
+          icon: <FaClone size={20} className="" />,
+          route: "/practice",
+          subItems: [],
+        },
         {
           label: "My Interview Reports",
           icon: <FaChartLine size={20} className="" />,
@@ -439,9 +437,9 @@ export default function HeaderFooterLayout({ Component }) {
       let route = location.pathname;
 
       let meunItem = menuData?.find(
-        (m) => m?.route == route || m?.subItems?.find((s) => s.route == route)
+        m => m?.route == route || m?.subItems?.find(s => s.route == route)
       );
-      let index = menuData?.findIndex((m) => m?.route == meunItem?.route);
+      let index = menuData?.findIndex(m => m?.route == meunItem?.route);
       setSelectedItem(index);
     }
   }, [menuData]);
@@ -475,17 +473,17 @@ export default function HeaderFooterLayout({ Component }) {
 
   useEffect(() => {
     if (menuData?.length > 0) {
-      const route = location.pathname; 
+      const route = location.pathname;
 
       let menuItem = menuData.find(
-        (m) => m.route === route || m.subItems.some((s) => s.route === route)
+        m => m.route === route || m.subItems.some(s => s.route === route)
       );
 
       if (menuItem) {
         const mainIndex = menuData.indexOf(menuItem);
         setSelectedItem(mainIndex);
 
-        const subItem = menuItem.subItems.find((s) => s.route === route);
+        const subItem = menuItem.subItems.find(s => s.route === route);
         if (subItem) {
           const subIndex = menuItem.subItems.indexOf(subItem);
           setSelectedSubItem(subIndex);
@@ -532,11 +530,7 @@ export default function HeaderFooterLayout({ Component }) {
       <CustomDrawer
         variant="permanent"
         open={open}
-        role1={
-          GLOBAL_CONSTANTS?.user_cred?.role_id
-            ? GLOBAL_CONSTANTS?.user_cred?.role_id
-            : 1
-        }
+        role1={GLOBAL_CONSTANTS?.user_cred?.role_id ? GLOBAL_CONSTANTS?.user_cred?.role_id : 1}
         color={color.background}
         background={backgroundColorClass}
       >
@@ -573,8 +567,7 @@ export default function HeaderFooterLayout({ Component }) {
             <div
               key={mainIndex}
               className={classNames(
-                GLOBAL_CONSTANTS?.user_cred?.role_id !== 1 &&
-                  (mainIndex == 3 || mainIndex == 5)
+                GLOBAL_CONSTANTS?.user_cred?.role_id !== 1 && (mainIndex == 3 || mainIndex == 5)
                   ? "mb-16"
                   : "mb-2",
                 ""
@@ -588,9 +581,7 @@ export default function HeaderFooterLayout({ Component }) {
                     if (selectedItem !== mainIndex) {
                       setSelectedSubItem(null);
                     }
-                    setOpenSubMenu(
-                      openSubMenu === mainIndex ? null : mainIndex
-                    );
+                    setOpenSubMenu(openSubMenu === mainIndex ? null : mainIndex);
                   } else {
                     handleListItemClick(mainIndex, mainItem.route);
                   }
@@ -622,9 +613,7 @@ export default function HeaderFooterLayout({ Component }) {
                       backgroundColor: selectedBackgroundColor,
                     },
                     background:
-                      selectedItem === mainIndex
-                        ? selectedBackgroundColor
-                        : "transparent",
+                      selectedItem === mainIndex ? selectedBackgroundColor : "transparent",
                   }}
                 >
                   <ListItemIcon
@@ -632,10 +621,7 @@ export default function HeaderFooterLayout({ Component }) {
                       minWidth: 0,
                       mr: open ? 2 : "auto",
                       justifyContent: "center",
-                      color:
-                        selectedItem === mainIndex
-                          ? `${selectedIcon}`
-                          : "white",
+                      color: selectedItem === mainIndex ? `${selectedIcon}` : "white",
                     }}
                     // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
                   >
@@ -644,15 +630,10 @@ export default function HeaderFooterLayout({ Component }) {
                   <ListItemText
                     disableTypography
                     style={{
-                      color:
-                        selectedItem === mainIndex
-                          ? selectTextColor
-                          : "#FFFFFF",
+                      color: selectedItem === mainIndex ? selectTextColor : "#FFFFFF",
                     }}
                     className={classNames(
-                      selectedItem === mainIndex
-                        ? "font-semibold"
-                        : `text-500 font-medium`,
+                      selectedItem === mainIndex ? "font-semibold" : `text-500 font-medium`,
                       "text-base"
                     )}
                     primary={mainItem.label}
@@ -668,19 +649,13 @@ export default function HeaderFooterLayout({ Component }) {
                       {openSubMenu === mainIndex ? (
                         <ExpandLessIcon
                           style={{
-                            color:
-                              selectedItem === mainIndex
-                                ? "#21263e"
-                                : "#fafcfc",
+                            color: selectedItem === mainIndex ? "#21263e" : "#fafcfc",
                           }}
                         />
                       ) : (
                         <ExpandMoreIcon
                           style={{
-                            color:
-                              selectedItem === mainIndex
-                                ? "#21263e"
-                                : "#fafcfc",
+                            color: selectedItem === mainIndex ? "#21263e" : "#fafcfc",
                           }}
                         />
                       )}
@@ -688,11 +663,7 @@ export default function HeaderFooterLayout({ Component }) {
                   )}
                 </ListItemButton>
               </ListItem>
-              <Collapse
-                in={openSubMenu === mainIndex}
-                timeout="auto"
-                unmountOnExit
-              >
+              <Collapse in={openSubMenu === mainIndex} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {mainItem.subItems.map((subItem, subIndex) => (
                     <ListItem
@@ -700,12 +671,10 @@ export default function HeaderFooterLayout({ Component }) {
                       disablePadding
                       sx={{ display: "block", pl: open ? 3 : 0 }}
                       onClick={() => {
-                        let meunItem = menuData?.find((m) =>
-                          m?.subItems?.find((s) => s.route == subItem.route)
+                        let meunItem = menuData?.find(m =>
+                          m?.subItems?.find(s => s.route == subItem.route)
                         );
-                        let index = menuData?.findIndex(
-                          (m) => m?.route == meunItem?.route
-                        );
+                        let index = menuData?.findIndex(m => m?.route == meunItem?.route);
                         handleListItemClick(index, subItem.route);
                         setSelectedSubItem(subIndex);
                       }}
@@ -716,10 +685,7 @@ export default function HeaderFooterLayout({ Component }) {
                           minHeight: 48,
                           justifyContent: open ? "initial" : "center",
                           px: 2.5,
-                          backgroundColor:
-                            selectedSubItem === subIndex
-                              ? "#2BE2D0"
-                              : "transparent",
+                          backgroundColor: selectedSubItem === subIndex ? "#2BE2D0" : "transparent",
                           borderRadius: "5px",
                           margin: "4px 10px",
                           "&:hover": {
@@ -732,10 +698,7 @@ export default function HeaderFooterLayout({ Component }) {
                             minWidth: 0,
                             mr: open ? 2 : "auto",
                             justifyContent: "center",
-                            color:
-                              selectedSubItem === subIndex
-                                ? "#21263e"
-                                : "white ",
+                            color: selectedSubItem === subIndex ? "#21263e" : "white ",
                           }}
 
                           // className={classNames(selectedItem === mainIndex ? "text-[#a590cf]" : "text-gray-400",)}
@@ -745,16 +708,11 @@ export default function HeaderFooterLayout({ Component }) {
                         <ListItemText
                           disableTypography
                           style={{
-                            color:
-                              selectedSubItem === subIndex
-                                ? "#21263e"
-                                : "white",
+                            color: selectedSubItem === subIndex ? "#21263e" : "white",
                             fontSize: "15px",
                           }}
                           className={classNames(
-                            selectedSubItem === subIndex
-                              ? "font-semibold"
-                              : `text-500 font-medium`,
+                            selectedSubItem === subIndex ? "font-semibold" : `text-500 font-medium`,
                             "text-base"
                           )}
                           primary={subItem.label}
@@ -822,10 +780,7 @@ export default function HeaderFooterLayout({ Component }) {
         role1={GLOBAL_CONSTANTS?.user_cred ? GLOBAL_CONSTANTS?.user_cred : {}}
       />
 
-      <div
-        className={`mt-[60px] overflow-auto ${backgroundColorClass}`}
-        style={{ flexGrow: 1 }}
-      >
+      <div className={`mt-[60px] overflow-auto ${backgroundColorClass}`} style={{ flexGrow: 1 }}>
         {Component}
       </div>
     </Box>

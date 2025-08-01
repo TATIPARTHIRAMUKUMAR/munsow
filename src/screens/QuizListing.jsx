@@ -26,20 +26,17 @@ export default function QuizListing() {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedRow, setselectedRow] = useState(null);
-  const { quizList } = useSelector((state) => state.data);
+  const { quizList } = useSelector(state => state.data);
 
   const [profileImage, setProfileImage] = useState([]);
-  const handleFileSelect = (event) => {
+  const handleFileSelect = event => {
     setProfileImage(() => event.target.files);
   };
 
   const onSignUp = () => {
     console.info(profileImage, "profileImage");
     dispatch(
-      quizCreate(
-        { file: profileImage, user_id: GLOBAL_CONSTANTS?.user_cred?.user_id },
-        () => {}
-      )
+      quizCreate({ file: profileImage, user_id: GLOBAL_CONSTANTS?.user_cred?.user_id }, () => {})
     );
   };
 
@@ -52,7 +49,7 @@ export default function QuizListing() {
   }, [quizList]);
   //   #region image upload
 
- const handleChange = (id, value) => {
+  const handleChange = (id, value) => {
     if (value)
       dispatch(
         activateQuiz(id, () => {
@@ -66,7 +63,6 @@ export default function QuizListing() {
         })
       );
   };
-
 
   return (
     <div className="grid gap-4 p-4">
@@ -112,7 +108,7 @@ export default function QuizListing() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {quizList.map((row) => (
+              {quizList.map(row => (
                 <TableRow
                   key={row.title}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -136,7 +132,7 @@ export default function QuizListing() {
                     <Switch
                       color="secondary"
                       checked={row?.is_active}
-                      onChange={(e) => handleChange(row?.id, e.target.checked)}
+                      onChange={e => handleChange(row?.id, e.target.checked)}
                       inputProps={{ "aria-label": "controlled" }}
                     />
                     {/* <DeleteIcon
@@ -188,7 +184,7 @@ export default function QuizListing() {
                 display: "grid",
                 gap: "10px",
               }}
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
               }}
             >
@@ -215,18 +211,19 @@ export default function QuizListing() {
                 <div className="grid grid-cols-2 justify-center items-center w-full h-full gap-2   ">
                   <div className="flex flex-col justify-center items-center text-md gap-y-4 text-white font-medium bg-gray-400 rounded p-4 border-2 border-dashed border-gray-200">
                     Download Sample CSV file from here
-                    <a href={`${GLOBAL_CONSTANTS?.backend_url}quiz/${quizList?.find(()=>true)?.id}/download_quiz`} >
-                    <Button
-                      endIcon={<CloudDownloadIcon />}
-                      style={{ color: "white", borderColor: "white" }}
-                      variant="outlined"
-                      size="small"
-                      onClick={() => {    
-                      }}
+                    <a
+                      href={`${GLOBAL_CONSTANTS?.backend_url}quiz/${quizList?.find(() => true)?.id}/download_quiz`}
                     >
-                      {" "}
-                      Download{" "}
-                    </Button>
+                      <Button
+                        endIcon={<CloudDownloadIcon />}
+                        style={{ color: "white", borderColor: "white" }}
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {}}
+                      >
+                        {" "}
+                        Download{" "}
+                      </Button>
                     </a>
                   </div>
 
@@ -307,7 +304,7 @@ export default function QuizListing() {
                 display: "grid",
                 gap: "10px",
               }}
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
               }}
             >
@@ -334,18 +331,17 @@ export default function QuizListing() {
                 <div className="grid grid-cols-2 justify-center items-center w-full h-full gap-2   ">
                   <div className="flex flex-col justify-center items-center text-md gap-y-4 text-white font-medium bg-gray-400 rounded p-4 border-2 border-dashed border-gray-200">
                     Download Sample CSV file from here
-                    <a href={`${GLOBAL_CONSTANTS?.backend_url}quiz/${selectedRow}/download_quiz`} >
-                    <Button
-                      endIcon={<CloudDownloadIcon />}
-                      style={{ color: "white", borderColor: "white" }}
-                      variant="outlined"
-                      size="small"
-                      onClick={() => {    
-                      }}
-                    >
-                      {" "}
-                      Download{" "}
-                    </Button>
+                    <a href={`${GLOBAL_CONSTANTS?.backend_url}quiz/${selectedRow}/download_quiz`}>
+                      <Button
+                        endIcon={<CloudDownloadIcon />}
+                        style={{ color: "white", borderColor: "white" }}
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {}}
+                      >
+                        {" "}
+                        Download{" "}
+                      </Button>
                     </a>
                   </div>
 

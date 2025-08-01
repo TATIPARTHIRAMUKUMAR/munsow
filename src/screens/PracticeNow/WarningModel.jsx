@@ -1,5 +1,5 @@
 import React from "react";
-import "./Practice.css"; 
+import "./Practice.css";
 
 const WarningModel = ({ message, isVisible, onClose }) => {
   if (!isVisible) return null;

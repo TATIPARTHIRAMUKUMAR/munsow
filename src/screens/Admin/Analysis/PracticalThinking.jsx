@@ -20,22 +20,21 @@ import {
   loadPracticalThinking,
   loadCourseList,
   loadDepartmentList,
-  loadUsersList
+  loadUsersList,
 } from "../../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import PopUpFilter from "../../../Components/PopUpFilter";
 import GLOBAL_CONSTANTS from "../../../../GlobalConstants.js";
 import CustomDateRangePicker from "../../../Components/DateRange.jsx";
-import format from 'date-fns/format';
+import format from "date-fns/format";
 
 const PracticalThinking = () => {
-  window.onbeforeunload = ()=>{
+  window.onbeforeunload = () => {
     localStorage.setItem("branch", "All Branches");
     localStorage.setItem("course", "All Courses");
     localStorage.setItem("department", "All Departments");
     localStorage.setItem("user", "All Users");
-
-  }
+  };
   const barPlotData = [
     {
       "Not Solved": 24,
@@ -64,10 +63,17 @@ const PracticalThinking = () => {
   const [active, setActive] = React.useState("All Branches");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const {practicalFilters,practicalThinking, branchList, courseList, departmentList, userListByDepartment} = useSelector((state)=>state?.data)
+  const {
+    practicalFilters,
+    practicalThinking,
+    branchList,
+    courseList,
+    departmentList,
+    userListByDepartment,
+  } = useSelector(state => state?.data);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  
+
   useEffect(() => {
     dispatch(getDepartmentList());
     dispatch(getCourseList());
@@ -78,25 +84,22 @@ const PracticalThinking = () => {
   const legendFormatter = (value, entry) => {
     return (
       <div className={"flex items-center"}>
-        <div
-          className={"h-4 w-4 mr-2"}
-          style={{ backgroundColor: entry.color }}
-        />
+        <div className={"h-4 w-4 mr-2"} style={{ backgroundColor: entry.color }} />
         <div>{value}</div>
       </div>
     );
   };
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuItemClick = (value) => {
+  const handleMenuItemClick = value => {
     if (value == "All Branches") {
       setBarPlot(barPlotData);
     } else {
       // use api to filter the data using id
       const problemSolvingRate = ["Solved", "Not Solved"];
-      const filteredBarplot = barPlot.map((data) => {
+      const filteredBarplot = barPlot.map(data => {
         for (const problem of problemSolvingRate) {
           const randomValue = Math.floor(Math.random() * 100) + 1;
           data[problem] = randomValue;
@@ -113,45 +116,40 @@ const PracticalThinking = () => {
     setAnchorEl(null);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (practicalFilters?.branch != undefined && practicalFilters?.branch != null) {
       localStorage.setItem("branch", practicalFilters?.branch);
       localStorage.setItem("course", practicalFilters?.course);
       localStorage.setItem("department", practicalFilters?.department);
       localStorage.setItem("user", practicalFilters?.user_name);
 
-      setEndDate(practicalFilters?.end_date)
-      setStartDate(practicalFilters?.start_date)
+      setEndDate(practicalFilters?.end_date);
+      setStartDate(practicalFilters?.start_date);
 
       dispatch(loadCourseList(`branch_id=${practicalFilters?.branch_id}`));
       dispatch(loadDepartmentList(`course_id=${practicalFilters?.course_id}`));
       dispatch(loadUsersList(`department_id=${practicalFilters?.department_id}`));
-
-
     }
+  }, [practicalThinking]);
 
-  },[practicalThinking])
-
-  const onDateSelect = (value) => {
-    console.log("api calls",value)
-    const formattedStartDate = format(value.startDate, 'yyyy-MM-dd');
-    const formattedEndDate = format(value.endDate, 'yyyy-MM-dd');
+  const onDateSelect = value => {
+    console.log("api calls", value);
+    const formattedStartDate = format(value.startDate, "yyyy-MM-dd");
+    const formattedEndDate = format(value.endDate, "yyyy-MM-dd");
     let params = {
       branch: localStorage.getItem("branch"),
       course: localStorage.getItem("course"),
       department: localStorage.getItem("department"),
       student_id: localStorage.getItem("user_id"),
       start_date: formattedStartDate,
-      end_date: formattedEndDate
+      end_date: formattedEndDate,
     };
     if (startDate && endDate) {
-
-
       // route == "AdminDashboard" ? dispatch(loadInstitutionStats(params)) : (route == "BehaviourAnanlysis" ? dispatch(loadBehaviourAnalysis(params)) :
-      dispatch(loadPracticalThinking(params))
+      dispatch(loadPracticalThinking(params));
       // (route == "PracticalThinking" ? "" : (route == "EmotionSensing" ? dispatch(loadEmotionStats(params)) : ""))));
     }
-  }
+  };
 
   return (
     <div className="flex-grow p-5">
@@ -167,17 +165,35 @@ const PracticalThinking = () => {
                   Practical Thinking
                 </span> */}
                 <div>
-                <div className="flex justify-end mr-10 mb-3">
-                <div className="">
-                <PopUpFilter route="EmotionSensing" list="Branches" dependencyList={branchList} startDate={startDate} endDate={endDate}/>
-              </div>
-              <div className="">
-                <PopUpFilter route="EmotionSensing" list="Courses" dependencyList={courseList} startDate={startDate} endDate={endDate}/>
-              </div>
-              <div className="">
-                <PopUpFilter route="EmotionSensing" list="Departments" dependencyList={departmentList} startDate={startDate} endDate={endDate}/>
-              </div>
-              {/* <div className="">
+                  <div className="flex justify-end mr-10 mb-3">
+                    <div className="">
+                      <PopUpFilter
+                        route="EmotionSensing"
+                        list="Branches"
+                        dependencyList={branchList}
+                        startDate={startDate}
+                        endDate={endDate}
+                      />
+                    </div>
+                    <div className="">
+                      <PopUpFilter
+                        route="EmotionSensing"
+                        list="Courses"
+                        dependencyList={courseList}
+                        startDate={startDate}
+                        endDate={endDate}
+                      />
+                    </div>
+                    <div className="">
+                      <PopUpFilter
+                        route="EmotionSensing"
+                        list="Departments"
+                        dependencyList={departmentList}
+                        startDate={startDate}
+                        endDate={endDate}
+                      />
+                    </div>
+                    {/* <div className="">
                 <PopUpFilter route="EmotionSensing" list="user" dependencyList={userListByDepartment} startDate={startDate} endDate={endDate}/>
               </div>
               {startDate != "" && (
@@ -185,7 +201,7 @@ const PracticalThinking = () => {
                 <CustomDateRangePicker startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} onDateSelect={onDateSelect}/>
               </div>
               )} */}
-                </div>
+                  </div>
                 </div>
               </div>
               <div className="mt-5 pt-3">
@@ -203,18 +219,11 @@ const PracticalThinking = () => {
                       <Label value="Department" position="bottom" dy={20} />
                     </XAxis>
                     <YAxis axisLine={false} tickLine={false} dx={-5}>
-                      <Label
-                        value="Problem Solving %"
-                        position="middle"
-                        angle={-90}
-                        dx={-25}
-                      />
+                      <Label value="Problem Solving %" position="middle" angle={-90} dx={-25} />
                     </YAxis>
                     <Tooltip />
                     <Legend
-                      formatter={(value, entry) =>
-                        legendFormatter(value, entry)
-                      }
+                      formatter={(value, entry) => legendFormatter(value, entry)}
                       layout="horizontal"
                       iconSize={0}
                       wrapperStyle={{
@@ -224,12 +233,7 @@ const PracticalThinking = () => {
                         top: "-50px",
                       }}
                     />
-                    <Bar
-                      dataKey="Solved"
-                      stackId={"a"}
-                      fill="#3D3B8E"
-                      barSize={60}
-                    />
+                    <Bar dataKey="Solved" stackId={"a"} fill="#3D3B8E" barSize={60} />
                     <Bar
                       dataKey="Not Solved"
                       stackId={"a"}

@@ -1,4 +1,4 @@
-import LoadingOverlay from '../../Components/LoadingOverlay';
+import LoadingOverlay from "../../Components/LoadingOverlay";
 import { Autocomplete, Divider, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
@@ -14,9 +14,7 @@ import {
   prepare_interview,
 } from "../../redux/action";
 
-import StepConnector, {
-  stepConnectorClasses,
-} from "@mui/material/StepConnector";
+import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
 import Audio_Video from "../../Components/Audio_Video";
@@ -26,7 +24,7 @@ import MutiSelect from "../../Components/Multiselect";
 import { useDarkMode } from "./../../Dark";
 import interview from "../../assets/interview.jpeg";
 import JobDescriptionForm from "./JobDescription";
-import { useLoader } from '../../Components/LoaderContext';
+import { useLoader } from "../../Components/LoaderContext";
 
 const QontoConnector = styled(StepConnector)(({ theme, linearGradientBackground }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -45,8 +43,7 @@ const QontoConnector = styled(StepConnector)(({ theme, linearGradientBackground 
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
-    borderColor:
-      theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
+    borderColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
     borderTopWidth: 3,
     borderRadius: 1,
   },
@@ -61,11 +58,7 @@ const StepperComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [questionsLoading, setQuestionsLoading] = useState(false);
 
-  const [steps] = useState([
-    { title: "Step 1" },
-    { title: "Step 2" },
-    { title: "Step 3" },
-  ]);
+  const [steps] = useState([{ title: "Step 1" }, { title: "Step 2" }, { title: "Step 3" }]);
   const [stepsModal] = useState(3);
   const [currentStep, setCurrentStep] = useState(0);
   const [currentStepModal, setCurrentStepModal] = useState(0);
@@ -85,10 +78,10 @@ const StepperComponent = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showAcknowledgement, setShowAcknowledgement] = useState(false);
 
-  const [jdcompany, setJdcompany] = useState('');
-  const [jdrole, setJdrole] = useState('');
-  const [cultcompany, setCultcompany] = useState('');
-  const [cultrole, setCultrole] = useState('');
+  const [jdcompany, setJdcompany] = useState("");
+  const [jdrole, setJdrole] = useState("");
+  const [cultcompany, setCultcompany] = useState("");
+  const [cultrole, setCultrole] = useState("");
 
   const { showLoader, hideLoader, setQuestions } = useLoader();
 
@@ -102,8 +95,8 @@ const StepperComponent = () => {
       hard_skill: "",
       soft_skill: "",
       level: "",
-    }
-  }
+    },
+  };
 
   useEffect(() => {
     setSelectedRole(null);
@@ -124,8 +117,8 @@ const StepperComponent = () => {
         return true;
       }
     }
-    if ((selectedCategory == "jd"||selectedCategory == "cult")&currentStep==1) {
-      if (Object.keys(selectedOptions).length>=1) {
+    if ((selectedCategory == "jd" || selectedCategory == "cult") & (currentStep == 1)) {
+      if (Object.keys(selectedOptions).length >= 1) {
         return false;
       } else {
         return true;
@@ -140,13 +133,13 @@ const StepperComponent = () => {
     companiesList,
     questionsList,
     colorTheme,
-  } = useSelector((state) => state?.data);
+  } = useSelector(state => state?.data);
 
   useEffect(() => {
     if (questionsList?.questions?.length > 0) {
       setQuestions(questionsList);
       setIsLoading(false);
-      
+
       if (currentStep === 1 && questionsLoading) {
         setCurrentStep(2);
         setQuestionsLoading(false);
@@ -158,8 +151,7 @@ const StepperComponent = () => {
   const handleNext = async () => {
     if (currentStep === 0) {
       setCurrentStep(currentStep + 1);
-    }
-    else if (currentStep === 1) {
+    } else if (currentStep === 1) {
       // Validate JD and cultural inputs
       if (selectedCategory === "jd" && (!jdcompany.trim() || !jdrole.trim())) {
         toast.error("Please enter both company name and role for Technical Mock.");
@@ -173,28 +165,32 @@ const StepperComponent = () => {
 
       setShowLoading(true);
       setQuestionsLoading(true);
-      
-      let toastId = toast("Preparing your interview questions...", { 
-        autoClose: 5000
+
+      let toastId = toast("Preparing your interview questions...", {
+        autoClose: 5000,
       });
-      
+
       const payload = {
         specifications: {
           level: experienceLevel || "",
           role: selectedRole?.label || "",
           company: selectedCompany?.label || "",
           hard_skill: selectedHardskill ? selectedHardskill.map(skill => skill.label) : [],
-          soft_skill: selectedSoftskill ? selectedSoftskill.map(skill => skill.label) : []
+          soft_skill: selectedSoftskill ? selectedSoftskill.map(skill => skill.label) : [],
         },
-        interview_type: selectedCategory === "jd" ? "jd_interview" 
-          : selectedCategory === "cult" ? "cultural_interview" 
-          : selectedCategory === "skills" ? "skill_interview" 
-          : "company_role_interview"
+        interview_type:
+          selectedCategory === "jd"
+            ? "jd_interview"
+            : selectedCategory === "cult"
+              ? "cultural_interview"
+              : selectedCategory === "skills"
+                ? "skill_interview"
+                : "company_role_interview",
       };
-  
+
       if (selectedCategory === "jd") {
-        payload.specifications.jd_skill = Array.isArray(selectedOptions) 
-          ? selectedOptions 
+        payload.specifications.jd_skill = Array.isArray(selectedOptions)
+          ? selectedOptions
           : Object.values(selectedOptions);
         payload.specifications.company = jdcompany;
         payload.specifications.role = jdrole;
@@ -202,10 +198,10 @@ const StepperComponent = () => {
         delete payload.specifications.soft_skill;
         delete payload.specifications.level;
       }
-  
+
       if (selectedCategory === "cult") {
-        payload.specifications.cultural_skill = Array.isArray(selectedOptions) 
-          ? selectedOptions 
+        payload.specifications.cultural_skill = Array.isArray(selectedOptions)
+          ? selectedOptions
           : Object.values(selectedOptions);
         payload.specifications.company = cultcompany;
         payload.specifications.role = cultrole;
@@ -213,79 +209,77 @@ const StepperComponent = () => {
         delete payload.specifications.soft_skill;
         delete payload.specifications.level;
       }
-      
+
       try {
         // console.log("Sending payload:", JSON.stringify(payload));
         const result = await dispatch(loadQuestions(payload));
         // console.log("Result from loadQuestions:", result);
 
-        
         if (questionsList?.questions?.length > 0) {
           toast.update(toastId, {
             render: "Questions loaded successfully!",
             type: "success",
-            autoClose: 2000
+            autoClose: 2000,
           });
-          
+
           setCurrentStep(2);
           setQuestionsLoading(false);
         } else {
           toast.update(toastId, {
             render: "Still preparing your questions...",
             type: "info",
-            autoClose: 5000
+            autoClose: 5000,
           });
-          
+
           const checkQuestionsInterval = setInterval(() => {
             if (questionsList?.questions?.length > 0) {
               clearInterval(checkQuestionsInterval);
-              
+
               toast.update(toastId, {
                 render: "Questions loaded successfully!",
                 type: "success",
-                autoClose: 2000
+                autoClose: 2000,
               });
             }
           }, 2000);
-          
+
           setTimeout(() => {
             clearInterval(checkQuestionsInterval);
             if (!questionsList?.questions?.length > 0) {
               setShowLoading(false);
               setQuestionsLoading(false);
-              
+
               toast.update(toastId, {
                 render: "Failed to load questions. Please try again.",
                 type: "error",
-                autoClose: 5000
+                autoClose: 5000,
               });
             }
           }, 60000);
         }
       } catch (error) {
-        console.error('Error loading questions:', error);
+        console.error("Error loading questions:", error);
         toast.update(toastId, {
           render: error.message || "Failed to load questions. Please try again.",
           type: "error",
-          autoClose: 5000
+          autoClose: 5000,
         });
-        
+
         setShowLoading(false);
         setQuestionsLoading(false);
       }
-    }
-    else if (currentStep === 2) {
+    } else if (currentStep === 2) {
       if (chosenCompany && audioValidated && videoValidated) {
-        let toastId = toast("Preparing your interview...", { 
-          autoClose: 5000 
+        let toastId = toast("Preparing your interview...", {
+          autoClose: 5000,
         });
-        
+
         setShowLoading(true);
-        
+
         try {
           let attempts = 0;
           let success = false;
-          
+
           while (attempts < 3 && !success) {
             try {
               attempts++;
@@ -300,64 +294,64 @@ const StepperComponent = () => {
               }
             }
           }
-          
+
           if (questionsList?.questions?.length > 0) {
             toast.update(toastId, {
               render: "Ready for your interview!",
               type: "success",
-              autoClose: 2000
+              autoClose: 2000,
             });
-            
+
             setShowLoading(false);
-            navigate("/interview", { 
-              state: { 
-                startInterview: true
-              } 
+            navigate("/interview", {
+              state: {
+                startInterview: true,
+              },
             });
           } else {
             toast.update(toastId, {
               render: "Still preparing your questions...",
               type: "info",
-              autoClose: 5000
+              autoClose: 5000,
             });
-            
+
             const checkQuestionsInterval = setInterval(() => {
               if (questionsList?.questions?.length > 0) {
                 clearInterval(checkQuestionsInterval);
-                
+
                 toast.update(toastId, {
                   render: "Ready for your interview!",
                   type: "success",
-                  autoClose: 2000
+                  autoClose: 2000,
                 });
-                
+
                 setShowLoading(false);
-                navigate("/interview", { 
-                  state: { 
-                    startInterview: true
-                  } 
+                navigate("/interview", {
+                  state: {
+                    startInterview: true,
+                  },
                 });
               }
             }, 1000);
-            
+
             setTimeout(() => {
               clearInterval(checkQuestionsInterval);
               if (!questionsList?.questions?.length > 0) {
                 toast.update(toastId, {
                   render: "Unable to load interview questions. Please try again.",
                   type: "error",
-                  autoClose: 5000
+                  autoClose: 5000,
                 });
                 setShowLoading(false);
               }
             }, 100000);
           }
         } catch (error) {
-          console.error('Error preparing interview after retries:', error);
+          console.error("Error preparing interview after retries:", error);
           toast.update(toastId, {
             render: `Something went wrong: ${error.message || "Please try again."}`,
             type: "error",
-            autoClose: 5000
+            autoClose: 5000,
           });
           setShowLoading(false);
         }
@@ -379,17 +373,11 @@ const StepperComponent = () => {
     ? colorTheme.dark.selectBackground
     : colorTheme.light.selectBackground;
 
-  const textColors = isDarkMode
-    ? colorTheme.dark.textColor2
-    : colorTheme.light.textColor2;
+  const textColors = isDarkMode ? colorTheme.dark.textColor2 : colorTheme.light.textColor2;
 
-  const textColor = isDarkMode
-    ? colorTheme.dark.textColor3
-    : colorTheme.light.textColor3;
+  const textColor = isDarkMode ? colorTheme.dark.textColor3 : colorTheme.light.textColor3;
 
-  const grayColors = isDarkMode
-    ? colorTheme.dark.grayColor3
-    : colorTheme.light.grayColor;
+  const grayColors = isDarkMode ? colorTheme.dark.grayColor3 : colorTheme.light.grayColor;
 
   useEffect(() => {
     dispatch(loadHardSkillsList());
@@ -427,496 +415,495 @@ const StepperComponent = () => {
             </Step>
           ))}
         </Stepper>
-        
+
         <Divider style={{ marginTop: "1rem" }} />
-        
+
         <div className="flex  p-4 items-center justify-center relative overflow-auto flex-col md:flex-row max-w-full h-auto">
-          
           {currentStep === 0 && (
             <>
-            {entity_type === "institution" ? (
-              <div>
-                <div
-                className={`bg-${selectedCategory === "skills" ? "gray-200" : "gray-100"
-                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
-                onClick={() => {
-                  setSelectedCategory("skills");
-                  setSelectedRole(null);
-                  setSelectedCompany(null);
-                  setJdcompany("");
-                  setJdrole("");
-                  setCultcompany("");
-                  setCultrole("");
-                }}
-              >
-                <div className="flex relative overflow-auto ">
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="skills"
-                    checked={selectedCategory === "skills"}
-                    onChange={() => setSelectedCategory("skills")}
-                    className="p-1 m-2 relative overflow-auto"
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-                  <h2
-                    className="relative overflow-auto"
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color: grayColors,
-                    }}
-                  >
-                    Skill Specific
-                  </h2>
-                </div>
-                <div
-                  className={
-                    selectedCategory !== "skills"
-                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-                  }
-                >
-                  <label className="flex items-center space-x-2 my-3 relative overflow-auto">
-                    <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
-                  </label>
-                  <MutiSelect
-                    options={hardSkillsList?.map((o) => {
-                      return {
-                        label: o.name,
-                        id: o.id,
-                      };
-                    })}
-                    label="Hard Skills"
-                    selectedItems={selectedHardskill}
-                    onSelectionChange={setSelectedHardskill}
-                  />
-                  <div>
-                    <label className="flex items-center space-x-2 my-3">
-                      <span className="font-bold pr-2">Soft Skills</span>
-                    </label>
-                    <MutiSelect
-                      options={(softSkillsList || []).map((o) => ({
-                        label: o.name,
-                        id: o.id,
-                      }))}
-                      selectedItems={selectedSoftskill}
-                      onSelectionChange={setSelectedSoftskill}
-                      label="Soft Skills"
-                    />
-                  </div>
-                </div>
-                </div>
-              </div>
-            ) : entity_type === "corporate" ? (
-              <div>
-                <div
-                className={`bg-${selectedCategory === "jd" ? "gray-200" : "gray-100"
-                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
-                onClick={() => {
-                  setSelectedCategory("jd");
-                  setSelectedRole(null);
-                  setSelectedCompany(null);
-                  setSelectedSoftskill(null);
-                  setSelectedHardskill(null);
-                  setCultcompany("");
-                  setCultrole("");
-                }}
-              >
-                <div className="flex relative overflow-auto ">
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="jd"
-                    checked={selectedCategory === "jd"}
-                    onChange={() => setSelectedCategory("jd")}
-                    className="p-1 m-2 relative overflow-auto"
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-                  <h2
-                    className="relative overflow-auto"
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color: grayColors,
-                    }}
-                  >
-                    Technical Mock 
-                  </h2>
-                </div>
-                <div
-                  className={
-                    selectedCategory !== "jd"
-                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-                  }
-                >
-                  <div className="my-3">
-                    <label className="font-bold block mb-2">
-                      Company Name:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter company name"
-                      className="w-full p-2 border border-gray-300 rounded"
-                      onChange={e => setJdcompany(e.target.value)}
-                      value={jdcompany}
-                    />
-                  </div>
-                  <div className="my-3">
-                    <label className="font-bold block mb-2">
-                      Role:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter role"
-                      className="w-full p-2 border border-gray-300 rounded"
-                      onChange={e => setJdrole(e.target.value)}
-                      value={jdrole}
-                    />
-                  </div>
-                </div>
-                </div>
-              </div>
-            ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-auto p-2 md:p-8">
-              <div
-                className={`bg-${selectedCategory === "skills" ? "gray-200" : "gray-100"
-                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
-                onClick={() => {
-                  setSelectedCategory("skills");
-                  setSelectedRole(null);
-                  setSelectedCompany(null);
-                  setJdcompany("");
-                  setJdrole("");
-                  setCultcompany("");
-                  setCultrole("");
-                }}
-              >
-                <div className="flex relative overflow-auto ">
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="skills"
-                    checked={selectedCategory === "skills"}
-                    onChange={() => setSelectedCategory("skills")}
-                    className="p-1 m-2 relative overflow-auto"
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-                  <h2
-                    className="relative overflow-auto"
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color: grayColors,
-                    }}
-                  >
-                    Skill Specific
-                  </h2>
-                </div>
-                <div
-                  className={
-                    selectedCategory !== "skills"
-                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-                  }
-                >
-                  <label className="flex items-center space-x-2 my-3 relative overflow-auto">
-                    <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
-                  </label>
-                  <MutiSelect
-                    options={hardSkillsList?.map((o) => {
-                      return {
-                        label: o.name,
-                        id: o.id,
-                      };
-                    })}
-                    label="Hard Skills"
-                    selectedItems={selectedHardskill}
-                    onSelectionChange={setSelectedHardskill}
-                  />
-                  <div>
-                    <label className="flex items-center space-x-2 my-3">
-                      <span className="font-bold pr-2">Soft Skills</span>
-                    </label>
-                    <MutiSelect
-                      options={(softSkillsList || []).map((o) => ({
-                        label: o.name,
-                        id: o.id,
-                      }))}
-                      selectedItems={selectedSoftskill}
-                      onSelectionChange={setSelectedSoftskill}
-                      label="Soft Skills"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`bg-${selectedCategory === "role" ? "gray-300" : "gray-100"
-                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
-                onClick={() => {
-                  setSelectedCategory("role");
-                  setSelectedSoftskill(null);
-                  setSelectedHardskill(null);
-                  setJdcompany("");
-                  setJdrole("");
-                  setCultcompany("");
-                  setCultrole("");
-                }}
-                style={{ color: textColors }}
-              >
-                <div className="flex ">
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="role"
-                    checked={selectedCategory === "role"}
-                    onChange={() => setSelectedCategory("role")}
-                    className="p-1 m-2 "
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-                  <h2
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color: grayColors,
-                    }}
-                  >
-                    Role Specific
-                  </h2>
-                </div>
-                <div
-                  className={
-                    selectedCategory !== "role"
-                      ? "opacity-50 pointer-events-none"
-                      : ""
-                  }
-                >
-                  <label className="flex items-center space-x-2 my-3">
-                    <span className="font-bold pr-2" style={{ color: grayColors }}
-                    >
-                      Choose Company{" "}
-                      <span className="font-bold text-red-500 text-2xl">
-                        {" "}
-                        {selectedCategory == "role" ? "*" : ""}
-                      </span>
-                    </span>
-                  </label>
-                  <CheckboxesTags
-                    options={companiesList?.map((o) => {
-                      return {
-                        label: o.name,
-                        id: o.id,
-                        role_ids: o.role_ids,
-                      };
-                    })}
-                    selectedItems={selectedCompany}
-                    onSelectionChange={setSelectedCompany}
-                    label="Companies"
-                  />
-                </div>
-                {selectedCompany != null && (
+              {entity_type === "institution" ? (
+                <div>
                   <div
-                    className={
-                      selectedCategory !== "role"
-                        ? "opacity-50 pointer-events-none"
-                        : ""
-                    }
+                    className={`bg-${
+                      selectedCategory === "skills" ? "gray-200" : "gray-100"
+                    } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
+                    onClick={() => {
+                      setSelectedCategory("skills");
+                      setSelectedRole(null);
+                      setSelectedCompany(null);
+                      setJdcompany("");
+                      setJdrole("");
+                      setCultcompany("");
+                      setCultrole("");
+                    }}
                   >
-                    <label className="flex items-center space-x-2 my-3">
-                      <span className="font-bold pr-2 ">
-                        Choose Role{" "}
-                        <span className="font-bold text-red-500 text-2xl">
-                          {selectedCategory == "role" ? "*" : ""}
+                    <div className="flex relative overflow-auto ">
+                      <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="skills"
+                        checked={selectedCategory === "skills"}
+                        onChange={() => setSelectedCategory("skills")}
+                        className="p-1 m-2 relative overflow-auto"
+                        style={{
+                          color: linearGradientBackground,
+                          outlineColor: linearGradientBackground,
+                        }}
+                      />
+                      <h2
+                        className="relative overflow-auto"
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          color: grayColors,
+                        }}
+                      >
+                        Skill Specific
+                      </h2>
+                    </div>
+                    <div
+                      className={
+                        selectedCategory !== "skills"
+                          ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto"
+                          : " relative overflow-auto max-w-full h-auto"
+                      }
+                    >
+                      <label className="flex items-center space-x-2 my-3 relative overflow-auto">
+                        <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
+                      </label>
+                      <MutiSelect
+                        options={hardSkillsList?.map(o => {
+                          return {
+                            label: o.name,
+                            id: o.id,
+                          };
+                        })}
+                        label="Hard Skills"
+                        selectedItems={selectedHardskill}
+                        onSelectionChange={setSelectedHardskill}
+                      />
+                      <div>
+                        <label className="flex items-center space-x-2 my-3">
+                          <span className="font-bold pr-2">Soft Skills</span>
+                        </label>
+                        <MutiSelect
+                          options={(softSkillsList || []).map(o => ({
+                            label: o.name,
+                            id: o.id,
+                          }))}
+                          selectedItems={selectedSoftskill}
+                          onSelectionChange={setSelectedSoftskill}
+                          label="Soft Skills"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : entity_type === "corporate" ? (
+                <div>
+                  <div
+                    className={`bg-${
+                      selectedCategory === "jd" ? "gray-200" : "gray-100"
+                    } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
+                    onClick={() => {
+                      setSelectedCategory("jd");
+                      setSelectedRole(null);
+                      setSelectedCompany(null);
+                      setSelectedSoftskill(null);
+                      setSelectedHardskill(null);
+                      setCultcompany("");
+                      setCultrole("");
+                    }}
+                  >
+                    <div className="flex relative overflow-auto ">
+                      <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="jd"
+                        checked={selectedCategory === "jd"}
+                        onChange={() => setSelectedCategory("jd")}
+                        className="p-1 m-2 relative overflow-auto"
+                        style={{
+                          color: linearGradientBackground,
+                          outlineColor: linearGradientBackground,
+                        }}
+                      />
+                      <h2
+                        className="relative overflow-auto"
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          color: grayColors,
+                        }}
+                      >
+                        Technical Mock
+                      </h2>
+                    </div>
+                    <div
+                      className={
+                        selectedCategory !== "jd"
+                          ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto"
+                          : " relative overflow-auto max-w-full h-auto"
+                      }
+                    >
+                      <div className="my-3">
+                        <label className="font-bold block mb-2">Company Name:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter company name"
+                          className="w-full p-2 border border-gray-300 rounded"
+                          onChange={e => setJdcompany(e.target.value)}
+                          value={jdcompany}
+                        />
+                      </div>
+                      <div className="my-3">
+                        <label className="font-bold block mb-2">Role:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter role"
+                          className="w-full p-2 border border-gray-300 rounded"
+                          onChange={e => setJdrole(e.target.value)}
+                          value={jdrole}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-auto p-2 md:p-8">
+                  <div
+                    className={`bg-${
+                      selectedCategory === "skills" ? "gray-200" : "gray-100"
+                    } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
+                    onClick={() => {
+                      setSelectedCategory("skills");
+                      setSelectedRole(null);
+                      setSelectedCompany(null);
+                      setJdcompany("");
+                      setJdrole("");
+                      setCultcompany("");
+                      setCultrole("");
+                    }}
+                  >
+                    <div className="flex relative overflow-auto ">
+                      <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="skills"
+                        checked={selectedCategory === "skills"}
+                        onChange={() => setSelectedCategory("skills")}
+                        className="p-1 m-2 relative overflow-auto"
+                        style={{
+                          color: linearGradientBackground,
+                          outlineColor: linearGradientBackground,
+                        }}
+                      />
+                      <h2
+                        className="relative overflow-auto"
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          color: grayColors,
+                        }}
+                      >
+                        Skill Specific
+                      </h2>
+                    </div>
+                    <div
+                      className={
+                        selectedCategory !== "skills"
+                          ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto"
+                          : " relative overflow-auto max-w-full h-auto"
+                      }
+                    >
+                      <label className="flex items-center space-x-2 my-3 relative overflow-auto">
+                        <span className="font-bold pr-2 relative overflow-auto">Hard Skills</span>
+                      </label>
+                      <MutiSelect
+                        options={hardSkillsList?.map(o => {
+                          return {
+                            label: o.name,
+                            id: o.id,
+                          };
+                        })}
+                        label="Hard Skills"
+                        selectedItems={selectedHardskill}
+                        onSelectionChange={setSelectedHardskill}
+                      />
+                      <div>
+                        <label className="flex items-center space-x-2 my-3">
+                          <span className="font-bold pr-2">Soft Skills</span>
+                        </label>
+                        <MutiSelect
+                          options={(softSkillsList || []).map(o => ({
+                            label: o.name,
+                            id: o.id,
+                          }))}
+                          selectedItems={selectedSoftskill}
+                          onSelectionChange={setSelectedSoftskill}
+                          label="Soft Skills"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    className={`bg-${
+                      selectedCategory === "role" ? "gray-300" : "gray-100"
+                    } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
+                    onClick={() => {
+                      setSelectedCategory("role");
+                      setSelectedSoftskill(null);
+                      setSelectedHardskill(null);
+                      setJdcompany("");
+                      setJdrole("");
+                      setCultcompany("");
+                      setCultrole("");
+                    }}
+                    style={{ color: textColors }}
+                  >
+                    <div className="flex ">
+                      <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="role"
+                        checked={selectedCategory === "role"}
+                        onChange={() => setSelectedCategory("role")}
+                        className="p-1 m-2 "
+                        style={{
+                          color: linearGradientBackground,
+                          outlineColor: linearGradientBackground,
+                        }}
+                      />
+                      <h2
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          color: grayColors,
+                        }}
+                      >
+                        Role Specific
+                      </h2>
+                    </div>
+                    <div
+                      className={
+                        selectedCategory !== "role" ? "opacity-50 pointer-events-none" : ""
+                      }
+                    >
+                      <label className="flex items-center space-x-2 my-3">
+                        <span className="font-bold pr-2" style={{ color: grayColors }}>
+                          Choose Company{" "}
+                          <span className="font-bold text-red-500 text-2xl">
+                            {" "}
+                            {selectedCategory == "role" ? "*" : ""}
+                          </span>
                         </span>
-                      </span>
-                    </label>
-                    <CheckboxesTags
-                      options={selectedCompany?.role_ids?.map((o) => {
-                        return {
-                          label: o.name,
-                          id: o.id,
-                        };
-                      })}
-                      selectedItems={selectedRole}
-                      onSelectionChange={setSelectedRole}
-                      label="Interview Roles"
-                    />
+                      </label>
+                      <CheckboxesTags
+                        options={companiesList?.map(o => {
+                          return {
+                            label: o.name,
+                            id: o.id,
+                            role_ids: o.role_ids,
+                          };
+                        })}
+                        selectedItems={selectedCompany}
+                        onSelectionChange={setSelectedCompany}
+                        label="Companies"
+                      />
+                    </div>
+                    {selectedCompany != null && (
+                      <div
+                        className={
+                          selectedCategory !== "role" ? "opacity-50 pointer-events-none" : ""
+                        }
+                      >
+                        <label className="flex items-center space-x-2 my-3">
+                          <span className="font-bold pr-2 ">
+                            Choose Role{" "}
+                            <span className="font-bold text-red-500 text-2xl">
+                              {selectedCategory == "role" ? "*" : ""}
+                            </span>
+                          </span>
+                        </label>
+                        <CheckboxesTags
+                          options={selectedCompany?.role_ids?.map(o => {
+                            return {
+                              label: o.name,
+                              id: o.id,
+                            };
+                          })}
+                          selectedItems={selectedRole}
+                          onSelectionChange={setSelectedRole}
+                          label="Interview Roles"
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              <div
-                className={`bg-${selectedCategory === "jd" ? "gray-200" : "gray-100"
-                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
-                onClick={() => {
-                  setSelectedCategory("jd");
-                  setSelectedRole(null);
-                  setSelectedCompany(null);
-                  setSelectedSoftskill(null);
-                  setSelectedHardskill(null);
-                  setCultcompany("");
-                  setCultrole("");
-                }}
-              >
-                <div className="flex relative overflow-auto ">
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="jd"
-                    checked={selectedCategory === "jd"}
-                    onChange={() => setSelectedCategory("jd")}
-                    className="p-1 m-2 relative overflow-auto"
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-                  <h2
-                    className="relative overflow-auto"
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color: grayColors,
+                  <div
+                    className={`bg-${
+                      selectedCategory === "jd" ? "gray-200" : "gray-100"
+                    } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto ml-auto w-full`}
+                    onClick={() => {
+                      setSelectedCategory("jd");
+                      setSelectedRole(null);
+                      setSelectedCompany(null);
+                      setSelectedSoftskill(null);
+                      setSelectedHardskill(null);
+                      setCultcompany("");
+                      setCultrole("");
                     }}
                   >
-                    Technical Mock 
-                  </h2>
-                </div>
-                <div
-                  className={
-                    selectedCategory !== "jd"
-                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-                  }
-                >
-                  <div className="my-3">
-                    <label className="font-bold block mb-2">
-                      Company Name:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter company name"
-                      className="w-full p-2 border border-gray-300 rounded"
-                      onChange={e => setJdcompany(e.target.value)}
-                      value={jdcompany}
-                    />
+                    <div className="flex relative overflow-auto ">
+                      <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="jd"
+                        checked={selectedCategory === "jd"}
+                        onChange={() => setSelectedCategory("jd")}
+                        className="p-1 m-2 relative overflow-auto"
+                        style={{
+                          color: linearGradientBackground,
+                          outlineColor: linearGradientBackground,
+                        }}
+                      />
+                      <h2
+                        className="relative overflow-auto"
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          color: grayColors,
+                        }}
+                      >
+                        Technical Mock
+                      </h2>
+                    </div>
+                    <div
+                      className={
+                        selectedCategory !== "jd"
+                          ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto"
+                          : " relative overflow-auto max-w-full h-auto"
+                      }
+                    >
+                      <div className="my-3">
+                        <label className="font-bold block mb-2">Company Name:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter company name"
+                          className="w-full p-2 border border-gray-300 rounded"
+                          onChange={e => setJdcompany(e.target.value)}
+                          value={jdcompany}
+                        />
+                      </div>
+                      <div className="my-3">
+                        <label className="font-bold block mb-2">Role:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter role"
+                          className="w-full p-2 border border-gray-300 rounded"
+                          onChange={e => setJdrole(e.target.value)}
+                          value={jdrole}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="my-3">
-                    <label className="font-bold block mb-2">
-                      Role:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter role"
-                      className="w-full p-2 border border-gray-300 rounded"
-                      onChange={e => setJdrole(e.target.value)}
-                      value={jdrole}
-                    />
-                  </div>
-                </div>
-              </div>
 
-              <div
-                className={`bg-${selectedCategory === "cult" ? "gray-200" : "gray-100"
-                  } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
-                onClick={() => {
-                  setSelectedCategory("cult");
-                  setSelectedRole(null);
-                  setSelectedCompany(null);
-                  setSelectedSoftskill(null);
-                  setSelectedHardskill(null);
-                  setJdcompany("");
-                  setJdrole("");
-                }}
-              >
-                <div className="flex relative overflow-auto ">
-                  <input
-                    type="radio"
-                    name="selectionCategory"
-                    value="cult"
-                    checked={selectedCategory === "cult"}
-                    onChange={() => setSelectedCategory("cult")}
-                    className="p-1 m-2 relative overflow-auto"
-                    style={{
-                      color: linearGradientBackground,
-                      outlineColor: linearGradientBackground
-                    }}
-                  />
-                  <h2
-                    className="relative overflow-auto"
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      color: grayColors,
+                  <div
+                    className={`bg-${
+                      selectedCategory === "cult" ? "gray-200" : "gray-100"
+                    } p-5 md:p-7 rounded-xl relative overflow-auto max-w-full h-auto mr-auto w-full`}
+                    onClick={() => {
+                      setSelectedCategory("cult");
+                      setSelectedRole(null);
+                      setSelectedCompany(null);
+                      setSelectedSoftskill(null);
+                      setSelectedHardskill(null);
+                      setJdcompany("");
+                      setJdrole("");
                     }}
                   >
-                    HR / Behavioural Mock 
-                  </h2>
-                </div>
-                <div
-                  className={
-                    selectedCategory !== "cult"
-                      ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto" : ' relative overflow-auto max-w-full h-auto'
-                  }
-                >
-                  <div className="my-3">
-                    <label className="font-bold block mb-2">
-                      Company Name:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter company name"
-                      className="w-full p-2 border border-gray-300 rounded"
-                      onChange={e => setCultcompany(e.target.value)}
-                      value={cultcompany}
-                    />
+                    <div className="flex relative overflow-auto ">
+                      <input
+                        type="radio"
+                        name="selectionCategory"
+                        value="cult"
+                        checked={selectedCategory === "cult"}
+                        onChange={() => setSelectedCategory("cult")}
+                        className="p-1 m-2 relative overflow-auto"
+                        style={{
+                          color: linearGradientBackground,
+                          outlineColor: linearGradientBackground,
+                        }}
+                      />
+                      <h2
+                        className="relative overflow-auto"
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          color: grayColors,
+                        }}
+                      >
+                        HR / Behavioural Mock
+                      </h2>
+                    </div>
+                    <div
+                      className={
+                        selectedCategory !== "cult"
+                          ? "opacity-50 pointer-events-none relative overflow-auto max-w-full h-auto"
+                          : " relative overflow-auto max-w-full h-auto"
+                      }
+                    >
+                      <div className="my-3">
+                        <label className="font-bold block mb-2">Company Name:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter company name"
+                          className="w-full p-2 border border-gray-300 rounded"
+                          onChange={e => setCultcompany(e.target.value)}
+                          value={cultcompany}
+                        />
+                      </div>
+                      <div className="my-3">
+                        <label className="font-bold block mb-2">Role:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter role"
+                          className="w-full p-2 border border-gray-300 rounded"
+                          onChange={e => setCultrole(e.target.value)}
+                          value={cultrole}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="my-3">
-                    <label className="font-bold block mb-2">
-                      Role:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter role"
-                      className="w-full p-2 border border-gray-300 rounded"
-                      onChange={e => setCultrole(e.target.value)}
-                      value={cultrole}
-                    />
-                  </div>
                 </div>
-              </div>
-            </div>
-            )}
+              )}
             </>
           )}
 
           {currentStep === 1 && (
             <div>
-                {(selectedCategory == "jd" || selectedCategory == "cult") && (
-              <JobDescriptionForm selectedCategory={selectedCategory} jdcompany={jdcompany} jdrole={jdrole} cultcompany={cultcompany} cultrole={cultrole} selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}/>)}
+              {(selectedCategory == "jd" || selectedCategory == "cult") && (
+                <JobDescriptionForm
+                  selectedCategory={selectedCategory}
+                  jdcompany={jdcompany}
+                  jdrole={jdrole}
+                  cultcompany={cultcompany}
+                  cultrole={cultrole}
+                  selectedOptions={selectedOptions}
+                  setSelectedOptions={setSelectedOptions}
+                />
+              )}
 
               {(selectedCategory == "skills" || selectedCategory == "role") && (
                 <div className="relative max-w-full h-auto p-4">
-                  <h2
-                    className="text-center text-2xl font-bold mb-4"
-                    style={{ color: grayColors }}
-                  >
+                  <h2 className="text-center text-2xl font-bold mb-4" style={{ color: grayColors }}>
                     Level
                   </h2>
                   <div
@@ -932,9 +919,11 @@ const StepperComponent = () => {
                       min="0"
                       max="100"
                       value={level}
-                      onChange={(e) => setLevel(e.target.value)}
+                      onChange={e => setLevel(e.target.value)}
                       className="w-full mb-4 appearance-none h-2 rounded-lg"
-                      style={{ background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)` }}
+                      style={{
+                        background: `linear-gradient(to right, #0fe1d2 ${level}%, #dedcdc ${level}%)`,
+                      }}
                     />
                     <div className="flex flex-col sm:flex-row justify-evenly items-center space-y-2 sm:space-y-0 sm:space-x-2">
                       <button
@@ -989,8 +978,8 @@ const StepperComponent = () => {
                   System Check
                 </h2>
                 <div className="text-sm max-w-xs text-center font-semibold text-gray-500 mb-4">
-                  Please complete this quick walk through to confirm your
-                  device/system is ready for a Validity test.
+                  Please complete this quick walk through to confirm your device/system is ready for
+                  a Validity test.
                 </div>
                 <label className="max-w-xs flex space-x-3 my-3">
                   <input
@@ -1004,14 +993,12 @@ const StepperComponent = () => {
                         ? `2px solid ${linearGradientBackground}`
                         : "2px solid grey",
                       outlineColor: chosenCompany ? linearGradientBackground : "none",
-                      backgroundColor: chosenCompany
-                        ? "#0fe1d2"
-                        : "transparent",
+                      backgroundColor: chosenCompany ? "#0fe1d2" : "transparent",
                     }}
                   />
                   <span className="ml-3 text-sm">
-                    I'm completing this check on this device and Wi-Fi
-                    network where I will participate
+                    I'm completing this check on this device and Wi-Fi network where I will
+                    participate
                   </span>
                 </label>
               </div>
@@ -1033,7 +1020,7 @@ const StepperComponent = () => {
             <button
               onClick={handlePrev}
               disabled={handleSelection() || questionsLoading}
-              className={`shadow-md ${questionsLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`shadow-md ${questionsLoading ? "opacity-50 cursor-not-allowed" : ""}`}
               style={{
                 margin: "0 0.5rem",
                 borderColor: linearGradientBackground,
@@ -1043,22 +1030,24 @@ const StepperComponent = () => {
                 borderRadius: "0.375rem",
                 cursor: questionsLoading ? "not-allowed" : "pointer",
               }}
-              onMouseEnter={(e) => { 
+              onMouseEnter={e => {
                 if (!questionsLoading) {
-                  e.target.style.background = linearGradientBackground 
+                  e.target.style.background = linearGradientBackground;
                 }
               }}
-              onMouseLeave={(e) => { e.target.style.background = "none" }}
+              onMouseLeave={e => {
+                e.target.style.background = "none";
+              }}
             >
               Previous
             </button>
           )}
-          
+
           {currentStep < steps.length - 1 && (
             <button
               onClick={handleNext}
               disabled={handleSelection() || questionsLoading}
-              className={`shadow-md mx-2 px-4 rounded-md ${handleSelection() || questionsLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`shadow-md mx-2 px-4 rounded-md ${handleSelection() || questionsLoading ? "opacity-50 cursor-not-allowed" : ""}`}
               style={{
                 backgroundColor: linearGradientBackground,
                 color: textColor,
@@ -1102,12 +1091,12 @@ const StepperComponent = () => {
           )}
         </div>
       </div>
- 
-      <LoadingOverlay 
+
+      <LoadingOverlay
         show={showLoading}
         message={
           questionsLoading
-            ? "Preparing your interview questions..." 
+            ? "Preparing your interview questions..."
             : currentStep === 2
               ? "Setting up your interview environment..."
               : "Loading..."

@@ -8,21 +8,16 @@ export const useDarkMode = () => {
 };
 
 export const DarkModeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("darkMode") === "true"
-  );
-  
-  const { colorTheme } = useSelector((state) => state?.data);
-  const [color, setColor] = useState(
-    isDarkMode ? colorTheme.dark : colorTheme.light
-  );
+  const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem("darkMode") === "true");
+
+  const { colorTheme } = useSelector(state => state?.data);
+  const [color, setColor] = useState(isDarkMode ? colorTheme.dark : colorTheme.light);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setIsDarkMode(savedDarkMode);
     setColor(savedDarkMode ? colorTheme.dark : colorTheme.light);
   }, []);
-
 
   const toggleDarkMode = () => {
     const newDarkMode = !isDarkMode;
@@ -32,9 +27,7 @@ export const DarkModeProvider = ({ children }) => {
   };
 
   return (
-    <DarkModeContext.Provider
-      value={{ isDarkMode, toggleDarkMode, color, colorTheme }}
-    >
+    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode, color, colorTheme }}>
       {children}
     </DarkModeContext.Provider>
   );

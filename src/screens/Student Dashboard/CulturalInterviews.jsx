@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { FormControl, Select, MenuItem, CircularProgress, Box, Typography, useTheme } from '@mui/material';
-import { SentimentDissatisfied } from '@mui/icons-material';
+import React, { useState, useEffect } from "react";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  CircularProgress,
+  Box,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { SentimentDissatisfied } from "@mui/icons-material";
 
 const getColor = (score, theme) => {
   if (score <= 3) return "#d63333";
@@ -24,9 +32,10 @@ const CulturalInterviews = ({ interviewData }) => {
     data: interview.data,
   }));
 
-  const latestInterview = combinedInterviews.length > 0 ? combinedInterviews[combinedInterviews.length - 1] : null;
+  const latestInterview =
+    combinedInterviews.length > 0 ? combinedInterviews[combinedInterviews.length - 1] : null;
 
-  const [selectedInterview, setSelectedInterview] = useState('');
+  const [selectedInterview, setSelectedInterview] = useState("");
 
   useEffect(() => {
     if (latestInterview && !selectedInterview) {
@@ -34,13 +43,13 @@ const CulturalInterviews = ({ interviewData }) => {
     }
   }, [latestInterview, selectedInterview]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const selectedLabel = event.target.value;
     setSelectedInterview(selectedLabel);
   };
 
   const selectedInterviewDetails = combinedInterviews.find(
-    (interview) => interview.label === selectedInterview
+    interview => interview.label === selectedInterview
   );
 
   return (
@@ -49,31 +58,31 @@ const CulturalInterviews = ({ interviewData }) => {
       {combinedInterviews?.length > 0 ? (
         <>
           <div className="flex justify-start mt-1 mb-4 ml-5">
-            <FormControl 
-            sx={{
-              width: '310px',
-              backgroundColor: '#F0F0F0',
-              borderRadius: '8px',
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  border: 'none',
-                  borderRadius: '8px',
+            <FormControl
+              sx={{
+                width: "310px",
+                backgroundColor: "#F0F0F0",
+                borderRadius: "8px",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: "none",
+                    borderRadius: "8px",
+                  },
                 },
-              },
-            }}
-            size="small"
+              }}
+              size="small"
             >
               <Select
                 value={selectedInterview}
                 onChange={handleChange}
                 displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
+                inputProps={{ "aria-label": "Without label" }}
                 sx={{
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none',
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
                   },
-                  '& .MuiSelect-select': {
-                    padding: '8px 14px', // Adjust padding if needed
+                  "& .MuiSelect-select": {
+                    padding: "8px 14px", // Adjust padding if needed
                   },
                 }}
               >
@@ -95,13 +104,23 @@ const CulturalInterviews = ({ interviewData }) => {
                       variant="determinate"
                       value={100}
                       thickness={4}
-                      sx={{ color: getLighterColor(skill.scored, theme), width: '100% !important', height: '100% !important' }}
+                      sx={{
+                        color: getLighterColor(skill.scored, theme),
+                        width: "100% !important",
+                        height: "100% !important",
+                      }}
                     />
                     <CircularProgress
                       variant="determinate"
                       value={(skill.scored / skill.total) * 100}
                       thickness={4}
-                      sx={{ color: getColor(skill.scored, theme), position: 'absolute', left: 0, width: '100% !important', height: '100% !important' }}
+                      sx={{
+                        color: getColor(skill.scored, theme),
+                        position: "absolute",
+                        left: 0,
+                        width: "100% !important",
+                        height: "100% !important",
+                      }}
                     />
                     <Box
                       top={0}
@@ -113,21 +132,43 @@ const CulturalInterviews = ({ interviewData }) => {
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <Typography variant="caption" component="div" color="textSecondary" style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                      <Typography
+                        variant="caption"
+                        component="div"
+                        color="textSecondary"
+                        style={{ fontSize: "20px", fontWeight: "bold" }}
+                      >
                         {skill.scored}
                       </Typography>
                     </Box>
                   </Box>
-                  <span className="flex justify-center text-center w-[220px]">{skill.skill_name}</span>
+                  <span className="flex justify-center text-center w-[220px]">
+                    {skill.skill_name}
+                  </span>
                 </div>
               ))}
           </div>
         </>
       ) : (
-        <div className='font-bold mt-[40%]' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80%', borderRadius: '10px' }}>
-          <SentimentDissatisfied style={{ fontSize: 50, color: '#888', animation: 'bounce 2s infinite' }} />
-          <div style={{ marginTop: '20px', textAlign: 'center', lineHeight: '1.5em', color: '#555' }}>
-            There's not enough data to present any insights. Start attending interviews to see your journey.
+        <div
+          className="font-bold mt-[40%]"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80%",
+            borderRadius: "10px",
+          }}
+        >
+          <SentimentDissatisfied
+            style={{ fontSize: 50, color: "#888", animation: "bounce 2s infinite" }}
+          />
+          <div
+            style={{ marginTop: "20px", textAlign: "center", lineHeight: "1.5em", color: "#555" }}
+          >
+            There's not enough data to present any insights. Start attending interviews to see your
+            journey.
           </div>
         </div>
       )}

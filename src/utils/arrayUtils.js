@@ -15,10 +15,9 @@ export const sortArray = (array, property) => _.sortBy(array, property);
 export const mapArray = (array, transformation) => _.map(array, transformation);
 
 // Reduce an array to a single value using an accumulator and an iteratee function
-export const reduceArray = (array, iteratee, accumulator) =>
-  _.reduce(array, iteratee, accumulator);
+export const reduceArray = (array, iteratee, accumulator) => _.reduce(array, iteratee, accumulator);
 
 // hasCommonElements or not
 export const hasCommonElements = (array1, array2) => {
-  return array1.some((item) => array2.includes(item));
+  return array1.some(item => array2.includes(item));
 };

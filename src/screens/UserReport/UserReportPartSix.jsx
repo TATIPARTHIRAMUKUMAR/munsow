@@ -15,9 +15,7 @@ const UserReportPartSix = ({ userData }) => {
         <div className="md:flex">
           <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#212e3e]">
             <div className="">
-              <span className="md:text-lg font-semibold text-white">
-                About The Company
-              </span>
+              <span className="md:text-lg font-semibold text-white">About The Company</span>
             </div>
           </div>
           <div className="md:w-9/12">
@@ -26,14 +24,10 @@ const UserReportPartSix = ({ userData }) => {
                 {userData?.about_company?.map((o, index) => {
                   return (
                     <>
-                      <li>
-                        {o}
-                      </li>
+                      <li>{o}</li>
                     </>
-                  )
-                }
-                )
-                }
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -49,17 +43,13 @@ const UserReportPartSix = ({ userData }) => {
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
               <ul className="list-disc list-inside text-lg font-medium text-[#212e3e]">
-              {userData?.lastest_company_news?.map((o, index) => {
+                {userData?.lastest_company_news?.map((o, index) => {
                   return (
                     <>
-                      <li>
-                        {o}
-                      </li>
+                      <li>{o}</li>
                     </>
-                  )
-                }
-                )
-                }
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -67,25 +57,19 @@ const UserReportPartSix = ({ userData }) => {
         <div className="md:flex">
           <div className="md:w-3/12 md:flex justify-center items-center md:mb-4 bg-[#212E3E]">
             <div>
-              <span className="md:text-lg font-semibold text-white">
-                Role-specific Skills
-              </span>
+              <span className="md:text-lg font-semibold text-white">Role-specific Skills</span>
             </div>
           </div>
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
               <ul className="list-disc list-inside text-lg font-medium text-[#212E3E]">
-              {userData?.role_specific_skills?.map((o, index) => {
+                {userData?.role_specific_skills?.map((o, index) => {
                   return (
                     <>
-                      <li>
-                        {o}
-                      </li>
+                      <li>{o}</li>
                     </>
-                  )
-                }
-                )
-                }
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -93,25 +77,19 @@ const UserReportPartSix = ({ userData }) => {
         <div className="md:flex">
           <div className="md:w-3/12 md:flex justify-center items-center md:mb-5 bg-[#212E3E]">
             <div>
-              <span className="md:text-lg font-semibold text-white">
-                Industry Trends
-              </span>
+              <span className="md:text-lg font-semibold text-white">Industry Trends</span>
             </div>
           </div>
           <div className="md:w-9/12">
             <div className="mt-4 md:ms-4 md:mb-5">
               <ul className="list-disc list-inside text-lg font-medium text-[#212E3E]">
-              {userData?.industry_trends?.map((o, index) => {
+                {userData?.industry_trends?.map((o, index) => {
                   return (
                     <>
-                      <li>
-                        {o}
-                      </li>
+                      <li>{o}</li>
                     </>
-                  )
-                }
-                )
-                }
+                  );
+                })}
               </ul>
             </div>
           </div>

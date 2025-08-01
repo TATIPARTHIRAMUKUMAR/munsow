@@ -57,13 +57,20 @@
 
 // export default SplashModal;
 
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import "./SplashModal.css";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import './SplashModal.css';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-
-const SplashModal = ({ step, totalSteps, children, onNext, questionsList, hideLoader, setStep }) => {
+const SplashModal = ({
+  step,
+  totalSteps,
+  children,
+  onNext,
+  questionsList,
+  hideLoader,
+  setStep,
+}) => {
   const progress = (step / totalSteps) * 100;
 
   const handleNextClick = () => {
@@ -90,12 +97,7 @@ const SplashModal = ({ step, totalSteps, children, onNext, questionsList, hideLo
           </div>
         </div>
         <TransitionGroup>
-          <CSSTransition
-            key={step}
-            timeout={500}
-            classNames="modal-content"
-            unmountOnExit
-          >
+          <CSSTransition key={step} timeout={500} classNames="modal-content" unmountOnExit>
             <div className="mb-4">{children}</div>
           </CSSTransition>
         </TransitionGroup>

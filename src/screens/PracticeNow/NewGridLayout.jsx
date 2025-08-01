@@ -52,21 +52,17 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   const initialShowLoader = location.state?.showLoader || false;
 
   // State to control the environment setup loader
-  const [showEnvironmentLoader, setShowEnvironmentLoader] =
-    useState(initialShowLoader);
+  const [showEnvironmentLoader, setShowEnvironmentLoader] = useState(initialShowLoader);
 
   // Store all transcripts throughout the interview
   const [allTranscripts, setAllTranscripts] = useState({});
 
-  const { questionsList } = useSelector((state) => state?.data);
+  const { questionsList } = useSelector(state => state?.data);
 
   // Enhanced loading state handling
   useEffect(() => {
     // Check if questions have been passed as props or are in redux
-    if (
-      (questions && questions.length > 0) ||
-      questionsList?.questions?.length > 0
-    ) {
+    if ((questions && questions.length > 0) || questionsList?.questions?.length > 0) {
       console.log("Questions available, ready for interview...");
       setIsQuestionsLoading(false);
     } else {
@@ -75,9 +71,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   }, [questions, questionsList]);
 
   // Calculate total time only after questions are loaded
-  const TOTAL_TIME = !isQuestionsLoading
-    ? questions?.reduce((acc, q) => acc + q.duration, 0)
-    : 0;
+  const TOTAL_TIME = !isQuestionsLoading ? questions?.reduce((acc, q) => acc + q.duration, 0) : 0;
 
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questionTimeLeft, setQuestionTimeLeft] = useState(
@@ -92,7 +86,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
   const { isDarkMode, colorTheme } = useDarkMode();
 
-  const { colorTheme: reduxColorTheme } = useSelector((state) => state?.data);
+  const { colorTheme: reduxColorTheme } = useSelector(state => state?.data);
   const linearGradientBackground = isDarkMode
     ? reduxColorTheme.dark.selectBackground
     : reduxColorTheme.light.selectBackground;
@@ -104,9 +98,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     ? reduxColorTheme.dark.foreground
     : reduxColorTheme.light.foreground;
 
-  const textColor = isDarkMode
-    ? reduxColorTheme.dark.textColor3
-    : reduxColorTheme.light.textColor3;
+  const textColor = isDarkMode ? reduxColorTheme.dark.textColor3 : reduxColorTheme.light.textColor3;
 
   const [warningCount, setWarningCount] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -134,7 +126,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       }
 
       // Enhanced female voice detection with more comprehensive names
-      const femaleVoices = voices.filter((voice) => {
+      const femaleVoices = voices.filter(voice => {
         const name = voice.name.toLowerCase();
         const lang = voice.lang.toLowerCase();
 
@@ -178,8 +170,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
             name.includes("nancy") ||
             name.includes("rachel") ||
             // Platform-specific patterns
-            (name.includes("microsoft") &&
-              (name.includes("eva") || name.includes("helen"))) ||
+            (name.includes("microsoft") && (name.includes("eva") || name.includes("helen"))) ||
             (name.includes("google") && name.includes("female")) ||
             (name.includes("apple") && name.includes("female")))
         );
@@ -190,32 +181,25 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       if (femaleVoices.length > 0) {
         // Prefer premium/neural voices if available
         const premiumFemaleVoices = femaleVoices.filter(
-          (v) =>
+          v =>
             v.name.toLowerCase().includes("premium") ||
             v.name.toLowerCase().includes("neural") ||
             v.name.toLowerCase().includes("enhanced")
         );
 
-        selectedVoice =
-          premiumFemaleVoices.length > 0
-            ? premiumFemaleVoices[0]
-            : femaleVoices[0];
+        selectedVoice = premiumFemaleVoices.length > 0 ? premiumFemaleVoices[0] : femaleVoices[0];
       } else {
         // Fallback: try to find any voice that might be female based on patterns
-        const possibleFemaleVoices = voices.filter((voice) => {
+        const possibleFemaleVoices = voices.filter(voice => {
           const name = voice.name.toLowerCase();
           const lang = voice.lang.toLowerCase();
-          return (
-            lang.includes("en") &&
-            !name.includes("male") &&
-            !name.includes("man")
-          );
+          return lang.includes("en") && !name.includes("male") && !name.includes("man");
         });
 
         selectedVoice =
           possibleFemaleVoices.length > 0
             ? possibleFemaleVoices[0]
-            : voices.find((v) => v.lang.includes("en")) || voices[0];
+            : voices.find(v => v.lang.includes("en")) || voices[0];
       }
 
       if (selectedVoice) {
@@ -280,7 +264,6 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     ) {
       console.log("Starting interview based on user submit action");
 
-
       // Show the environment setup loader for 7 seconds before starting the interview
       if (showEnvironmentLoader) {
         // Add toast notification for "Preparing your interview..."
@@ -299,9 +282,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
           // Initialize timer values
           setQuestionTimeLeft(questions[0]?.duration || 0);
-          setTotalTimeLeft(
-            questions?.reduce((acc, q) => acc + q.duration, 0) || 0
-          );
+          setTotalTimeLeft(questions?.reduce((acc, q) => acc + q.duration, 0) || 0);
 
           // Start recording
           startStreamAndRecording();
@@ -328,9 +309,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         // If no loader needed, start immediately
         // Initialize timer values
         setQuestionTimeLeft(questions[0]?.duration || 0);
-        setTotalTimeLeft(
-          questions?.reduce((acc, q) => acc + q.duration, 0) || 0
-        );
+        setTotalTimeLeft(questions?.reduce((acc, q) => acc + q.duration, 0) || 0);
 
         // Start recording
         startStreamAndRecording();
@@ -353,7 +332,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         `Saving transcript for question ${questionIndex}:`,
         currentTranscript.substring(0, 50) + "..."
       );
-      setAllTranscripts((prev) => ({
+      setAllTranscripts(prev => ({
         ...prev,
         [questionIndex]: currentTranscript,
       }));
@@ -369,7 +348,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
           audio: true,
         });
         // Stop the tracks immediately after checking
-        stream.getTracks().forEach((track) => track.stop());
+        stream.getTracks().forEach(track => track.stop());
         setMicPermissionGranted(true);
         setPermissionError("");
         console.log("Microphone permission granted!");
@@ -392,9 +371,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         setModalMessage(
           `Warning ${newWarningCount}/${maxWarnings}: Please do not switch tabs or leave this window. Your interview will be terminated after ${
             maxWarnings - newWarningCount
-          } more ${
-            maxWarnings - newWarningCount <= 1 ? "warning" : "warnings"
-          }.`
+          } more ${maxWarnings - newWarningCount <= 1 ? "warning" : "warnings"}.`
         );
         setModalVisible(true);
       }
@@ -415,19 +392,15 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
   useEffect(() => {
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () =>
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, [warningCount]);
 
   const handleFinishInterview = () => {
     setShowConfirmationPopup(true);
   };
 
-  const handleTranscriptUpdate = (transcript) => {
-    console.log(
-      "Transcript updated from child component:",
-      transcript.substring(0, 50) + "..."
-    );
+  const handleTranscriptUpdate = transcript => {
+    console.log("Transcript updated from child component:", transcript.substring(0, 50) + "...");
     setCurrentTranscript(transcript);
   };
 
@@ -443,13 +416,11 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
     console.log("All collected transcripts:", finalTranscripts);
 
-    const formattedTranscripts = Object.entries(finalTranscripts).map(
-      ([qIndex, transcript]) => ({
-        question_id: questions[parseInt(qIndex)]?.id,
-        question: questions[parseInt(qIndex)]?.question,
-        transcript: transcript || "",
-      })
-    );
+    const formattedTranscripts = Object.entries(finalTranscripts).map(([qIndex, transcript]) => ({
+      question_id: questions[parseInt(qIndex)]?.id,
+      question: questions[parseInt(qIndex)]?.question,
+      transcript: transcript || "",
+    }));
 
     console.log("Formatted transcripts for payload:", formattedTranscripts);
 
@@ -499,7 +470,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
         // Dispatch the action with the complete payload
         dispatch(
-          submit_interview(completePayload, (resp) => {
+          submit_interview(completePayload, resp => {
             console.log("Submission response:", resp);
 
             if (status === "Completed") {
@@ -527,7 +498,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
       // Dispatch the action with just the base payload
       dispatch(
-        submit_interview(basePayload, (resp) => {
+        submit_interview(basePayload, resp => {
           console.log("Submission response:", resp);
 
           if (status === "Completed") {
@@ -553,7 +524,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       stopRecording(false);
       setRecordedChunks([]);
 
-      setQuestionIndex((prevIndex) => {
+      setQuestionIndex(prevIndex => {
         const nextIndex = prevIndex + 1;
         setQuestionTimeLeft(questions[nextIndex].duration);
         return nextIndex;
@@ -561,7 +532,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
       // Reset current transcript for the next question
       setCurrentTranscript("");
-      setTranscriptResetTrigger((prev) => prev + 1);
+      setTranscriptResetTrigger(prev => prev + 1);
 
       // Add a small delay to ensure cleanup is complete before restarting
       setTimeout(() => {
@@ -580,7 +551,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
           `Saving transcript for skipped question ${questionIndex}:`,
           currentTranscript.substring(0, 50) + "..."
         );
-        setAllTranscripts((prev) => ({
+        setAllTranscripts(prev => ({
           ...prev,
           [questionIndex]: currentTranscript,
         }));
@@ -588,7 +559,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
       stopRecording(true);
       setRecordedChunks([]);
-      setQuestionIndex((prevIndex) => {
+      setQuestionIndex(prevIndex => {
         const nextIndex = prevIndex + 1;
         setQuestionTimeLeft(questions[nextIndex].duration);
         return nextIndex;
@@ -596,7 +567,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
       // Reset current transcript for the next question
       setCurrentTranscript("");
-      setTranscriptResetTrigger((prev) => prev + 1);
+      setTranscriptResetTrigger(prev => prev + 1);
       startStreamAndRecording();
     }
   };
@@ -610,7 +581,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     const stream = videoElement?.srcObject;
     if (stream) {
       const tracks = stream.getTracks();
-      tracks.forEach((track) => {
+      tracks.forEach(track => {
         track.stop();
       });
       videoElement.srcObject = null;
@@ -627,7 +598,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         `Saving final transcript for question ${questionIndex}:`,
         currentTranscript.substring(0, 50) + "..."
       );
-      setAllTranscripts((prev) => ({
+      setAllTranscripts(prev => ({
         ...prev,
         [questionIndex]: currentTranscript,
       }));
@@ -641,7 +612,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
     const stream = videoElement?.srcObject;
     if (stream) {
       const tracks = stream.getTracks();
-      tracks.forEach((track) => {
+      tracks.forEach(track => {
         track.stop();
       });
       videoElement.srcObject = null;
@@ -668,10 +639,8 @@ export default function NewGridLayout({ questions, isLoading = true }) {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.ondataavailable = function (event) {
             if (event.data.size > 0) {
-              console.log(
-                `Received data chunk of size ${event.data.size} bytes`
-              );
-              setRecordedChunks((prevChunks) => [...prevChunks, event.data]);
+              console.log(`Received data chunk of size ${event.data.size} bytes`);
+              setRecordedChunks(prevChunks => [...prevChunks, event.data]);
             }
           };
 
@@ -713,9 +682,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       .catch(function (error) {
         console.error("Media permission error:", error);
         setMicPermissionGranted(false);
-        setPermissionError(
-          `Error: ${error.message}. Please grant microphone permissions.`
-        );
+        setPermissionError(`Error: ${error.message}. Please grant microphone permissions.`);
       });
   }
 
@@ -740,9 +707,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
           // If it's the end of the interview, ensure we still submit all data
           if (interviewCompleted) {
-            console.log(
-              "Interview completed but no video chunks - still submitting data"
-            );
+            console.log("Interview completed but no video chunks - still submitting data");
             submitInterviewData(null, "Completed", skipped);
           }
           return;
@@ -760,21 +725,15 @@ export default function NewGridLayout({ questions, isLoading = true }) {
 
       // If it's the end of the interview, ensure we still submit all data
       if (interviewCompleted) {
-        console.log(
-          "Interview completed but no active recording - still submitting data"
-        );
+        console.log("Interview completed but no active recording - still submitting data");
         submitInterviewData(null, "Completed", skipped);
       }
     }
   }
 
   // Enhanced female voice speech function
-  const speakOut = (text) => {
-    if (
-      "speechSynthesis" in window &&
-      isSpeakerOn &&
-      !spokenQuestions.includes(text)
-    ) {
+  const speakOut = text => {
+    if ("speechSynthesis" in window && isSpeakerOn && !spokenQuestions.includes(text)) {
       // Cancel any ongoing speech first
       window.speechSynthesis.cancel();
 
@@ -789,7 +748,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         } else {
           // Fallback: try to find a female voice on the fly
           const voices = window.speechSynthesis.getVoices();
-          const femaleVoiceBackup = voices.find((voice) => {
+          const femaleVoiceBackup = voices.find(voice => {
             const name = voice.name.toLowerCase();
             const lang = voice.lang.toLowerCase();
             return (
@@ -814,7 +773,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         utterance.volume = 0.8; // Good volume level
 
         // Error handling
-        utterance.onerror = (event) => {
+        utterance.onerror = event => {
           // Error handled silently
         };
 
@@ -830,28 +789,23 @@ export default function NewGridLayout({ questions, isLoading = true }) {
         window.speechSynthesis.speak(utterance);
 
         // Track that we've spoken this question
-        setSpokenQuestions((prev) => [...prev, text]);
+        setSpokenQuestions(prev => [...prev, text]);
       }, 150); // Small delay to ensure proper cancellation
     }
   };
 
   useEffect(() => {
     // Only start timer and speak question if questions are loaded AND interview has started
-    if (
-      !isQuestionsLoading &&
-      questions?.length > 0 &&
-      interviewStarted &&
-      voicesLoaded
-    ) {
+    if (!isQuestionsLoading && questions?.length > 0 && interviewStarted && voicesLoaded) {
       const interval = setInterval(() => {
         if (questionTimeLeft > 0) {
-          setQuestionTimeLeft((prevTime) => prevTime - 1);
+          setQuestionTimeLeft(prevTime => prevTime - 1);
         } else {
           console.log("Question time expired, moving to next question");
           nextQuestion();
         }
         if (totalTimeLeft > 0) {
-          setTotalTimeLeft((prevTime) => prevTime - 1);
+          setTotalTimeLeft(prevTime => prevTime - 1);
         } else {
           console.log("Total interview time expired");
 
@@ -862,7 +816,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
           const stream = videoElement?.srcObject;
           if (stream) {
             const tracks = stream.getTracks();
-            tracks.forEach((track) => {
+            tracks.forEach(track => {
               track.stop();
             });
             videoElement.srcObject = null;
@@ -979,9 +933,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   const renderLoading = () => {
     // Show environment setup loader if needed - with the specific grid design
     if (showEnvironmentLoader && shouldStartInterview) {
-      return (
-        <LoadingAnimation message="Setting up your interview environment... ✨↗️" />
-      );
+      return <LoadingAnimation message="Setting up your interview environment... ✨↗️" />;
     }
 
     // If questions are loaded but interview hasn't started yet (no shouldStartInterview flag)
@@ -989,18 +941,12 @@ export default function NewGridLayout({ questions, isLoading = true }) {
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] p-6">
           <div className="mb-6">
-            <img
-              src={image}
-              alt="Interview Ready"
-              className="w-32 h-32 object-contain mx-auto"
-            />
+            <img src={image} alt="Interview Ready" className="w-32 h-32 object-contain mx-auto" />
           </div>
-          <p className="text-xl font-medium text-center">
-            Your interview is ready to begin
-          </p>
+          <p className="text-xl font-medium text-center">Your interview is ready to begin</p>
           <p className="text-sm text-gray-500 mt-2 text-center mb-6">
-            Please go back and click the Submit button on the system check page
-            to start your interview.
+            Please go back and click the Submit button on the system check page to start your
+            interview.
           </p>
           <button
             onClick={() => navigate(-1)}
@@ -1031,11 +977,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
   } else {
     content = (
       <div className="active-interview">
-        <WarningModel
-          message={modalMessage}
-          isVisible={isModalVisible}
-          onClose={closeModal}
-        />
+        <WarningModel message={modalMessage} isVisible={isModalVisible} onClose={closeModal} />
 
         {/* timer progress bar */}
         <div className="bg-teal-100 h-[25px] progressBar relative">
@@ -1044,9 +986,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
             className="bg-teal-500 h-[25px] progressFill"
             style={{
               animation: `progress-bar-animation ${questions?.[questionIndex]?.duration}s linear`,
-              width: `${
-                (questionTimeLeft / questions?.[questionIndex]?.duration) * 100
-              }%`,
+              width: `${(questionTimeLeft / questions?.[questionIndex]?.duration) * 100}%`,
             }}
           />
           <span className="absolute inset-0 flex items-center justify-center text-black py-3 font-bold">
@@ -1081,8 +1021,8 @@ export default function NewGridLayout({ questions, isLoading = true }) {
                   <strong>Permission Error:</strong> {permissionError}
                 </p>
                 <p>
-                  Please ensure you have granted camera and microphone
-                  permissions to use this application.
+                  Please ensure you have granted camera and microphone permissions to use this
+                  application.
                 </p>
               </div>
             )}
@@ -1129,10 +1069,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
                 >
                   Finish Interview
                 </button>
-                <button
-                  onClick={skipQuestion}
-                  className="px-8 h-[45px] bg-gray-300 rounded-lg"
-                >
+                <button onClick={skipQuestion} className="px-8 h-[45px] bg-gray-300 rounded-lg">
                   Skip
                 </button>
                 <button
@@ -1143,8 +1080,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
                     height: "45px",
                     background: linearGradientBackground,
                     color: textColor,
-                    visibility:
-                      questionIndex < questions?.length - 1 ? "" : "hidden",
+                    visibility: questionIndex < questions?.length - 1 ? "" : "hidden",
                   }}
                   className="text-secondary px-8"
                 >
@@ -1160,10 +1096,7 @@ export default function NewGridLayout({ questions, isLoading = true }) {
             {showConfirmationPopup && (
               <div className="fixed z-99999999999999999 inset-0 overflow-y-auto">
                 <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                  <div
-                    className="fixed inset-0 transition-opacity"
-                    aria-hidden="true"
-                  >
+                  <div className="fixed inset-0 transition-opacity" aria-hidden="true">
                     <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                   </div>
 
